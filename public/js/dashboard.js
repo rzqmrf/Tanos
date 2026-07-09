@@ -1,6 +1,5 @@
 /**
  * Tanos ERP — Dashboard Charts (ApexCharts)
- * Replaces all Chart.js implementations with ApexCharts
  */
 
 // ─── Color Palette ───────────────────────────────────────────────────────────
@@ -19,6 +18,19 @@ const PALETTE   = [COLORS.blue, COLORS.emerald, COLORS.amber, COLORS.purple, COL
 const GRID_CLR  = '#f1f5f9';
 const LABEL_CLR = '#94a3b8';
 const FONT      = 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif';
+
+// ─── Shared Legend Style ──────────────────────────────────────────────────────
+const legendStyle = {
+    show: true,
+    position: 'bottom',
+    horizontalAlign: 'center',
+    fontSize: '11px',
+    fontFamily: FONT,
+    fontWeight: 600,
+    labels: { colors: '#64748b' },
+    markers: { size: 7, shape: 'circle', offsetX: -2 },
+    itemMargin: { horizontal: 10, vertical: 4 },
+};
 
 // ─── Shared ApexCharts Defaults ───────────────────────────────────────────────
 const baseOptions = {
@@ -70,7 +82,7 @@ function initProjectSegmentChart(data) {
         plotOptions: {
             pie: {
                 donut: {
-                    size: '72%',
+                    size: '68%',
                     labels: {
                         show: true,
                         total: {
@@ -87,9 +99,13 @@ function initProjectSegmentChart(data) {
             },
         },
         stroke: { width: 2 },
-        tooltip: { ...baseOptions.tooltip },
+        // Donut uses custom HTML legend in blade, no built-in legend needed
         legend: { show: false },
         dataLabels: { enabled: false },
+        tooltip: {
+            ...baseOptions.tooltip,
+            y: { formatter: (v, { seriesIndex, w }) => `${v} proyek (${((v / w.globals.seriesTotals.reduce((a,b)=>a+b,0))*100).toFixed(1)}%)` },
+        },
     });
 }
 
@@ -107,7 +123,7 @@ function initProjectRegionalChart(data) {
         plotOptions: {
             pie: {
                 donut: {
-                    size: '72%',
+                    size: '68%',
                     labels: {
                         show: true,
                         total: {
@@ -124,8 +140,12 @@ function initProjectRegionalChart(data) {
             },
         },
         stroke: { width: 2 },
-        dataLabels: { enabled: false },
         legend: { show: false },
+        dataLabels: { enabled: false },
+        tooltip: {
+            ...baseOptions.tooltip,
+            y: { formatter: (v, { seriesIndex, w }) => `${v} proyek (${((v / w.globals.seriesTotals.reduce((a,b)=>a+b,0))*100).toFixed(1)}%)` },
+        },
     });
 }
 
@@ -137,8 +157,8 @@ function initPegawaiRegionalChart(data) {
     renderChart('pegawaiRegionalChart', {
         ...baseOptions,
         chart:  { ...baseOptions.chart, type: 'bar', height: '100%' },
-        series: [{ name: 'Pegawai', data: values }],
-        xaxis:  {
+        series: [{ name: 'Jumlah Pegawai', data: values }],
+        xaxis: {
             categories: labels,
             labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } },
             axisBorder: { show: false }, axisTicks: { show: false },
@@ -154,10 +174,16 @@ function initPegawaiRegionalChart(data) {
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
                          gradientToColors: [COLORS.indigo], stops: [0, 100] },
         },
+        // Legend: show series name at top
+        legend: { ...legendStyle },
+        tooltip: {
+            ...baseOptions.tooltip,
+            y: { formatter: v => v.toLocaleString('id-ID') + ' orang' },
+        },
     });
 }
 
-// ─── 4. Line (Area): Total Tagihan per Bulan ─────────────────────────────────
+// ─── 4. Area: Total Tagihan per Bulan ────────────────────────────────────────
 function initTagihanBulanChart(data) {
     const items  = (data && data.tagihanPerBulan) ? data.tagihanPerBulan : [];
     const labels = items.map(i => i.category);
@@ -165,9 +191,7 @@ function initTagihanBulanChart(data) {
     renderChart('tagihanBulanChart', {
         ...baseOptions,
         chart:  { ...baseOptions.chart, type: 'area', height: '100%' },
-        series: [
-            { name: 'Tagihan', data: vals },
-        ],
+        series: [{ name: 'Total Tagihan', data: vals }],
         xaxis: {
             categories: labels,
             labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } },
@@ -189,6 +213,8 @@ function initTagihanBulanChart(data) {
             type: 'gradient',
             gradient: { shadeIntensity: 1, opacityFrom: 0.25, opacityTo: 0.02, stops: [0, 95] },
         },
+        // Legend top-left
+        legend: { ...legendStyle },
         markers: { size: 4, hover: { size: 6 } },
         tooltip: {
             ...baseOptions.tooltip,
@@ -229,6 +255,7 @@ function initCostRegionalChart(data) {
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
                          gradientToColors: [COLORS.cyan], stops: [0, 100] },
         },
+        legend: { ...legendStyle },
         tooltip: {
             ...baseOptions.tooltip,
             y: { formatter: v => 'Rp ' + v.toLocaleString('id-ID') },
@@ -236,7 +263,7 @@ function initCostRegionalChart(data) {
     });
 }
 
-// ─── 6. Bar (Horizontal): Total Cost per Segment ─────────────────────────────
+// ─── 6. Bar: Total Cost per Segment ──────────────────────────────────────────
 function initCostSegmentChart(data) {
     const items  = (data && data.costPerSegment) ? data.costPerSegment : [];
     const labels = items.map(i => i.category);
@@ -267,6 +294,7 @@ function initCostSegmentChart(data) {
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
                          gradientToColors: [COLORS.rose], stops: [0, 100] },
         },
+        legend: { ...legendStyle },
         tooltip: {
             ...baseOptions.tooltip,
             y: { formatter: v => 'Rp ' + v.toLocaleString('id-ID') },
@@ -274,7 +302,7 @@ function initCostSegmentChart(data) {
     });
 }
 
-// ─── 7. Line: Trend Cost per Bulan ───────────────────────────────────────────
+// ─── 7. Area: Trend Cost per Bulan ───────────────────────────────────────────
 function initCostBulanChart(data) {
     const items  = (data && data.costPerBulan) ? data.costPerBulan : [];
     const labels = items.map(i => i.category);
@@ -282,7 +310,7 @@ function initCostBulanChart(data) {
     renderChart('costBulanChart', {
         ...baseOptions,
         chart:  { ...baseOptions.chart, type: 'area', height: '100%' },
-        series: [{ name: 'Cost', data: values }],
+        series: [{ name: 'Trend Cost', data: values }],
         xaxis: {
             categories: labels,
             labels: { style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT } },
@@ -304,6 +332,11 @@ function initCostBulanChart(data) {
             type: 'gradient',
             gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.02, stops: [0, 95] },
         },
+        legend: {
+            ...legendStyle,
+            position: 'top',
+            horizontalAlign: 'left',
+        },
         markers: { size: 4, hover: { size: 6 } },
         tooltip: {
             ...baseOptions.tooltip,
@@ -312,7 +345,7 @@ function initCostBulanChart(data) {
     });
 }
 
-// ─── Init all charts from server-supplied data ────────────────────────────────
+// ─── Init all charts ──────────────────────────────────────────────────────────
 function initDashboardCharts(chartData) {
     initProjectSegmentChart(chartData.projectsPerSegment);
     initProjectRegionalChart(chartData.projectsPerRegional);
@@ -323,7 +356,7 @@ function initDashboardCharts(chartData) {
     initCostBulanChart(chartData);
 }
 
-// ─── Update all charts (called by Alpine fetchData) ───────────────────────────
+// ─── Update on Alpine filter change ──────────────────────────────────────────
 window.updateDashboardCharts = function(chartData) {
     initDashboardCharts(chartData);
 };
