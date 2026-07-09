@@ -56,13 +56,9 @@
     <!-- Left Card: Jumlah Project per Segment -->
     <x-chart-card title="Jumlah Project per Segment">
         <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
-            <!-- Doughnut Chart Canvas with Center Overlay -->
-            <div class="relative w-40 h-40 shrink-0">
-                <canvas id="projectSegmentChart"></canvas>
-                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Total</span>
-                    <span x-text="stats.totalActiveProjects.formatted" class="text-base font-extrabold text-slate-700"></span>
-                </div>
+            <!-- Donut Chart (ApexCharts div) -->
+            <div class="relative w-44 h-44 shrink-0">
+                <div id="projectSegmentChart"></div>
             </div>
             <!-- Custom HTML Legend -->
             <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4">
@@ -81,7 +77,7 @@
                         <div class="text-slate-700 shrink-0 pl-2">
                             <span x-text="item.value"></span>
                             <span class="text-slate-400 font-medium ml-1"
-                                  x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)'"></span>
+                                  x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)' "></span>
                         </div>
                     </div>
                 </template>
@@ -92,13 +88,8 @@
     <!-- Right Card: Jumlah Project per Regional -->
     <x-chart-card title="Jumlah Project per Regional">
         <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
-            <!-- Doughnut Chart Canvas with Center Overlay -->
-            <div class="relative w-40 h-40 shrink-0">
-                <canvas id="projectRegionalChart"></canvas>
-                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Total</span>
-                    <span x-text="stats.totalActiveProjects.formatted" class="text-base font-extrabold text-slate-700"></span>
-                </div>
+            <div class="relative w-44 h-44 shrink-0">
+                <div id="projectRegionalChart"></div>
             </div>
             <!-- Custom HTML Legend -->
             <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4">
@@ -117,7 +108,7 @@
                         <div class="text-slate-700 shrink-0 pl-2">
                             <span x-text="item.value"></span>
                             <span class="text-slate-400 font-medium ml-1"
-                                  x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)'"></span>
+                                  x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)' "></span>
                         </div>
                     </div>
                 </template>
@@ -133,40 +124,40 @@
     <!-- Left Card: Total Pegawai per Regional -->
     <x-chart-card title="Total Pegawai per Regional">
         <div class="w-full h-64">
-            <canvas id="pegawaiRegionalChart"></canvas>
+            <div id="pegawaiRegionalChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Total Tagihan per Bulan -->
     <x-chart-card title="Total Tagihan per Bulan">
         <div class="w-full h-64">
-            <canvas id="tagihanBulanChart"></canvas>
+            <div id="tagihanBulanChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
 </div>
 
-<!-- Charts Grid - Row 3 (Three Columns: 2 Bars, 1 Area) -->
+<!-- Charts Grid - Row 3 (Three Columns) -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- Left Card: Total Cost per Regional -->
     <x-chart-card title="Total Cost per Regional">
         <div class="w-full h-60">
-            <canvas id="costRegionalChart"></canvas>
+            <div id="costRegionalChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Middle Card: Total Cost per Segment -->
     <x-chart-card title="Total Cost per Segment">
         <div class="w-full h-60">
-            <canvas id="costSegmentChart"></canvas>
+            <div id="costSegmentChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Trend Cost per Bulan -->
     <x-chart-card title="Trend Cost per Bulan">
         <div class="w-full h-60">
-            <canvas id="costBulanChart"></canvas>
+            <div id="costBulanChart" class="h-full"></div>
         </div>
     </x-chart-card>
 

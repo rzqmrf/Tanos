@@ -76,8 +76,12 @@
             </main>
         </div>
     </div>
+    <!-- Inject initial chart data for ApexCharts boot -->
+    <script>
+        window.__initialChartData = @js($initialData['charts'] ?? []);
+    </script>
 
-    <!-- Static Dashboard JS loaded after assets compile -->
+    <!-- Dashboard Charts (ApexCharts) -->
     <script src="{{ asset('js/dashboard.js') }}"></script>
 </body>
 </html>
