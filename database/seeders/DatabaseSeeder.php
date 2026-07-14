@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +14,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Bersihkan sisa data lama (kecuali users biar aman)
+        DB::table('projects')->truncate();
+        DB::table('employees')->truncate();
+        DB::table('invoices')->truncate();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // 2. Tetap bikin User dummy bawaan kemarin buat login demo
+        // Pake firstOrCreate biar kalau udah ada di database gak bikin eror duplikat
+        User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'), // Pastiin passwordnya lu inget, default 'password'
+            ]
+        );
+
+        // 3. Panggil DashboardSeeder untuk mengisi tabel projects, employees, invoices
+        $this->call(DashboardSeeder::class);
     }
 }

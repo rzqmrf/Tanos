@@ -6,7 +6,6 @@
             class="fixed top-0 left-0 bottom-0 w-[250px] bg-white border-r border-slate-200/60 flex flex-col justify-between p-4 z-40 transition-transform duration-300 md:translate-x-0 rounded-none">
 
     <div>
-        <!-- Company Logo Section -->
         <div class="flex items-center px-2 py-3 mb-3 min-h-[48px]">
             <img src="{{ asset('images/logo.png') }}"
                     alt="Tanos Logo"
@@ -14,7 +13,6 @@
                     onerror="this.style.display='none'; document.getElementById('sidebar-logo-fallback').classList.remove('hidden');">
 
             <div id="sidebar-logo-fallback" class="hidden flex items-center space-x-2.5">
-                <!-- Icon Symbol -->
                 <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-lg shadow-sm shadow-blue-200 select-none">
                     T
                 </div>
@@ -22,7 +20,6 @@
             </div>
         </div>
 
-        <!-- Integrated Compact User Profile Card -->
         @php
             $name = session('user.name', 'Guest User');
             $role = session('user.role', 'Staff Member');
@@ -38,38 +35,31 @@
             $initials = substr($initials, 0, 2);
         @endphp
         <div class="px-3 py-3 mb-5 bg-slate-50/60 border border-slate-100 rounded-2xl flex items-center space-x-3">
-            <!-- Avatar with Online Status Dot -->
             <div class="relative flex-shrink-0">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs select-none shadow-sm shadow-blue-200">
                     {{ $initials }}
                 </div>
-                <!-- Online Status Dot -->
                 <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-slate-50 bg-emerald-500" title="Online"></span>
             </div>
 
-            <!-- User Information Details -->
             <div class="min-w-0 flex-1">
                 <span class="block text-xs font-bold text-slate-800 truncate leading-none">{{ $name }}</span>
                 <span class="block text-[10px] font-semibold text-slate-400 truncate mt-1">{{ $role }}</span>
             </div>
         </div>
 
-        <!-- Navigation Menus -->
         <nav class="space-y-6">
 
-            <!-- SECTION 1: MAIN MENU -->
             <div class="space-y-1.5">
                 <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Main Menu</span>
 
-                <!-- Dashboard (Active) -->
-                <a href="#" class="flex items-center space-x-3 bg-blue-50/80 text-blue-600 px-3 py-2.5 rounded-xl font-bold transition-all duration-150">
+                <a href="{{ route('dashboard.index') }}" class="flex items-center space-x-3 bg-blue-50/80 text-blue-600 px-3 py-2.5 rounded-xl font-bold transition-all duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-blue-500">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
                     <span class="text-xs">Dashboard</span>
                 </a>
 
-                <!-- General Settings Dropdown (Alpine.js State) -->
                 <div x-data="{ open: false }" class="relative">
                     <button @click="open = !open"
                             class="w-full flex items-center justify-between text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group cursor-pointer">
@@ -86,7 +76,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>
-                    <!-- Dropdown Sub-links -->
                     <div x-show="open"
                          x-transition:enter="transition ease-out duration-100"
                          x-transition:enter-start="opacity-0 -translate-y-1"
@@ -96,38 +85,34 @@
                          x-transition:leave-end="opacity-0 -translate-y-1"
                          class="mt-1 pl-9 space-y-1"
                          style="display: none;">
-                        <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors">
+                        <a href="{{ route('project.config') }}" class="block py-1.5 px-2 text-[11px] font-semibold text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors">
                             Project Config
                         </a>
-                        <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors">
+                        <a href="{{ route('access.controls') }}" class="block py-1.5 px-2 text-[11px] font-semibold text-slate-500 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors">
                             Access Controls
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 2: MASTER DATA -->
             <div class="space-y-1.5">
                 <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Master Data</span>
 
-                <!-- Projects -->
-                <a href="#" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
+                <a href="{{ route('projects.index') }}" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 group-hover:text-slate-600 transition-colors">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75c.621 0 1.125.504 1.125 1.125v1.875c0 .621-.504 1.125-1.125 1.125H5.625A1.125 1.125 0 0 1 4.5 7.5V5.625C4.5 5.004 5.004 4.5 5.625 4.5Z" />
                     </svg>
                     <span class="text-xs">Projects</span>
                 </a>
 
-                <!-- Employees -->
-                <a href="#" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
+                <a href="{{ route('employees.index') }}" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 group-hover:text-slate-600 transition-colors">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                     <span class="text-xs">Employees</span>
                 </a>
 
-                <!-- Invoices -->
-                <a href="#" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
+                <a href="{{ route('invoices.index') }}" class="flex items-center space-x-3 text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 group-hover:text-slate-600 transition-colors">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 5.25h19.5m-19.5 0h19.5M2.25 12h19.5m-19.5 0h19.5m-19.5 5.25h19.5m-19.5 0h19.5M3 19.5h18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 21 4.5H3a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3 19.5Z" />
                     </svg>
@@ -137,7 +122,6 @@
         </nav>
     </div>
 
-    <!-- Bottom Section: Logout Button -->
     <div class="border-t border-slate-100 pt-3">
         <a href="{{ route('logout') }}" class="w-full flex items-center space-x-3 text-slate-500 hover:text-rose-600 hover:bg-rose-50/50 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 group-hover:text-rose-500 transition-colors">
