@@ -31,7 +31,7 @@ class DashboardSeeder extends Seeder
         foreach ($months as $mIdx => $month) {
             foreach ($regionals as $rIdx => $reg) {
                 foreach ($segments as $sIdx => $seg) {
-                    
+
                     // Seed-based deterministic number of projects
                     $numProjects = (($mIdx + 1) * 3 + ($rIdx * 2) + ($sIdx * 4) + 7) % 12 + 2;
 
@@ -55,6 +55,7 @@ class DashboardSeeder extends Seeder
                             'month' => $month,
                             'regional' => $reg,
                             'segment' => $seg
+                            
                         ]);
                     }
 

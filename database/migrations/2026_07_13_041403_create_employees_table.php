@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('month');
             $table->string('regional');
-            $table->string('segment');
-            $table->string('periode'); // bebas bisa ditambah atau tidak
+            $table->string('segment'); // bebas bisa ditambah atau tidak
             $table->timestamps();
         });
     }
