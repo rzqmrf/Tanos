@@ -35,13 +35,34 @@
         }
     </style>
 
+    <script>
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-[#f8fafc] text-slate-800 antialiased min-h-screen">
+<body class="bg-[#f8fafc] dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen transition-colors duration-300">
 
     <div class="flex min-h-screen" x-data="{ 
         sidebarOpen: false, 
+        darkMode: localStorage.getItem('darkMode') === 'true',
+        toggleDarkMode() {
+            this.darkMode = !this.darkMode;
+            localStorage.setItem('darkMode', this.darkMode);
+            if (this.darkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            if (window.updateDashboardCharts && this.chartData) {
+                window.updateDashboardCharts(this.chartData);
+            }
+        },
         selectedMonth: '{{ $currentMonth ?? '' }}', 
         selectedRegional: '{{ $currentRegional ?? '' }}', 
         selectedSegment: '{{ $currentSegment ?? '' }}',

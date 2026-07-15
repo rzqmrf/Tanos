@@ -16,15 +16,15 @@
     $themeClass = $themes[$theme] ?? $themes['blue'];
 @endphp
 
-<div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.02)] hover:-translate-y-1 hover:shadow-[0_12px_30px_-5px_rgba(0,0,0,0.06)] hover:border-slate-200/60 transition-all duration-300 flex items-center group">
-    <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center mr-4 transition-all duration-300 group-hover:scale-110 {{ $themeClass }}">
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.02)] flex items-center xl:flex-col xl:items-start">
+    <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center mr-4 xl:mr-0 xl:mb-3 {{ $themeClass }}">
         {{ $slot }}
     </div>
 
-    <div class="min-w-0">
-        <span class="text-xs font-semibold text-slate-400 block mb-1 truncate">{{ $title }}</span>
+    <div class="min-w-0 w-full">
+        <span class="text-xs font-semibold text-slate-400 dark:text-slate-400 block mb-1 truncate">{{ $title }}</span>
         
-        <span x-text="stats.{{ $field }} ? stats.{{ $field }}.formatted : '...'" class="text-2xl font-extrabold text-slate-800 tracking-tight block leading-tight">
+        <span x-text="stats.{{ $field }} ? stats.{{ $field }}.formatted : '...'" class="text-2xl xl:text-lg 2xl:text-xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight block leading-tight whitespace-nowrap">
             ...
         </span>
 
@@ -45,7 +45,7 @@
             </template>
 
             <span x-text="stats.{{ $field }} ? Math.abs(stats.{{ $field }}.growth).toFixed(1) + '%' : '0%'"></span>
-            <span class="text-slate-400 font-normal ml-1">dari bulan lalu</span>
+            <span class="text-slate-400 dark:text-slate-500 font-normal ml-1">dari bulan lalu</span>
         </div>
     </div>
 </div>

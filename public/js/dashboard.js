@@ -19,6 +19,12 @@ const GRID_CLR  = '#f1f5f9';
 const LABEL_CLR = '#94a3b8';
 const FONT      = 'Plus Jakarta Sans, ui-sans-serif, system-ui, sans-serif';
 
+const isDark = () => document.documentElement.classList.contains('dark');
+const getGridClr = () => isDark() ? '#334155' : '#f1f5f9';
+const getLabelClr = () => isDark() ? '#94a3b8' : '#64748b';
+const getLegendColor = () => isDark() ? '#cbd5e1' : '#64748b';
+const getTooltipTheme = () => isDark() ? 'dark' : 'light';
+
 // ─── Shared Legend Style ──────────────────────────────────────────────────────
 const legendStyle = {
     show: true,
@@ -64,6 +70,26 @@ function renderChart(id, options) {
     if (charts[id]) { charts[id].destroy(); }
     const el = document.querySelector('#' + id);
     if (!el) return;
+
+    // Dynamically override values for dark mode support
+    if (!options.grid) options.grid = {};
+    options.grid.borderColor = getGridClr();
+
+    if (!options.tooltip) options.tooltip = {};
+    options.tooltip.theme = getTooltipTheme();
+
+    if (options.xaxis && options.xaxis.labels && options.xaxis.labels.style) {
+        options.xaxis.labels.style.colors = getLabelClr();
+    }
+
+    if (options.yaxis && options.yaxis.labels && options.yaxis.labels.style) {
+        options.yaxis.labels.style.colors = getLabelClr();
+    }
+
+    if (options.legend && options.legend.labels) {
+        options.legend.labels.colors = getLegendColor();
+    }
+
     charts[id] = new ApexCharts(el, options);
     charts[id].render();
 }
@@ -90,10 +116,10 @@ function initProjectSegmentChart(data) {
                             label: 'Total',
                             fontSize: '10px',
                             fontWeight: 700,
-                            color: LABEL_CLR,
+                            color: isDark() ? '#94a3b8' : '#64748b',
                             formatter: w => w.globals.seriesTotals.reduce((a, b) => a + b, 0),
                         },
-                        value: { fontSize: '16px', fontWeight: 800, color: '#0f172a' },
+                        value: { fontSize: '16px', fontWeight: 800, color: isDark() ? '#f8fafc' : '#0f172a' },
                     },
                 },
             },
@@ -131,10 +157,10 @@ function initProjectRegionalChart(data) {
                             label: 'Total',
                             fontSize: '10px',
                             fontWeight: 700,
-                            color: LABEL_CLR,
+                            color: isDark() ? '#94a3b8' : '#64748b',
                             formatter: w => w.globals.seriesTotals.reduce((a, b) => a + b, 0),
                         },
-                        value: { fontSize: '16px', fontWeight: 800, color: '#0f172a' },
+                        value: { fontSize: '16px', fontWeight: 800, color: isDark() ? '#f8fafc' : '#0f172a' },
                     },
                 },
             },

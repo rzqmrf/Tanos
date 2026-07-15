@@ -53,8 +53,8 @@ class DashboardService
 
         $totalActive = (clone $projectQuery)->where('active', true)->count();
         $totalPegawai = $employeeQuery->count();
-        $totalP2P = (clone $invoiceQuery)->where('type', 'P2P')->count();
-        $totalNonP2P = (clone $invoiceQuery)->where('type', 'Non P2P')->count();
+        $totalP2P = (clone $invoiceQuery)->where('type', 'P2P')->sum('amount');
+        $totalNonP2P = (clone $invoiceQuery)->where('type', 'Non P2P')->sum('amount');
         $totalCost = (clone $projectQuery)->sum('cost');
         $avgCost = $totalActive > 0 ? ($totalCost / $totalActive) : 0;
 
@@ -64,8 +64,8 @@ class DashboardService
             'stats' => [
                 'totalActiveProjects' => ['raw' => $totalActive, 'formatted' => number_format($totalActive, 0, ',', '.'), 'growth' => $growth['activeProjects']],
                 'jumlahPegawai' => ['raw' => $totalPegawai, 'formatted' => number_format($totalPegawai, 0, ',', '.'), 'growth' => $growth['pegawai']],
-                'notaP2P' => ['raw' => $totalP2P, 'formatted' => number_format($totalP2P, 0, ',', '.'), 'growth' => $growth['p2p']],
-                'notaNonP2P' => ['raw' => $totalNonP2P, 'formatted' => number_format($totalNonP2P, 0, ',', '.'), 'growth' => $growth['nonP2p']],
+                'notaP2P' => ['raw' => $totalP2P, 'formatted' => $this->formatRupiahDisplay($totalP2P), 'growth' => $growth['p2p']],
+                'notaNonP2P' => ['raw' => $totalNonP2P, 'formatted' => $this->formatRupiahDisplay($totalNonP2P), 'growth' => $growth['nonP2p']],
                 'totalCost' => ['raw' => $totalCost, 'formatted' => $this->formatRupiahDisplay($totalCost), 'growth' => $growth['totalCost']],
                 'avgCost' => ['raw' => $avgCost, 'formatted' => $this->formatRupiahDisplay($avgCost), 'growth' => $growth['avgCost']]
             ],
@@ -102,8 +102,8 @@ class DashboardService
         string $selectedSeg,
         int $currActive,
         int $currPegawai,
-        int $currP2P,
-        int $currNonP2P,
+        float $currP2P,
+        float $currNonP2P,
         float $currCost,
         float $currAvgCost
     ): array {
@@ -130,8 +130,8 @@ class DashboardService
 
         $prevActiveCount = $filter(Project::where('active', true))->count();
         $prevPegawaiCount = $filter(Employee::query())->count();
-        $prevP2PCount = $filter(Invoice::where('type', 'P2P'))->count();
-        $prevNonP2PCount = $filter(Invoice::where('type', 'Non P2P'))->count();
+        $prevP2PAmount = $filter(Invoice::where('type', 'P2P'))->sum('amount');
+        $prevNonP2PAmount = $filter(Invoice::where('type', 'Non P2P'))->sum('amount');
         $prevTotalCost = $filter(Project::query())->sum('cost');
         $prevAvgCost = $prevActiveCount > 0 ? ($prevTotalCost / $prevActiveCount) : 0;
 
@@ -140,8 +140,8 @@ class DashboardService
         return [
             'activeProjects' => $calcPct($currActive, $prevActiveCount),
             'pegawai' => $calcPct($currPegawai, $prevPegawaiCount),
-            'p2p' => $calcPct($currP2P, $prevP2PCount),
-            'nonP2p' => $calcPct($currNonP2P, $prevNonP2PCount),
+            'p2p' => $calcPct($currP2P, $prevP2PAmount),
+            'nonP2p' => $calcPct($currNonP2P, $prevNonP2PAmount),
             'totalCost' => $calcPct($currCost, $prevTotalCost),
             'avgCost' => $calcPct($currAvgCost, $prevAvgCost)
         ];
@@ -165,11 +165,11 @@ class DashboardService
     private function formatRupiahDisplay(float $value): string
     {
         if ($value >= 1000000000) {
-            return 'Rp' . number_format($value / 1000000000, 2, ',', '.') . ' M';
+            return 'Rp ' . number_format($value / 1000000000, 2, ',', '.') . ' M';
         } elseif ($value >= 1000000) {
-            return 'Rp' . number_format($value / 1000000, 2, ',', '.') . ' Jt';
+            return 'Rp ' . number_format($value / 1000000, 2, ',', '.') . ' Jt';
         } else {
-            return 'Rp' . number_format($value, 0, ',', '.');
+            return 'Rp ' . number_format($value, 0, ',', '.');
         }
     }
 }

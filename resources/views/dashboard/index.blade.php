@@ -72,11 +72,11 @@
                                 index === 3 ? 'bg-purple-500' : '',
                                 index === 4 ? 'bg-slate-400' : ''
                             ]" class="w-3 h-3 rounded-md shrink-0"></span>
-                            <span x-text="item.category" class="text-slate-500 truncate"></span>
+                            <span x-text="item.category" class="text-slate-500 dark:text-slate-400 truncate"></span>
                         </div>
-                        <div class="text-slate-700 shrink-0 pl-2">
+                        <div class="text-slate-700 dark:text-slate-300 shrink-0 pl-2">
                             <span x-text="item.value"></span>
-                            <span class="text-slate-400 font-medium ml-1"
+                            <span class="text-slate-400 dark:text-slate-500 font-medium ml-1"
                                   x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)' "></span>
                         </div>
                     </div>
@@ -103,11 +103,11 @@
                                 index === 3 ? 'bg-purple-500' : '',
                                 index === 4 ? 'bg-slate-400' : ''
                             ]" class="w-3 h-3 rounded-md shrink-0"></span>
-                            <span x-text="item.category" class="text-slate-500 truncate"></span>
+                            <span x-text="item.category" class="text-slate-500 dark:text-slate-400 truncate"></span>
                         </div>
-                        <div class="text-slate-700 shrink-0 pl-2">
+                        <div class="text-slate-700 dark:text-slate-300 shrink-0 pl-2">
                             <span x-text="item.value"></span>
-                            <span class="text-slate-400 font-medium ml-1"
+                            <span class="text-slate-400 dark:text-slate-500 font-medium ml-1"
                                   x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)' "></span>
                         </div>
                     </div>
