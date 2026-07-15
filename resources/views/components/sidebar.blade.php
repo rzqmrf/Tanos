@@ -122,12 +122,4 @@
         </nav>
     </div>
 
-    <div class="border-t border-slate-100 dark:border-slate-800/80 pt-3">
-        <a href="{{ route('logout') }}" class="w-full flex items-center space-x-3 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-500 group-hover:text-rose-500 transition-colors">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-            </svg>
-            <span class="text-xs">Logout</span>
-        </a>
-    </div>
 </aside>
