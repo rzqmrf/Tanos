@@ -18,7 +18,7 @@ class EmployeeController extends Controller
 
         // Filter options
         $months = ['Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025', 'Mei 2025', 'Juni 2025'];
-        $regionals = ['Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'Sumatera', 'Kalimantan'];
+        $regionals = ['Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'];
         $segments = ['Enterprise', 'Corporate', 'Government', 'SME', 'Retail'];
 
         // Get filter inputs

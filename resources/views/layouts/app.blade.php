@@ -71,7 +71,7 @@
         async fetchData() {
             if(!this.selectedMonth) return;
             try {
-                const res = await fetch(`/api/dashboard-data?month=${this.selectedMonth}&regional=${this.selectedRegional}&segment=${this.selectedSegment}`);
+                const res = await fetch(`{{ route('dashboard.api') }}?month=${this.selectedMonth}&regional=${this.selectedRegional}&segment=${this.selectedSegment}`);
                 const data = await res.json();
                 this.stats = data.stats;
                 this.chartData = data.charts;

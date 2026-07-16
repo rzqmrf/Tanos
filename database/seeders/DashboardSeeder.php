@@ -20,7 +20,7 @@ class DashboardSeeder extends Seeder
         ];
 
         $regionals = [
-            'Jawa Barat', 'Jawa Timur', 'Jawa Tengah', 'Sumatera', 'Kalimantan'
+            'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'
         ];
 
         $segments = [

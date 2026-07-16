@@ -65,12 +65,8 @@ const baseOptions = {
 // ─── Chart instances (kept globally for update) ───────────────────────────────
 let charts = {};
 
-// ─── Helper: destroy + re-create a chart ─────────────────────────────────────
+// ─── Helper: update options or create a chart ─────────────────────────────────
 function renderChart(id, options) {
-    if (charts[id]) { charts[id].destroy(); }
-    const el = document.querySelector('#' + id);
-    if (!el) return;
-
     // Dynamically override values for dark mode support
     if (!options.grid) options.grid = {};
     options.grid.borderColor = getGridClr();
@@ -90,8 +86,14 @@ function renderChart(id, options) {
         options.legend.labels.colors = getLegendColor();
     }
 
-    charts[id] = new ApexCharts(el, options);
-    charts[id].render();
+    if (charts[id]) {
+        charts[id].updateOptions(options);
+    } else {
+        const el = document.querySelector('#' + id);
+        if (!el) return;
+        charts[id] = new ApexCharts(el, options);
+        charts[id].render();
+    }
 }
 
 // ─── 1. Donut: Jumlah Project per Segment ────────────────────────────────────
