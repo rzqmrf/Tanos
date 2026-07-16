@@ -44,3 +44,7 @@ Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.ind
 Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
 Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
 Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
+
+// New Routes
+Route::get('/reports', function () { return view('dashboard.reports'); })->name('reports.index');
+Route::get('/users', function () { return view('dashboard.users'); })->name('users.index');
