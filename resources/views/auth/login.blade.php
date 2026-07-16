@@ -120,34 +120,7 @@
                     </p>
                 </div>
 
-                <div class="mt-8 bg-white/5 border border-white/10 rounded-xl p-4 text-xs text-purple-200">
-                    <div class="font-bold text-white mb-3 flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                        <span>Akun Demo:</span>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-2">
-                            <div>
-                                <span class="block font-bold text-white leading-none">Naufal</span>
-                                <span class="block text-[10px] text-purple-300 mt-1">Admin</span>
-                            </div>
-                            <div class="flex space-x-1">
-                                <code class="bg-white/10 px-1.5 py-0.5 rounded text-[10px] text-white">naufal / naufal@gmail.com</code>
-                                <code class="bg-white/10 px-1.5 py-0.5 rounded text-[10px] text-white">naufal123</code>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between border-b border-white/5 pb-2">
-                            <div>
-                                <span class="block font-bold text-white leading-none">Rozaq</span>
-                                <span class="block text-[10px] text-purple-300 mt-1">Supervisor</span>
-                            </div>
-                            <div class="flex space-x-1">
-                                <code class="bg-white/10 px-1.5 py-0.5 rounded text-[10px] text-white">rozaq / rozaq@gmail.com</code>
-                                <code class="bg-white/10 px-1.5 py-0.5 rounded text-[10px] text-white">rozaq123</code>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
             </div>
 
