@@ -31,4 +31,13 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::resource('invoices', InvoiceController::class);
     Route::resource('employees', EmployeeController::class);
+
+    // Placeholder routes for reports and users
+    Route::get('reports', function () {
+        return view('dashboard.reports');
+    })->name('reports.index');
+
+    Route::get('users', function () {
+        return view('dashboard.users');
+    })->name('users.index');
 });
