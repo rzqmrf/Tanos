@@ -33,6 +33,15 @@
 
                 <h1 class="text-3xl font-extrabold tracking-tight mb-8">Sign In</h1>
 
+                @if (session('success'))
+                    <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-start space-x-2.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <span class="text-sm font-medium text-emerald-200">{{ session('success') }}</span>
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="mb-6 bg-rose-500/10 border border-rose-500/20 rounded-xl p-4 flex items-start space-x-2.5">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-rose-400 shrink-0 mt-0.5">
