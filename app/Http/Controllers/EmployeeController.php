@@ -1,112 +1,52 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Employee;
+use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index()
     {
-        if (!session()->has('user')) {
-            return redirect()->route('login');
-        }
-
-        // Filter options
-        $months = ['Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025', 'Mei 2025', 'Juni 2025'];
-        $regionals = ['Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'];
-        $segments = ['Enterprise', 'Corporate', 'Government', 'SME', 'Retail'];
-
-        // Get filter inputs
-        $searchMonth = $request->input('month');
-        $searchRegional = $request->input('regional');
-        $searchSegment = $request->input('segment');
-
-        $query = Employee::query();
-
-        // Apply filters
-        if ($searchMonth && $searchMonth !== 'All') {
-            $query->where('month', $searchMonth);
-        }
-        if ($searchRegional && $searchRegional !== 'All') {
-            $query->where('regional', $searchRegional);
-        }
-        if ($searchSegment && $searchSegment !== 'All') {
-            $query->where('segment', $searchSegment);
-        }
-
-        // Order by latest and paginate
-        $employees = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
-
+        // paginasi dipaksa max 25 data per halaman awal
         return view('dashboard.employees', [
-            'employees' => $employees,
-            'months' => $months,
-            'regionals' => $regionals,
-            'segments' => $segments,
-            'currentMonth' => $searchMonth ?? 'All',
-            'currentRegional' => $searchRegional ?? 'All',
-            'currentSegment' => $searchSegment ?? 'All',
+            'employees' => Employee::oldest()->paginate(25)
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        if (!session()->has('user')) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $validated = $request->validate([
-            'month' => 'required|string',
-            'regional' => 'required|string',
-            'segment' => 'required|string',
+        $validData = $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'segment' => 'required|string|max:255',
+            'month' => 'required|string|max:255',
+            'regional' => 'required|string|max:255'
         ]);
 
-        Employee::create($validated);
+        Employee::create($validData);
 
-        return redirect()->route('employees.index')->with('success', 'Data pegawai berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Berhasil menambah data pegawai!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Employee $employee)
     {
-        if (!session()->has('user')) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $employee = Employee::findOrFail($id);
-
-        $validated = $request->validate([
-            'month' => 'required|string',
-            'regional' => 'required|string',
-            'segment' => 'required|string',
+        $validData = $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'segment' => 'required|string|max:255',
+            'month' => 'required|string|max:255',
+            'regional' => 'required|string|max:255'
         ]);
 
-        $employee->update($validated);
+        $employee->update($validData);
 
-        return redirect()->route('employees.index')->with('success', 'Data pegawai berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Data pegawai berhasil diperbarui!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        if (!session()->has('user')) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $employee = Employee::findOrFail($id);
         $employee->delete();
-
-        return redirect()->route('employees.index')->with('success', 'Data pegawai berhasil dihapus!');
+        return redirect()->back()->with('success', 'Pegawai berhasil dihapus!');
     }
 }
