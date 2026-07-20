@@ -85,7 +85,7 @@
     }">
         <x-sidebar />
 
-        <div class="flex-1 flex flex-col min-w-0 pl-[250px] transition-all duration-300">
+        <div class="flex-1 flex flex-col min-w-0 pl-[250px]">
             <x-navbar :months="$months ?? []" :regionals="$regionals ?? []" :segments="$segments ?? []" />
 
             <main class="flex-1 p-6 lg:p-8">
@@ -102,6 +102,10 @@
     @if(request()->is('/'))
     <script src="{{ asset('js/dashboard.js') }}"></script>
     @endif
+
+
+    
+    @include('components.profile-modals')
 </body>
 
 </html>

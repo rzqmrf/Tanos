@@ -8,6 +8,7 @@ use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProfileController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -19,6 +20,11 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 // dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 Route::get('/api/dashboard-data', [DashboardController::class, 'apiData'])->name('dashboard.api');
+
+// profile routes (using manual session check in controller)
+Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
 // crud grop
 Route::prefix('dashboard')->group(function () {
