@@ -6,7 +6,7 @@
 
 <header class="sticky top-0 bg-[#f8fafc]/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-900 z-30 px-6 py-4 flex items-center justify-between">
     
-    <!-- Left Area: Hamburger for mobile, Search bar for desktop -->
+    <!-- Left Area: Hamburger for mobile -->
     <div class="flex items-center space-x-4 flex-1">
         <!-- Mobile Sidebar Toggle -->
         <button @click="sidebarOpen = !sidebarOpen" class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 focus:outline-none md:hidden">
@@ -14,19 +14,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </button>
-
-        <!-- Search Bar -->
-        <div class="relative max-w-xs w-full hidden sm:block">
-            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <!-- Search Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-400 dark:text-slate-500">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
-                </svg>
-            </div>
-            <input type="text" 
-                   placeholder="Search..." 
-                   class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-[#1b3bb6] focus:ring-1 focus:ring-[#1b3bb6] transition-all duration-200">
-        </div>
     </div>
 
     <!-- Right Area: Filters + Notification + Profile -->
