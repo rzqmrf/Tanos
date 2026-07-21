@@ -64,6 +64,22 @@ Route::prefix('dashboard')->group(function () {
         return view('dashboard.expenses');
     })->name('expenses.index');
 
+    Route::get('recruitment', function () {
+        return view('dashboard.recruitment');
+    })->name('recruitment.index');
+
+    Route::get('evaluations', function () {
+        return view('dashboard.evaluations');
+    })->name('evaluations.index');
+
+    Route::get('certifications', function () {
+        return view('dashboard.certifications');
+    })->name('certifications.index');
+
+    Route::get('schedules', function () {
+        return view('dashboard.schedules');
+    })->name('schedules.index');
+
     Route::get('api/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
