@@ -27,8 +27,9 @@ class DashboardController extends Controller
             return redirect()->route('login');
         }
 
-        // Default initial filters
-        $defaultMonth = 'Juni 2025';
+        // Default initial filters (dynamic based on current real-time month)
+        $months = $this->dashboardService->getMonths();
+        $defaultMonth = end($months);
         $defaultRegional = 'All';
         $defaultSegment = 'All';
 
@@ -55,7 +56,10 @@ class DashboardController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $month = $request->query('month', 'Juni 2025');
+        $months = $this->dashboardService->getMonths();
+        $defaultMonth = end($months);
+
+        $month = $request->query('month', $defaultMonth);
         $regional = $request->query('regional', 'All');
         $segment = $request->query('segment', 'All');
 

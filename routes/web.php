@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -46,4 +47,24 @@ Route::prefix('dashboard')->group(function () {
     Route::get('users', function () {
         return view('dashboard.users');
     })->name('users.index');
+
+    Route::get('clients', function () {
+        return view('dashboard.clients');
+    })->name('clients.index');
+
+    Route::get('attendances', function () {
+        return view('dashboard.attendances');
+    })->name('attendances.index');
+
+    Route::get('payrolls', function () {
+        return view('dashboard.payrolls');
+    })->name('payrolls.index');
+
+    Route::get('expenses', function () {
+        return view('dashboard.expenses');
+    })->name('expenses.index');
+
+    Route::get('api/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+    Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });

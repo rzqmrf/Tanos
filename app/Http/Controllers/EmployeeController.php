@@ -24,7 +24,17 @@ class EmployeeController extends Controller
             'regional' => 'required|string|max:255'
         ]);
 
-        Employee::create($validData);
+        $employee = Employee::create($validData);
+
+        // Trigger notification for all users
+        foreach (\App\Models\User::all() as $u) {
+            \App\Models\Notification::create([
+                'user_id' => $u->id,
+                'title' => 'Pegawai Baru Bergabung',
+                'message' => $employee->name . ' telah bergabung sebagai ' . $employee->role . ' di ' . $employee->regional . '.',
+                'type' => 'employee',
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Berhasil menambah data pegawai!');
     }

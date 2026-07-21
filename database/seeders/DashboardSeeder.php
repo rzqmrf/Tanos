@@ -14,10 +14,8 @@ class DashboardSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. DEKLARASI VARIABEL YANG HILANG
-        $months = [
-            'Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025', 'Mei 2025', 'Juni 2025'
-        ];
+        // 1. DEKLARASI VARIABEL YANG HILANG (dinamis berdasarkan kalender real)
+        $months = \App\Services\DashboardService::generateLast6Months();
 
         $regionals = [
             'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'

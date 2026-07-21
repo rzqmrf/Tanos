@@ -54,6 +54,10 @@
             $isProjects = request()->routeIs('projects.index');
             $isEmployees = request()->routeIs('employees.index');
             $isInvoices = request()->routeIs('invoices.index');
+            $isClients = request()->routeIs('clients.index');
+            $isAttendance = request()->routeIs('attendances.index');
+            $isPayroll = request()->routeIs('payrolls.index');
+            $isExpenses = request()->routeIs('expenses.index');
             $isProjectConfig = request()->routeIs('project.config');
             $isAccessControls = request()->routeIs('access.controls');
             $isUsers = request()->routeIs('users.index');
@@ -105,6 +109,24 @@
                     </svg>
                     <span class="text-xs">Employees</span>
                 </a>
+
+                <a href="{{ route('clients.index') }}" 
+                   class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isClients ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                         class="w-4.5 h-4.5 transition-colors {{ $isClients ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.003 9.003 0 0 0-8.343-6.102 3.75 3.75 0 1 1 4.986-3.084A9.011 9.011 0 0 1 18 18.72ZM12 2.25V4.5m5.303.197-1.591 1.591M21 12h-2.25m-.197 5.303-1.591-1.591m-12 0-1.591 1.591M3 12H5.25M5.447 5.152 7.038 6.744M12 18.75v2.25" />
+                    </svg>
+                    <span class="text-xs">Clients</span>
+                </a>
+
+                <a href="{{ route('attendances.index') }}" 
+                   class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isAttendance ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                         class="w-4.5 h-4.5 transition-colors {{ $isAttendance ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    <span class="text-xs">Attendance</span>
+                </a>
             </div>
 
             <!-- Category: Keuangan -->
@@ -118,6 +140,24 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 5.25h19.5m-19.5 0h19.5M2.25 12h19.5m-19.5 0h19.5m-19.5 5.25h19.5m-19.5 0h19.5M3 19.5h18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 21 4.5H3a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3 19.5Z" />
                     </svg>
                     <span class="text-xs">Invoices</span>
+                </a>
+
+                <a href="{{ route('payrolls.index') }}" 
+                   class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isPayroll ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                         class="w-4.5 h-4.5 transition-colors {{ $isPayroll ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h16.5m-16.5 3h16.5m-16.5 3h16.5m-16.5 3h16.5m-16.5 3h16.5M3.75 4.5v12m16.5-12v12m-16.5 0a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5" />
+                    </svg>
+                    <span class="text-xs">Payroll</span>
+                </a>
+
+                <a href="{{ route('expenses.index') }}" 
+                   class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isExpenses ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                         class="w-4.5 h-4.5 transition-colors {{ $isExpenses ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.752.315C10.428 17.072 11.218 17.25 12 17.25c.957 0 1.92-.3 2.508-1.077.58-.766.53-1.897-.263-2.564l-.79-.667a4.275 4.275 0 0 0-2.6-1.344c-.455-.078-.9-.253-1.302-.518-1.092-.725-1.214-2.232-.302-3.178C9.9 8.077 10.966 7.75 12 7.75c.896 0 1.701.21 2.308.625l.483.33M9 16.125h.008v.008H9v-.008Zm0-6.125h.008v.008H9V10Zm6 6v.008h-.008V16H15Zm0-6.125h.008v.008H15V9.875Z" />
+                    </svg>
+                    <span class="text-xs">Expenses</span>
                 </a>
             </div>
 

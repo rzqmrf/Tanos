@@ -24,7 +24,18 @@ class ProjectController extends Controller
             'active' => 'required|integer', // 1 untuk aktif, 0 untuk non-aktif
         ]);
 
-        Project::create($validData);
+        $project = Project::create($validData);
+
+        // Trigger notification for all users
+        foreach (\App\Models\User::all() as $u) {
+            \App\Models\Notification::create([
+                'user_id' => $u->id,
+                'title' => 'Proyek Baru Aktif',
+                'message' => 'Proyek segment ' . $project->segment . ' di ' . $project->regional . ' senilai Rp ' . number_format($project->cost, 0, ',', '.') . ' telah ditambahkan.',
+                'type' => 'project',
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Project baru sukses dibuat!');
     }
 

@@ -24,7 +24,18 @@ class InvoiceController extends Controller
             'segment' => 'required|string|max:255',
             'amount' => 'required|numeric',
         ]);
-        Invoice::create($validData);
+        $invoice = Invoice::create($validData);
+
+        // Trigger notification for all users
+        foreach (\App\Models\User::all() as $u) {
+            \App\Models\Notification::create([
+                'user_id' => $u->id,
+                'title' => 'Invoice Baru Masuk',
+                'message' => 'Invoice ' . $invoice->type . ' di ' . $invoice->regional . ' senilai Rp ' . number_format($invoice->amount, 0, ',', '.') . ' telah dibuat.',
+                'type' => 'invoice',
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Invoice sukses dibuat!');
     }
 

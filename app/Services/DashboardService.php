@@ -9,9 +9,7 @@ use App\Models\Invoice;
 class DashboardService
 {
     // filter / sorting
-    private array $months = [
-        'Januari 2025', 'Februari 2025', 'Maret 2025', 'April 2025', 'Mei 2025', 'Juni 2025'
-    ];
+    private array $months = [];
 
     private array $regionals = [
         'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'
@@ -20,6 +18,29 @@ class DashboardService
     private array $segments = [
         'Enterprise', 'Corporate', 'Government', 'SME', 'Retail'
     ];
+
+    public function __construct()
+    {
+        $this->months = self::generateLast6Months();
+    }
+
+    public static function generateLast6Months(): array
+    {
+        $monthsIndo = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+        ];
+        
+        $months = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $time = strtotime("-$i months");
+            $monthNum = (int)date('n', $time);
+            $year = date('Y', $time);
+            $months[] = $monthsIndo[$monthNum] . ' ' . $year;
+        }
+        
+        return $months;
+    }
 
     public function getMonths(): array
     {
@@ -60,6 +81,19 @@ class DashboardService
 
         $growth = $this->calculateGrowth($selectedMonth, $selectedReg, $selectedSeg, $totalActive, $totalPegawai, $totalP2P, $totalNonP2P, $totalCost, $avgCost);
 
+        // Queries for charts ignoring segment/regional filters depending on the chart dimension
+        $projectQueryNoSeg = Project::query()
+            ->when($selectedMonth !== 'All', fn($q) => $q->where('month', $selectedMonth))
+            ->when($selectedReg !== 'All', fn($q) => $q->where('regional', $selectedReg));
+
+        $projectQueryNoReg = Project::query()
+            ->when($selectedMonth !== 'All', fn($q) => $q->where('month', $selectedMonth))
+            ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
+
+        $employeeQueryNoReg = Employee::query()
+            ->when($selectedMonth !== 'All', fn($q) => $q->where('month', $selectedMonth))
+            ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
+
         return [
             'stats' => [
                 'totalActiveProjects' => ['raw' => $totalActive, 'formatted' => number_format($totalActive, 0, ',', '.'), 'growth' => $growth['activeProjects']],
@@ -70,9 +104,9 @@ class DashboardService
                 'avgCost' => ['raw' => $avgCost, 'formatted' => $this->formatRupiahDisplay($avgCost), 'growth' => $growth['avgCost']]
             ],
             'charts' => [
-                'projectsPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQuery)->where('active', true)->where('segment', $seg)->count()])->all(),
-                'projectsPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQuery)->where('active', true)->where('regional', $reg)->count()])->all(),
-                'pegawaiPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $employeeQuery)->where('regional', $reg)->count()])->all(),
+                'projectsPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('active', true)->where('segment', $seg)->count()])->all(),
+                'projectsPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('active', true)->where('regional', $reg)->count()])->all(),
+                'pegawaiPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $employeeQueryNoReg)->where('regional', $reg)->count()])->all(),
                 'tagihanPerBulan' => collect($this->months)->map(fn($m) => [
                     'category' => substr($m, 0, 3),
                     'value' => Invoice::where('month', $m)
@@ -80,8 +114,8 @@ class DashboardService
                         ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg))
                         ->sum('amount')
                 ])->all(),
-                'costPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQuery)->where('regional', $reg)->sum('cost')])->all(),
-                'costPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQuery)->where('segment', $seg)->sum('cost')])->all(),
+                'costPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('regional', $reg)->sum('cost')])->all(),
+                'costPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('segment', $seg)->sum('cost')])->all(),
                 'costPerBulan' => collect($this->months)->map(fn($m) => [
                     'category' => substr($m, 0, 3),
                     'value' => Project::where('month', $m)

@@ -54,7 +54,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
     <!-- Left Card: Jumlah Project per Segment -->
-    <x-chart-card title="Jumlah Project per Segment">
+    <x-chart-card title="Jumlah Project per Segment" link="{{ route('projects.index') }}">
         <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
             <!-- Donut Chart (ApexCharts div) -->
             <div class="relative w-44 h-44 shrink-0">
@@ -86,7 +86,7 @@
     </x-chart-card>
 
     <!-- Right Card: Jumlah Project per Regional -->
-    <x-chart-card title="Jumlah Project per Regional">
+    <x-chart-card title="Jumlah Project per Regional" link="{{ route('projects.index') }}">
         <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="relative w-44 h-44 shrink-0">
                 <div id="projectRegionalChart"></div>
@@ -122,14 +122,14 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
     <!-- Left Card: Total Pegawai per Regional -->
-    <x-chart-card title="Total Pegawai per Regional">
+    <x-chart-card title="Total Pegawai per Regional" link="{{ route('employees.index') }}">
         <div class="w-full h-64">
             <div id="pegawaiRegionalChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Total Tagihan per Bulan -->
-    <x-chart-card title="Total Tagihan per Bulan">
+    <x-chart-card title="Total Tagihan per Bulan" link="{{ route('invoices.index') }}">
         <div class="w-full h-64">
             <div id="tagihanBulanChart" class="h-full"></div>
         </div>
@@ -141,21 +141,21 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- Left Card: Total Cost per Regional -->
-    <x-chart-card title="Total Cost per Regional">
+    <x-chart-card title="Total Cost per Regional" link="{{ route('projects.index') }}">
         <div class="w-full h-60">
             <div id="costRegionalChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Middle Card: Total Cost per Segment -->
-    <x-chart-card title="Total Cost per Segment">
+    <x-chart-card title="Total Cost per Segment" link="{{ route('projects.index') }}">
         <div class="w-full h-60">
             <div id="costSegmentChart" class="h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Trend Cost per Bulan -->
-    <x-chart-card title="Trend Cost per Bulan">
+    <x-chart-card title="Trend Cost per Bulan" link="{{ route('projects.index') }}">
         <div class="w-full h-60">
             <div id="costBulanChart" class="h-full"></div>
         </div>
