@@ -263,6 +263,18 @@
                          x-transition:leave-end="opacity-0 -translate-y-1"
                          class="mt-1 pl-9 space-y-1"
                          style="display: none;">
+                         <a href="{{ route('project.config') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isProjectConfig ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            Project Config
+                        </a>
+                        <a href="{{ route('access.controls') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isAccessControls ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            Access Controls
+                        </a>
+                        <a href="{{ route('users.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isUsers ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            User Management
+                        </a>
+                    </div>
+                </div>
+            </div>
         </nav>
     </div>
 
