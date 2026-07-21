@@ -25,7 +25,7 @@
             @elseif(request()->routeIs('invoices.index'))
                 Invoices
             @elseif(request()->routeIs('reports.index'))
-                Laporan & Analitik
+                Reports & Analytics
             @elseif(request()->routeIs('project.config'))
                 Project Configuration
             @elseif(request()->routeIs('access.controls'))
@@ -33,15 +33,15 @@
             @elseif(request()->routeIs('users.index'))
                 User Management
             @elseif(request()->routeIs('profile.edit'))
-                Edit Profil
+                Edit Profile
             @elseif(request()->routeIs('clients.index'))
-                Manajemen Klien
+                Client Management
             @elseif(request()->routeIs('attendances.index'))
-                Absensi & Cuti
+                Attendance & Leaves
             @elseif(request()->routeIs('payrolls.index'))
-                Penggajian (Payroll)
+                Payroll
             @elseif(request()->routeIs('expenses.index'))
-                Pengeluaran & Procurement
+                Expenses & Procurement
             @else
                 Tanos ERP
             @endif
