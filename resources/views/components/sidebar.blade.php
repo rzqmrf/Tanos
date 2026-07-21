@@ -67,7 +67,8 @@
             $isUsers = request()->routeIs('users.index');
             $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers;
 
-            $isOperationalActive = $isProjects || $isEmployees || $isClients || $isAttendance || $isSchedules || $isRecruitment || $isEvaluations || $isCertifications;
+            $isOperationalActive = $isProjects || $isClients || $isSchedules;
+            $isHRActive = $isEmployees || $isAttendance || $isRecruitment || $isEvaluations || $isCertifications;
             $isFinanceActive = $isInvoices || $isPayroll || $isExpenses;
         @endphp
         <nav class="space-y-6">
@@ -96,9 +97,10 @@
             </div>
 
             <!-- Category: Operasional -->
-            <div class="space-y-1.5">
+            <div class="space-y-3">
                 <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Operasional</span>
 
+                <!-- Group: Operations -->
                 <div x-data="{ open: {{ $isOperationalActive ? 'true' : 'false' }} }" class="relative">
                     <button @click="open = !open"
                             class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group cursor-pointer {{ $isOperationalActive ? 'text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-800/20' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40' }}">
@@ -127,17 +129,46 @@
                         <a href="{{ route('projects.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isProjects ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                             Projects
                         </a>
-                        <a href="{{ route('employees.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEmployees ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                            Employees
-                        </a>
                         <a href="{{ route('clients.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isClients ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                             Clients
                         </a>
-                        <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isAttendance ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                            Attendance
-                        </a>
                         <a href="{{ route('schedules.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isSchedules ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                             Shift Scheduling
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Group: Human Resources -->
+                <div x-data="{ open: {{ $isHRActive ? 'true' : 'false' }} }" class="relative">
+                    <button @click="open = !open"
+                            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group cursor-pointer {{ $isHRActive ? 'text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-800/20' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40' }}">
+                        <div class="flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                                 class="w-4.5 h-4.5 transition-colors {{ $isHRActive ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766v-.109A12.318 12.318 0 0 1 9.374 18c2.331 0 4.512.645 6.374 1.766Zm-3-12.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM18 10.5a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                            </svg>
+                            <span class="text-xs">Human Resources</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+                             :class="open ? 'rotate-180 text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
+                             class="w-3 h-3 transition-transform duration-150">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </button>
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 -translate-y-1"
+                         class="mt-1 pl-9 space-y-1"
+                         style="display: none;">
+                        <a href="{{ route('employees.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEmployees ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            Employees
+                        </a>
+                        <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isAttendance ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            Attendance
                         </a>
                         <a href="{{ route('recruitment.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isRecruitment ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                             Recruitment
