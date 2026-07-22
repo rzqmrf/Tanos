@@ -259,8 +259,12 @@ function initCostRegionalChart(data) {
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
-            labels: { style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT },
-                      rotate: -30, trim: true },
+            labels: { 
+                style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT },
+                rotate: 0, 
+                rotateAlways: false,
+                trim: true 
+            },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
@@ -274,7 +278,7 @@ function initCostRegionalChart(data) {
             },
         },
         colors: [COLORS.blue],
-        plotOptions: { bar: { borderRadius: 5, columnWidth: '45%' } },
+        plotOptions: { bar: { borderRadius: 4, columnWidth: '40%' } },
         fill: {
             type: 'gradient',
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
@@ -299,7 +303,13 @@ function initCostSegmentChart(data) {
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
-            labels: { style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT } },
+            labels: { 
+                style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT },
+                rotate: 0,
+                rotateAlways: false,
+                trim: true,
+                hideOverlappingLabels: false
+            },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
@@ -313,7 +323,7 @@ function initCostSegmentChart(data) {
             },
         },
         colors: [COLORS.amber],
-        plotOptions: { bar: { borderRadius: 5, columnWidth: '45%' } },
+        plotOptions: { bar: { borderRadius: 4, columnWidth: '40%' } },
         fill: {
             type: 'gradient',
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
