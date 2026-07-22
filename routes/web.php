@@ -49,45 +49,45 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('invoices', InvoiceController::class);
     Route::resource('employees', EmployeeController::class);
 
-    // Placeholder routes for reports and users
+    // Placeholder routes for reports, users, etc.
     Route::get('reports', function () {
-        return view('dashboard.reports');
+        return view('analytics.reports');
     })->name('reports.index');
 
     Route::get('users', function () {
-        return view('dashboard.users');
+        return view('settings.users');
     })->name('users.index');
 
     Route::get('clients', function () {
-        return view('dashboard.clients');
+        return view('operations.clients');
     })->name('clients.index');
 
     Route::get('attendances', function () {
-        return view('dashboard.attendances');
+        return view('hr.attendances');
     })->name('attendances.index');
 
     Route::get('payrolls', function () {
-        return view('dashboard.payrolls');
+        return view('finance.payrolls');
     })->name('payrolls.index');
 
     Route::get('expenses', function () {
-        return view('dashboard.expenses');
+        return view('finance.expenses');
     })->name('expenses.index');
 
     Route::get('recruitment', function () {
-        return view('dashboard.recruitment');
+        return view('hr.recruitment');
     })->name('recruitment.index');
 
     Route::get('evaluations', function () {
-        return view('dashboard.evaluations');
+        return view('hr.evaluations');
     })->name('evaluations.index');
 
     Route::get('certifications', function () {
-        return view('dashboard.certifications');
+        return view('hr.certifications');
     })->name('certifications.index');
 
     Route::get('schedules', function () {
-        return view('dashboard.schedules');
+        return view('operations.schedules');
     })->name('schedules.index');
 
     Route::get('notifications', [NotificationController::class, 'page'])->name('notifications.page');

@@ -14,7 +14,7 @@ class InvoiceController extends Controller
     {
         $dashboardService = new DashboardService();
 
-        return view('dashboard.invoices', [
+        return view('finance.invoices', [
             'invoices' => Invoice::latest()->paginate(25),
             'regionals' => Regional::orderBy('name')->get(),
             'segments' => Segment::orderBy('name')->get(),

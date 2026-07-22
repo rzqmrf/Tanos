@@ -20,7 +20,7 @@ class EmployeeController extends Controller
         $segments = Segment::orderBy('name')->get();
         $months = $dashboardService->getMonths();
 
-        return view('dashboard.employees', [
+        return view('hr.employees', [
             'employees' => Employee::latest()->paginate(25),
             'regionals' => $regionals,
             'subRegionals' => $subRegionals,

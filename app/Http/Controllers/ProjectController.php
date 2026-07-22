@@ -14,7 +14,7 @@ class ProjectController extends Controller
     {
         $dashboardService = new DashboardService();
 
-        return view('dashboard.projects', [
+        return view('operations.projects', [
             'projects' => Project::latest()->paginate(25),
             'regionals' => Regional::orderBy('name')->get(),
             'segments' => Segment::orderBy('name')->get(),

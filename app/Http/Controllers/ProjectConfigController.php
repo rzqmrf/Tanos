@@ -17,7 +17,7 @@ class ProjectConfigController extends Controller
         $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
         $segments = Segment::orderBy('name')->get();
 
-        return view('dashboard.project-config', compact('regionals', 'subRegionals', 'segments'));
+        return view('settings.project-config', compact('regionals', 'subRegionals', 'segments'));
     }
 
     public function storeRegional(Request $request)

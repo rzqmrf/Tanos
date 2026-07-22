@@ -55,7 +55,7 @@ class NotificationController extends Controller
 
         $totalCount = Notification::where('user_id', $user->id)->count();
 
-        return view('dashboard.notifications', compact('notifications', 'unreadCount', 'totalCount'));
+        return view('notifications.index', compact('notifications', 'unreadCount', 'totalCount'));
     }
 
     /**
