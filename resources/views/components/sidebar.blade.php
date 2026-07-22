@@ -2,8 +2,8 @@
     'active' => 'dashboard'
 ])
 
-<aside :class="sidebarHidden ? '-translate-x-full' : (sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0')"
-            class="fixed top-0 left-0 bottom-0 w-[250px] bg-white dark:bg-slate-900 border-r border-slate-200/60 dark:border-slate-800/80 flex flex-col justify-between p-4 z-40 transition-transform duration-300 rounded-none">
+<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+            class="fixed top-0 left-0 bottom-0 w-[250px] bg-white dark:bg-slate-900 border-r border-slate-200/60 dark:border-slate-800/80 flex flex-col justify-between p-4 z-40 transition-transform duration-300 md:translate-x-0 rounded-none">
 
     <div>
         <div class="flex items-center px-2 py-3 mb-3 min-h-[48px]">

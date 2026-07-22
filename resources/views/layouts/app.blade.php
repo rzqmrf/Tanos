@@ -36,6 +36,7 @@
     </style>
 
     <script>
+        localStorage.removeItem('sidebarHidden');
         if (localStorage.getItem('darkMode') === 'true') {
             document.documentElement.classList.add('dark');
         } else {
@@ -50,14 +51,6 @@
 
     <div class="flex min-h-screen" x-data="{ 
         sidebarOpen: false, 
-        sidebarHidden: localStorage.getItem('sidebarHidden') === 'true',
-        toggleSidebar() {
-            this.sidebarHidden = !this.sidebarHidden;
-            localStorage.setItem('sidebarHidden', this.sidebarHidden);
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-            }, 300);
-        },
         darkMode: localStorage.getItem('darkMode') === 'true',
         toggleDarkMode() {
             this.darkMode = !this.darkMode;
@@ -93,7 +86,7 @@
     }">
         <x-sidebar />
 
-        <div class="flex-1 flex flex-col min-w-0 transition-all duration-300" :class="sidebarHidden ? 'pl-0' : 'pl-[250px]'">
+        <div class="flex-1 flex flex-col min-w-0 pl-[250px]">
             <x-navbar :months="$months ?? []" :regionals="$regionals ?? []" :segments="$segments ?? []" />
 
             <main class="flex-1 p-6 lg:p-8">
@@ -111,8 +104,6 @@
     <script src="{{ asset('js/dashboard.js') }}"></script>
     @endif
 
-
-    
     @include('components.profile-modals')
 </body>
 
