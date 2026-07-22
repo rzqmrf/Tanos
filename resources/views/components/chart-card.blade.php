@@ -3,7 +3,7 @@
     'link' => '#'
 ])
 
-<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_-3px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow duration-300 flex flex-col justify-between h-full">
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_-3px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.04)] transition-shadow duration-300 flex flex-col justify-between h-full overflow-hidden w-full min-w-0">
     
     <!-- Card Header -->
     <div class="flex items-center justify-between mb-5">
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Chart Canvas Container -->
-    <div class="relative flex-1 w-full min-h-0 flex items-center justify-center">
+    <div class="relative flex-1 w-full min-w-0 min-h-0 flex items-center justify-center overflow-hidden">
         {{ $slot }}
     </div>
 </div>

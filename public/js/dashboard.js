@@ -44,6 +44,7 @@ const baseOptions = {
         fontFamily: FONT,
         toolbar:    { show: false },
         zoom:       { enabled: false },
+        redrawOnWindowResize: true,
         animations: { enabled: true, speed: 500, animateGradually: { enabled: true, delay: 80 } },
     },
     grid: {
@@ -51,7 +52,7 @@ const baseOptions = {
         strokeDashArray: 4,
         xaxis: { lines: { show: false } },
         yaxis: { lines: { show: true  } },
-        padding: { top: 0, right: 8, bottom: 0, left: 8 },
+        padding: { top: 0, right: 12, bottom: 0, left: 12 },
     },
     tooltip: {
         style:  { fontFamily: FONT, fontSize: '12px' },
@@ -67,7 +68,6 @@ let charts = {};
 
 // ─── Helper: update options or create a chart ─────────────────────────────────
 function renderChart(id, options) {
-    // Dynamically override values for dark mode support
     if (!options.grid) options.grid = {};
     options.grid.borderColor = getGridClr();
 
@@ -127,7 +127,6 @@ function initProjectSegmentChart(data) {
             },
         },
         stroke: { width: 2 },
-        // Donut uses custom HTML legend in blade, no built-in legend needed
         legend: { show: false },
         dataLabels: { enabled: false },
         tooltip: {
@@ -184,7 +183,7 @@ function initPegawaiRegionalChart(data) {
     const values = items.map(i => i.value);
     renderChart('pegawaiRegionalChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: '100%' },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 240 },
         series: [{ name: 'Jumlah Pegawai', data: values }],
         xaxis: {
             categories: labels,
@@ -194,7 +193,7 @@ function initPegawaiRegionalChart(data) {
         yaxis: { labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } } },
         colors: [COLORS.purple],
         plotOptions: {
-            bar: { borderRadius: 6, columnWidth: '55%' },
+            bar: { borderRadius: 6, columnWidth: '45%' },
         },
         dataLabels: { enabled: false },
         fill: {
@@ -202,7 +201,6 @@ function initPegawaiRegionalChart(data) {
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
                          gradientToColors: [COLORS.indigo], stops: [0, 100] },
         },
-        // Legend: show series name at top
         legend: { ...legendStyle },
         tooltip: {
             ...baseOptions.tooltip,
@@ -218,7 +216,7 @@ function initTagihanBulanChart(data) {
     const vals   = items.map(i => i.value);
     renderChart('tagihanBulanChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'area', height: '100%' },
+        chart:  { ...baseOptions.chart, type: 'area', height: 240 },
         series: [{ name: 'Total Tagihan', data: vals }],
         xaxis: {
             categories: labels,
@@ -241,7 +239,6 @@ function initTagihanBulanChart(data) {
             type: 'gradient',
             gradient: { shadeIntensity: 1, opacityFrom: 0.25, opacityTo: 0.02, stops: [0, 95] },
         },
-        // Legend top-left
         legend: { ...legendStyle },
         markers: { size: 4, hover: { size: 6 } },
         tooltip: {
@@ -258,7 +255,7 @@ function initCostRegionalChart(data) {
     const values = items.map(i => i.value);
     renderChart('costRegionalChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: '100%' },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 220 },
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
@@ -277,7 +274,7 @@ function initCostRegionalChart(data) {
             },
         },
         colors: [COLORS.blue],
-        plotOptions: { bar: { borderRadius: 5, columnWidth: '55%' } },
+        plotOptions: { bar: { borderRadius: 5, columnWidth: '45%' } },
         fill: {
             type: 'gradient',
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
@@ -298,7 +295,7 @@ function initCostSegmentChart(data) {
     const values = items.map(i => i.value);
     renderChart('costSegmentChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: '100%' },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 220 },
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
@@ -316,7 +313,7 @@ function initCostSegmentChart(data) {
             },
         },
         colors: [COLORS.amber],
-        plotOptions: { bar: { borderRadius: 5, columnWidth: '55%' } },
+        plotOptions: { bar: { borderRadius: 5, columnWidth: '45%' } },
         fill: {
             type: 'gradient',
             gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
@@ -337,7 +334,7 @@ function initCostBulanChart(data) {
     const values = items.map(i => i.value);
     renderChart('costBulanChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'area', height: '100%' },
+        chart:  { ...baseOptions.chart, type: 'area', height: 220 },
         series: [{ name: 'Trend Cost', data: values }],
         xaxis: {
             categories: labels,
@@ -388,6 +385,13 @@ function initDashboardCharts(chartData) {
 window.updateDashboardCharts = function(chartData) {
     initDashboardCharts(chartData);
 };
+
+// ─── Handle window resize & sidebar toggle ─────────────────────────────────────
+window.addEventListener('resize', () => {
+    setTimeout(() => {
+        Object.values(charts).forEach(c => c && c.windowResizeHandler && c.windowResizeHandler());
+    }, 200);
+});
 
 // ─── Boot on DOMContentLoaded ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {

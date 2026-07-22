@@ -54,6 +54,9 @@
         toggleSidebar() {
             this.sidebarHidden = !this.sidebarHidden;
             localStorage.setItem('sidebarHidden', this.sidebarHidden);
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 300);
         },
         darkMode: localStorage.getItem('darkMode') === 'true',
         toggleDarkMode() {

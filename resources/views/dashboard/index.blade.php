@@ -55,16 +55,16 @@
 
     <!-- Left Card: Jumlah Project per Segment -->
     <x-chart-card title="Jumlah Project per Segment" link="{{ route('projects.index') }}">
-        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 min-w-0 overflow-hidden">
             <!-- Donut Chart (ApexCharts div) -->
             <div class="relative w-44 h-44 shrink-0">
-                <div id="projectSegmentChart"></div>
+                <div id="projectSegmentChart" class="w-full h-full"></div>
             </div>
             <!-- Custom HTML Legend -->
-            <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4">
+            <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4 min-w-0">
                 <template x-for="(item, index) in chartData.projectsPerSegment" :key="item.category">
                     <div class="flex items-center justify-between text-xs font-semibold">
-                        <div class="flex items-center space-x-2.5">
+                        <div class="flex items-center space-x-2.5 min-w-0">
                             <span :class="[
                                 index === 0 ? 'bg-[#1b3bb6]' : '',
                                 index === 1 ? 'bg-emerald-500' : '',
@@ -87,15 +87,15 @@
 
     <!-- Right Card: Jumlah Project per Regional -->
     <x-chart-card title="Jumlah Project per Regional" link="{{ route('projects.index') }}">
-        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 min-w-0 overflow-hidden">
             <div class="relative w-44 h-44 shrink-0">
-                <div id="projectRegionalChart"></div>
+                <div id="projectRegionalChart" class="w-full h-full"></div>
             </div>
             <!-- Custom HTML Legend -->
-            <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4">
+            <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4 min-w-0">
                 <template x-for="(item, index) in chartData.projectsPerRegional" :key="item.category">
                     <div class="flex items-center justify-between text-xs font-semibold">
-                        <div class="flex items-center space-x-2.5">
+                        <div class="flex items-center space-x-2.5 min-w-0">
                             <span :class="[
                                 index === 0 ? 'bg-[#1b3bb6]' : '',
                                 index === 1 ? 'bg-emerald-500' : '',
@@ -123,15 +123,15 @@
 
     <!-- Left Card: Total Pegawai per Regional -->
     <x-chart-card title="Total Pegawai per Regional" link="{{ route('employees.index') }}">
-        <div class="w-full h-64">
-            <div id="pegawaiRegionalChart" class="h-full"></div>
+        <div class="w-full h-64 min-w-0 overflow-hidden">
+            <div id="pegawaiRegionalChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Total Tagihan per Bulan -->
     <x-chart-card title="Total Tagihan per Bulan" link="{{ route('invoices.index') }}">
-        <div class="w-full h-64">
-            <div id="tagihanBulanChart" class="h-full"></div>
+        <div class="w-full h-64 min-w-0 overflow-hidden">
+            <div id="tagihanBulanChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
@@ -142,22 +142,22 @@
 
     <!-- Left Card: Total Cost per Regional -->
     <x-chart-card title="Total Cost per Regional" link="{{ route('projects.index') }}">
-        <div class="w-full h-60">
-            <div id="costRegionalChart" class="h-full"></div>
+        <div class="w-full h-60 min-w-0 overflow-hidden">
+            <div id="costRegionalChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Middle Card: Total Cost per Segment -->
     <x-chart-card title="Total Cost per Segment" link="{{ route('projects.index') }}">
-        <div class="w-full h-60">
-            <div id="costSegmentChart" class="h-full"></div>
+        <div class="w-full h-60 min-w-0 overflow-hidden">
+            <div id="costSegmentChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Trend Cost per Bulan -->
     <x-chart-card title="Trend Cost per Bulan" link="{{ route('projects.index') }}">
-        <div class="w-full h-60">
-            <div id="costBulanChart" class="h-full"></div>
+        <div class="w-full h-60 min-w-0 overflow-hidden">
+            <div id="costBulanChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
