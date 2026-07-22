@@ -32,6 +32,16 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('project-config', ProjectConfigController::class)->names([
         'index' => 'project.config'
     ]);
+    Route::post('project-config/regionals', [ProjectConfigController::class, 'storeRegional'])->name('project.config.regionals.store');
+    Route::put('project-config/regionals/{regional}', [ProjectConfigController::class, 'updateRegional'])->name('project.config.regionals.update');
+    Route::delete('project-config/regionals/{regional}', [ProjectConfigController::class, 'destroyRegional'])->name('project.config.regionals.destroy');
+    Route::post('project-config/sub-regionals', [ProjectConfigController::class, 'storeSubRegional'])->name('project.config.sub-regionals.store');
+    Route::put('project-config/sub-regionals/{subRegional}', [ProjectConfigController::class, 'updateSubRegional'])->name('project.config.sub-regionals.update');
+    Route::delete('project-config/sub-regionals/{subRegional}', [ProjectConfigController::class, 'destroySubRegional'])->name('project.config.sub-regionals.destroy');
+    Route::post('project-config/segments', [ProjectConfigController::class, 'storeSegment'])->name('project.config.segments.store');
+    Route::put('project-config/segments/{segment}', [ProjectConfigController::class, 'updateSegment'])->name('project.config.segments.update');
+    Route::delete('project-config/segments/{segment}', [ProjectConfigController::class, 'destroySegment'])->name('project.config.segments.destroy');
+
     Route::resource('access-controls', AccessControlController::class)->names([
         'index' => 'access.controls'
     ]);

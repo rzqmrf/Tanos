@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Invoice;
+use App\Models\Regional;
+use App\Models\Segment;
 
 class DashboardSeeder extends Seeder
 {
@@ -24,6 +26,14 @@ class DashboardSeeder extends Seeder
         $segments = [
             'Enterprise', 'Corporate', 'Government', 'SME', 'Retail'
         ];
+
+        foreach ($regionals as $reg) {
+            Regional::firstOrCreate(['name' => $reg]);
+        }
+
+        foreach ($segments as $seg) {
+            Segment::firstOrCreate(['name' => $seg]);
+        }
 
         // 2. LOOPING UNTUK MENGISI TABEL PROJECTS
         foreach ($months as $mIdx => $month) {

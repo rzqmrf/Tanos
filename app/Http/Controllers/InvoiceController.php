@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Invoice;
+use App\Models\Regional;
+use App\Models\Segment;
+use App\Services\DashboardService;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        $dashboardService = new DashboardService();
+
         return view('dashboard.invoices', [
-            'invoices' => Invoice::oldest()->paginate(25)]);
+            'invoices' => Invoice::latest()->paginate(25),
+            'regionals' => Regional::orderBy('name')->get(),
+            'segments' => Segment::orderBy('name')->get(),
+            'months' => $dashboardService->getMonths(),
+        ]);
     }
 
     public function store(Request $request) {
@@ -56,8 +62,4 @@ class InvoiceController extends Controller
         $invoices->delete();
         return redirect()->back()->with('success', 'Invoice sukses dihapus!');
     }
-
-
-
-
 }

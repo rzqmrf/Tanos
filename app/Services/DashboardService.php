@@ -5,17 +5,19 @@ namespace App\Services;
 use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Invoice;
+use App\Models\Regional;
+use App\Models\Segment;
 
 class DashboardService
 {
     // filter / sorting
     private array $months = [];
 
-    private array $regionals = [
+    private array $defaultRegionals = [
         'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'
     ];
 
-    private array $segments = [
+    private array $defaultSegments = [
         'Enterprise', 'Corporate', 'Government', 'SME', 'Retail'
     ];
 
@@ -49,12 +51,24 @@ class DashboardService
 
     public function getRegionals(): array
     {
-        return $this->regionals;
+        if (\Illuminate\Support\Facades\Schema::hasTable('regionals')) {
+            $dbRegionals = Regional::pluck('name')->toArray();
+            if (!empty($dbRegionals)) {
+                return $dbRegionals;
+            }
+        }
+        return $this->defaultRegionals;
     }
 
     public function getSegments(): array
     {
-        return $this->segments;
+        if (\Illuminate\Support\Facades\Schema::hasTable('segments')) {
+            $dbSegments = Segment::pluck('name')->toArray();
+            if (!empty($dbSegments)) {
+                return $dbSegments;
+            }
+        }
+        return $this->defaultSegments;
     }
 
     /**
@@ -104,9 +118,9 @@ class DashboardService
                 'avgCost' => ['raw' => $avgCost, 'formatted' => $this->formatRupiahDisplay($avgCost), 'growth' => $growth['avgCost']]
             ],
             'charts' => [
-                'projectsPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('active', true)->where('segment', $seg)->count()])->all(),
-                'projectsPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('active', true)->where('regional', $reg)->count()])->all(),
-                'pegawaiPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $employeeQueryNoReg)->where('regional', $reg)->count()])->all(),
+                'projectsPerSegment' => collect($this->getSegments())->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('active', true)->where('segment', $seg)->count()])->all(),
+                'projectsPerRegional' => collect($this->getRegionals())->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('active', true)->where('regional', $reg)->count()])->all(),
+                'pegawaiPerRegional' => collect($this->getRegionals())->map(fn($reg) => ['category' => $reg, 'value' => (clone $employeeQueryNoReg)->where('regional', $reg)->count()])->all(),
                 'tagihanPerBulan' => collect($this->months)->map(fn($m) => [
                     'category' => substr($m, 0, 3),
                     'value' => Invoice::where('month', $m)
@@ -114,8 +128,8 @@ class DashboardService
                         ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg))
                         ->sum('amount')
                 ])->all(),
-                'costPerRegional' => collect($this->regionals)->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('regional', $reg)->sum('cost')])->all(),
-                'costPerSegment' => collect($this->segments)->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('segment', $seg)->sum('cost')])->all(),
+                'costPerRegional' => collect($this->getRegionals())->map(fn($reg) => ['category' => $reg, 'value' => (clone $projectQueryNoReg)->where('regional', $reg)->sum('cost')])->all(),
+                'costPerSegment' => collect($this->getSegments())->map(fn($seg) => ['category' => $seg, 'value' => (clone $projectQueryNoSeg)->where('segment', $seg)->sum('cost')])->all(),
                 'costPerBulan' => collect($this->months)->map(fn($m) => [
                     'category' => substr($m, 0, 3),
                     'value' => Project::where('month', $m)

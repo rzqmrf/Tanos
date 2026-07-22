@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\Regional;
+use App\Models\Segment;
+use App\Services\DashboardService;
 
 class ProjectController extends Controller
 {
     public function index()
     {
+        $dashboardService = new DashboardService();
+
         return view('dashboard.projects', [
-            'projects' => Project::oldest()->paginate(25)
+            'projects' => Project::latest()->paginate(25),
+            'regionals' => Regional::orderBy('name')->get(),
+            'segments' => Segment::orderBy('name')->get(),
+            'months' => $dashboardService->getMonths(),
         ]);
     }
 

@@ -1,16 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Regional;
+use App\Models\SubRegional;
+use App\Models\Segment;
+use App\Services\DashboardService;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        // paginasi dipaksa max 25 data per halaman awal
+        $dashboardService = new DashboardService();
+
+        $regionals = Regional::with('subRegionals')->orderBy('name')->get();
+        $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
+        $segments = Segment::orderBy('name')->get();
+        $months = $dashboardService->getMonths();
+
         return view('dashboard.employees', [
-            'employees' => Employee::oldest()->paginate(25)
+            'employees' => Employee::latest()->paginate(25),
+            'regionals' => $regionals,
+            'subRegionals' => $subRegionals,
+            'segments' => $segments,
+            'months' => $months,
         ]);
     }
 
@@ -21,7 +36,8 @@ class EmployeeController extends Controller
             'role' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
             'month' => 'required|string|max:255',
-            'regional' => 'required|string|max:255'
+            'regional' => 'required|string|max:255',
+            'sub_regional' => 'nullable|string|max:255',
         ]);
 
         $employee = Employee::create($validData);
@@ -31,7 +47,7 @@ class EmployeeController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $u->id,
                 'title' => 'Pegawai Baru Bergabung',
-                'message' => $employee->name . ' telah bergabung sebagai ' . $employee->role . ' di ' . $employee->regional . '.',
+                'message' => $employee->name . ' telah bergabung sebagai ' . $employee->role . ' di ' . $employee->regional . ($employee->sub_regional ? ' (' . $employee->sub_regional . ')' : '') . '.',
                 'type' => 'employee',
             ]);
         }
@@ -46,7 +62,8 @@ class EmployeeController extends Controller
             'role' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
             'month' => 'required|string|max:255',
-            'regional' => 'required|string|max:255'
+            'regional' => 'required|string|max:255',
+            'sub_regional' => 'nullable|string|max:255',
         ]);
 
         $employee->update($validData);

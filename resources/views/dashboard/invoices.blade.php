@@ -105,15 +105,30 @@
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan</label>
-                <input type="text" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Bulan --</option>
+                    @foreach($months as $m)
+                        <option value="{{ $m }}">{{ $m }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
-                <input type="text" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Regional --</option>
+                    @foreach($regionals as $reg)
+                        <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
-                <input type="text" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Segment --</option>
+                    @foreach($segments as $seg)
+                        <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Amount (Angka Saja)</label>
@@ -147,15 +162,27 @@
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan</label>
-                <input type="text" id="edit-month" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-month" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($months as $m)
+                        <option value="{{ $m }}">{{ $m }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
-                <input type="text" id="edit-regional" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-regional" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($regionals as $reg)
+                        <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
-                <input type="text" id="edit-segment" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-segment" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($segments as $seg)
+                        <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Amount</label>

@@ -39,7 +39,7 @@
                         <th class="p-4">Nama Pegawai</th>
                         <th class="p-4">Jabatan / Role</th>
                         <th class="p-4">Bulan</th>
-                        <th class="p-4">Regional</th>
+                        <th class="p-4">Regional & Sub-Area</th>
                         <th class="p-4">Segment</th>
                         <th class="p-4 text-center">Aksi</th>
                     </tr>
@@ -54,7 +54,14 @@
                             </span>
                         </td>
                         <td class="p-4 text-slate-500 dark:text-slate-400">{{ $item->month }}</td>
-                        <td class="p-4 text-slate-500 dark:text-slate-400">{{ $item->regional }}</td>
+                        <td class="p-4 text-slate-500 dark:text-slate-400">
+                            <span>{{ $item->regional }}</span>
+                            @if(!empty($item->sub_regional))
+                                <span class="ml-1 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-md text-xs font-medium">
+                                    {{ $item->sub_regional }}
+                                </span>
+                            @endif
+                        </td>
                         <td class="p-4 text-slate-500 dark:text-slate-400">{{ $item->segment }}</td>
                         <td class="p-4 flex items-center justify-center space-x-2">
                             <!-- Tombol Edit -->
@@ -71,7 +78,6 @@
                         </td>
                     </tr>
                     @empty
-                    <!-- Tampilan default kalau data beneran 0 di DB -->
                     <tr>
                         <td colspan="6" class="p-12 text-center">
                             <div class="rounded-xl bg-slate-50 dark:bg-slate-800/10 border border-slate-200 dark:border-slate-800 p-6 max-w-md mx-auto">
@@ -84,7 +90,6 @@
             </table>
         </div>
 
-        <!-- Bagian Link Paginasi Bawaan Laravel -->
         <div class="mt-4">
             {{ $employees->links() }}
         </div>
@@ -104,23 +109,47 @@
             @csrf
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pegawai</label>
-                <input type="text" name="name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <input type="text" name="name" required placeholder="Nama lengkap pegawai" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Jabatan / Role</label>
-                <input type="text" name="role" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <input type="text" name="role" required placeholder="Contoh: Manager, Developer, Staff" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan</label>
-                <input type="text" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Bulan --</option>
+                    @foreach($months as $m)
+                        <option value="{{ $m }}">{{ $m }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
-                <input type="text" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Regional --</option>
+                    @foreach($regionals as $reg)
+                        <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Sub-Regional / Area <span class="text-slate-400 lowercase font-normal">(opsional)</span></label>
+                <select name="sub_regional" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Tidak Ada / Opsional --</option>
+                    @foreach($subRegionals as $sub)
+                        <option value="{{ $sub->name }}">{{ $sub->name }} ({{ $sub->regional->name ?? 'Global' }})</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
-                <input type="text" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Pilih Segment --</option>
+                    @foreach($segments as $seg)
+                        <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="flex justify-end space-x-2 pt-2">
                 <button type="button" onclick="document.getElementById('modal-create-employee').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Batal</button>
@@ -151,15 +180,36 @@
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan</label>
-                <input type="text" id="edit-month" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-month" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($months as $m)
+                        <option value="{{ $m }}">{{ $m }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
-                <input type="text" id="edit-regional" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-regional" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($regionals as $reg)
+                        <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Sub-Regional / Area <span class="text-slate-400 lowercase font-normal">(opsional)</span></label>
+                <select id="edit-sub-regional" name="sub_regional" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    <option value="">-- Tidak Ada / Opsional --</option>
+                    @foreach($subRegionals as $sub)
+                        <option value="{{ $sub->name }}">{{ $sub->name }} ({{ $sub->regional->name ?? 'Global' }})</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
-                <input type="text" id="edit-segment" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                <select id="edit-segment" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
+                    @foreach($segments as $seg)
+                        <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="flex justify-end space-x-2 pt-2">
                 <button type="button" onclick="document.getElementById('modal-edit-employee').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Batal</button>
@@ -169,7 +219,6 @@
     </div>
 </div>
 
-<!-- Script Mapping Data untuk Modal Edit -->
 <script>
     function openEditModal(employee) {
         const modal = document.getElementById('modal-edit-employee');
@@ -179,6 +228,7 @@
         document.getElementById('edit-role').value = employee.role || '';
         document.getElementById('edit-month').value = employee.month || '';
         document.getElementById('edit-regional').value = employee.regional || '';
+        document.getElementById('edit-sub-regional').value = employee.sub_regional || '';
         document.getElementById('edit-segment').value = employee.segment || '';
         modal.classList.remove('hidden');
     }
