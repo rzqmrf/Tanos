@@ -33,16 +33,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
-
-        /* Smooth page transition animation */
-        #main-content {
-            transition: opacity 0.18s ease-in-out, transform 0.18s ease-in-out;
-        }
-
-        #main-content.page-loading {
-            opacity: 0.3;
-            transform: translateY(4px);
-        }
     </style>
 
     <script>
@@ -58,9 +48,6 @@
 </head>
 
 <body class="bg-[#f8fafc] dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen">
-
-    <!-- Top Loading Progress Bar -->
-    <div id="page-loader-bar" class="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 z-50 transition-all duration-300 w-0 opacity-0 shadow-sm shadow-blue-500/50 pointer-events-none"></div>
 
     <div class="flex min-h-screen" x-data="{ 
         sidebarOpen: false, 
@@ -114,37 +101,12 @@
 
     <script src="{{ asset('js/dashboard.js') }}"></script>
 
-    <!-- Smooth SPA Navigation Engine -->
+    <!-- Instant Navigation Engine (Zero Fade / Instant Swap) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const loaderBar = document.getElementById('page-loader-bar');
             const mainContent = document.getElementById('main-content');
 
-            function startLoading() {
-                if (loaderBar) {
-                    loaderBar.style.opacity = '1';
-                    loaderBar.style.width = '40%';
-                }
-                if (mainContent) {
-                    mainContent.classList.add('page-loading');
-                }
-            }
-
-            function finishLoading() {
-                if (loaderBar) {
-                    loaderBar.style.width = '100%';
-                    setTimeout(() => {
-                        loaderBar.style.opacity = '0';
-                        setTimeout(() => { loaderBar.style.width = '0'; }, 300);
-                    }, 200);
-                }
-                if (mainContent) {
-                    mainContent.classList.remove('page-loading');
-                }
-            }
-
             async function navigateTo(url, pushState = true) {
-                startLoading();
                 try {
                     const response = await fetch(url, {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -163,7 +125,7 @@
                     const newTitle = doc.querySelector('title');
                     if (newTitle) document.title = newTitle.innerText;
 
-                    // Update Main Content
+                    // Update Main Content INSTANTLY
                     const newMain = doc.querySelector('#main-content');
                     if (newMain && mainContent) {
                         mainContent.innerHTML = newMain.innerHTML;
@@ -182,17 +144,17 @@
                     }
 
                     // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo(0, 0);
 
                     // Re-init scripts if navigating to dashboard
                     const parsedUrl = new URL(url, window.location.origin);
                     if (parsedUrl.pathname === '/' || parsedUrl.pathname === '/dashboard') {
                         if (window.initDashboardCharts && window.__initialChartData) {
-                            setTimeout(() => { window.initDashboardCharts(window.__initialChartData); }, 100);
+                            window.initDashboardCharts(window.__initialChartData);
                         }
                     }
 
-                    // Re-bind Alpine if needed
+                    // Re-bind Alpine
                     if (window.Alpine) {
                         window.Alpine.discoverUninitializedComponents((el) => {
                             window.Alpine.initializeComponent(el);
@@ -200,10 +162,7 @@
                     }
 
                 } catch (err) {
-                    console.error('Smooth navigation failed, falling back to location.href:', err);
                     window.location.href = url;
-                } finally {
-                    finishLoading();
                 }
             }
 
@@ -217,7 +176,6 @@
                     return;
                 }
 
-                // Only handle same-origin GET navigation links
                 const targetUrl = new URL(href, window.location.origin);
                 if (targetUrl.origin === window.location.origin && !link.hasAttribute('download') && !link.classList.contains('no-smooth')) {
                     e.preventDefault();
