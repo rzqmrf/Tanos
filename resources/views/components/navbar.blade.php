@@ -372,7 +372,7 @@
                 <!-- Footer -->
                 <div class="px-4 py-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <button @click="markAllAsRead()" class="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 transition-colors">Tandai semua dibaca</button>
-                    <a href="{{ route('reports.index') }}" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">Lihat semua →</a>
+                    <a href="{{ route('notifications.page') }}" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">Lihat semua →</a>
                 </div>
             </div>
         </div>

@@ -90,6 +90,9 @@ Route::prefix('dashboard')->group(function () {
         return view('dashboard.schedules');
     })->name('schedules.index');
 
+    Route::get('notifications', [NotificationController::class, 'page'])->name('notifications.page');
+    Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('notifications-clear-all', [NotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
     Route::get('api/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');

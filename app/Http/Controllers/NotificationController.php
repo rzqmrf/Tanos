@@ -22,7 +22,44 @@ class NotificationController extends Controller
     }
 
     /**
-     * Get notifications for the authenticated user.
+     * Dedicated Notifications Page View.
+     */
+    public function page(Request $request)
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $query = Notification::where('user_id', $user->id);
+
+        // Filter by type if provided
+        if ($request->filled('type') && in_array($request->type, ['project', 'employee', 'invoice'])) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by read status if provided
+        if ($request->filled('status')) {
+            if ($request->status === 'unread') {
+                $query->whereNull('read_at');
+            } elseif ($request->status === 'read') {
+                $query->whereNotNull('read_at');
+            }
+        }
+
+        $notifications = $query->latest()->paginate(15)->withQueryString();
+
+        $unreadCount = Notification::where('user_id', $user->id)
+            ->whereNull('read_at')
+            ->count();
+
+        $totalCount = Notification::where('user_id', $user->id)->count();
+
+        return view('dashboard.notifications', compact('notifications', 'unreadCount', 'totalCount'));
+    }
+
+    /**
+     * Get notifications for the authenticated user (API for Navbar).
      */
     public function index()
     {
@@ -40,7 +77,6 @@ class NotificationController extends Controller
             ->whereNull('read_at')
             ->count();
 
-        // format created_at diff for human in a simple way
         $formattedNotifications = $notifications->map(function ($n) {
             return [
                 'id' => $n->id,
@@ -72,7 +108,11 @@ class NotificationController extends Controller
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
-        return response()->json(['success' => true]);
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Semua notifikasi telah ditandai sebagai dibaca!');
     }
 
     /**
@@ -93,6 +133,42 @@ class NotificationController extends Controller
             $notification->update(['read_at' => now()]);
         }
 
-        return response()->json(['success' => true]);
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Notifikasi ditandai dibaca.');
+    }
+
+    /**
+     * Delete a single notification.
+     */
+    public function destroy($id)
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        Notification::where('user_id', $user->id)
+            ->where('id', $id)
+            ->delete();
+
+        return redirect()->back()->with('success', 'Notifikasi berhasil dihapus.');
+    }
+
+    /**
+     * Delete all notifications for the user.
+     */
+    public function deleteAll()
+    {
+        $user = $this->getAuthenticatedUser();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        Notification::where('user_id', $user->id)->delete();
+
+        return redirect()->back()->with('success', 'Seluruh riwayat notifikasi berhasil dibersihkan.');
     }
 }
