@@ -101,7 +101,7 @@
 
     <script src="{{ asset('js/dashboard.js') }}"></script>
 
-    <!-- Instant Navigation Engine (Zero Fade / Instant Swap) -->
+    <!-- Instant SPA Navigation Engine -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mainContent = document.getElementById('main-content');
@@ -138,6 +138,13 @@
                         currentNavbarTitle.innerHTML = newNavbarTitle.innerHTML;
                     }
 
+                    // Update Sidebar Active Links
+                    const newSidebar = doc.querySelector('aside');
+                    const currentSidebar = document.querySelector('aside');
+                    if (newSidebar && currentSidebar) {
+                        currentSidebar.innerHTML = newSidebar.innerHTML;
+                    }
+
                     // Push State
                     if (pushState) {
                         history.pushState(null, '', url);
@@ -150,19 +157,20 @@
                     const parsedUrl = new URL(url, window.location.origin);
                     if (parsedUrl.pathname === '/' || parsedUrl.pathname === '/dashboard') {
                         if (window.initDashboardCharts && window.__initialChartData) {
-                            window.initDashboardCharts(window.__initialChartData);
+                            setTimeout(() => {
+                                window.initDashboardCharts(window.__initialChartData);
+                            }, 50);
                         }
                     }
 
-                    // Re-bind Alpine
-                    if (window.Alpine) {
-                        window.Alpine.discoverUninitializedComponents((el) => {
-                            window.Alpine.initializeComponent(el);
-                        });
+                    // Re-init Alpine v3 components safely
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                        window.Alpine.initTree(mainContent);
+                        if (currentSidebar) window.Alpine.initTree(currentSidebar);
                     }
 
                 } catch (err) {
-                    window.location.href = url;
+                    console.error('SPA navigation error:', err);
                 }
             }
 
