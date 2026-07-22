@@ -89,114 +89,20 @@
         <div class="flex-1 flex flex-col min-w-0 pl-[250px]">
             <x-navbar :months="$months ?? []" :regionals="$regionals ?? []" :segments="$segments ?? []" />
 
-            <main id="main-content" class="flex-1 p-6 lg:p-8">
+            <main class="flex-1 p-6 lg:p-8">
                 @yield('content')
             </main>
         </div>
     </div>
 
     <script>
+        // Pakai JSON.parse dibungkus kutip biar text editor lu gak pusing membaca syntax Laravel
         window.__initialChartData = JSON.parse('{!! json_encode($initialData['charts'] ?? []) !!}');
     </script>
 
+    @if(request()->is('/') || request()->routeIs('dashboard.index'))
     <script src="{{ asset('js/dashboard.js') }}"></script>
-
-    <!-- Instant SPA Navigation Engine -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mainContent = document.getElementById('main-content');
-
-            async function navigateTo(url, pushState = true) {
-                try {
-                    const response = await fetch(url, {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    });
-
-                    if (!response.ok) {
-                        window.location.href = url;
-                        return;
-                    }
-
-                    const html = await response.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-
-                    // Update Title
-                    const newTitle = doc.querySelector('title');
-                    if (newTitle) document.title = newTitle.innerText;
-
-                    // Update Main Content INSTANTLY
-                    const newMain = doc.querySelector('#main-content');
-                    if (newMain && mainContent) {
-                        mainContent.innerHTML = newMain.innerHTML;
-                    }
-
-                    // Update Navbar Title Header
-                    const newNavbarTitle = doc.querySelector('header h2');
-                    const currentNavbarTitle = document.querySelector('header h2');
-                    if (newNavbarTitle && currentNavbarTitle) {
-                        currentNavbarTitle.innerHTML = newNavbarTitle.innerHTML;
-                    }
-
-                    // Update Sidebar Active Links
-                    const newSidebar = doc.querySelector('aside');
-                    const currentSidebar = document.querySelector('aside');
-                    if (newSidebar && currentSidebar) {
-                        currentSidebar.innerHTML = newSidebar.innerHTML;
-                    }
-
-                    // Push State
-                    if (pushState) {
-                        history.pushState(null, '', url);
-                    }
-
-                    // Scroll to top
-                    window.scrollTo(0, 0);
-
-                    // Re-init scripts if navigating to dashboard
-                    const parsedUrl = new URL(url, window.location.origin);
-                    if (parsedUrl.pathname === '/' || parsedUrl.pathname === '/dashboard') {
-                        if (window.initDashboardCharts && window.__initialChartData) {
-                            setTimeout(() => {
-                                window.initDashboardCharts(window.__initialChartData);
-                            }, 50);
-                        }
-                    }
-
-                    // Re-init Alpine v3 components safely
-                    if (window.Alpine && typeof window.Alpine.initTree === 'function') {
-                        window.Alpine.initTree(mainContent);
-                        if (currentSidebar) window.Alpine.initTree(currentSidebar);
-                    }
-
-                } catch (err) {
-                    console.error('SPA navigation error:', err);
-                }
-            }
-
-            // Intercept internal link clicks
-            document.addEventListener('click', (e) => {
-                const link = e.target.closest('a');
-                if (!link) return;
-
-                const href = link.getAttribute('href');
-                if (!href || href.startsWith('#') || href.startsWith('javascript:') || link.getAttribute('target') === '_blank') {
-                    return;
-                }
-
-                const targetUrl = new URL(href, window.location.origin);
-                if (targetUrl.origin === window.location.origin && !link.hasAttribute('download') && !link.classList.contains('no-smooth')) {
-                    e.preventDefault();
-                    navigateTo(targetUrl.href);
-                }
-            });
-
-            // Handle browser Back / Forward buttons
-            window.addEventListener('popstate', () => {
-                navigateTo(window.location.href, false);
-            });
-        });
-    </script>
+    @endif
 
     @include('components.profile-modals')
 </body>
