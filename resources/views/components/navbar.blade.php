@@ -6,16 +6,18 @@
 
 <header class="sticky top-0 bg-[#f8fafc]/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-900 z-30 px-6 py-4 flex items-center justify-between">
     
-    <!-- Left Area: Hamburger for mobile + Dynamic Page Title -->
-    <div class="flex items-center space-x-4 flex-1">
-        <!-- Mobile Sidebar Toggle -->
-        <button @click="sidebarOpen = !sidebarOpen" class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 focus:outline-none md:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+    <!-- Left Area: Hamburger for mobile/desktop + Dynamic Page Title -->
+    <div class="flex items-center space-x-3 flex-1">
+        <!-- Desktop & Mobile Sidebar Toggle Button -->
+        <button @click="toggleSidebar()" 
+                class="flex items-center justify-center p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm transition-all duration-200 cursor-pointer"
+                :title="sidebarHidden ? 'Tampilkan Sidebar' : 'Sembunyikan Sidebar'">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transition-transform duration-200" :class="sidebarHidden ? 'rotate-180' : ''">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
         </button>
 
-        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 hidden md:block">
+        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100">
             @if(request()->routeIs('dashboard.index'))
                 Dashboard
             @elseif(request()->routeIs('projects.index'))
@@ -42,6 +44,8 @@
                 Payroll
             @elseif(request()->routeIs('expenses.index'))
                 Expenses & Procurement
+            @elseif(request()->routeIs('notifications.page'))
+                Notifications & Activity Log
             @else
                 Tanos ERP
             @endif
