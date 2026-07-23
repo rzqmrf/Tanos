@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -47,7 +47,7 @@ class NotificationController extends Controller
             }
         }
 
-        $notifications = $query->latest()->paginate(15)->withQueryString();
+        $notifications = $query->oldest()->paginate(15)->withQueryString();
 
         $unreadCount = Notification::where('user_id', $user->id)
             ->whereNull('read_at')
@@ -69,7 +69,7 @@ class NotificationController extends Controller
         }
 
         $notifications = Notification::where('user_id', $user->id)
-            ->latest()
+            ->oldest()
             ->take(10)
             ->get();
 

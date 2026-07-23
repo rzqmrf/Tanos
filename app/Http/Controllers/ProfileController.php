@@ -92,4 +92,30 @@ class ProfileController extends Controller
             'message' => 'Password berhasil diperbarui'
         ]);
     }
+
+    public function updateSettings(Request $request)
+    {
+        $user = $this->getSessionUser();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        $validated = $request->validate([
+            'language' => 'required|string|in:id,en',
+            'defaultRegional' => 'required|string',
+            'defaultSegment' => 'required|string',
+            'notifyInvoice' => 'required|boolean',
+            'notifyEmployee' => 'required|boolean',
+            'notifyDeadline' => 'required|boolean',
+        ]);
+
+        $user->update([
+            'settings' => $validated
+        ]);
+
+        return response()->json([
+            'message' => 'Pengaturan berhasil diperbarui',
+            'settings' => $user->settings
+        ]);
+    }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Regional;
 use App\Models\Segment;
 use App\Services\DashboardService;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -15,21 +15,21 @@ class ProjectController extends Controller
         $dashboardService = new DashboardService();
 
         return view('operations.projects', [
-            'projects' => Project::latest()->paginate(25),
+            'projects' => Project::oldest()->paginate(25),
             'regionals' => Regional::orderBy('name')->get(),
             'segments' => Segment::orderBy('name')->get(),
             'months' => $dashboardService->getMonths(),
         ]);
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $validData = $request->validate([
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
             'cost' => 'required|numeric',
-            'active' => 'required|integer', // 1 untuk aktif, 0 untuk non-aktif
+            'active' => 'required|integer',  // 1 untuk aktif, 0 untuk non-aktif
         ]);
 
         $project = Project::create($validData);
@@ -47,7 +47,7 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Project baru sukses dibuat!');
     }
 
-    public function update(Request $request, Project $project) 
+    public function update(Request $request, Project $project)
     {
         $validData = $request->validate([
             'month' => 'required|string|max:255',
@@ -61,7 +61,7 @@ class ProjectController extends Controller
         return redirect()->back()->with('success', 'Project sukses diupdate!');
     }
 
-    public function destroy(Project $project) 
+    public function destroy(Project $project)
     {
         $project->delete();
         return redirect()->back()->with('success', 'Project sukses dihapus!');

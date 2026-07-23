@@ -26,6 +26,7 @@ Route::get('/api/dashboard-data', [DashboardController::class, 'apiData'])->name
 Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+Route::put('profile/settings', [ProfileController::class, 'updateSettings'])->name('profile.settings');
 
 // crud grop
 Route::prefix('dashboard')->group(function () {
@@ -97,3 +98,7 @@ Route::prefix('dashboard')->group(function () {
     Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
+
+Route::get('/dashboard/reports', function () {
+    return 'tes';
+})->name('reports.index');

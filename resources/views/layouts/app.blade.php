@@ -1,3 +1,9 @@
+@php
+    $dbUser = null;
+    if (session()->has('user')) {
+        $dbUser = \App\Models\User::where('email', session('user.username'))->first();
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 
@@ -65,8 +71,8 @@
             }
         },
         selectedMonth: '{{ $currentMonth ?? '' }}', 
-        selectedRegional: '{{ $currentRegional ?? '' }}', 
-        selectedSegment: '{{ $currentSegment ?? '' }}',
+        selectedRegional: '{{ $dbUser?->settings['defaultRegional'] ?? 'All' }}', 
+        selectedSegment: '{{ $dbUser?->settings['defaultSegment'] ?? 'All' }}',
         stats: {{ json_encode($initialData['stats'] ?? []) }},
         chartData: {{ json_encode($initialData['charts'] ?? []) }},
         async fetchData() {
@@ -81,6 +87,11 @@
                 }
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
+            }
+        },
+        init() {
+            if (this.selectedRegional !== '{{ $currentRegional ?? "All" }}' || this.selectedSegment !== '{{ $currentSegment ?? "All" }}') {
+                this.fetchData();
             }
         }
     }">

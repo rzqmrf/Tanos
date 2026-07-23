@@ -7,7 +7,7 @@ class AccessControlController extends Controller
 {
     public function index() {
         // Tampilkan daftar role permission bawaan aplikasi
-        return view('dashboard.access-controls');
+        return view('settings.access-controls');
     }
 
     public function store(Request $request) {

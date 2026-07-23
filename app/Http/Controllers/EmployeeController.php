@@ -21,7 +21,7 @@ class EmployeeController extends Controller
         $months = $dashboardService->getMonths();
 
         return view('hr.employees', [
-            'employees' => Employee::latest()->paginate(25),
+            'employees' => Employee::oldest()->paginate(25),
             'regionals' => $regionals,
             'subRegionals' => $subRegionals,
             'segments' => $segments,

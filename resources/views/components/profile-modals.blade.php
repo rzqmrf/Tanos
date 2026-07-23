@@ -6,7 +6,8 @@
 @endphp
 <div x-data="profileModalsData()"
      @open-profile-modal.window="showProfileModal = true"
-     @open-password-modal.window="showPasswordModal = true">
+     @open-password-modal.window="showPasswordModal = true"
+     @open-settings-modal.window="showSettingsModal = true">
 
     <!-- Toast Notification -->
     <div x-show="toast.show" 
@@ -143,6 +144,104 @@
             </form>
         </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div x-show="showSettingsModal" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+         
+        <div x-show="showSettingsModal" @click.away="showSettingsModal = false"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+            
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <div class="p-1.5 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.936 6.936 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 dark:text-slate-100">Pengaturan Aplikasi</h3>
+                </div>
+                <button type="button" @click="showSettingsModal = false" class="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            
+            <form @submit.prevent="saveSettings" class="space-y-5">
+                <!-- Preferensi Bahasa -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Preferensi Bahasa</label>
+                    <select x-model="settings.language" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <option value="id">Bahasa Indonesia</option>
+                        <option value="en">English (US)</option>
+                    </select>
+                </div>
+
+                <!-- Default Dashboard Filter: Regional -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Default Filter Regional</label>
+                    <select x-model="settings.defaultRegional" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <option value="All">Semua Regional</option>
+                        <option value="Regional 1">Regional 1</option>
+                        <option value="Regional 2">Regional 2</option>
+                        <option value="Regional 3">Regional 3</option>
+                        <option value="Regional 4">Regional 4</option>
+                    </select>
+                </div>
+
+                <!-- Default Dashboard Filter: Segment -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Default Filter Segment</label>
+                    <select x-model="settings.defaultSegment" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <option value="All">Semua Segment</option>
+                        <option value="Enterprise">Enterprise</option>
+                        <option value="Corporate">Corporate</option>
+                        <option value="Government">Government</option>
+                        <option value="SME">SME</option>
+                        <option value="Retail">Retail</option>
+                    </select>
+                </div>
+
+                <!-- Notification Preferences -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Preferensi Notifikasi</label>
+                    
+                    <div class="space-y-2">
+                        <!-- Invoice Notify -->
+                        <label class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer">
+                            <span class="text-xs text-slate-600 dark:text-slate-300 font-medium">Notifikasi Invoice Baru</span>
+                            <input type="checkbox" x-model="settings.notifyInvoice" class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-950">
+                        </label>
+
+                        <!-- Employee Notify -->
+                        <label class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer">
+                            <span class="text-xs text-slate-600 dark:text-slate-300 font-medium">Notifikasi Pegawai Baru</span>
+                            <input type="checkbox" x-model="settings.notifyEmployee" class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-950">
+                        </label>
+
+                        <!-- Deadline Notify -->
+                        <label class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/40 cursor-pointer">
+                            <span class="text-xs text-slate-600 dark:text-slate-300 font-medium">Notifikasi Batas Waktu Project</span>
+                            <input type="checkbox" x-model="settings.notifyDeadline" class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-950">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" @click="showSettingsModal = false" class="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50">Batal</button>
+                    <button type="submit" :disabled="isLoadingSettings" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium shadow-sm disabled:opacity-70">
+                        <span x-show="!isLoadingSettings">Simpan Pengaturan</span>
+                        <span x-show="isLoadingSettings">Menyimpan...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -150,9 +249,20 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('profileModalsData', () => ({
         showProfileModal: false,
         showPasswordModal: false,
+        showSettingsModal: false,
         isLoadingProfile: false,
         isLoadingPassword: false,
+        isLoadingSettings: false,
         profilePreview: null,
+        
+        settings: {
+            language: '{{ $dbUser?->settings['language'] ?? 'id' }}',
+            defaultRegional: '{{ $dbUser?->settings['defaultRegional'] ?? 'All' }}',
+            defaultSegment: '{{ $dbUser?->settings['defaultSegment'] ?? 'All' }}',
+            notifyInvoice: {{ ($dbUser?->settings['notifyInvoice'] ?? true) ? 'true' : 'false' }},
+            notifyEmployee: {{ ($dbUser?->settings['notifyEmployee'] ?? true) ? 'true' : 'false' }},
+            notifyDeadline: {{ ($dbUser?->settings['notifyDeadline'] ?? true) ? 'true' : 'false' }}
+        },
         
         toast: {
             show: false,
@@ -288,6 +398,40 @@ document.addEventListener('alpine:init', () => {
                 alert('Terjadi kesalahan pada server');
             } finally {
                 this.isLoadingPassword = false;
+            }
+        },
+
+        async saveSettings() {
+            this.isLoadingSettings = true;
+            try {
+                const response = await fetch('{{ route("profile.settings") }}', {
+                    method: 'PUT',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.message || 'Terjadi kesalahan');
+                } else {
+                    this.showSettingsModal = false;
+                    this.showToast('Pengaturan aplikasi berhasil disimpan!');
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                }
+            } catch (e) {
+                alert('Terjadi kesalahan pada server');
+            } finally {
+                this.isLoadingSettings = false;
             }
         }
     }));
