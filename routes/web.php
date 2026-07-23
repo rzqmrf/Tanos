@@ -98,7 +98,3 @@ Route::prefix('dashboard')->group(function () {
     Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
-
-Route::get('/dashboard/reports', function () {
-    return 'tes';
-})->name('reports.index');

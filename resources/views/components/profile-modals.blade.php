@@ -173,15 +173,6 @@
             </div>
             
             <form @submit.prevent="saveSettings" class="space-y-5">
-                <!-- Preferensi Bahasa -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Preferensi Bahasa</label>
-                    <select x-model="settings.language" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                        <option value="id">Bahasa Indonesia</option>
-                        <option value="en">English (US)</option>
-                    </select>
-                </div>
-
                 <!-- Default Dashboard Filter: Regional -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Default Filter Regional</label>
