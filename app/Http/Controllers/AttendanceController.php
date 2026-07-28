@@ -14,56 +14,30 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $dashboardService = new DashboardService();
         $employeeId = session('user.employee_id');
 
-        // Check if logged in user is a regular Employee (Self-Service)
+        // 1. Tampilan Self-Service Karyawan Regular
         if ($employeeId) {
             $employee = Employee::findOrFail($employeeId);
             $today = Carbon::today()->toDateString();
-            
-            // Get today's attendance record
-            $todayAttendance = Attendance::where('employee_id', $employeeId)
-                ->where('date', $today)
-                ->first();
-
-            // Get monthly history for this employee
-            $history = Attendance::where('employee_id', $employeeId)
-                ->orderBy('date', 'desc')
-                ->paginate(10)
-                ->withQueryString();
 
             return view('hr.attendances-employee', [
-                'employee' => $employee,
-                'todayAttendance' => $todayAttendance,
-                'history' => $history,
-                'today' => $today,
+                'employee'        => $employee,
+                'todayAttendance' => Attendance::where('employee_id', $employeeId)->where('date', $today)->first(),
+                'history'         => Attendance::where('employee_id', $employeeId)->latest('date')->paginate(10)->withQueryString(),
+                'today'           => $today,
             ]);
         }
 
-        $date = $request->input('date', Carbon::today()->toDateString());
+        // 2. Tampilan Dashboard Admin / HR
+        $date     = $request->input('date', Carbon::today()->toDateString());
         $regional = $request->input('regional', 'All');
-        $segment = $request->input('segment', 'All');
+        $segment  = $request->input('segment', 'All');
+        $search   = $request->input('search');
 
-        // Get filter options
-        $regionals = Regional::orderBy('name')->get();
-        $segments = Segment::orderBy('name')->get();
-        $months = $dashboardService->getMonths();
+        // Query Utama Employee
+        $employeesQuery = Employee::query();
 
-        $search = $request->input('search');
-
-        // Format selected date's month to match database seeder format
-        $monthsIndo = [
-            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-        ];
-        $time = strtotime($date);
-        $monthNum = (int)date('n', $time);
-        $year = date('Y', $time);
-        $monthStr = $monthsIndo[$monthNum] . ' ' . $year;
-
-        // Get filtered employees list
-        $employeesQuery = Employee::where('month', $monthStr);
         if ($regional !== 'All') {
             $employeesQuery->where('regional', $regional);
         }
@@ -74,117 +48,124 @@ class AttendanceController extends Controller
             $employeesQuery->where('name', 'like', '%' . $search . '%');
         }
 
-        // Get all matching employee IDs for overall statistics
-        $allFilteredEmployeeIds = (clone $employeesQuery)->pluck('id')->toArray();
-
-        // Fetch attendance stats for ALL matching employees on selected date
-        $allAttendances = Attendance::whereIn('employee_id', $allFilteredEmployeeIds)
-            ->where('date', $date)
-            ->get();
+        // Hitung Statistik Keseluruhan
+        $allFilteredIds = (clone $employeesQuery)->pluck('id')->toArray();
+        $allAttendances = Attendance::whereIn('employee_id', $allFilteredIds)->where('date', $date)->get();
 
         $stats = [
-            'present' => $allAttendances->where('status', 'Hadir')->count(),
+            'present'         => $allAttendances->where('status', 'Hadir')->count(),
             'sick_permission' => $allAttendances->whereIn('status', ['Sakit', 'Izin'])->count(),
-            'absent' => $allAttendances->where('status', 'Alfa')->count(),
-            'overtime' => $allAttendances->sum('overtime_hours'),
+            'absent'          => $allAttendances->where('status', 'Alfa')->count(),
+            'overtime'        => $allAttendances->sum('overtime_hours'),
         ];
 
-        // Paginate employees for table view (10 per page)
-        $employees = $employeesQuery->orderBy('name')->paginate(10)->withQueryString();
-
-        // Fetch attendance records for the CURRENT page
-        $currentPageEmployeeIds = $employees->pluck('id')->toArray();
-        $attendances = Attendance::whereIn('employee_id', $currentPageEmployeeIds)
+        // Paginate & Ambil Data Presensi (Urut ID biar sejajar sama Master Data)
+        $employees   = $employeesQuery->orderBy('id')->paginate(25)->withQueryString();
+        $attendances = Attendance::whereIn('employee_id', $employees->pluck('id')->toArray())
             ->where('date', $date)
             ->get()
             ->keyBy('employee_id');
 
         return view('hr.attendances', [
-            'employees' => $employees,
-            'attendances' => $attendances,
-            'stats' => $stats,
-            'date' => $date,
+            'employees'        => $employees,
+            'attendances'      => $attendances,
+            'stats'            => $stats,
+            'date'             => $date,
             'selectedRegional' => $regional,
-            'selectedSegment' => $segment,
-            'regionals' => $regionals,
-            'segments' => $segments,
-            'months' => $months,
-            'search' => $search,
+            'selectedSegment'  => $segment,
+            'regionals'        => Regional::orderBy('name')->get(),
+            'segments'         => Segment::orderBy('name')->get(),
+            'months'           => (new DashboardService())->getMonths(),
+            'search'           => $search,
         ]);
     }
 
     public function store(Request $request)
     {
-        // Self-Service Clock In / Clock Out
+        // A. Self-Service Clock In / Clock Out dari User Karyawan
         if ($request->has('action')) {
             $employeeId = session('user.employee_id');
             if (!$employeeId) {
-                return redirect()->back()->withErrors(['error' => 'Akses ditolak. Anda tidak terhubung ke data pegawai mana pun.']);
+                return back()->withErrors(['error' => 'Akses ditolak. Lu gak terhubung ke data pegawai mana pun!']);
             }
-            $date = Carbon::today()->toDateString();
+
+            $date   = Carbon::today()->toDateString();
             $action = $request->input('action');
 
             if ($action === 'clock_in') {
-                // Prevent duplicate clock in
-                $exists = Attendance::where('employee_id', $employeeId)->where('date', $date)->exists();
-                if ($exists) {
-                    return redirect()->back()->withErrors(['error' => 'Anda sudah mencatat kehadiran hari ini.']);
+                if (Attendance::where('employee_id', $employeeId)->where('date', $date)->exists()) {
+                    return back()->withErrors(['error' => 'Lu udah mencatat kehadiran hari ini.']);
                 }
 
                 Attendance::create([
                     'employee_id' => $employeeId,
-                    'date' => $date,
-                    'status' => 'Hadir',
-                    'clock_in' => Carbon::now()->toTimeString(),
+                    'date'        => $date,
+                    'status'      => 'Hadir',
+                    'clock_in'    => Carbon::now()->toTimeString(),
                 ]);
-                return redirect()->back()->with('success', 'Clock In berhasil dicatat pada jam ' . Carbon::now()->format('H:i') . '!');
+
+                return back()->with('success', 'Clock In berhasil dicatat jam ' . Carbon::now()->format('H:i') . '!');
             } elseif ($action === 'clock_out') {
-                $attendance = Attendance::where('employee_id', $employeeId)
-                    ->where('date', $date)
-                    ->first();
+                $attendance = Attendance::where('employee_id', $employeeId)->where('date', $date)->first();
+
                 if (!$attendance) {
-                    return redirect()->back()->withErrors(['error' => 'Anda belum melakukan Clock In hari ini.']);
+                    return back()->withErrors(['error' => 'Lu belum melakukan Clock In hari ini.']);
                 }
                 if ($attendance->clock_out) {
-                    return redirect()->back()->withErrors(['error' => 'Anda sudah melakukan Clock Out hari ini.']);
+                    return back()->withErrors(['error' => 'Lu udah melakukan Clock Out hari meletup!']);
                 }
-                $attendance->update([
-                    'clock_out' => Carbon::now()->toTimeString(),
-                ]);
-                return redirect()->back()->with('success', 'Clock Out berhasil dicatat pada jam ' . Carbon::now()->format('H:i') . '!');
+
+                $attendance->update(['clock_out' => Carbon::now()->toTimeString()]);
+
+                return back()->with('success', 'Clock Out berhasil dicatat jam ' . Carbon::now()->format('H:i') . '!');
             }
         }
 
+        // B. CRUD Input/Edit Presensi Manual dari Admin
         $validData = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'date' => 'required|date',
-            'status' => 'required|string|in:Hadir,Sakit,Izin,Alfa',
-            'clock_in' => 'nullable|string',
-            'clock_out' => 'nullable|string',
-            'overtime_hours' => 'nullable|numeric|min:0|max:24',
-            'notes' => 'nullable|string',
+            'employee_id'    => 'required|exists:employees,id',
+            'date'           => 'required',
+            'status'         => 'required',
+            'clock_in'       => 'nullable',
+            'clock_out'      => 'nullable',
+            'overtime_hours' => 'nullable',
+            'notes'          => 'nullable',
         ]);
 
+        // Helper pintar konversi jam (Support AM/PM & 24 jam)
+        $parseTime = function ($timeString) {
+            if (empty($timeString) || $timeString === '-') return null;
+            try {
+                return Carbon::parse($timeString)->format('H:i:s');
+            } catch (\Exception $e) {
+                return null;
+            }
+        };
+
+        // Format Tanggal
+        $formattedDate = Carbon::parse($validData['date'])->toDateString();
+
+        // Simpan / Update Data Absensi
         Attendance::updateOrCreate(
             [
                 'employee_id' => $validData['employee_id'],
-                'date' => $validData['date'],
+                'date'        => $formattedDate,
             ],
             [
-                'status' => $validData['status'],
-                'clock_in' => $validData['clock_in'] ? Carbon::parse($validData['clock_in'])->toTimeString() : null,
-                'clock_out' => $validData['clock_out'] ? Carbon::parse($validData['clock_out'])->toTimeString() : null,
-                'overtime_hours' => $validData['overtime_hours'] ?? 0.00,
-                'notes' => $validData['notes'],
+                'status'         => $validData['status'],
+                'clock_in'       => $parseTime($request->input('clock_in')),
+                'clock_out'      => $parseTime($request->input('clock_out')),
+                'overtime_hours' => is_numeric($request->input('overtime_hours')) ? $request->input('overtime_hours') : 0,
+                'notes'          => $request->input('notes'),
             ]
         );
 
-        return redirect()->back()->with('success', 'Kehadiran berhasil dicatat!');
+        return back()->with('success', 'Kehadiran berhasil dicatat!');
     }
 
     public function destroy(Attendance $attendance)
     {
         $attendance->delete();
-        return redirect()->back()->with('success', 'Catatan kehadiran berhasil dihapus!');
+        return back()->with('success', 'Catatan kehadiran berhasil dihapus!');
     }
 }

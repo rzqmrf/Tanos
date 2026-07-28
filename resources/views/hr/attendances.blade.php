@@ -70,6 +70,7 @@
         <h2 class="text-sm font-semibold text-slate-750 dark:text-slate-200">Daftar Kehadiran</h2>
         
         <form method="GET" action="{{ route('attendances.index') }}" class="relative w-full max-w-xs">
+            <input type="hidden" name="employee_id" id="edit_employee_id" value="...">
             <input type="hidden" name="date" value="{{ $date }}">
             <input type="hidden" name="regional" value="{{ $selectedRegional }}">
             <input type="hidden" name="segment" value="{{ $selectedSegment }}">
@@ -126,7 +127,7 @@
                                 @endif
                             @else
                                 <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800/55 text-slate-400 dark:text-slate-500 rounded-md text-xs font-medium border border-slate-200 dark:border-slate-800">
-                                    Belum Diabsen
+                                    Belum Presensi
                                 </span>
                             @endif
                         </td>
@@ -189,6 +190,9 @@
       </div>
       <form action="{{ route('attendances.store') }}" method="POST" class="space-y-4">
           @csrf
+
+            <!-- hidden input -->
+          <input type="hidden" name="employee_id" id="hidden-employee-id">
           
           <!-- Employee selection -->
           <div>
@@ -274,6 +278,7 @@ statusSelect.addEventListener('change', function() {
 function openCreateModal() {
     document.getElementById('modal-title').textContent = 'Catat Kehadiran';
     document.getElementById('input-employee-id').value = '';
+    document.getElementById('hidden-employee-id').value = '';
     document.getElementById('input-employee-id').disabled = false;
     document.getElementById('input-status').value = 'Hadir';
     document.getElementById('input-clock-in').value = '08:00';
@@ -287,8 +292,12 @@ function openCreateModal() {
 
 function openEditModal(employee, attendance) {
     document.getElementById('modal-title').textContent = 'Ubah Catatan Kehadiran';
+    
+    // hidden input agar tidak auto disable
     document.getElementById('input-employee-id').value = employee.id;
-    document.getElementById('input-employee-id').disabled = true; // prevent changing employee on edit
+    document.getElementById('hidden-employee-id').value = employee.id; 
+    
+    document.getElementById('input-employee-id').disabled = true;
     
     // If an attendance record exists, fill the details
     if (attendance) {
