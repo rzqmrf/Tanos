@@ -23,7 +23,7 @@ class UserController extends Controller
         }
 
         // Fetch users with their mapped employees
-        $users = User::with('employee')->orderBy('name')->paginate(10)->withQueryString();
+        $users = User::with('employee')->orderBy('name')->paginate(25)->withQueryString();
         
         // Fetch all employees for database mapping
         $employees = Employee::orderBy('name')->get();
