@@ -10,13 +10,13 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\UserController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
 // dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -55,17 +55,13 @@ Route::prefix('dashboard')->group(function () {
         return view('analytics.reports');
     })->name('reports.index');
 
-    Route::get('users', function () {
-        return view('settings.users');
-    })->name('users.index');
+    Route::resource('users', UserController::class);
 
     Route::get('clients', function () {
         return view('operations.clients');
     })->name('clients.index');
 
-    Route::get('attendances', function () {
-        return view('hr.attendances');
-    })->name('attendances.index');
+    Route::resource('attendances', AttendanceController::class);
 
     Route::get('payrolls', function () {
         return view('finance.payrolls');

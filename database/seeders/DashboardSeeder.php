@@ -57,13 +57,16 @@ class DashboardSeeder extends Seeder
                     }
 
                     // 3. LOOPING UNTUK MENGISI TABEL EMPLOYEES
+                    $faker = \Faker\Factory::create('id_ID');
+                    $roles = ['Staff Operasional', 'Staff Administrasi', 'Supervisor'];
                     $numPegawai = (($mIdx + 1) * 6 + ($rIdx * 12) + ($sIdx * 8) + 15) % 35 + 5;
                     for ($k = 0; $k < $numPegawai; $k++) {
                         Employee::create([
+                            'name' => $faker->name,
+                            'role' => $roles[$k % count($roles)],
                             'month' => $month,
                             'regional' => $reg,
                             'segment' => $seg
-                            
                         ]);
                     }
 

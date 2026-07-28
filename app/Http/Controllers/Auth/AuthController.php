@@ -29,15 +29,17 @@ class AuthController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
 
-        $dbUser = User::where('email', $username)->orWhere('name', $username)->first();
+        $dbUser = User::where('username', $username)->orWhere('email', $username)->first();
 
         // auth
         if ($dbUser && Hash::check($password, $dbUser->password)) {
             session([
                 'user' => [
+                    'id' => $dbUser->id,
                     'name' => $dbUser->name,
-                    'username' => $dbUser->email,
-                    'role' => 'Staff Member' // role default user baru
+                    'username' => $dbUser->username,
+                    'role' => $dbUser->role ?? 'Employee',
+                    'employee_id' => $dbUser->employee_id,
                 ]
             ]);
 
@@ -50,33 +52,6 @@ class AuthController extends Controller
         ])->withInput($request->only('username'));
     }
 
-
-    // logika login
-    public function showRegisterForm()
-    {
-        if (session()->has('user')) {
-            return redirect()->route('dashboard.index');
-        }
-        return view('auth.register');
-    }
-
-    // regist
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed'
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
-
-        return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silakan login.');
-    }
 
     // logout
     public function logout()

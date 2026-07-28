@@ -96,41 +96,10 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label for="server" class="block text-xs font-semibold text-blue-200/80 uppercase tracking-wider">Server</label>
-                        <div class="relative mt-1">
-                            <select id="server"
-                                    name="server"
-                                    class="w-full bg-transparent border-b border-blue-400/30 text-white py-2.5 focus:outline-none focus:border-blue-300 text-sm transition-colors rounded-none px-0 appearance-none pr-8 cursor-pointer">
-                                <option value="main" class="bg-[#0f2e6b] text-white">Server Utama (Production)</option>
-                                <option value="staging" class="bg-[#0f2e6b] text-white">Server Staging</option>
-                                <option value="local" class="bg-[#0f2e6b] text-white">Server Local</option>
-                            </select>
-
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-1 pointer-events-none text-blue-200/60">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
                     <button type="submit" class="w-full bg-[#1e40af] hover:bg-[#1d3a9e] active:bg-[#1e3a8a] text-white text-xs font-bold py-3.5 tracking-wider uppercase rounded transition-colors shadow-md mt-6 cursor-pointer">
                         LOGIN
                     </button>
                 </form>
-
-                <div class="mt-4 text-center">
-                    <p class="text-xs text-blue-200/60">
-                        Belum punya akun?
-                        <a href="{{ route('register') }}" class="text-white font-semibold hover:text-blue-300 hover:underline transition-colors ml-1">
-                            Daftar Akun Baru
-                        </a>
-                    </p>
-                </div>
-
-
-
             </div>
 
             <div class="text-xs text-purple-300/40">

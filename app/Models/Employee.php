@@ -14,4 +14,14 @@ class Employee extends Model
         'sub_regional',
         'segment',
     ];
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

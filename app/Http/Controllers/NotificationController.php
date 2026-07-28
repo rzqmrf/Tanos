@@ -17,8 +17,8 @@ class NotificationController extends Controller
             return null;
         }
 
-        $email = session('user.username');
-        return User::where('email', $email)->first();
+        $username = session('user.username');
+        return User::where('username', $username)->first();
     }
 
     /**

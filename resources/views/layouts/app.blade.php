@@ -1,7 +1,7 @@
 @php
     $dbUser = null;
     if (session()->has('user')) {
-        $dbUser = \App\Models\User::where('email', session('user.username'))->first();
+        $dbUser = \App\Models\User::where('username', session('user.username'))->first();
     }
 @endphp
 <!DOCTYPE html>
