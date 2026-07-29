@@ -37,6 +37,12 @@ class DashboardController extends Controller
             $employee = $employeeId ? Employee::find($employeeId) : null;
             $userId = session('user.id');
 
+            // Fetch dynamic filters for navbar layout alignment
+            $months = $this->dashboardService->getMonths();
+            $regionals = $this->dashboardService->getRegionals();
+            $segments = $this->dashboardService->getSegments();
+            $defaultMonth = end($months);
+
             if ($employeeId && $employee) {
                 $today = Carbon::today()->toDateString();
                 
@@ -79,6 +85,12 @@ class DashboardController extends Controller
                 'todayAttendance' => $todayAttendance,
                 'stats' => $stats,
                 'notifications' => $notifications,
+                'months' => $months,
+                'regionals' => $regionals,
+                'segments' => $segments,
+                'currentMonth' => $defaultMonth,
+                'currentRegional' => 'All',
+                'currentSegment' => 'All',
             ]);
         }
 
