@@ -15,39 +15,11 @@
         }
     }
     $initials = substr($initials, 0, 2);
-
-    // Calculate dynamic line chart data for current month
-    $daysInMonth = \Carbon\Carbon::now()->daysInMonth;
-    $chartData = array_fill(0, $daysInMonth, 0.0);
-    
-    if ($employee) {
-        $startOfMonth = \Carbon\Carbon::now()->startOfMonth()->toDateString();
-        $endOfMonth = \Carbon\Carbon::now()->endOfMonth()->toDateString();
-        
-        $monthlyRecords = \App\Models\Attendance::where('employee_id', $employee->id)
-            ->whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->get();
-            
-        foreach ($monthlyRecords as $record) {
-            $day = \Carbon\Carbon::parse($record->date)->day;
-            if ($record->status === 'Hadir') {
-                $chartData[$day - 1] = 4.0; // Matches the target visual graph height (4.0)
-            } elseif (in_array($record->status, ['Sakit', 'Izin'])) {
-                $chartData[$day - 1] = 1.2; // Sakit/Izin has lower amplitude
-            }
-        }
-    }
-    
-    $chartDataJson = json_encode($chartData);
-    $chartLabelsJson = json_encode(range(1, $daysInMonth));
-    
-    // Calculate attendance percentage
-    $attendanceRate = $daysInMonth > 0 ? ($stats['present'] / $daysInMonth) * 100 : 0;
 @endphp
 
 <div class="space-y-6 w-full">
     <!-- Greeting & Info Header Card (Light/Dark Mode Adaptive) -->
-    <div class="p-6 bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950 dark:to-indigo-900 rounded-2xl border border-slate-200/60 dark:border-none shadow-sm flex items-center justify-between flex-wrap gap-4 transition duration-150">
+    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-none shadow-sm flex items-center justify-between flex-wrap gap-4 transition duration-150">
         <div class="space-y-1">
             <h1 class="text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2">
                 <span>Selamat Datang, {{ $name }}</span>
@@ -105,7 +77,7 @@
                     </svg>
                     <span>100%</span>
                 </span>
-                <span class="text-slate-400 dark:text-slate-500">dari kemarin</span>
+                <span class="text-slate-400 dark:text-slate-505">dari kemarin</span>
             </div>
         </div>
 
@@ -125,7 +97,7 @@
             </div>
             <div class="flex items-center text-[10px] font-bold space-x-1 border-t border-slate-100 dark:border-slate-800/60 pt-3">
                 <span class="text-amber-500 dark:text-amber-400">→ 0%</span>
-                <span class="text-slate-400 dark:text-slate-500">dari kemarin</span>
+                <span class="text-slate-400 dark:text-slate-505">dari kemarin</span>
             </div>
         </div>
 
@@ -145,7 +117,7 @@
             </div>
             <div class="flex items-center text-[10px] font-bold space-x-1 border-t border-slate-100 dark:border-slate-800/60 pt-3">
                 <span class="text-rose-500 dark:text-rose-400">→ 0%</span>
-                <span class="text-slate-400 dark:text-slate-500">dari kemarin</span>
+                <span class="text-slate-400 dark:text-slate-505">dari kemarin</span>
             </div>
         </div>
 
@@ -165,7 +137,7 @@
             </div>
             <div class="flex items-center text-[10px] font-bold space-x-1 border-t border-slate-100 dark:border-slate-800/60 pt-3">
                 <span class="text-blue-600 dark:text-blue-400">→ 0%</span>
-                <span class="text-slate-400 dark:text-slate-500">dari kemarin</span>
+                <span class="text-slate-400 dark:text-slate-505">dari kemarin</span>
             </div>
         </div>
     </div>
@@ -176,7 +148,7 @@
         <div class="p-6 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
             <div>
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-850/60">
-                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-505 uppercase tracking-wider">Presensi Hari Ini</h3>
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-555 uppercase tracking-wider">Presensi Hari Ini</h3>
                     @if($todayAttendance && $todayAttendance->clock_out)
                         <span class="px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 rounded-full text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -269,7 +241,7 @@
         <div class="p-6 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col justify-between space-y-6">
             <div>
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-850/60">
-                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-550 uppercase tracking-wider">Pengumuman & Notifikasi</h3>
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-555 uppercase tracking-wider">Pengumuman & Notifikasi</h3>
                     <a href="{{ route('notifications.page') }}" class="text-xs text-slate-400 dark:text-slate-500 font-bold hover:text-[#1b3bb6] inline-flex items-center space-x-1">
                         <span>Lihat Semua</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
@@ -293,94 +265,12 @@
             </div>
         </div>
     </div>
-
-    <!-- Bottom Row: Statistics & Tips -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Statistik Kehadiran (Line Chart) -->
-        <div class="lg:col-span-2 p-6 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-850/60 pb-3">
-                <h3 class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">Statistik Kehadiran Anda (Bulan Ini)</h3>
-                
-                <div class="flex items-center space-x-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 cursor-pointer shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-400 mr-1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                    </svg>
-                    <span class="font-bold tracking-tight font-mono">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3 text-slate-400 ml-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Line Chart Area -->
-                <div class="md:col-span-2 w-full min-h-[220px] flex items-center justify-center">
-                    <div id="attendanceLineChart" class="w-full"></div>
-                </div>
-
-                <!-- Right Side Summary Blocks -->
-                <div class="flex flex-col justify-center space-y-5 border-l border-slate-100 dark:border-slate-850/60 pl-0 md:pl-6">
-                    <div class="space-y-1">
-                        <span class="block text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider">Total Hari</span>
-                        <div class="text-3xl font-black text-[#1b3bb6] dark:text-blue-400 font-mono tracking-tight">
-                            {{ $daysInMonth }}
-                        </div>
-                        <span class="text-xs font-bold text-slate-500 dark:text-slate-450">Hari Kerja</span>
-                    </div>
-                    
-                    <div class="space-y-1">
-                        <span class="block text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wider">Rata-rata Kehadiran</span>
-                        <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono tracking-tight">
-                            {{ number_format($attendanceRate, 1) }}%
-                        </div>
-                        <span class="block text-[10px] text-slate-400 dark:text-slate-500 font-medium">Dari total hari kerja</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tips Hari Ini -->
-        <div class="p-6 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col justify-between relative overflow-hidden min-h-[300px]">
-            <div class="flex items-center space-x-3.5 pb-3 border-b border-slate-100 dark:border-slate-850/60">
-                <div class="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18ZM12 18c-1.657 0-3-1.343-3-3 0-1.657 1.343-3 3-3m0 6c1.657 0 3-1.343 3-3 0-1.657-1.343-3-3-3" />
-                    </svg>
-                </div>
-                <h3 class="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">Tips Hari Ini</h3>
-            </div>
-
-            <div class="my-auto py-4">
-                <blockquote class="text-slate-600 dark:text-slate-300 font-medium italic text-base leading-relaxed">
-                    "Disiplin hari ini akan membentuk hasil yang lebih besar esok."
-                </blockquote>
-            </div>
-
-            <!-- Absolute leaf element positioned in bottom right corner -->
-            <div class="absolute bottom-2 right-2 w-20 h-20 opacity-10 text-emerald-500 pointer-events-none select-none">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full">
-                    <path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.39.04-.32.06-.64.06-.97 0-4.04-3.28-7.31-7.31-7.31-.33 0-.65.02-.97.06C1.83 9.13 5.58 6.25 10 6.25c4.04 0 7.31 3.28 7.31 7.31 0 .33-.02.65-.06.97 3.97-1.22 6.84-4.97 6.84-9.39 0-5.52-4.48-10-10-10Z" />
-                </svg>
-            </div>
-
-            <div class="border-t border-slate-100 dark:border-slate-850/60 pt-4 text-left">
-                <a href="#" class="text-xs text-[#1b3bb6] dark:text-blue-400 font-bold hover:underline inline-flex items-center space-x-1">
-                    <span>Lihat Tips Lainnya</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
 </div>
 
-<!-- Scripts for dynamic gauge counting & ApexCharts -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- Scripts for dynamic gauge counting -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Live Time Counter script with universal ISO-8601 parsing
+        // Live Time Counter script with universal ISO-8601 parsing
         const clockInTimeStr = '{{ $todayAttendance && $todayAttendance->clock_in ? \Carbon\Carbon::parse($todayAttendance->clock_in)->toIso8601String() : "" }}';
         const clockOutTimeStr = '{{ $todayAttendance && $todayAttendance->clock_out ? \Carbon\Carbon::parse($todayAttendance->clock_out)->toIso8601String() : "" }}';
         const timerEl = document.getElementById('live-timer');
@@ -435,78 +325,6 @@
                 timerEl.textContent = '00:00';
             }
         }
-
-        // 2. Attendance Line Chart Render
-        const options = {
-            chart: {
-                type: 'line',
-                height: 220,
-                toolbar: { show: false },
-                zoom: { enabled: false }
-            },
-            series: [{
-                name: 'Hari Kerja',
-                data: {!! $chartDataJson !!}
-            }],
-            stroke: {
-                width: 3,
-                curve: 'smooth'
-            },
-            colors: ['#2563eb'],
-            markers: {
-                size: 5,
-                colors: ['#2563eb'],
-                strokeWidth: 2,
-                strokeColors: '#ffffff',
-                hover: { size: 7 }
-            },
-            legend: {
-                show: true,
-                position: 'top',
-                horizontalAlign: 'left',
-                fontSize: '11px',
-                fontWeight: 600,
-                markers: {
-                    width: 8,
-                    height: 8,
-                    radius: 12
-                },
-                itemMargin: {
-                    vertical: 8
-                }
-            },
-            grid: {
-                borderColor: '#f1f5f9',
-                strokeDashArray: 4,
-                yaxis: { lines: { show: true } }
-            },
-            xaxis: {
-                categories: {!! $chartLabelsJson !!},
-                labels: {
-                    style: { colors: '#94a3b8', fontSize: '9px', fontWeight: 600 }
-                },
-                axisBorder: { show: false },
-                axisTicks: { show: false }
-            },
-            yaxis: {
-                min: 0,
-                max: 5,
-                tickAmount: 5,
-                labels: {
-                    formatter: function(val) {
-                        return Math.round(val);
-                    },
-                    style: { colors: '#94a3b8', fontSize: '9px', fontWeight: 600 }
-                }
-            },
-            tooltip: {
-                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-                x: { show: true, formatter: (val) => `Hari ${val}` }
-            }
-        };
-
-        const chart = new ApexCharts(document.querySelector("#attendanceLineChart"), options);
-        chart.render();
     });
 </script>
 @endsection
