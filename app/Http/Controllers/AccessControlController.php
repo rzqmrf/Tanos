@@ -23,8 +23,26 @@ class AccessControlController extends Controller
             'invoices' => 'Keuangan - Invoices',
             'payroll' => 'Keuangan - Payroll',
             'expenses' => 'Keuangan - Expenses',
-            'settings' => 'Pengaturan Aplikasi'
+            'settings' => 'Pengaturan Aplikasi',
+            'rekap_absensi' => 'Employee - Rekap Absensi',
+            'pengajuan_cuti' => 'Employee - Pengajuan Cuti',
+            'kalender' => 'Employee - Kalender',
+            'laporan' => 'Employee - Laporan'
         ];
+
+        // Self-heal default permissions if they don't exist
+        foreach ($roles as $r) {
+            foreach ($permissionsList as $permKey => $permLabel) {
+                $exists = RolePermission::where('role', $r)->where('permission', $permKey)->exists();
+                if (!$exists) {
+                    RolePermission::create([
+                        'role' => $r,
+                        'permission' => $permKey,
+                        'is_enabled' => ($r === 'Admin') || in_array($permKey, ['dashboard', 'attendance', 'rekap_absensi', 'pengajuan_cuti', 'kalender', 'laporan'])
+                    ]);
+                }
+            }
+        }
 
         // Fetch all permissions, grouped by role
         $rolePermissions = RolePermission::all()->groupBy('role');
@@ -40,7 +58,8 @@ class AccessControlController extends Controller
         $permissionsList = [
             'dashboard', 'reports', 'projects', 'clients', 'schedules',
             'employees', 'attendance', 'recruitment', 'evaluations', 'certifications',
-            'invoices', 'payroll', 'expenses', 'settings'
+            'invoices', 'payroll', 'expenses', 'settings',
+            'rekap_absensi', 'pengajuan_cuti', 'kalender', 'laporan'
         ];
 
         $inputPermissions = $request->input('permissions');
@@ -81,7 +100,8 @@ class AccessControlController extends Controller
         $permissionsList = [
             'dashboard', 'reports', 'projects', 'clients', 'schedules',
             'employees', 'attendance', 'recruitment', 'evaluations', 'certifications',
-            'invoices', 'payroll', 'expenses', 'settings'
+            'invoices', 'payroll', 'expenses', 'settings',
+            'rekap_absensi', 'pengajuan_cuti', 'kalender', 'laporan'
         ];
 
         foreach ($permissionsList as $perm) {
