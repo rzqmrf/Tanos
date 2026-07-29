@@ -23,6 +23,14 @@
         @php
             $name = session('user.name', 'Guest User');
             $role = session('user.role', 'Staff Member');
+            
+            if (session()->has('user')) {
+                $realUser = \App\Models\User::find(session('user.id'));
+                if ($realUser) {
+                    $name = $realUser->name;
+                    $role = $realUser->role ?? 'Employee';
+                }
+            }
 
             // Extract initials (first letters of the first two words)
             $words = explode(' ', $name);
@@ -73,54 +81,37 @@
         @endphp
         <nav x-data="{ activeGroup: '{{ $isOperationalActive ? 'operations' : ($isHRActive ? 'hr' : ($isFinanceActive ? 'finance' : ($isSettingsActive ? 'settings' : ''))) }}' }" class="space-y-6">
 
-            @if(session('user.role') === 'Employee')
-                <!-- Category: Dashboard & Attendance (Employee Role) -->
-                <div class="space-y-1.5">
-                    <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Menu Utama</span>
-
-                    <a href="{{ route('dashboard.index') }}" 
-                       class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                             class="w-4.5 h-4.5 transition-colors {{ $isDashboard ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
-                        <span class="text-xs">Dashboard</span>
-                    </a>
-
-                    <a href="{{ route('attendances.index') }}" 
-                       class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isAttendance ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                             class="w-4.5 h-4.5 transition-colors {{ $isAttendance ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                        </svg>
-                        <span class="text-xs">Absensi Saya</span>
-                    </a>
-                </div>
-            @else
-                <!-- Category: Dashboard & Analytics -->
+            <!-- Category: Dashboard & Analytics -->
+            @if(\App\Models\RolePermission::hasPermission($role, 'dashboard') || \App\Models\RolePermission::hasPermission($role, 'reports'))
                 <div class="space-y-1.5">
                     <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Dashboard & Analytics</span>
 
-                    <a href="{{ route('dashboard.index') }}" 
-                       class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                             class="w-4.5 h-4.5 transition-colors {{ $isDashboard ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
-                        <span class="text-xs">Dashboard</span>
-                    </a>
+                    @if(\App\Models\RolePermission::hasPermission($role, 'dashboard'))
+                        <a href="{{ route('dashboard.index') }}" 
+                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isDashboard ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                                 class="w-4.5 h-4.5 transition-colors {{ $isDashboard ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+                            <span class="text-xs">Dashboard</span>
+                        </a>
+                    @endif
 
-                    <a href="{{ route('reports.index') }}" 
-                       class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isReports ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                             class="w-4.5 h-4.5 transition-colors {{ $isReports ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-                        </svg>
-                        <span class="text-xs">Laporan & Analitik</span>
-                    </a>
+                    @if(\App\Models\RolePermission::hasPermission($role, 'reports'))
+                        <a href="{{ route('reports.index') }}" 
+                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isReports ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                                 class="w-4.5 h-4.5 transition-colors {{ $isReports ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v5.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 3 18.375v-5.25ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125v-9.75ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v14.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                            </svg>
+                            <span class="text-xs">Laporan & Analitik</span>
+                        </a>
+                    @endif
                 </div>
+            @endif
 
-                <!-- Category: Operasional -->
+            <!-- Category: Operasional -->
+            @if(\App\Models\RolePermission::hasPermission($role, 'projects') || \App\Models\RolePermission::hasPermission($role, 'clients') || \App\Models\RolePermission::hasPermission($role, 'schedules'))
                 <div class="space-y-3">
                     <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Operasional</span>
 
@@ -152,19 +143,32 @@
                              x-transition:leave-end="opacity-0 -translate-y-1"
                              class="mt-1 pl-9 space-y-1"
                              style="display: none;">
-                            <a href="{{ route('projects.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isProjects ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Projects
-                            </a>
-                            <a href="{{ route('clients.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isClients ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Clients
-                            </a>
-                            <a href="{{ route('schedules.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isSchedules ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Shift Scheduling
-                            </a>
+                            @if(\App\Models\RolePermission::hasPermission($role, 'projects'))
+                                <a href="{{ route('projects.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isProjects ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Projects
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'clients'))
+                                <a href="{{ route('clients.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isClients ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Clients
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'schedules'))
+                                <a href="{{ route('schedules.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isSchedules ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Shift Scheduling
+                                </a>
+                            @endif
                         </div>
                     </div>
+                </div>
+            @endif
 
-                    <!-- Group: Human Resources -->
+            <!-- Category: Human Resources -->
+            @if(\App\Models\RolePermission::hasPermission($role, 'employees') || \App\Models\RolePermission::hasPermission($role, 'attendance') || \App\Models\RolePermission::hasPermission($role, 'recruitment') || \App\Models\RolePermission::hasPermission($role, 'evaluations') || \App\Models\RolePermission::hasPermission($role, 'certifications'))
+                <div class="space-y-3">
+                    <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Human Resources</span>
+
+                    <!-- Group: HR -->
                     <div class="relative">
                         <button @click="activeGroup = activeGroup === 'hr' ? '' : 'hr'"
                                 :class="(activeGroup === 'hr' || {{ $isHRActive ? 'true' : 'false' }}) ? 'text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-800/20' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40'"
@@ -178,7 +182,7 @@
                                 <span class="text-xs">Human Resources</span>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
-                                 :class="activeGroup === 'hr' ? 'rotate-180 text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
+                                 :class="activeGroup === 'hr' ? 'rotate-180 text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-505 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
                                  class="w-3 h-3 transition-transform duration-150">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
@@ -192,36 +196,49 @@
                              x-transition:leave-end="opacity-0 -translate-y-1"
                              class="mt-1 pl-9 space-y-1"
                              style="display: none;">
-                            <a href="{{ route('employees.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEmployees ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Employees
-                            </a>
-                            <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isAttendance ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Attendance
-                            </a>
-                            <a href="{{ route('recruitment.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isRecruitment ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Recruitment
-                            </a>
-                            <a href="{{ route('evaluations.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEvaluations ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Performance Appraisal
-                            </a>
-                            <a href="{{ route('certifications.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isCertifications ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Training & Certs
-                            </a>
+                            @if(\App\Models\RolePermission::hasPermission($role, 'employees'))
+                                <a href="{{ route('employees.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEmployees ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Employees
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'attendance'))
+                                <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isAttendance ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    {{ $role === 'Employee' ? 'Absensi Saya' : 'Attendance' }}
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'recruitment'))
+                                <a href="{{ route('recruitment.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isRecruitment ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Recruitment
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'evaluations'))
+                                <a href="{{ route('evaluations.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isEvaluations ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Performance Appraisal
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'certifications'))
+                                <a href="{{ route('certifications.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isCertifications ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Training & Certs
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
+            @endif
 
-                <!-- Category: Keuangan -->
+            <!-- Category: Keuangan -->
+            @if(\App\Models\RolePermission::hasPermission($role, 'invoices') || \App\Models\RolePermission::hasPermission($role, 'payroll') || \App\Models\RolePermission::hasPermission($role, 'expenses'))
                 <div class="space-y-1.5">
                     <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Keuangan</span>
 
+                    <!-- Group: Finance -->
                     <div class="relative">
                         <button @click="activeGroup = activeGroup === 'finance' ? '' : 'finance'"
                                 :class="(activeGroup === 'finance' || {{ $isFinanceActive ? 'true' : 'false' }}) ? 'text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-800/20' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40'"
                                 class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-semibold transition-all duration-150 group cursor-pointer">
                             <div class="flex items-center space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
-                                     :class="(activeGroup === 'finance' || {{ $isFinanceActive ? 'true' : 'false' }}) ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
+                                     :class="(activeGroup === 'finance' || {{ $isFinanceActive ? 'true' : 'false' }}) ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-505 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
                                      class="w-4.5 h-4.5 transition-colors">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 5.25h19.5m-19.5 0h19.5M2.25 12h19.5m-19.5 0h19.5m-19.5 5.25h19.5m-19.5 0h19.5M3 19.5h18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 21 4.5H3a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3 19.5Z" />
                                 </svg>
@@ -229,7 +246,7 @@
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
                                  :class="activeGroup === 'finance' ? 'rotate-180 text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'"
-                                 class="w-3 h-3 transition-transform duration-150">
+                                 class="w-3.5 h-3.5 transition-transform duration-150">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
                         </button>
@@ -242,23 +259,32 @@
                              x-transition:leave-end="opacity-0 -translate-y-1"
                              class="mt-1 pl-9 space-y-1"
                              style="display: none;">
-                            <a href="{{ route('invoices.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isInvoices ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Invoices
-                            </a>
-                            <a href="{{ route('payrolls.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isPayroll ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Payroll
-                            </a>
-                            <a href="{{ route('expenses.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isExpenses ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                Expenses
-                            </a>
+                            @if(\App\Models\RolePermission::hasPermission($role, 'invoices'))
+                                <a href="{{ route('invoices.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isInvoices ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Invoices
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'payroll'))
+                                <a href="{{ route('payrolls.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isPayroll ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Payroll
+                                </a>
+                            @endif
+                            @if(\App\Models\RolePermission::hasPermission($role, 'expenses'))
+                                <a href="{{ route('expenses.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isExpenses ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                    Expenses
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
+            @endif
 
-                <!-- Category: Pengaturan -->
+            <!-- Category: Pengaturan -->
+            @if(\App\Models\RolePermission::hasPermission($role, 'settings'))
                 <div class="space-y-1.5">
                     <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Pengaturan</span>
 
+                    <!-- Group: Settings -->
                     <div class="relative">
                         <button @click="activeGroup = activeGroup === 'settings' ? '' : 'settings'"
                                 :class="(activeGroup === 'settings' || {{ $isSettingsActive ? 'true' : 'false' }}) ? 'text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-800/20' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40'"
@@ -298,6 +324,7 @@
                             </a>
                         </div>
                     </div>
+                </div>
             @endif
         </nav>
     </div>
