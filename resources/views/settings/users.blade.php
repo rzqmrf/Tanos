@@ -17,7 +17,7 @@
                 <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Pengelolaan akun pengguna ERP, hak akses, dan pemetaan ke pegawai lapangan.</p>
             </div>
         </div>
-        <button onclick="openCreateModal()" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition duration-150 shadow-sm flex items-center space-x-2 cursor-pointer">
+        <button onclick="openCreateModal()" class="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center space-x-2 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -39,43 +39,43 @@
     @endif
 
     <!-- Stats Panel -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Stat Card 1 -->
-        <div class="p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Akun</span>
-                <span class="block text-2xl font-bold text-slate-800 dark:text-slate-100 font-mono">{{ $stats['total'] }}</span>
-            </div>
-            <div class="p-3 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-800/80">
+        <!-- Stat Item 1 -->
+        <div class="flex-1 p-5 flex items-center space-x-4">
+            <div class="p-3 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-xl shadow-sm border border-blue-100/50 dark:border-blue-800/30 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.089 18H9.91A11.386 11.386 0 0 1 5 19.237v-.11c0-1.113.285-2.16.786-3.07M15 7.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5-3a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 9a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
             </div>
+            <div>
+                <span class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Total Akun</span>
+                <span class="block text-2xl font-extrabold text-slate-800 dark:text-slate-100 font-mono tracking-tight leading-none mt-1">{{ $stats['total'] }}</span>
+            </div>
         </div>
 
-        <!-- Stat Card 2 -->
-        <div class="p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Administrator</span>
-                <span class="block text-2xl font-bold text-slate-800 dark:text-slate-100 font-mono">{{ $stats['admins'] }}</span>
-            </div>
-            <div class="p-3 bg-violet-50 dark:bg-violet-950/20 text-violet-600 dark:text-violet-400 rounded-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+        <!-- Stat Item 2 -->
+        <div class="flex-1 p-5 flex items-center space-x-4">
+            <div class="p-3 bg-violet-50 dark:bg-violet-950/20 text-violet-600 dark:text-violet-400 rounded-xl shadow-sm border border-violet-100/50 dark:border-violet-800/30 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
             </div>
+            <div>
+                <span class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Administrator</span>
+                <span class="block text-2xl font-extrabold text-slate-800 dark:text-slate-100 font-mono tracking-tight leading-none mt-1">{{ $stats['admins'] }}</span>
+            </div>
         </div>
 
-        <!-- Stat Card 3 -->
-        <div class="p-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm flex items-center justify-between">
-            <div class="space-y-1">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pegawai Lapangan</span>
-                <span class="block text-2xl font-bold text-slate-800 dark:text-slate-100 font-mono">{{ $stats['employees'] }}</span>
-            </div>
-            <div class="p-3 bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 rounded-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+        <!-- Stat Item 3 -->
+        <div class="flex-1 p-5 flex items-center space-x-4">
+            <div class="p-3 bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 rounded-xl shadow-sm border border-amber-100/50 dark:border-amber-800/30 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
+            </div>
+            <div>
+                <span class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Pegawai Lapangan</span>
+                <span class="block text-2xl font-extrabold text-slate-800 dark:text-slate-100 font-mono tracking-tight leading-none mt-1">{{ $stats['employees'] }}</span>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
                     @forelse($users as $user)
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                             <td class="p-4 font-semibold text-slate-800 dark:text-slate-100 flex items-center space-x-3">
-                                <div class="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold text-xs select-none">
+                                <div class="w-9 h-9 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-xs select-none shadow-sm ring-2 ring-white dark:ring-slate-800">
                                     {{ substr($user->name, 0, 2) }}
                                 </div>
                                 <span>{{ $user->name }}</span>
@@ -111,11 +111,15 @@
                             </td>
                             <td class="p-4">
                                 @if($user->role === 'Admin')
-                                    <span class="px-2.5 py-1 bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 rounded-md text-xs font-bold">
+                                    <span class="px-2.5 py-1.5 bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 border border-violet-200 dark:border-violet-800/50 rounded-lg text-[10px] font-extrabold tracking-wide uppercase shadow-sm">
+                                        {{ $user->role }}
+                                    </span>
+                                @elseif($user->role === 'Employee')
+                                    <span class="px-2.5 py-1.5 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-[10px] font-extrabold tracking-wide uppercase shadow-sm">
                                         {{ $user->role }}
                                     </span>
                                 @else
-                                    <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 rounded-md text-xs font-bold">
+                                    <span class="px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-[10px] font-extrabold tracking-wide uppercase shadow-sm">
                                         {{ $user->role }}
                                     </span>
                                 @endif
@@ -193,8 +197,9 @@
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Role</label>
                     <select name="role" id="userRole" required class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-violet-500 cursor-pointer">
-                        <option value="Employee">Employee</option>
-                        <option value="Admin">Admin</option>
+                        @foreach($roles as $r)
+                            <option value="{{ $r }}">{{ $r }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>

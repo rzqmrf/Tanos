@@ -35,10 +35,14 @@ class UserController extends Controller
             'employees' => User::where('role', 'Employee')->count(),
         ];
 
+        // Fetch distinct roles for the dropdown
+        $roles = \App\Models\RolePermission::select('role')->distinct()->pluck('role');
+
         return view('settings.users', [
             'users' => $users,
             'employees' => $employees,
             'stats' => $stats,
+            'roles' => $roles,
         ]);
     }
 
@@ -56,7 +60,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|string|in:Admin,Employee',
+            'role' => 'required|string|exists:role_permissions,role',
             'employee_id' => 'nullable|exists:employees,id|unique:users,employee_id',
         ]);
 
@@ -86,7 +90,7 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
-            'role' => 'required|string|in:Admin,Employee',
+            'role' => 'required|string|exists:role_permissions,role',
             'employee_id' => 'nullable|exists:employees,id|unique:users,employee_id,' . $user->id,
         ]);
 

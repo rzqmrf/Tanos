@@ -232,7 +232,7 @@
                 @endif
 
                 <!-- Category: Human Resources -->
-                @if(\App\Models\RolePermission::hasPermission($role, 'employees') || \App\Models\RolePermission::hasPermission($role, 'attendance') || \App\Models\RolePermission::hasPermission($role, 'recruitment') || \App\Models\RolePermission::hasPermission($role, 'evaluations') || \App\Models\RolePermission::hasPermission($role, 'certifications'))
+                @if(\App\Models\RolePermission::hasPermission($role, 'employees') || \App\Models\RolePermission::hasPermission($role, 'attendance') || \App\Models\RolePermission::hasPermission($role, 'recruitment') || \App\Models\RolePermission::hasPermission($role, 'evaluations') || \App\Models\RolePermission::hasPermission($role, 'certifications') || \App\Models\RolePermission::hasPermission($role, 'rekap_absensi') || \App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti') || \App\Models\RolePermission::hasPermission($role, 'kalender') || \App\Models\RolePermission::hasPermission($role, 'laporan'))
                     <div class="space-y-3">
                         <span class="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest px-2.5 block mb-2">Human Resources</span>
 
@@ -287,6 +287,26 @@
                                 @if(\App\Models\RolePermission::hasPermission($role, 'certifications'))
                                     <a href="{{ route('certifications.index') }}" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors {{ $isCertifications ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                                         Training & Certs
+                                    </a>
+                                @endif
+                                @if(\App\Models\RolePermission::hasPermission($role, 'rekap_absensi'))
+                                    <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        Rekap Absensi
+                                    </a>
+                                @endif
+                                @if(\App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti'))
+                                    <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        Pengajuan Cuti
+                                    </a>
+                                @endif
+                                @if(\App\Models\RolePermission::hasPermission($role, 'kalender'))
+                                    <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        Kalender
+                                    </a>
+                                @endif
+                                @if(\App\Models\RolePermission::hasPermission($role, 'laporan'))
+                                    <a href="#" class="block py-1.5 px-2 text-[11px] font-semibold rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                        Laporan
                                     </a>
                                 @endif
                             </div>
