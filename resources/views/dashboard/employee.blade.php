@@ -5,14 +5,6 @@
 @section('content')
 @php
     $name = $employee ? $employee->name : session('user.name', 'Karyawan');
-
-    // Calculate robust ISO-8601 datetimes for JavaScript clock
-    $clockInIso = $todayAttendance && $todayAttendance->clock_in
-        ? \Carbon\Carbon::parse($todayAttendance->date . ' ' . $todayAttendance->clock_in)->toIso8601String()
-        : "";
-    $clockOutIso = $todayAttendance && $todayAttendance->clock_out
-        ? \Carbon\Carbon::parse($todayAttendance->date . ' ' . $todayAttendance->clock_out)->toIso8601String()
-        : "";
 @endphp
 
 <div class="space-y-5 w-full">
@@ -56,10 +48,7 @@
     @endif
 
     {{-- ═══════════════════════════════════════════════════════════════
-         2. METRICS ROW  (4 equal-width cards)
-         Layout per card:  [icon]  label / big-number / "Hari ini"
-                           ─────────────────────────────────────
-                           ↑ 100%  dari kemarin
+         2. METRICS ROW (4 equal-width cards)
     ═══════════════════════════════════════════════════════════════ --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
@@ -176,49 +165,68 @@
                                 <circle id="circle-progress" cx="50" cy="50" r="42" stroke="#10b981" stroke-width="6" fill="transparent" stroke-dasharray="264" stroke-dashoffset="{{ !$todayAttendance ? '264' : ($todayAttendance->clock_out ? '0' : '132') }}" stroke-linecap="round" />
                             </svg>
                             <div class="absolute inset-0 flex flex-col items-center justify-center">
-                                <span class="text-2xl font-extrabold text-slate-800 dark:text-white font-mono" id="live-timer">00:00</span>
+                                {{-- NAMPILIN JAM MASUK DARI DB (CLOCK_IN) --}}
+                                <span class="text-2xl font-extrabold text-slate-800 dark:text-white font-mono">
+                                    {{ $todayAttendance && $todayAttendance->clock_in ? \Carbon\Carbon::parse($todayAttendance->clock_in)->format('H:i') : '00:00' }}
+                                </span>
                                 <span class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-0.5">WIB</span>
                             </div>
                         </div>
 
                         {{-- Status Panel --}}
                         <div class="flex-1 w-full space-y-3">
-                            @if(!$todayAttendance)
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status Kehadiran</span>
-                                    <h4 class="text-base font-bold text-slate-700 dark:text-slate-200 mt-0.5">Belum Clock In</h4>
-                                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Silakan klik tombol di bawah untuk mencatat jam masuk kerja hari ini.</p>
-                                </div>
-                                <form action="{{ route('attendances.store') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="action" value="clock_in">
-                                    <button type="submit" class="w-full py-2.5 bg-[#1b3bb6] hover:bg-[#15309b] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center space-x-2 cursor-pointer border-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-                                        <span>Clock In Masuk</span>
-                                    </button>
-                                </form>
-                            @elseif(!$todayAttendance->clock_out)
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Anda sudah melakukan</span>
-                                    <h4 class="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">Clock In</h4>
-                                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Terima kasih! Tetap semangat dalam bekerja.</p>
-                                </div>
-                                <form action="{{ route('attendances.store') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="action" value="clock_out">
-                                    <button type="submit" class="w-full py-2.5 bg-[#1b3bb6] hover:bg-[#15309b] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center space-x-2 cursor-pointer border-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" /></svg>
-                                        <span>Clock Out Keluar</span>
-                                    </button>
-                                </form>
-                            @else
-                                <div>
-                                    <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status Presensi</span>
-                                    <h4 class="text-base font-bold text-slate-700 dark:text-slate-200 mt-0.5">Selesai</h4>
-                                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Kerja bagus hari ini! Sampai jumpa besok pagi.</p>
-                                </div>
-                            @endif
-                        </div>
+    @if(!$todayAttendance)
+        {{-- Kondisi 1: Belum Presensi Sama Sekali --}}
+        <div>
+            <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status Kehadiran</span>
+            <h4 class="text-base font-bold text-slate-700 dark:text-slate-200 mt-0.5">Belum Clock In</h4>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Silakan klik tombol di bawah untuk mencatat jam masuk kerja hari ini.</p>
+        </div>
+        <form action="{{ route('attendances.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="action" value="clock_in">
+            <button type="submit" class="w-full py-2.5 bg-[#1b3bb6] hover:bg-[#15309b] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center space-x-2 cursor-pointer border-none">
+                <span>Clock In Masuk</span>
+            </button>
+        </form>
+
+    @elseif(in_array($todayAttendance->status, ['Sakit', 'Izin', 'Alfa', 'Cuti']))
+        {{-- Kondisi 2: Kalo Statusnya Sakit / Izin / Alfa (cannot clock in/out) --}}
+        <div>
+            <span class="block text-[10px] font-semibold text-amber-500 uppercase tracking-wider">Keterangan Hari Ini</span>
+            <h4 class="text-base font-bold text-amber-600 dark:text-amber-400 mt-0.5">Status: {{ $todayAttendance->status }}</h4>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">
+                Anda tercatat <span class="font-bold text-slate-200">{{ $todayAttendance->status }}</span> pada hari ini. Tidak perlu melakukan presensi Clock In / Clock Out.
+            </p>
+        </div>
+        <div class="w-full py-2.5 bg-slate-800 text-slate-400 rounded-xl text-xs font-semibold text-center border border-slate-700">
+            Presensi Diliburkan ({{ $todayAttendance->status }})
+        </div>
+
+    @elseif(!$todayAttendance->clock_out)
+        {{-- Kondisi 3: Sudah Clock In, Belum Clock Out --}}
+        <div>
+            <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Anda sudah melakukan</span>
+            <h4 class="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">Clock In ({{ \Carbon\Carbon::parse($todayAttendance->clock_in)->format('H:i') }})</h4>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Terima kasih! Tetap semangat dalam bekerja.</p>
+        </div>
+        <form action="{{ route('attendances.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="action" value="clock_out">
+            <button type="submit" class="w-full py-2.5 bg-[#1b3bb6] hover:bg-[#15309b] text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center space-x-2 cursor-pointer border-none">
+                <span>Clock Out Keluar</span>
+            </button>
+        </form>
+
+    @else
+        {{-- Kondisi 4: Sudah Clock Out (Selesai) --}}
+        <div>
+            <span class="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Status Presensi</span>
+            <h4 class="text-base font-bold text-slate-700 dark:text-slate-200 mt-0.5">Selesai Kerja</h4>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 leading-relaxed">Kerja bagus hari ini! Sampai jumpa besok pagi.</p>
+        </div>
+    @endif
+</div>
                     </div>
                 @else
                     <div class="text-center py-10 text-slate-400 text-xs font-medium">
@@ -262,49 +270,4 @@
         </div>
     </div>
 </div>
-
-{{-- ═══════════════════════════════════════════════════════════════
-     JAVASCRIPT — Live clock counter + circular progress
-═══════════════════════════════════════════════════════════════ --}}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const clockInStr  = '{{ $clockInIso }}';
-    const clockOutStr = '{{ $clockOutIso }}';
-    const timerEl     = document.getElementById('live-timer');
-
-    if (!timerEl) return;
-
-    const clockIn  = clockInStr  ? new Date(clockInStr)  : null;
-    const clockOut = clockOutStr ? new Date(clockOutStr) : null;
-
-    function setTimer(hrs, mins) {
-        timerEl.textContent = String(hrs).padStart(2,'0') + ':' + String(mins).padStart(2,'0');
-    }
-
-    function setProgress(ratio) {
-        const el = document.getElementById('circle-progress');
-        if (el) el.setAttribute('stroke-dashoffset', 264 - 264 * Math.min(1, ratio));
-    }
-
-    if (clockIn && !isNaN(clockIn.getTime()) && (!clockOut || isNaN(clockOut.getTime()))) {
-        // Active — update every second
-        (function tick() {
-            const ms = Date.now() - clockIn.getTime();
-            if (ms > 0) {
-                setTimer(Math.floor(ms/3600000), Math.floor((ms%3600000)/60000));
-                setProgress(ms / 28800000);
-            }
-            setTimeout(tick, 1000);
-        })();
-    } else if (clockIn && !isNaN(clockIn.getTime()) && clockOut && !isNaN(clockOut.getTime())) {
-        // Finished — static display
-        const ms = clockOut - clockIn;
-        if (ms > 0) {
-            setTimer(Math.floor(ms/3600000), Math.floor((ms%3600000)/60000));
-            setProgress(1);
-        }
-    }
-    // else: stays at 00:00
-});
-</script>
 @endsection
