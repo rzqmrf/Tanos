@@ -194,88 +194,226 @@
     </div>
 
     {{-- MODAL: SUBMIT LEAVE --}}
-    <div x-show="leaveModal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-xl relative" @click.away="leaveModal = false">
-            <h3 class="text-base font-bold text-slate-800 dark:text-slate-200 mb-4">Form Pengajuan Cuti / Izin</h3>
+    <div x-show="leaveModal" 
+         class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" 
+         style="display: none;"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-xl p-6 md:p-8 shadow-2xl relative" 
+             @click.away="leaveModal = false"
+             x-data="{ 
+                 selectedType: 'Cuti Tahunan',
+                 startDate: '',
+                 endDate: '',
+                 fileName: '',
+                 get totalDays() {
+                     if (!this.startDate || !this.endDate) return 0;
+                     const start = new Date(this.startDate);
+                     const end = new Date(this.endDate);
+                     if (end < start) return 0;
+                     const diffTime = Math.abs(end - start);
+                     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                 }
+             }">
             
-            <form action="{{ route('ess.leave.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-800/40">
+                        🏖️
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-850 dark:text-slate-100">Pengajuan Cuti & Izin</h3>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Lengkapi detail permohonan ketidakhadiran Anda.</p>
+                    </div>
+                </div>
+                <button @click="leaveModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <form action="{{ route('ess.leave.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
+                
+                {{-- Interactive Leave Type Cards Selector --}}
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Tipe Pengajuan</label>
-                    <select name="type" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
-                        <option value="Cuti Tahunan">Cuti Tahunan</option>
-                        <option value="Sakit">Sakit (Membutuhkan Surat Dokter)</option>
-                        <option value="Cuti Melahirkan">Cuti Melahirkan</option>
-                        <option value="Izin Alasan Penting">Izin Alasan Penting</option>
-                        <option value="Cuti Ibadah Keagamaan">Cuti Ibadah Keagamaan</option>
-                    </select>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Pilih Tipe Cuti / Izin</label>
+                    <input type="hidden" name="type" :value="selectedType">
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                        <button type="button" @click="selectedType = 'Cuti Tahunan'"
+                                :class="selectedType === 'Cuti Tahunan' ? 'border-indigo-600 bg-indigo-50/40 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-400 font-bold ring-2 ring-indigo-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
+                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                            <span class="text-lg">🏖️</span>
+                            <span>Cuti Tahunan</span>
+                        </button>
+                        <button type="button" @click="selectedType = 'Sakit'"
+                                :class="selectedType === 'Sakit' ? 'border-rose-600 bg-rose-50/40 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 font-bold ring-2 ring-rose-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
+                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                            <span class="text-lg">🤒</span>
+                            <span>Sakit</span>
+                        </button>
+                        <button type="button" @click="selectedType = 'Cuti Melahirkan'"
+                                :class="selectedType === 'Cuti Melahirkan' ? 'border-amber-600 bg-amber-50/40 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 font-bold ring-2 ring-amber-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
+                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                            <span class="text-lg">👶</span>
+                            <span>Cuti Melahirkan</span>
+                        </button>
+                        <button type="button" @click="selectedType = 'Izin Alasan Penting'"
+                                :class="selectedType === 'Izin Alasan Penting' ? 'border-orange-600 bg-orange-50/40 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 font-bold ring-2 ring-orange-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
+                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                            <span class="text-lg">⚠️</span>
+                            <span>Izin Alasan Penting</span>
+                        </button>
+                        <button type="button" @click="selectedType = 'Cuti Ibadah Keagamaan'"
+                                :class="selectedType === 'Cuti Ibadah Keagamaan' ? 'border-teal-600 bg-teal-50/40 dark:bg-teal-950/20 text-teal-700 dark:text-teal-400 font-bold ring-2 ring-teal-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
+                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                            <span class="text-lg">🕌</span>
+                            <span>Ibadah Keagamaan</span>
+                        </button>
+                    </div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1.5">Tanggal Mulai</label>
-                        <input type="date" name="start_date" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                {{-- Date Pickers with Real-time Count Badge --}}
+                <div class="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 mb-1.5">Tanggal Mulai</label>
+                            <input type="date" name="start_date" x-model="startDate" required 
+                                   class="w-full text-xs px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-500 mb-1.5">Tanggal Selesai</label>
+                            <input type="date" name="end_date" x-model="endDate" required 
+                                   class="w-full text-xs px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1.5">Tanggal Selesai</label>
-                        <input type="date" name="end_date" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                    
+                    {{-- Real-time count feedback badge --}}
+                    <div x-show="totalDays > 0" 
+                         x-transition 
+                         class="flex items-center justify-between bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100/60 dark:border-indigo-900/30 px-3.5 py-2 rounded-xl">
+                        <span class="text-[10px] font-bold text-indigo-700 dark:text-indigo-400">Total Durasi Pengajuan:</span>
+                        <span class="text-xs font-black text-indigo-800 dark:text-indigo-300" x-text="totalDays + ' Hari Kerja'"></span>
                     </div>
                 </div>
 
+                {{-- Reason field --}}
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Alasan Cuti</label>
-                    <textarea name="reason" required rows="3" placeholder="Tuliskan keterangan detail alasan pengajuan..." class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200"></textarea>
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Alasan Pengajuan</label>
+                    <textarea name="reason" required rows="3" placeholder="Tuliskan keterangan detail alasan pengajuan..." 
+                              class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200"></textarea>
                 </div>
 
+                {{-- Custom File Upload Input --}}
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Unggah Berkas Pendukung (Opsional)</label>
-                    <input type="file" name="attachment" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 text-slate-400">
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Unggah Berkas Pendukung (Opsional)</label>
+                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-2xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
+                        <input type="file" name="attachment" 
+                               @change="fileName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-slate-400 mb-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+                        </svg>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300 block" x-text="fileName || 'Pilih berkas PDF atau gambar (Maks 2MB)'"></span>
+                        <span class="text-[9px] text-slate-400 mt-1 block">Seret & taruh berkas di sini untuk unggah</span>
+                    </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-2.5 pt-2">
-                    <button type="button" @click="leaveModal = false" class="px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow cursor-pointer">Ajukan</button>
+                {{-- Submit Buttons --}}
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                    <button type="button" @click="leaveModal = false" class="px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 cursor-pointer transition">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow transition cursor-pointer">Kirim Pengajuan</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- MODAL: SUBMIT CICO CORRECTION --}}
-    <div x-show="cicoModal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-xl relative" @click.away="cicoModal = false">
-            <h3 class="text-base font-bold text-slate-800 dark:text-slate-200 mb-4">Form Koreksi Absensi (CICO)</h3>
+    <div x-show="cicoModal" 
+         class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" 
+         style="display: none;"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+         
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 md:p-8 shadow-2xl relative" 
+             @click.away="cicoModal = false"
+             x-data="{ cicoFileName: '' }">
+            
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-800/40">
+                        ⏰
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-850 dark:text-slate-100">Koreksi Absensi CICO</h3>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Sesuaikan jam masuk/pulang Anda.</p>
+                    </div>
+                </div>
+                <button @click="cicoModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
             
             <form action="{{ route('ess.cico.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Tanggal Absensi Yang Dikoreksi</label>
-                    <input type="date" name="date" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Tanggal Absensi Yang Dikoreksi</label>
+                    <input type="date" name="date" required 
+                           class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1.5">Jam Masuk (Clock In)</label>
-                        <input type="time" name="clock_in" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Jam Masuk (Clock In)</label>
+                        <input type="time" name="clock_in" required 
+                               class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 mb-1.5">Jam Pulang (Clock Out)</label>
-                        <input type="time" name="clock_out" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Jam Pulang (Clock Out)</label>
+                        <input type="time" name="clock_out" required 
+                               class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Alasan Koreksi</label>
-                    <textarea name="reason" required rows="3" placeholder="Tuliskan alasan penyesuaian jam absensi (misal: mesin fingerprint error)..." class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200"></textarea>
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Alasan Penyesuaian</label>
+                    <textarea name="reason" required rows="3" placeholder="Tuliskan alasan penyesuaian (misal: mesin fingerprint error)..." 
+                              class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200"></textarea>
                 </div>
 
+                {{-- Custom File Upload Zone --}}
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1.5">Unggah Foto Bukti/Surat Tugas (Opsional)</label>
-                    <input type="file" name="attachment" class="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 text-slate-400">
+                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Unggah Foto Bukti/Surat Tugas (Opsional)</label>
+                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-2xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
+                        <input type="file" name="attachment" 
+                               @change="cicoFileName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-slate-400 mb-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                        </svg>
+                        <span class="text-[11px] font-bold text-slate-700 dark:text-slate-300 block" x-text="cicoFileName || 'Pilih berkas PDF atau gambar (Maks 2MB)'"></span>
+                        <span class="text-[9px] text-slate-400 mt-1 block">Seret & taruh berkas di sini untuk unggah</span>
+                    </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-2.5 pt-2">
-                    <button type="button" @click="cicoModal = false" class="px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow cursor-pointer">Ajukan Koreksi</button>
+                {{-- Submit buttons --}}
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                    <button type="button" @click="cicoModal = false" class="px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 cursor-pointer transition">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow transition cursor-pointer">Ajukan Koreksi</button>
                 </div>
             </form>
         </div>
@@ -283,3 +421,4 @@
 
 </div>
 @endsection
+
