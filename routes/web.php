@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CopilotController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -96,4 +97,8 @@ Route::prefix('dashboard')->group(function () {
     Route::get('api/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('api/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     Route::post('api/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    // copilot
+    Route::get('copilot', [CopilotController::class, 'index'])->name('copilot.index')->middleware('permission:dashboard');
+    Route::post('copilot/chat', [CopilotController::class, 'chat'])->name('copilot.chat')->middleware('permission:dashboard');
 });
