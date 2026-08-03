@@ -86,8 +86,11 @@
             $isUsers = request()->routeIs('users.index');
             $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers;
 
+            $isESS = request()->routeIs('ess.index');
+            $isESSAdmin = request()->routeIs('ess.admin.index');
+
             $isOperationalActive = $isProjects || $isClients || $isSchedules;
-            $isHRActive = $isEmployees || $isAttendance || $isRecruitment || $isEvaluations || $isCertifications;
+            $isHRActive = $isEmployees || $isAttendance || $isRecruitment || $isEvaluations || $isCertifications || $isESS || $isESSAdmin;
             $isFinanceActive = $isInvoices || $isPayroll || $isExpenses;
         @endphp
         <nav x-data="{ activeGroup: '{{ $isOperationalActive ? 'operations' : ($isHRActive ? 'hr' : ($isFinanceActive ? 'finance' : ($isSettingsActive ? 'settings' : ''))) }}' }" class="space-y-6">
@@ -130,12 +133,12 @@
                     @endif
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti'))
-                        <a href="#" 
-                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300">
+                        <a href="{{ route('ess.index') }}" 
+                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isESS ? 'bg-blue-50/80 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 {{ $isESS ? 'text-blue-500 dark:text-blue-400' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                             </svg>
-                            <span class="text-sm">Pengajuan Cuti</span>
+                            <span class="text-sm">Pengajuan Cuti / ESS</span>
                         </a>
                     @endif
 
@@ -322,9 +325,14 @@
                                     <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isAttendance ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                                         Attendance / Time Mgt
                                     </a>
-                                    <a href="#" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                    <a href="{{ route('ess.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isESS ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                                         Employee Self Service
                                     </a>
+                                    @if(in_array($role, ['Admin', 'HR']))
+                                        <a href="{{ route('ess.admin.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isESSAdmin ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                            ESS Approvals
+                                        </a>
+                                    @endif
                                 @endif
                                 @if(\App\Models\RolePermission::hasPermission($role, 'recruitment'))
                                     <a href="{{ route('recruitment.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isRecruitment ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">

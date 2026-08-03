@@ -24,4 +24,14 @@ class Employee extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
+
+    public function cicoCorrections()
+    {
+        return $this->hasMany(CicoCorrection::class);
+    }
 }

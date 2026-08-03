@@ -13,6 +13,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CopilotController;
+use App\Http\Controllers\EssController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -101,4 +102,12 @@ Route::prefix('dashboard')->group(function () {
     // copilot
     Route::get('copilot', [CopilotController::class, 'index'])->name('copilot.index')->middleware('permission:dashboard');
     Route::post('copilot/chat', [CopilotController::class, 'chat'])->name('copilot.chat')->middleware('permission:dashboard');
+
+    // employee self service (ess)
+    Route::get('ess', [EssController::class, 'index'])->name('ess.index')->middleware('permission:dashboard');
+    Route::post('ess/leave', [EssController::class, 'storeLeave'])->name('ess.leave.store')->middleware('permission:dashboard');
+    Route::post('ess/cico', [EssController::class, 'storeCico'])->name('ess.cico.store')->middleware('permission:dashboard');
+    Route::get('admin/ess', [EssController::class, 'adminIndex'])->name('ess.admin.index')->middleware('permission:dashboard');
+    Route::post('admin/ess/leave/{id}/{status}', [EssController::class, 'actionLeave'])->name('ess.admin.leave.action')->middleware('permission:dashboard');
+    Route::post('admin/ess/cico/{id}/{status}', [EssController::class, 'actionCico'])->name('ess.admin.cico.action')->middleware('permission:dashboard');
 });

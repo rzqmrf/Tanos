@@ -57,4 +57,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function leaveApprovals()
+    {
+        return $this->hasMany(LeaveRequest::class, 'approved_by');
+    }
+
+    public function cicoApprovals()
+    {
+        return $this->hasMany(CicoCorrection::class, 'approved_by');
+    }
 }
