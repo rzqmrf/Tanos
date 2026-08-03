@@ -93,7 +93,7 @@
             $isHRActive = $isEmployees || $isAttendance || $isRecruitment || $isEvaluations || $isCertifications || $isESS || $isESSAdmin;
             $isFinanceActive = $isInvoices || $isPayroll || $isExpenses;
         @endphp
-        <nav x-data="{ activeGroup: '{{ $isOperationalActive ? 'operations' : ($isHRActive ? 'hr' : ($isFinanceActive ? 'finance' : ($isSettingsActive ? 'settings' : ''))) }}' }" class="space-y-6">
+        <nav x-data="{ activeGroup: '{{ $isOperationalActive ? 'operations' : ($isHRActive ? 'hr' : ($isFinanceActive ? 'finance' : ($isSettingsActive ? 'settings' : ''))) }}' }" class="space-y-3">
 
             @if($role === 'Employee')
                 <!-- Category: Menu Utama (Employee View) -->
@@ -122,15 +122,7 @@
                         </a>
                     @endif
 
-                    @if(\App\Models\RolePermission::hasPermission($role, 'rekap_absensi'))
-                        <a href="#" 
-                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-505 group-hover:text-slate-600 dark:group-hover:text-slate-300">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-                            </svg>
-                            <span class="text-sm">Rekap Absensi</span>
-                        </a>
-                    @endif
+
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti'))
                         <a href="{{ route('ess.index') }}" 
@@ -202,7 +194,7 @@
 
                 <!-- Category: Operasional -->
                 @if(\App\Models\RolePermission::hasPermission($role, 'projects') || \App\Models\RolePermission::hasPermission($role, 'clients') || \App\Models\RolePermission::hasPermission($role, 'schedules'))
-                    <div class="space-y-3">
+                    <div class="space-y-1.5">
                         <!-- Operasional -->
 
                         <!-- Group: Operations -->
@@ -279,7 +271,7 @@
 
                 <!-- Category: Human Resources -->
                 @if(\App\Models\RolePermission::hasPermission($role, 'employees') || \App\Models\RolePermission::hasPermission($role, 'attendance') || \App\Models\RolePermission::hasPermission($role, 'recruitment') || \App\Models\RolePermission::hasPermission($role, 'evaluations') || \App\Models\RolePermission::hasPermission($role, 'certifications') || \App\Models\RolePermission::hasPermission($role, 'rekap_absensi') || \App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti') || \App\Models\RolePermission::hasPermission($role, 'kalender') || \App\Models\RolePermission::hasPermission($role, 'laporan'))
-                    <div class="space-y-3">
+                    <div class="space-y-1.5">
                         <!-- Human Resources -->
 
                         <!-- Group: HR -->
