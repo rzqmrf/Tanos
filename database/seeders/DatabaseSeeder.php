@@ -47,27 +47,43 @@ class DatabaseSeeder extends Seeder
         ];
         $currentMonthStr = $monthsIndo[(int)date('n')] . ' ' . date('Y');
 
-        // Make sure the id = 1 is leo and sync the month
-        $firstEmployee = Employee::find(1);
-        if ($firstEmployee) {
-            $firstEmployee->update([
-                'name'  => 'Leo Rajata',
-                'month' => $currentMonthStr, // tetap muncul saat terfilter
-            ]);
-        }
-
         // 100 id
         $keepIds = Employee::orderBy('id')->take(100)->pluck('id');
         Employee::whereNotIn('id', $keepIds)->delete();
         // ----------------------------------------------------------------------
 
-        // 4. Akun User Employee yang terkoneksi ke id 1
+        // 4. Auto-generate User accounts for ALL Employees
+        $usedUsernames = [];
+        Employee::orderBy('id')->get()->each(function ($emp) use (&$usedUsernames) {
+            $firstName = strtolower(explode(' ', $emp->name)[0]);
+            $username = $firstName;
+            $counter = 2;
+            while (User::where('username', $username)->exists() || in_array($username, $usedUsernames)) {
+                $username = $firstName . $counter;
+                $counter++;
+            }
+            $usedUsernames[] = $username;
+
+            User::firstOrCreate(
+                ['username' => $username],
+                [
+                    'name'        => $emp->name,
+                    'email'       => strtolower(str_replace(' ', '', $emp->name)) . $emp->id . '@tanos.local',
+                    'password'    => bcrypt('password'),
+                    'employee_id' => $emp->id,
+                    'role'        => 'Employee',
+                ]
+            );
+        });
+
+        // 5. Akun demo 'employee' (username: employee, password: password) — selalu link ke Employee id 1
+        $firstEmployee = Employee::find(1);
         if ($firstEmployee) {
             User::firstOrCreate(
                 ['username' => 'employee'],
                 [
                     'name'        => $firstEmployee->name,
-                    'email'       => 'employee@example.com',
+                    'email'       => 'employee@tanos.local',
                     'password'    => bcrypt('password'),
                     'employee_id' => $firstEmployee->id,
                     'role'        => 'Employee',

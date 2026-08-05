@@ -352,15 +352,27 @@
 </div>
 
 <script>
+/**
+ * State & logic chat untuk Tanos AI Copilot (Alpine).
+ * Nama method/property tidak diubah agar kompatibel dengan binding x-* di markup.
+ */
 function copilotChat() {
     return {
+        // -- State --
         messages: [],
         inputText: '',
         loading: false,
 
+        // -- Lifecycle --
         init() {
             const saved = localStorage.getItem('tanos_copilot_chat');
-            if (saved) { try { this.messages = JSON.parse(saved); } catch(e) { this.messages = []; } }
+            if (saved) {
+                try {
+                    this.messages = JSON.parse(saved);
+                } catch (e) {
+                    this.messages = [];
+                }
+            }
         },
 
         clearChat() {
@@ -368,44 +380,15 @@ function copilotChat() {
             localStorage.removeItem('tanos_copilot_chat');
         },
 
+        // -- Persistence --
+        save() {
+            localStorage.setItem('tanos_copilot_chat', JSON.stringify(this.messages));
+        },
+
+        // -- Helpers --
         now() {
             const d = new Date();
-            return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
-        },
-
-        submitPrompt(text) {
-            this.inputText = text;
-            this.$nextTick(() => this.submitChat());
-        },
-
-        submitChat() {
-            const message = this.inputText.trim();
-            if (!message || this.loading) return;
-
-            this.messages.push({ sender: 'user', text: message, html: false, time: this.now() });
-            this.inputText = '';
-            this.loading = true;
-            this.scrollToBottom();
-
-            fetch("{{ route('copilot.chat') }}", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ message })
-            })
-            .then(r => r.json())
-            .then(data => {
-                const text = data.response || '';
-                const isHtml = /<\/?[a-z][\s\S]*>/i.test(text);
-                this.messages.push({ sender: 'ai', text, html: isHtml, time: this.now() });
-                localStorage.setItem('tanos_copilot_chat', JSON.stringify(this.messages));
-            })
-            .catch(() => {
-                this.messages.push({ sender: 'ai', text: 'Gagal menghubungi API. Silakan coba lagi.', html: false, time: this.now() });
-            })
-            .finally(() => {
-                this.loading = false;
-                this.scrollToBottom();
-            });
+            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
         },
 
         scrollToBottom() {
@@ -415,15 +398,65 @@ function copilotChat() {
             });
         },
 
+        isHtmlContent(text) {
+            return /<\/?[a-z][\s\S]*>/i.test(text);
+        },
+
+        addMessage(sender, text, html) {
+            this.messages.push({ sender, text, html: !!html, time: this.now() });
+            this.save();
+            this.scrollToBottom();
+        },
+
+        // -- Actions --
+        submitPrompt(text) {
+            this.inputText = text;
+            this.$nextTick(() => this.submitChat());
+        },
+
+        submitChat() {
+            const message = this.inputText.trim();
+            if (!message || this.loading) return;
+
+            this.addMessage('user', message, false);
+            this.inputText = '';
+            this.loading = true;
+            this.scrollToBottom();
+
+            fetch("{{ route('copilot.chat') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ message }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    const text = data.response || '';
+                    this.addMessage('ai', text, this.isHtmlContent(text));
+                })
+                .catch(() => {
+                    this.addMessage('ai', 'Gagal menghubungi API. Silakan coba lagi.', false);
+                })
+                .finally(() => {
+                    this.loading = false;
+                    this.scrollToBottom();
+                });
+        },
+
+        // -- Rendering --
         formatMarkdown(text) {
             if (!text) return '';
             return text
+                // **tebal**
                 .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight:700;">$1</strong>')
+                // *miring*
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // `kode inline`
                 .replace(/`(.*?)`/g, '<code style="padding:1px 6px;background:rgba(99,102,241,0.12);color:#6366f1;border-radius:4px;font-size:10px;font-family:monospace;">$1</code>')
+                // # judul
                 .replace(/^#{1,3}\s+(.*?)$/gm, '<div style="font-weight:700;font-size:13px;margin-top:8px;margin-bottom:4px;">$1</div>')
+                // - bullet
                 .replace(/^\s*[-*]\s+(.*?)$/gm, '<div style="display:flex;align-items:flex-start;gap:6px;margin:2px 0;"><span style="color:#6366f1;flex-shrink:0;">&#8226;</span><span>$1</span></div>');
-        }
+        },
     };
 }
 </script>
