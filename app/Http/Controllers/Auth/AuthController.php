@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AuthController extends Controller
 {
@@ -26,6 +27,17 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
+        $throttleKey = 'login:' . $request->ip();
+
+        // Rate limit check: block if too many attempts
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            return back()->withErrors([
+                'username' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . ceil($seconds / 60) . ' menit.'
+            ]);
+        }
+
         $username = $request->input('username');
         $password = $request->input('password');
 
@@ -33,6 +45,8 @@ class AuthController extends Controller
 
         // auth
         if ($dbUser && Hash::check($password, $dbUser->password)) {
+            RateLimiter::clear($throttleKey);
+
             session([
                 'user' => [
                     'id' => $dbUser->id,
@@ -45,6 +59,9 @@ class AuthController extends Controller
 
             return redirect()->route('dashboard.index');
         }
+
+        // failed login: increment the attempt counter
+        RateLimiter::hit($throttleKey);
 
         // redirect
         return back()->withErrors([
