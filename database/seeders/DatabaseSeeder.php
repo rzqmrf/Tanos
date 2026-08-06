@@ -83,10 +83,20 @@ class DatabaseSeeder extends Seeder
 
         // truncate 100 orang saja
         $monthsIndo = [
-            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
         ];
-        $currentMonthStr = $monthsIndo[(int) date('n')].' '.date('Y');
+        $currentMonthStr = $monthsIndo[(int) date('n')] . ' ' . date('Y');
 
         // 100 id
         $keepIds = Employee::orderBy('id')->take(100)->pluck('id');
@@ -100,7 +110,7 @@ class DatabaseSeeder extends Seeder
             $username = $firstName;
             $counter = 2;
             while (User::where('username', $username)->exists() || in_array($username, $usedUsernames)) {
-                $username = $firstName.$counter;
+                $username = $firstName . $counter;
                 $counter++;
             }
             $usedUsernames[] = $username;
@@ -109,7 +119,7 @@ class DatabaseSeeder extends Seeder
                 ['username' => $username],
                 [
                     'name' => $emp->name,
-                    'email' => strtolower(str_replace(' ', '', $emp->name)).$emp->id.'@tanos.local',
+                    'email' => strtolower(str_replace(' ', '', $emp->name)) . $emp->id . '@tanos.local',
                     'password' => bcrypt('password'),
                     'employee_id' => $emp->id,
                     'role' => 'Employee',
@@ -156,8 +166,8 @@ class DatabaseSeeder extends Seeder
                     'status' => $attendancePool[array_rand($attendancePool)],
                     'clock_in' => '08:00:00',
                     'clock_out' => '17:00:00',
-                    'overtime_hours' => 0.00,
-                    'notes' => 'Auto-generate seeder',
+                    'overtime_hours' => 0.0,
+                    'notes' => '-',
                 ]
             );
         });
@@ -166,7 +176,7 @@ class DatabaseSeeder extends Seeder
         Notification::create([
             'user_id' => $testUser->id,
             'title' => 'Invoice baru masuk',
-            'message' => 'Invoice #INV-'.date('Y').'-312 dari Proyek Enterprise Jawa Barat telah diterima.',
+            'message' => 'Invoice #INV-' . date('Y') . '-312 dari Proyek Enterprise Jawa Barat telah diterima.',
             'type' => 'invoice',
             'created_at' => now()->subMinutes(2),
         ]);
