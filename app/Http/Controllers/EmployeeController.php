@@ -40,6 +40,14 @@ class EmployeeController extends Controller
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'sub_regional' => 'nullable|string|max:255',
+            'nipp' => 'required|string|max:50|unique:employees,nipp',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account_number' => 'nullable|string|max:50',
+            'bank_account_name' => 'nullable|string|max:255',
+            'ptkp_status' => 'required|string|max:10',
+            'tmt_date' => 'nullable|date',
+            'bpjs_kesehatan_number' => 'nullable|string|max:50',
+            'bpjs_ketenagakerjaan_number' => 'nullable|string|max:50',
         ]);
 
         $employee = Employee::create($validData);
@@ -86,6 +94,14 @@ class EmployeeController extends Controller
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'sub_regional' => 'nullable|string|max:255',
+            'nipp' => 'required|string|max:50|unique:employees,nipp,' . $employee->id,
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account_number' => 'nullable|string|max:50',
+            'bank_account_name' => 'nullable|string|max:255',
+            'ptkp_status' => 'required|string|max:10',
+            'tmt_date' => 'nullable|date',
+            'bpjs_kesehatan_number' => 'nullable|string|max:50',
+            'bpjs_ketenagakerjaan_number' => 'nullable|string|max:50',
         ]);
 
         $employee->update($validData);

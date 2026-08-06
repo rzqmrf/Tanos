@@ -68,9 +68,33 @@ Route::prefix('dashboard')->group(function () {
 
     Route::resource('attendances', AttendanceController::class)->middleware('permission:attendance');
 
-    Route::get('payrolls', function () {
-        return view('finance.payrolls');
-    })->name('payrolls.index')->middleware('permission:payroll');
+    // Projects WBS System
+    Route::get('projects/{project}/wbs', [\App\Http\Controllers\WbsController::class, 'index'])->name('projects.wbs.index')->middleware('permission:projects');
+    Route::post('projects/{project}/wbs', [\App\Http\Controllers\WbsController::class, 'store'])->name('projects.wbs.store')->middleware('permission:projects');
+    Route::put('projects/{project}/wbs/{wbs}', [\App\Http\Controllers\WbsController::class, 'update'])->name('projects.wbs.update')->middleware('permission:projects');
+    Route::delete('projects/{project}/wbs/{wbs}', [\App\Http\Controllers\WbsController::class, 'destroy'])->name('projects.wbs.destroy')->middleware('permission:projects');
+    Route::post('projects/{project}/wbs/send-sap', [\App\Http\Controllers\WbsController::class, 'sendToSap'])->name('projects.wbs.send-sap')->middleware('permission:projects');
+
+    // HCM Period Payroll & Component Formulation
+    Route::get('payrolls', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payrolls.index')->middleware('permission:payroll');
+    Route::post('payrolls', [\App\Http\Controllers\PayrollController::class, 'store'])->name('payrolls.store')->middleware('permission:payroll');
+    Route::get('payrolls/{id}', [\App\Http\Controllers\PayrollController::class, 'show'])->name('payrolls.show')->middleware('permission:payroll');
+    Route::post('payrolls/{id}/calculate', [\App\Http\Controllers\PayrollController::class, 'calculate'])->name('payrolls.calculate')->middleware('permission:payroll');
+    Route::post('payrolls/{id}/copy-formula', [\App\Http\Controllers\PayrollController::class, 'copyFormula'])->name('payrolls.copy-formula')->middleware('permission:payroll');
+    Route::post('payrolls/{id}/post-sap', [\App\Http\Controllers\PayrollController::class, 'postSap'])->name('payrolls.post-sap')->middleware('permission:payroll');
+
+    // PS Posting Payroll General Ledger
+    Route::get('posting-payrolls', [\App\Http\Controllers\PostingPayrollController::class, 'index'])->name('posting_payrolls.index')->middleware('permission:payroll');
+    Route::get('posting-payrolls/{id}/journal', [\App\Http\Controllers\PostingPayrollController::class, 'showJournal'])->name('posting_payrolls.journal')->middleware('permission:payroll');
+    Route::post('posting-payrolls/{id}/upload', [\App\Http\Controllers\PostingPayrollController::class, 'uploadPFile'])->name('posting_payrolls.upload')->middleware('permission:payroll');
+    Route::post('posting-payrolls/{id}/void', [\App\Http\Controllers\PostingPayrollController::class, 'voidJournal'])->name('posting_payrolls.void')->middleware('permission:payroll');
+
+    // PS Billing & Pranota
+    Route::get('billing', [\App\Http\Controllers\BillingController::class, 'index'])->name('billing.index')->middleware('permission:invoices');
+    Route::post('billing/pranota', [\App\Http\Controllers\BillingController::class, 'storePranota'])->name('billing.pranota.store')->middleware('permission:invoices');
+    Route::post('billing/pranota/{id}/approve', [\App\Http\Controllers\BillingController::class, 'approvePranota'])->name('billing.pranota.approve')->middleware('permission:invoices');
+    Route::post('billing/nota', [\App\Http\Controllers\BillingController::class, 'doNota'])->name('billing.nota.store')->middleware('permission:invoices');
+    Route::post('billing/nota/{id}/post-sap', [\App\Http\Controllers\BillingController::class, 'postNota'])->name('billing.nota.post-sap')->middleware('permission:invoices');
 
     Route::get('expenses', function () {
         return view('finance.expenses');

@@ -13,6 +13,18 @@ class Employee extends Model
         'regional',
         'sub_regional',
         'segment',
+        'nipp',
+        'bank_name',
+        'bank_account_number',
+        'bank_account_name',
+        'ptkp_status',
+        'tmt_date',
+        'bpjs_kesehatan_number',
+        'bpjs_ketenagakerjaan_number',
+    ];
+
+    protected $casts = [
+        'tmt_date' => 'date',
     ];
 
     public function attendances()
@@ -33,5 +45,10 @@ class Employee extends Model
     public function cicoCorrections()
     {
         return $this->hasMany(CicoCorrection::class);
+    }
+
+    public function movements()
+    {
+        return $this->hasMany(EmployeeMovement::class);
     }
 }
