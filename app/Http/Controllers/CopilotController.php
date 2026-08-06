@@ -156,17 +156,60 @@ Aturan Penting saat Menjawab:
     }
 
     /**
-     * Mengambil daftar proyek dari database.
+     * Menyusun ringkasan proyek aktif (active = 1) per bulan, real-time dari database.
      */
     private function buildProjectsText(): string
     {
         try {
-            $projectsList = Project::limit(10)->get(['month', 'regional', 'segment', 'cost', 'active'])->toArray();
+            // 6 bulan terakhir (sama dengan dashboard): misal Maret - Agustus 2026
+            $months = \App\Services\DashboardService::generateLast6Months();
 
-            return ! empty($projectsList) ? json_encode($projectsList, JSON_PRETTY_PRINT) : 'Tidak ada data proyek di database.';
+            $lines = [];
+            foreach ($months as $month) {
+                $summary = $this->projectSummaryForMonth($month);
+                $lines[] = $summary;
+            }
+
+            return implode("\n\n", $lines);
         } catch (\Exception $e) {
             return 'Gagal memuat data proyek dari database: '.$e->getMessage();
         }
+    }
+
+    /**
+     * Ringkasan agregat proyek aktif untuk satu bulan.
+     */
+    private function projectSummaryForMonth(string $month): string
+    {
+        $query = Project::where('month', $month)->where('active', 1);
+        $total = $query->count();
+        $budget = $query->sum('cost');
+
+        $byRegional = Project::where('month', $month)->where('active', 1)
+            ->groupBy('regional')
+            ->selectRaw('regional, COUNT(*) as total')
+            ->orderBy('total', 'desc')
+            ->pluck('total', 'regional');
+
+        $bySegment = Project::where('month', $month)->where('active', 1)
+            ->groupBy('segment')
+            ->selectRaw('segment, COUNT(*) as total')
+            ->orderBy('total', 'desc')
+            ->pluck('total', 'segment');
+
+        $regionalText = $byRegional->isNotEmpty()
+            ? $byRegional->map(fn ($c, $r) => "{$r} ({$c})")->implode(', ')
+            : 'tidak ada';
+
+        $segmentText = $bySegment->isNotEmpty()
+            ? $bySegment->map(fn ($c, $s) => "{$s} ({$c})")->implode(', ')
+            : 'tidak ada';
+
+        $budgetFormatted = 'Rp ' . number_format($budget, 0, ',', '.');
+
+        return "Bulan {$month}: {$total} proyek aktif | Total anggaran aktif: {$budgetFormatted}"
+            . "\n- Per Regional: {$regionalText}"
+            . "\n- Per Segment: {$segmentText}";
     }
 
     /**
