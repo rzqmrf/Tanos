@@ -90,6 +90,7 @@
             $isSchedules = request()->routeIs('schedules.index');
             $isAttendance = request()->routeIs('attendances.index');
             $isEssAdmin = request()->routeIs('ess.admin.index');
+            $isESS = request()->routeIs('ess.index');
             $isPayroll = request()->routeIs('payrolls.index') || request()->routeIs('payrolls.show');
             $isHCActive = $isEmployees || $isSchedules || $isAttendance || $isEssAdmin || $isPayroll;
 
