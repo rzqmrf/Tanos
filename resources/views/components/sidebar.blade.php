@@ -72,10 +72,11 @@
             $isReports = request()->routeIs('reports.index');
             $isProjects = request()->routeIs('projects.index');
             $isEmployees = request()->routeIs('employees.index');
-            $isInvoices = request()->routeIs('invoices.index');
+            $isInvoices = request()->routeIs('invoices.index') || request()->routeIs('billing.index');
             $isClients = request()->routeIs('clients.index');
             $isAttendance = request()->routeIs('attendances.index');
-            $isPayroll = request()->routeIs('payrolls.index');
+            $isPayroll = request()->routeIs('payrolls.index') || request()->routeIs('payrolls.show');
+            $isPostingPayroll = request()->routeIs('posting_payrolls.index');
             $isExpenses = request()->routeIs('expenses.index');
             $isRecruitment = request()->routeIs('recruitment.index');
             $isEvaluations = request()->routeIs('evaluations.index');
@@ -91,7 +92,7 @@
 
             $isOperationalActive = $isProjects || $isClients || $isSchedules;
             $isHRActive = $isEmployees || $isAttendance || $isRecruitment || $isEvaluations || $isCertifications || $isESS || $isESSAdmin;
-            $isFinanceActive = $isInvoices || $isPayroll || $isExpenses;
+            $isFinanceActive = $isInvoices || $isPayroll || $isPostingPayroll || $isExpenses;
         @endphp
         <nav x-data="{ activeGroup: '{{ $isOperationalActive ? 'operations' : ($isHRActive ? 'hr' : ($isFinanceActive ? 'finance' : ($isSettingsActive ? 'settings' : ''))) }}' }" class="space-y-3">
 
@@ -400,13 +401,16 @@
                                  class="mt-1 pl-9 space-y-1"
                                  style="display: none;">
                                 @if(\App\Models\RolePermission::hasPermission($role, 'invoices'))
-                                    <a href="{{ route('invoices.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isInvoices ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
-                                        Invoices
+                                    <a href="{{ route('billing.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isInvoices ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                        Billing (Pranota & Nota)
                                     </a>
                                 @endif
                                 @if(\App\Models\RolePermission::hasPermission($role, 'payroll'))
                                     <a href="{{ route('payrolls.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isPayroll ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                                         Payroll
+                                    </a>
+                                    <a href="{{ route('posting_payrolls.index') }}" class="block py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors {{ $isPostingPayroll ? 'text-blue-600 dark:text-blue-400 bg-blue-50/30 dark:bg-blue-950/10' : 'text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                                        Posting Payroll
                                     </a>
                                 @endif
                                 @if(\App\Models\RolePermission::hasPermission($role, 'expenses'))

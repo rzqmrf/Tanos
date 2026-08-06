@@ -40,6 +40,45 @@ class DatabaseSeeder extends Seeder
         
         $this->call(DashboardSeeder::class);
 
+        // Seed WBS elements for projects to support complete workflow demos
+        $projects = \App\Models\Project::all();
+        foreach ($projects as $proj) {
+            $root = \App\Models\WbsElement::create([
+                'project_id' => $proj->id,
+                'wbs_code' => 'WBS-' . sprintf('%03d', $proj->id),
+                'wbs_name' => 'Penyediaan TAD',
+                'wbs_category' => 'Upah Pokok',
+                'weight' => 50,
+                'expected_start' => now()->startOfMonth(),
+                'expected_end' => now()->endOfMonth(),
+                'sent_to_sap' => true,
+            ]);
+
+            \App\Models\WbsElement::create([
+                'project_id' => $proj->id,
+                'parent_id' => $root->id,
+                'wbs_code' => 'WBS-' . sprintf('%03d', $proj->id) . '.1',
+                'wbs_name' => 'Transport Karyawan',
+                'wbs_category' => 'Uang Transport',
+                'weight' => 30,
+                'expected_start' => now()->startOfMonth(),
+                'expected_end' => now()->endOfMonth(),
+                'sent_to_sap' => true,
+            ]);
+
+            \App\Models\WbsElement::create([
+                'project_id' => $proj->id,
+                'parent_id' => $root->id,
+                'wbs_code' => 'WBS-' . sprintf('%03d', $proj->id) . '.2',
+                'wbs_name' => 'Upah Lembur',
+                'wbs_category' => 'Lembur',
+                'weight' => 20,
+                'expected_start' => now()->startOfMonth(),
+                'expected_end' => now()->endOfMonth(),
+                'sent_to_sap' => true,
+            ]);
+        }
+
         // truncate 100 orang saja
         $monthsIndo = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
