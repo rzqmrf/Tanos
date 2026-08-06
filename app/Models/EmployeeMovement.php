@@ -2,23 +2,34 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EmployeeMovement extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
+        'ecn_name',
         'employee_id',
         'movement_type',
+        'status',
         'from_position_id',
         'to_position_id',
         'from_project_id',
         'to_project_id',
         'reference_number',
         'effective_date',
+        'valid_from',
+        'valid_to',
+        'sent_to_sap'
     ];
 
     protected $casts = [
         'effective_date' => 'date',
+        'valid_from' => 'date',
+        'valid_to' => 'date',
+        'sent_to_sap' => 'boolean',
     ];
 
     public function employee()

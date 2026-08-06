@@ -15,8 +15,8 @@ class BillingController extends Controller
         $project_id = $request->input('project_id');
 
         // Filter queries
-        $pranotaQuery = PranotaBilling::with(['project', 'period']);
-        $notaQuery = NotaBilling::with('project');
+        $pranotaQuery = PranotaBilling::with(['project', 'period', 'items']);
+        $notaQuery = NotaBilling::with(['project', 'items']);
 
         if ($project_id) {
             $pranotaQuery->where('project_id', $project_id);
@@ -51,7 +51,24 @@ class BillingController extends Controller
 
         $validData['status'] = 'Belum Terbilling';
 
-        PranotaBilling::create($validData);
+        $pranota = PranotaBilling::create($validData);
+
+        // Auto-generate detailed item for manual pranota (reverse calculation)
+        $totalVal = $pranota->amount;
+        $dpp = $totalVal / 1.221;
+        $fee = $dpp * 0.10;
+        $ppn = ($dpp + $fee) * 0.11;
+
+        \App\Models\PranotaBillingItem::create([
+            'pranota_billing_id' => $pranota->id,
+            'item_name' => 'Jasa Penyediaan Tenaga Kerja & Operasional (Manual)',
+            'dpp_amount' => $dpp,
+            'management_fee_rate' => 10.00,
+            'management_fee_amount' => $fee,
+            'ppn_rate' => 11.00,
+            'ppn_amount' => $ppn,
+            'total_amount' => $totalVal,
+        ]);
 
         return redirect()->back()->with('success', 'Pranota Manual sukses dibuat!');
     }
@@ -73,7 +90,7 @@ class BillingController extends Controller
             'nota_number' => 'required|string|unique:nota_billings,nota_number',
         ]);
 
-        $pranotas = PranotaBilling::whereIn('id', $request->pranota_ids)->get();
+        $pranotas = PranotaBilling::whereIn('id', $request->pranota_ids)->with('items')->get();
         $totalAmount = $pranotas->sum('amount');
 
         // Create Nota Billing (Page 11-12)
@@ -83,6 +100,21 @@ class BillingController extends Controller
             'amount' => $totalAmount,
             'status' => 'Draft',
         ]);
+
+        // Copy Pranota items to Nota Billing items
+        foreach ($pranotas as $pranota) {
+            foreach ($pranota->items as $pItem) {
+                \App\Models\NotaBillingItem::create([
+                    'nota_billing_id' => $nota->id,
+                    'pranota_billing_id' => $pranota->id,
+                    'item_name' => $pItem->item_name,
+                    'dpp_amount' => $pItem->dpp_amount,
+                    'management_fee_amount' => $pItem->management_fee_amount,
+                    'ppn_amount' => $pItem->ppn_amount,
+                    'total_amount' => $pItem->total_amount,
+                ]);
+            }
+        }
 
         // Update Pranotas to Sudah Terbilling
         PranotaBilling::whereIn('id', $request->pranota_ids)->update(['status' => 'Sudah Terbilling']);

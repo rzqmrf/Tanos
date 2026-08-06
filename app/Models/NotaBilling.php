@@ -25,4 +25,9 @@ class NotaBilling extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(NotaBillingItem::class);
+    }
 }
