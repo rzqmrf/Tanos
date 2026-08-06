@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Attendance;
 use App\Models\Employee;
+use App\Models\Notification;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -29,23 +32,22 @@ class DatabaseSeeder extends Seeder
         $testUser = User::firstOrCreate(
             ['username' => 'rozaq'],
             [
-                'name'        => 'Test User',
-                'email'       => 'test@example.com',
-                'password'    => bcrypt('admin123'),
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => bcrypt('admin123'),
                 'employee_id' => null,
-                'role'        => 'Admin',
+                'role' => 'Admin',
             ]
         );
 
-        
         $this->call(DashboardSeeder::class);
 
         // truncate 100 orang saja
         $monthsIndo = [
             1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
         ];
-        $currentMonthStr = $monthsIndo[(int)date('n')] . ' ' . date('Y');
+        $currentMonthStr = $monthsIndo[(int) date('n')].' '.date('Y');
 
         // 100 id
         $keepIds = Employee::orderBy('id')->take(100)->pluck('id');
@@ -59,7 +61,7 @@ class DatabaseSeeder extends Seeder
             $username = $firstName;
             $counter = 2;
             while (User::where('username', $username)->exists() || in_array($username, $usedUsernames)) {
-                $username = $firstName . $counter;
+                $username = $firstName.$counter;
                 $counter++;
             }
             $usedUsernames[] = $username;
@@ -67,11 +69,11 @@ class DatabaseSeeder extends Seeder
             User::firstOrCreate(
                 ['username' => $username],
                 [
-                    'name'        => $emp->name,
-                    'email'       => strtolower(str_replace(' ', '', $emp->name)) . $emp->id . '@tanos.local',
-                    'password'    => bcrypt('password'),
+                    'name' => $emp->name,
+                    'email' => strtolower(str_replace(' ', '', $emp->name)).$emp->id.'@tanos.local',
+                    'password' => bcrypt('password'),
                     'employee_id' => $emp->id,
-                    'role'        => 'Employee',
+                    'role' => 'Employee',
                 ]
             );
         });
@@ -82,37 +84,67 @@ class DatabaseSeeder extends Seeder
             User::firstOrCreate(
                 ['username' => 'employee'],
                 [
-                    'name'        => $firstEmployee->name,
-                    'email'       => 'employee@tanos.local',
-                    'password'    => bcrypt('password'),
+                    'name' => $firstEmployee->name,
+                    'email' => 'employee@tanos.local',
+                    'password' => bcrypt('password'),
                     'employee_id' => $firstEmployee->id,
-                    'role'        => 'Employee',
+                    'role' => 'Employee',
                 ]
             );
         }
 
+        // 6. Auto-generate data absensi hari ini untuk semua employee
+        //    (mayoritas Hadir, sebagian Izin/Sakit/Alfa — biar copilot jawab dari data riil)
+        $attendanceDate = Carbon::today()->format('Y-m-d');
+        $attendanceWeights = [
+            'Hadir' => 90,
+            'Izin' => 5,
+            'Sakit' => 3,
+            'Alfa' => 2,
+        ];
+
+        $attendancePool = [];
+        foreach ($attendanceWeights as $status => $weight) {
+            for ($i = 0; $i < $weight; $i++) {
+                $attendancePool[] = $status;
+            }
+        }
+
+        Employee::orderBy('id')->get()->each(function ($emp) use ($attendanceDate, $attendancePool) {
+            Attendance::firstOrCreate(
+                ['employee_id' => $emp->id, 'date' => $attendanceDate],
+                [
+                    'status' => $attendancePool[array_rand($attendancePool)],
+                    'clock_in' => '08:00:00',
+                    'clock_out' => '17:00:00',
+                    'overtime_hours' => 0.00,
+                    'notes' => 'Auto-generate seeder',
+                ]
+            );
+        });
+
         // 5. Seed Notifikasi Mock Admin
-        \App\Models\Notification::create([
-            'user_id'    => $testUser->id,
-            'title'      => 'Invoice baru masuk',
-            'message'    => 'Invoice #INV-' . date('Y') . '-312 dari Proyek Enterprise Jawa Barat telah diterima.',
-            'type'       => 'invoice',
+        Notification::create([
+            'user_id' => $testUser->id,
+            'title' => 'Invoice baru masuk',
+            'message' => 'Invoice #INV-'.date('Y').'-312 dari Proyek Enterprise Jawa Barat telah diterima.',
+            'type' => 'invoice',
             'created_at' => now()->subMinutes(2),
         ]);
 
-        \App\Models\Notification::create([
-            'user_id'    => $testUser->id,
-            'title'      => 'Project mendekati deadline',
-            'message'    => 'Proyek "Digitalisasi Sumatera" batas waktu 3 hari lagi.',
-            'type'       => 'project',
+        Notification::create([
+            'user_id' => $testUser->id,
+            'title' => 'Project mendekati deadline',
+            'message' => 'Proyek "Digitalisasi Sumatera" batas waktu 3 hari lagi.',
+            'type' => 'project',
             'created_at' => now()->subHour(),
         ]);
 
-        \App\Models\Notification::create([
-            'user_id'    => $testUser->id,
-            'title'      => 'Pegawai baru ditambahkan',
-            'message'    => 'Budi Santoso telah bergabung di Regional Jawa Tengah.',
-            'type'       => 'employee',
+        Notification::create([
+            'user_id' => $testUser->id,
+            'title' => 'Pegawai baru ditambahkan',
+            'message' => 'Budi Santoso telah bergabung di Regional Jawa Tengah.',
+            'type' => 'employee',
             'created_at' => now()->subDay(),
         ]);
     }

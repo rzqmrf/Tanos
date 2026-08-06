@@ -6,8 +6,10 @@ use App\Models\Employee;
 use App\Models\Regional;
 use App\Models\SubRegional;
 use App\Models\Segment;
+use App\Models\User;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -41,6 +43,26 @@ class EmployeeController extends Controller
         ]);
 
         $employee = Employee::create($validData);
+
+        // Auto-create User account supaya employee baru bisa login
+        // (username = nama depan, password default = 'password', role = Employee)
+        $firstName = strtolower(explode(' ', $employee->name)[0]);
+        $baseUsername = $firstName;
+        $username = $baseUsername;
+        $counter = 2;
+        while (User::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        User::create([
+            'username'    => $username,
+            'name'        => $employee->name,
+            'email'       => strtolower(str_replace(' ', '', $employee->name)) . $employee->id . '@tanos.local',
+            'password'    => Hash::make('password'),
+            'employee_id' => $employee->id,
+            'role'        => 'Employee',
+        ]);
 
         // Trigger notification for all users
         foreach (\App\Models\User::all() as $u) {
