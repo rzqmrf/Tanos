@@ -21,6 +21,8 @@ class Employee extends Model
         'tmt_date',
         'bpjs_kesehatan_number',
         'bpjs_ketenagakerjaan_number',
+        'project_id',
+        'job_position_id'
     ];
 
     protected $casts = [
@@ -50,5 +52,15 @@ class Employee extends Model
     public function movements()
     {
         return $this->hasMany(EmployeeMovement::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function jobPosition()
+    {
+        return $this->belongsTo(JobPosition::class);
     }
 }

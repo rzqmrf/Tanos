@@ -255,16 +255,52 @@ class PayrollController extends Controller
         ]);
 
         // Core business integration: Auto-Generate PRANOTA Billing (Halaman 9)
-        $totalAmount = PayrollResult::where('payroll_period_id', $period->id)->sum('net_salary');
+        $sumBasic = PayrollResult::where('payroll_period_id', $period->id)->sum('basic_salary');
+        $sumTransport = PayrollResult::where('payroll_period_id', $period->id)->sum('transport_allowance');
+        $sumOvertime = PayrollResult::where('payroll_period_id', $period->id)->sum('overtime_pay');
+
         $pranotaNo = 'PRAN-' . Carbon::now()->format('Ymd') . sprintf('%04d', $period->id);
         
-        PranotaBilling::create([
+        $pranota = PranotaBilling::create([
             'payroll_period_id' => $period->id,
             'project_id' => $period->project_id,
             'pranota_number' => $pranotaNo,
-            'amount' => $totalAmount * 1.15, // Cost + 15% Management Fee
+            'amount' => 0, // Will be updated as the sum of items
             'status' => 'Belum Terbilling',
         ]);
+
+        $totalPranotaAmount = 0;
+        $itemsToCreate = [
+            'Upah Pokok Tenaga Kerja' => $sumBasic,
+            'Uang Transport' => $sumTransport,
+            'Uang Lembur / Overtime' => $sumOvertime,
+        ];
+
+        foreach ($itemsToCreate as $name => $dpp) {
+            if ($dpp > 0) {
+                $feeRate = 10.00;
+                $feeAmount = $dpp * ($feeRate / 100);
+                $ppnRate = 11.00;
+                $ppnAmount = ($dpp + $feeAmount) * ($ppnRate / 100);
+                $totalItemAmount = $dpp + $feeAmount + $ppnAmount;
+
+                \App\Models\PranotaBillingItem::create([
+                    'pranota_billing_id' => $pranota->id,
+                    'item_name' => $name,
+                    'dpp_amount' => $dpp,
+                    'management_fee_rate' => $feeRate,
+                    'management_fee_amount' => $feeAmount,
+                    'ppn_rate' => $ppnRate,
+                    'ppn_amount' => $ppnAmount,
+                    'total_amount' => $totalItemAmount,
+                ]);
+
+                $totalPranotaAmount += $totalItemAmount;
+            }
+        }
+
+        // Update total amount on the header
+        $pranota->update(['amount' => $totalPranotaAmount]);
 
         return redirect()->back()->with('success', 'Jurnal Payroll sukses diposting ke SAP (Doc: ' . $sapDoc . ') & Dokumen Pranota Billing telah sukses ter-generate!');
     }

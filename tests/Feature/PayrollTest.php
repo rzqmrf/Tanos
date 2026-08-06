@@ -34,6 +34,14 @@ class PayrollTest extends TestCase
     private function setupProjectAndEmployee(): array
     {
         $project = Project::create([
+            'project_code' => 'S/PS-2026-0819',
+            'project_name' => 'Jasa Keamanan Perak',
+            'customer_name' => 'PT Pelindo Terminal Petikemas',
+            'contract_number' => 'OA-2026-1002',
+            'start_date' => '2026-08-01',
+            'end_date' => '2027-07-31',
+            'cost_center' => 'CC-9901',
+            'fund_center' => 'FC-9901',
             'month' => 'Agustus 2026',
             'regional' => 'Jawa Timur',
             'segment' => 'Enterprise',
@@ -215,7 +223,7 @@ class PayrollTest extends TestCase
             'payroll_period_id' => $period->id,
             'project_id' => $data['project']->id,
             'status' => 'Belum Terbilling',
-            'amount' => 4400000 * 1.15 // Cost + 15% Management Fee
+            'amount' => 5372400.00
         ]);
     }
 

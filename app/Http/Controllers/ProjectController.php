@@ -25,6 +25,14 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validData = $request->validate([
+            'project_code' => 'required|string|max:255|unique:projects,project_code',
+            'project_name' => 'required|string|max:255',
+            'customer_name' => 'required|string|max:255',
+            'contract_number' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'cost_center' => 'required|string|max:255',
+            'fund_center' => 'required|string|max:255',
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
@@ -39,7 +47,7 @@ class ProjectController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $u->id,
                 'title' => 'Proyek Baru Aktif',
-                'message' => 'Proyek segment ' . $project->segment . ' di ' . $project->regional . ' senilai Rp ' . number_format($project->cost, 0, ',', '.') . ' telah ditambahkan.',
+                'message' => 'Proyek ' . $project->project_name . ' (' . $project->project_code . ') di ' . $project->regional . ' senilai Rp ' . number_format($project->cost, 0, ',', '.') . ' telah ditambahkan.',
                 'type' => 'project',
             ]);
         }
@@ -50,6 +58,14 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $validData = $request->validate([
+            'project_code' => 'required|string|max:255|unique:projects,project_code,' . $project->id,
+            'project_name' => 'required|string|max:255',
+            'customer_name' => 'required|string|max:255',
+            'contract_number' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'cost_center' => 'required|string|max:255',
+            'fund_center' => 'required|string|max:255',
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'segment' => 'required|string|max:255',

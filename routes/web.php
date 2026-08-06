@@ -14,6 +14,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CopilotController;
 use App\Http\Controllers\EssController;
+use App\Http\Controllers\RabBudgetController;
+use App\Http\Controllers\OrgStructureController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -74,6 +76,31 @@ Route::prefix('dashboard')->group(function () {
     Route::put('projects/{project}/wbs/{wbs}', [\App\Http\Controllers\WbsController::class, 'update'])->name('projects.wbs.update')->middleware('permission:projects');
     Route::delete('projects/{project}/wbs/{wbs}', [\App\Http\Controllers\WbsController::class, 'destroy'])->name('projects.wbs.destroy')->middleware('permission:projects');
     Route::post('projects/{project}/wbs/send-sap', [\App\Http\Controllers\WbsController::class, 'sendToSap'])->name('projects.wbs.send-sap')->middleware('permission:projects');
+
+    // RAB Budget Matrix System
+    Route::get('rab-budgets', [RabBudgetController::class, 'index'])->name('rab.index')->middleware('permission:projects');
+    Route::get('rab-budgets/{id}', [RabBudgetController::class, 'show'])->name('rab.show')->middleware('permission:projects');
+    Route::post('rab-budgets/{rabId}/items', [RabBudgetController::class, 'storeItem'])->name('rab.items.store')->middleware('permission:projects');
+    Route::put('rab-budgets/{rabId}/items/{itemId}', [RabBudgetController::class, 'updateItem'])->name('rab.items.update')->middleware('permission:projects');
+    Route::delete('rab-budgets/{rabId}/items/{itemId}', [RabBudgetController::class, 'destroyItem'])->name('rab.items.destroy')->middleware('permission:projects');
+    Route::post('rab-budgets/{id}/send-sap', [RabBudgetController::class, 'sendToSap'])->name('rab.send-sap')->middleware('permission:projects');
+
+    // Organizational Structure Modules (STO, Job Position, ECN)
+    Route::get('org-structure/sto', [OrgStructureController::class, 'stoIndex'])->name('org.sto.index')->middleware('permission:employees');
+    Route::post('org-structure/sto', [OrgStructureController::class, 'stoStore'])->name('org.sto.store')->middleware('permission:employees');
+    Route::post('org-structure/sto/{id}/delimit', [OrgStructureController::class, 'stoDelimit'])->name('org.sto.delimit')->middleware('permission:employees');
+    Route::post('org-structure/sto/{id}/send-sap', [OrgStructureController::class, 'stoSendSap'])->name('org.sto.send-sap')->middleware('permission:employees');
+
+    Route::get('org-structure/job', [OrgStructureController::class, 'jobIndex'])->name('org.job.index')->middleware('permission:employees');
+    Route::post('org-structure/job', [OrgStructureController::class, 'jobStore'])->name('org.job.store')->middleware('permission:employees');
+    Route::post('org-structure/job/{id}/delimit', [OrgStructureController::class, 'jobDelimit'])->name('org.job.delimit')->middleware('permission:employees');
+    Route::post('org-structure/job/{id}/duplicate', [OrgStructureController::class, 'jobDuplicate'])->name('org.job.duplicate')->middleware('permission:employees');
+    Route::post('org-structure/job/{id}/send-sap', [OrgStructureController::class, 'jobSendSap'])->name('org.job.send-sap')->middleware('permission:employees');
+
+    Route::get('org-structure/ecn', [OrgStructureController::class, 'ecnIndex'])->name('org.ecn.index')->middleware('permission:employees');
+    Route::post('org-structure/ecn', [OrgStructureController::class, 'ecnStore'])->name('org.ecn.store')->middleware('permission:employees');
+    Route::post('org-structure/ecn/{id}/complete', [OrgStructureController::class, 'ecnComplete'])->name('org.ecn.complete')->middleware('permission:employees');
+    Route::post('org-structure/ecn/{id}/send-sap', [OrgStructureController::class, 'ecnSendSap'])->name('org.ecn.send-sap')->middleware('permission:employees');
 
     // HCM Period Payroll & Component Formulation
     Route::get('payrolls', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payrolls.index')->middleware('permission:payroll');

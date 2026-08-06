@@ -91,14 +91,19 @@
             $isAttendance = request()->routeIs('attendances.index');
             $isEssAdmin = request()->routeIs('ess.admin.index');
             $isPayroll = request()->routeIs('payrolls.index') || request()->routeIs('payrolls.show');
-            $isHCActive = $isEmployees || $isSchedules || $isAttendance || $isEssAdmin || $isPayroll;
+            $isSto = request()->routeIs('org.sto.*');
+            $isJob = request()->routeIs('org.job.*');
+            $isEcn = request()->routeIs('org.ecn.*');
+            $isOrg = $isSto || $isJob || $isEcn;
+            $isHCActive = $isEmployees || $isSchedules || $isAttendance || $isEssAdmin || $isPayroll || $isOrg;
 
             // --- PROJECT SYSTEM ACTIVE STATE ---
             $isProjects = request()->routeIs('projects.index') || request()->routeIs('projects.show') || request()->routeIs('projects.create') || request()->routeIs('projects.edit');
             $isWbs = request()->routeIs('projects.wbs.index');
+            $isRab = request()->routeIs('rab.*');
             $isBilling = request()->routeIs('billing.index');
             $isPostingPayroll = request()->routeIs('posting_payrolls.index');
-            $isPSActive = $isProjects || $isWbs || $isBilling || $isPostingPayroll;
+            $isPSActive = $isProjects || $isWbs || $isRab || $isBilling || $isPostingPayroll;
 
             // Determine active group for single accordion
             $activeGroup = '';
@@ -113,14 +118,15 @@
 
             // Determine active sub-group for HC
             $hcActiveSub = '';
-            if ($isEmployees) { $hcActiveSub = 'employee'; }
+            if ($isOrg) { $hcActiveSub = 'org_structure'; }
+            elseif ($isEmployees) { $hcActiveSub = 'employee'; }
             elseif ($isAttendance || $isSchedules) { $hcActiveSub = 'time'; }
             elseif ($isEssAdmin) { $hcActiveSub = 'ess'; }
             elseif ($isPayroll) { $hcActiveSub = 'payroll'; }
 
             // Determine active sub-group for PS
             $psActiveSub = '';
-            if ($isProjects || $isWbs) { $psActiveSub = 'project'; }
+            if ($isProjects || $isWbs || $isRab) { $psActiveSub = 'project'; }
             elseif ($isPostingPayroll) { $psActiveSub = 'budgeting'; }
             elseif ($isBilling) { $psActiveSub = 'nota'; }
             elseif ($isReports) { $psActiveSub = 'reports'; }
@@ -461,9 +467,9 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'org_structure'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">STO Chart</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Job Position</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Employee Change Notice</a>
+                                <a href="{{ route('org.sto.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSto ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">STO Chart</a>
+                                <a href="{{ route('org.job.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isJob ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Job Position</a>
+                                <a href="{{ route('org.ecn.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEcn ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Employee Change Notice</a>
                             </div>
                         </div>
 
@@ -624,8 +630,8 @@
                             <div x-show="activeSubMenu === 'project'" x-transition class="pl-4 space-y-1" style="display: none;">
                                 <a href="{{ route('projects.index') }}" 
                                    class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isProjects ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Project Definition</a>
-                                <a href="{{ route('projects.index') }}" 
-                                   class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">RAB Budget</a>
+                                <a href="{{ route('rab.index') }}" 
+                                   class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isRab ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">RAB Budget</a>
                                 <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" 
                                    class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isWbs ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">WBS Structure</a>
                             </div>
