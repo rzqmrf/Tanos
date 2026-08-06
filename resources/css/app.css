@@ -11,6 +11,8 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-primary: #100b60;
+    --color-primary-hover: #1a1c5d;
 }
 
 /* Custom premium scrollbar for sidebar */
