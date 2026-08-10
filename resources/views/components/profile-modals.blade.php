@@ -1,23 +1,26 @@
 @php
     $dbUser = null;
-    if (session()->has('user')) {
-        $dbUser = \App\Models\User::where('email', session('user.username'))->first();
+    if (auth()->check()) {
+        $dbUser = auth()->user();
+    } elseif (session()->has('user')) {
+        $username = session('user.username');
+        $dbUser = \App\Models\User::where('username', $username)->orWhere('email', $username)->first();
     }
 @endphp
 <div x-data="profileModalsData()"
-     @open-profile-modal.window="showProfileModal = true"
-     @open-password-modal.window="showPasswordModal = true"
-     @open-settings-modal.window="showSettingsModal = true">
+     @open-profile-modal.window="showProfileModal = true; showPasswordModal = false; showSettingsModal = false"
+     @open-password-modal.window="showPasswordModal = true; showProfileModal = false; showSettingsModal = false"
+     @open-settings-modal.window="showSettingsModal = true; showProfileModal = false; showPasswordModal = false">
 
     <!-- Toast Notification -->
     <div x-show="toast.show" 
          x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0 translate-y-4"
-         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
          x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-4"
-         class="fixed bottom-6 right-6 z-[1100] flex items-center p-4 mb-4 text-white bg-emerald-500 rounded-xl shadow-[0_10px_25px_-5px_rgba(16,185,129,0.3)]" role="alert" style="display: none;">
+         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+         x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+         class="fixed bottom-6 right-6 z-[1100] flex items-center px-4 py-3 text-white bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-lg" role="alert" style="display: none;">
         <svg class="w-5 h-5 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
         </svg>
