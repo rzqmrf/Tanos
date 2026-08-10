@@ -19,6 +19,7 @@
             </div>
         </div>
         
+        @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
         <div class="flex items-center gap-2">
             <!-- Action: Copy Formula (Halaman 29) -->
             <button @click="showCopyModal = true" class="px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 rounded-xl text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-750 transition cursor-pointer">
@@ -53,6 +54,9 @@
                 </form>
             @endif
         </div>
+        @else
+            <span class="text-xs text-slate-450 italic bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-800">Read-Only Mode</span>
+        @endif
     </div>
 
     @if(session('success'))

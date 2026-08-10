@@ -34,7 +34,11 @@ return new class extends Migration
             'invoices',
             'payroll',
             'expenses',
-            'settings'
+            'settings',
+            'rekap_absensi',
+            'pengajuan_cuti',
+            'kalender',
+            'laporan'
         ];
 
         // Seed Admin permissions (all enabled)
@@ -50,9 +54,45 @@ return new class extends Migration
 
         // Seed Employee permissions
         foreach ($permissions as $perm) {
-            $enabled = in_array($perm, ['dashboard', 'attendance']);
+            $enabled = in_array($perm, ['dashboard', 'rekap_absensi', 'pengajuan_cuti', 'kalender', 'laporan']);
             DB::table('role_permissions')->insert([
                 'role' => 'Employee',
+                'permission' => $perm,
+                'is_enabled' => $enabled,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Seed HR Manager permissions
+        foreach ($permissions as $perm) {
+            $enabled = in_array($perm, ['dashboard', 'employees', 'attendance', 'recruitment', 'evaluations', 'certifications', 'rekap_absensi', 'pengajuan_cuti', 'kalender']);
+            DB::table('role_permissions')->insert([
+                'role' => 'HR Manager',
+                'permission' => $perm,
+                'is_enabled' => $enabled,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Seed Finance Manager permissions
+        foreach ($permissions as $perm) {
+            $enabled = in_array($perm, ['dashboard', 'invoices', 'payroll', 'expenses', 'rekap_absensi', 'pengajuan_cuti', 'kalender']);
+            DB::table('role_permissions')->insert([
+                'role' => 'Finance Manager',
+                'permission' => $perm,
+                'is_enabled' => $enabled,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Seed Project Manager permissions
+        foreach ($permissions as $perm) {
+            $enabled = in_array($perm, ['dashboard', 'projects', 'clients', 'rekap_absensi', 'pengajuan_cuti', 'kalender']);
+            DB::table('role_permissions')->insert([
+                'role' => 'Project Manager',
                 'permission' => $perm,
                 'is_enabled' => $enabled,
                 'created_at' => now(),

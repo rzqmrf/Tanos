@@ -24,6 +24,12 @@ class DashboardSeeder extends Seeder
     {
         // Disable foreign key constraints to safely fresh seed
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        \App\Models\TimeResult::truncate();
+        \App\Models\TimePeriod::truncate();
+        \App\Models\TimeEvaluation::truncate();
+        \App\Models\ScheduleAssignment::truncate();
+        \App\Models\ScheduleGroup::truncate();
+        \App\Models\AbsentType::truncate();
         EmployeeMovement::truncate();
         JobPosition::truncate();
         Division::truncate();
@@ -54,6 +60,45 @@ class DashboardSeeder extends Seeder
         foreach ($segments as $seg) {
             Segment::firstOrCreate(['name' => $seg]);
         }
+
+        // Seed Absent Types
+        $absents = [
+            ['code' => 'CT', 'name' => 'Cuti Tahunan', 'gender' => 'All', 'priority_level' => 1, 'deduction_absent' => 'No', 'valid_from' => '2024-01-01', 'valid_to' => '9999-12-31', 'active' => true],
+            ['code' => 'SK', 'name' => 'Sakit (Surat Dokter)', 'gender' => 'All', 'priority_level' => 2, 'deduction_absent' => 'No', 'valid_from' => '2024-01-01', 'valid_to' => '9999-12-31', 'active' => true],
+            ['code' => 'CM', 'name' => 'Cuti Melahirkan', 'gender' => 'Female', 'priority_level' => 3, 'deduction_absent' => 'No', 'valid_from' => '2024-01-01', 'valid_to' => '9999-12-31', 'active' => true],
+            ['code' => 'IP', 'name' => 'Izin Penting', 'gender' => 'All', 'priority_level' => 4, 'deduction_absent' => 'Yes', 'valid_from' => '2024-01-01', 'valid_to' => '9999-12-31', 'active' => true],
+        ];
+        foreach ($absents as $ab) {
+            \App\Models\AbsentType::create($ab);
+        }
+
+        // Seed Schedule Groups
+        $regGroup = \App\Models\ScheduleGroup::create([
+            'name' => 'Reguler Pelindo (Mon-Fri)',
+            'type' => 'Reguler',
+            'work_start' => '08:00:00',
+            'work_end' => '17:00:00',
+            'is_active' => true
+        ]);
+        
+        $shiftGroup = \App\Models\ScheduleGroup::create([
+            'name' => 'Shift Security Group A',
+            'type' => 'Shift',
+            'work_start' => '07:00:00',
+            'work_end' => '19:00:00',
+            'is_active' => true
+        ]);
+
+        // Seed Time Evaluation parameter
+        \App\Models\TimeEvaluation::create([
+            'name' => 'Aturan Dispensasi Keterlambatan Pelindo',
+            'description' => 'Dispensasi 15 menit untuk jam masuk reguler maupun shift.',
+            'valid_from' => '2024-01-01',
+            'valid_to' => '9999-12-31',
+            'late_tolerance_minutes' => 15,
+            'early_departure_minutes' => 15,
+            'is_active' => true
+        ]);
 
         // 1. Seed Divisions (Unit Kerja STO)
         $divisionsData = [
@@ -303,6 +348,14 @@ class DashboardSeeder extends Seeder
                             'bpjs_ketenagakerjaan_number' => $faker->numerify('###########'),
                             'project_id' => isset($proj) ? $proj->id : null,
                             'job_position_id' => $jPosId
+                        ]);
+
+                        // Assign schedule assignment group
+                        \App\Models\ScheduleAssignment::create([
+                            'employee_id' => $employee->id,
+                            'schedule_group_id' => ($roleName === 'Supervisor') ? $shiftGroup->id : $regGroup->id,
+                            'valid_from' => '2024-01-01',
+                            'valid_to' => '2027-12-31'
                         ]);
 
                         // Seed active ECN career movements randomly

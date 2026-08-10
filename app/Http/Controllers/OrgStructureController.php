@@ -12,6 +12,24 @@ use Illuminate\Support\Str;
 
 class OrgStructureController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $routeAction = $request->route()->getActionMethod();
+            $modifyingActions = [
+                'stoStore', 'stoDelimit', 'stoSendSap',
+                'jobStore', 'jobDelimit', 'jobDuplicate', 'jobSendSap',
+                'ecnStore', 'ecnComplete', 'ecnSendSap'
+            ];
+            if (in_array($routeAction, $modifyingActions)) {
+                if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+                    abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat melakukan aksi ini.');
+                }
+            }
+            return $next($request);
+        });
+    }
+
     // ==========================================
     // 1. STO CHART (ORGANIZATION/UNIT)
     // ==========================================

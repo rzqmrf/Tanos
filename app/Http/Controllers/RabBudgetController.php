@@ -10,6 +10,20 @@ use Illuminate\Support\Str;
 
 class RabBudgetController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $routeAction = $request->route()->getActionMethod();
+            $modifyingActions = ['storeItem', 'updateItem', 'destroyItem', 'sendToSap'];
+            if (in_array($routeAction, $modifyingActions)) {
+                if (!in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager'])) {
+                    abort(403, 'Akses ditolak. Hanya Admin, Project Manager, dan Finance Manager yang dapat melakukan aksi ini.');
+                }
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         // Get all projects with their RAB budget

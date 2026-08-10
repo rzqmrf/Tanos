@@ -18,11 +18,13 @@
             </div>
         </div>
         
+        @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
         <div>
             <button @click="showCreateModal = true" class="bg-blue-650 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
                 + Tambah Jabatan
             </button>
         </div>
+        @endif
     </div>
 
     @if(session('success'))
@@ -99,36 +101,40 @@
                         </td>
                         <td class="p-4 align-middle text-center whitespace-nowrap">
                             <div class="flex items-center justify-center space-x-1.5">
-                                @if($job->active)
-                                    <form action="{{ route('org.job.delimit', $job->id) }}" method="POST" onsubmit="return confirm('Delimit formasi jabatan ini?')" class="inline">
-                                        @csrf
-                                        <button type="submit" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-lg transition cursor-pointer">
-                                            Delimit
-                                        </button>
-                                    </form>
+                                @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+                                    @if($job->active)
+                                        <form action="{{ route('org.job.delimit', $job->id) }}" method="POST" onsubmit="return confirm('Delimit formasi jabatan ini?')" class="inline">
+                                            @csrf
+                                            <button type="submit" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-lg transition cursor-pointer">
+                                                Delimit
+                                            </button>
+                                        </form>
+                                        
+                                        <form action="{{ route('org.job.duplicate', $job->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-xs font-bold rounded-lg transition cursor-pointer" title="Duplicate massal jabatan untuk rekrutmen TAD">
+                                                Duplicate
+                                            </button>
+                                        </form>
+                                    @endif
                                     
-                                    <form action="{{ route('org.job.duplicate', $job->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-xs font-bold rounded-lg transition cursor-pointer" title="Duplicate massal jabatan untuk rekrutmen TAD">
-                                            Duplicate
-                                        </button>
-                                    </form>
-                                @endif
-
-                                @if(!$job->sent_to_sap)
-                                    <form action="{{ route('org.job.send-sap', $job->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-lg transition cursor-pointer">
-                                            Send to SAP
-                                        </button>
-                                    </form>
+                                    @if(!$job->sent_to_sap)
+                                        <form action="{{ route('org.job.send-sap', $job->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold rounded-lg transition cursor-pointer">
+                                                Send to SAP
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold rounded-lg flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5 mr-1">
+                                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+                                            </svg>
+                                            SAP Sent
+                                        </span>
+                                    @endif
                                 @else
-                                    <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold rounded-lg flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5 mr-1">
-                                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
-                                        </svg>
-                                        SAP Sent
-                                    </span>
+                                    <span class="text-xs text-slate-400 italic">No Action</span>
                                 @endif
                             </div>
                         </td>
