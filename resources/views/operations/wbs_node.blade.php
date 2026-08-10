@@ -33,6 +33,7 @@
             </div>
         </div>
 
+        @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
         <div class="flex items-center gap-1.5 self-end md:self-auto">
             <button @click="openAddModal('{{ $node->id }}', '{{ $node->wbs_name }}')" 
                     class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-750 transition cursor-pointer">
@@ -58,6 +59,7 @@
                 </button>
             </form>
         </div>
+        @endif
     </div>
 </div>
 

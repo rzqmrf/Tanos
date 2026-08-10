@@ -63,4 +63,14 @@ class Employee extends Model
     {
         return $this->belongsTo(JobPosition::class);
     }
+
+    public function scheduleAssignments()
+    {
+        return $this->hasMany(ScheduleAssignment::class);
+    }
+
+    public function timeResults()
+    {
+        return $this->hasMany(TimeResult::class);
+    }
 }

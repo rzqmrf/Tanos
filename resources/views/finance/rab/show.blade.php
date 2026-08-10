@@ -47,6 +47,7 @@
                 </div>
             </div>
             
+            @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
             <div class="flex items-center gap-2">
                 @if($rab->sap_status != 'Sent')
                     <button @click="showAddModal = true" class="bg-blue-650 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
@@ -67,6 +68,18 @@
                     </span>
                 @endif
             </div>
+            @else
+                @if($rab->sap_status == 'Sent')
+                    <span class="px-4 py-2 border border-emerald-200 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-400 text-xs font-bold rounded-xl flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1.5">
+                            <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clip-rule="evenodd" />
+                        </svg>
+                        SAP Budget Locked
+                    </span>
+                @else
+                    <span class="text-xs text-slate-450 italic bg-slate-50 dark:bg-slate-850 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-800">Read-Only Mode</span>
+                @endif
+            @endif
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
@@ -164,6 +177,7 @@
                             </td>
                             @if($rab->sap_status != 'Sent')
                                 <td class="p-3 align-middle text-center whitespace-nowrap">
+                                    @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
                                     <div class="flex items-center justify-center space-x-1.5">
                                         <button @click="openEditModal(
                                             '{{ $item->id }}', '{{ $item->coa_code }}', '{{ $item->fund_center }}', '{{ $item->cost_center }}', '{{ $item->profit_center }}',
@@ -179,6 +193,9 @@
                                             </button>
                                         </form>
                                     </div>
+                                    @else
+                                        <span class="text-xs text-slate-400 italic">No Action</span>
+                                    @endif
                                 </td>
                             @endif
                         </tr>

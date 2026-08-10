@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 
 class WbsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $routeAction = $request->route()->getActionMethod();
+            $modifyingActions = ['store', 'update', 'destroy', 'sendToSap'];
+            if (in_array($routeAction, $modifyingActions)) {
+                if (!in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager'])) {
+                    abort(403, 'Akses ditolak. Hanya Admin, Project Manager, dan Finance Manager yang dapat melakukan aksi ini.');
+                }
+            }
+            return $next($request);
+        });
+    }
+
     public function index($projectId)
     {
         $project = Project::findOrFail($projectId);

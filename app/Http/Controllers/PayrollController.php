@@ -15,6 +15,20 @@ use Carbon\Carbon;
 
 class PayrollController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $routeAction = $request->route()->getActionMethod();
+            $modifyingActions = ['store', 'calculate', 'copyFormula', 'postSap'];
+            if (in_array($routeAction, $modifyingActions)) {
+                if (!in_array(session('user.role'), ['Admin', 'Finance Manager'])) {
+                    abort(403, 'Akses ditolak. Hanya Admin dan Finance Manager yang dapat melakukan aksi ini.');
+                }
+            }
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         $query = PayrollPeriod::with('project');
@@ -126,16 +140,30 @@ class PayrollController extends Controller
         PayrollResult::where('payroll_period_id', $period->id)->delete();
 
         foreach ($employees as $employee) {
-            // Count attendances
-            $daysPresent = Attendance::where('employee_id', $employee->id)
-                ->whereBetween('date', [$period->start_date, $period->end_date])
-                ->where('status', 'Hadir')
-                ->count();
+            // Try to find a calculated TimeResult for the same period dates
+            $timeResult = \App\Models\TimeResult::where('employee_id', $employee->id)
+                ->whereHas('timePeriod', function($q) use ($period) {
+                    $q->where('start_date', $period->start_date)
+                      ->where('end_date', $period->end_date);
+                })->first();
 
-            // Sum overtime
-            $overtimeHours = Attendance::where('employee_id', $employee->id)
-                ->whereBetween('date', [$period->start_date, $period->end_date])
-                ->sum('overtime_hours');
+            if ($timeResult) {
+                $daysPresent = $timeResult->present_days;
+                $overtimeHours = (float) $timeResult->overtime_hours;
+                $extraDeductions = (float) $timeResult->deduction_amount;
+            } else {
+                // Fallback to raw attendances count
+                $daysPresent = Attendance::where('employee_id', $employee->id)
+                    ->whereBetween('date', [$period->start_date, $period->end_date])
+                    ->where('status', 'Hadir')
+                    ->count();
+
+                $overtimeHours = Attendance::where('employee_id', $employee->id)
+                    ->whereBetween('date', [$period->start_date, $period->end_date])
+                    ->sum('overtime_hours');
+
+                $extraDeductions = 0.00;
+            }
 
             // Calculate components
             $basicSalary = 0;
@@ -172,7 +200,8 @@ class PayrollController extends Controller
                 }
             }
 
-            $netSalary = $basicSalary + $transportAllowance + $overtimePay - $deductions;
+            $deductionsTotal = $deductions + $extraDeductions;
+            $netSalary = $basicSalary + $transportAllowance + $overtimePay - $deductionsTotal;
 
             PayrollResult::create([
                 'payroll_period_id' => $period->id,
@@ -182,7 +211,7 @@ class PayrollController extends Controller
                 'basic_salary' => $basicSalary,
                 'transport_allowance' => $transportAllowance,
                 'overtime_pay' => $overtimePay,
-                'deductions' => $deductions,
+                'deductions' => $deductionsTotal,
                 'net_salary' => $netSalary,
             ]);
         }

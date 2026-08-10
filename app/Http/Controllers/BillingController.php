@@ -10,6 +10,20 @@ use Carbon\Carbon;
 
 class BillingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $routeAction = $request->route()->getActionMethod();
+            $modifyingActions = ['storePranota', 'approvePranota', 'doNota', 'postNota'];
+            if (in_array($routeAction, $modifyingActions)) {
+                if (!in_array(session('user.role'), ['Admin', 'Finance Manager'])) {
+                    abort(403, 'Akses ditolak. Hanya Admin dan Finance Manager yang dapat melakukan aksi ini.');
+                }
+            }
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         $project_id = $request->input('project_id');
