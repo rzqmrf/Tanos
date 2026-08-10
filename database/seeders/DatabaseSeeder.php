@@ -28,15 +28,59 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->truncate();
         Schema::enableForeignKeyConstraints();
 
-        // 2. User Admin buat Login Demo
+        // 2. User Admin & Demo Accounts per Role (Unique Passwords per Role)
         $testUser = User::firstOrCreate(
-            ['username' => 'rozaq'],
+            ['username' => 'admin'],
             [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-                'password' => bcrypt('admin123'),
+                'name' => 'Administrator TANOS',
+                'email' => 'admin@tanos.local',
+                'password' => bcrypt('Admin#Tanos2026!'),
                 'employee_id' => null,
                 'role' => 'Admin',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['username' => 'rozaq'],
+            [
+                'name' => 'Rozaq (Admin)',
+                'email' => 'rozaq@tanos.local',
+                'password' => bcrypt('Admin#Tanos2026!'),
+                'employee_id' => null,
+                'role' => 'Admin',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['username' => 'hrmanager'],
+            [
+                'name' => 'HR Manager Demo',
+                'email' => 'hrmanager@tanos.local',
+                'password' => bcrypt('HR#Secure2026!'),
+                'employee_id' => null,
+                'role' => 'HR Manager',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['username' => 'financemanager'],
+            [
+                'name' => 'Finance Manager Demo',
+                'email' => 'financemanager@tanos.local',
+                'password' => bcrypt('Finance#Paid2026!'),
+                'employee_id' => null,
+                'role' => 'Finance Manager',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['username' => 'projectmanager'],
+            [
+                'name' => 'Project Manager Demo',
+                'email' => 'projectmanager@tanos.local',
+                'password' => bcrypt('Project#Build2026!'),
+                'employee_id' => null,
+                'role' => 'Project Manager',
             ]
         );
 
@@ -110,14 +154,14 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $emp->name,
                     'email' => strtolower(str_replace(' ', '', $emp->name)).$emp->id.'@tanos.local',
-                    'password' => bcrypt('password'),
+                    'password' => bcrypt('Tanos#Emp2026!'),
                     'employee_id' => $emp->id,
                     'role' => 'Employee',
                 ]
             );
         });
 
-        // 5. Akun demo 'employee' (username: employee, password: password) — selalu link ke Employee id 1
+        // 5. Akun demo 'employee' (username: employee, password: Tanos#Emp2026!) — selalu link ke Employee id 1
         $firstEmployee = Employee::find(1);
         if ($firstEmployee) {
             User::firstOrCreate(
@@ -125,7 +169,7 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $firstEmployee->name,
                     'email' => 'employee@tanos.local',
-                    'password' => bcrypt('password'),
+                    'password' => bcrypt('Tanos#Emp2026!'),
                     'employee_id' => $firstEmployee->id,
                     'role' => 'Employee',
                 ]

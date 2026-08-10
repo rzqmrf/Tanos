@@ -46,6 +46,12 @@ class CopilotController extends Controller
         }
 
         try {
+            // Cek apakah ada perintah perubahan akses (Permission Command)
+            $actionResult = $this->tryHandlePermissionCommand($request->input('message'));
+            if ($actionResult !== null) {
+                return $this->jsonResponse($actionResult);
+            }
+
             $response = $this->askGemini(
                 $request->input('message'),
                 $this->buildDatabaseContext()
@@ -55,8 +61,13 @@ class CopilotController extends Controller
                 return $this->jsonResponse($this->apiErrorMessage($response->json()));
             }
 
-            return $this->jsonResponse($this->extractGeminiText($response->json())
-                ?? 'Maaf, AI tidak mengembalikan respon valid.');
+            $aiText = $this->extractGeminiText($response->json())
+                ?? 'Maaf, AI tidak mengembalikan respon valid.';
+
+            // Periksa jika AI merekomendasikan aksi perubahan izin secara otomatis
+            $aiText = $this->processAiActionTags($aiText);
+
+            return $this->jsonResponse($aiText);
         } catch (\Exception $e) {
             return $this->jsonResponse($this->connectionErrorMessage($e));
         }
@@ -119,60 +130,220 @@ class CopilotController extends Controller
     }
 
     /**
-     * Membangun RAG context dari real database models.
+     * Membangun RAG context komprehensif dari seluruh database models Tanos ERP.
      */
     private function buildDatabaseContext()
     {
         $today = Carbon::today()->format('d M Y');
 
         $projectsText = $this->buildProjectsText();
+        $orgText = $this->buildOrgText();
         $employeesText = $this->buildEmployeesText();
-        $expiryText = $this->buildExpiryText();
+        $payrollText = $this->buildPayrollText();
+        $billingText = $this->buildBillingText();
+        $essText = $this->buildEssText();
+        $timeText = $this->buildTimeManagementText();
         $attendanceText = $this->buildAttendanceText($today);
 
-        return "Anda adalah Tanos Copilot, asisten AI cerdas untuk Tanos ERP (Enterprise Resource Planning) yang digunakan oleh PT Pelindo untuk mengelola Tenaga Alih Daya (TAD) dan Proyek.
+        return "Anda adalah Tanos Copilot, asisten AI cerdas untuk Tanos ERP (Enterprise Resource Planning) yang digunakan oleh PT Pelindo untuk mengelola Tenaga Alih Daya (TAD), Struktur Organisasi, Payroll, Billing, dan Proyek System.
 
-Berikut adalah data yang diambil dari database Tanos ERP untuk membantu Anda menjawab pertanyaan user. Data ini adalah data nyata, kecuali disebutkan lain:
+Berikut adalah data terintegrasi secara REAL-TIME dari database Tanos ERP untuk membantu Anda menjawab pertanyaan user secara presisi:
 
 =========================================
-1. DATA PROYEK AKTIF (Terbaru):
+1. DATA PROYEK AKTIF, RAB, & WBS (Project System):
 {$projectsText}
 
 =========================================
-2. DATA KARYAWAN & SERTIFIKASI SEGERA HABIS (<30 Hari):
-{$expiryText}
+2. DATA STRUKTUR ORGANISASI (STO, JOB POSITION, ECN):
+{$orgText}
 
 =========================================
-3. RINGKASAN ABSENSI HARI INI (DARI DATABASE):
+3. DATA TENAGA ALIH DAYA (TAD / KARYAWAN):
+{$employeesText}
+
+=========================================
+4. DATA PROSES PAYROLL (GAJI & FORMULASI):
+{$payrollText}
+
+=========================================
+5. DATA BILLING (PRANOTA & NOTA BILLING SAP):
+{$billingText}
+
+=========================================
+6. DATA EMPLOYEE SELF SERVICE (ESS APPROVALS):
+{$essText}
+
+=========================================
+7. DATA TIME MANAGEMENT & JADWAL SHIFT:
+{$timeText}
+
+=========================================
+8. RINGKASAN ABSENSI HARI INI (DARI DATABASE):
 {$attendanceText}
 =========================================
 
 Aturan Penting saat Menjawab:
 1. Jawablah menggunakan Bahasa Indonesia yang ramah, profesional, ringkas, dan jelas.
-2. Gunakan data di atas untuk menjawab jika user menanyakan informasi seputar proyek, absensi, karyawan TAD, sertifikasi kompetensi, atau anggaran.
-3. JANGAN mengarang data atau memunculkan informasi fiktif di luar data di atas jika user menanyakan data internal yang spesifik. Jika data tidak tersedia di database (misal sertifikasi), katakan dengan jujur bahwa datanya belum tersedia — jangan membuat angka atau nama palsu.
+2. Gunakan data di atas untuk menjawab jika user menanyakan informasi seputar proyek, STO, formasi jabatan, mutasi ECN, absensi, karyawan TAD, payroll, billing pranota/nota, atau anggaran RAB/WBS.
+3. JANGAN mengarang data atau memunculkan informasi fiktif di luar data di atas jika user menanyakan data internal yang spesifik. Jika data tidak tersedia di database, katakan dengan jujur bahwa datanya belum diisi.
 4. FORMAT DISPLAY: Jika user meminta data ditampilkan dalam bentuk tabel, buatlah tabel menggunakan tag HTML standar (<table>, <thead>, <tbody>, <tr>, <th>, <td>) dengan class styling Tailwind yang bersih (misal: 'min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden' dan 'px-3 py-2 text-left bg-slate-50 font-bold') agar bisa dirender dengan indah di chat bubble. JANGAN gunakan markdown table format (| Col | Col |), selalu gunakan tag HTML asli untuk tabel agar visualnya premium.
-5. Anda dapat menjawab pertanyaan umum di luar sistem ERP (seperti salam, pertanyaan umum, saran manajemen proyek) secara ramah, tetapi arahkan kembali user ke topik Tanos ERP.";
+5. Anda dapat menjawab pertanyaan umum di luar sistem ERP (seperti salam, pertanyaan umum, saran manajemen proyek) secara ramah, tetapi arahkan kembali user ke topik Tanos ERP.
+6. PERUBAHAN HAK AKSES: Jika user meminta Anda mengubah/membuka/menutup hak akses (role permissions) suatu modul untuk peran tertentu, tambahkan tag khusus di akhir jawaban Anda: [ACTION_PERM:NamaRole:NamaPermission:true|false]. Contoh: [ACTION_PERM:HR Manager:payroll:true].";
     }
 
     /**
-     * Menyusun ringkasan proyek aktif (active = 1) per bulan, real-time dari database.
+     * Menyusun ringkasan proyek aktif, WBS, dan anggaran RAB.
      */
     private function buildProjectsText(): string
     {
         try {
-            // 6 bulan terakhir (sama dengan dashboard): misal Maret - Agustus 2026
             $months = \App\Services\DashboardService::generateLast6Months();
 
             $lines = [];
             foreach ($months as $month) {
-                $summary = $this->projectSummaryForMonth($month);
-                $lines[] = $summary;
+                $lines[] = $this->projectSummaryForMonth($month);
             }
+
+            $totalRab = \App\Models\RabBudget::count();
+            $sumRab = \App\Models\RabBudget::sum('total_budget');
+            $totalWbs = \App\Models\WbsElement::count();
+
+            $lines[] = "RAB & WBS Overview:\n- Total Rencana Anggaran Biaya (RAB): {$totalRab} dokumen | Alokasi Rp " . number_format($sumRab, 0, ',', '.') . "\n- Total Elemen WBS: {$totalWbs} elemen terstruktur";
 
             return implode("\n\n", $lines);
         } catch (\Exception $e) {
             return 'Gagal memuat data proyek dari database: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Menyusun data Struktur Organisasi (STO, Job Position, ECN).
+     */
+    private function buildOrgText(): string
+    {
+        try {
+            $totalUnits = \App\Models\Division::count();
+            $activeUnits = \App\Models\Division::where('active', 1)->count();
+            $totalJobs = \App\Models\JobPosition::count();
+            $activeJobs = \App\Models\JobPosition::where('active', 1)->count();
+            $totalEcn = \App\Models\EmployeeMovement::count();
+
+            return "STO Chart (Unit/Departemen): {$totalUnits} unit ({$activeUnits} aktif)\n"
+                ."Job Position (Formasi Jabatan): {$totalJobs} jabatan ({$activeJobs} aktif)\n"
+                ."Employee Change Notice (ECN / Mutasi): {$totalEcn} usulan pergerakan tercatat";
+        } catch (\Exception $e) {
+            return "STO & Organization Data: Belum dapat dimuat.";
+        }
+    }
+
+    /**
+     * Mengambil data rinci karyawan TAD dari database.
+     */
+    private function buildEmployeesText(): string
+    {
+        try {
+            $totalEmployees = Employee::count();
+
+            $byRegional = Employee::groupBy('regional')
+                ->selectRaw('regional, COUNT(*) as total')
+                ->pluck('total', 'regional');
+            
+            $bySegment = Employee::groupBy('segment')
+                ->selectRaw('segment, COUNT(*) as total')
+                ->pluck('total', 'segment');
+
+            $regStr = $byRegional->map(fn($c, $r) => "{$r}: {$c}")->implode(', ');
+            $segStr = $bySegment->map(fn($c, $s) => "{$s}: {$c}")->implode(', ');
+
+            return "Total Tenaga Alih Daya (TAD) terdaftar: {$totalEmployees} orang.\n"
+                ."- Per Regional: {$regStr}\n"
+                ."- Per Segment: {$segStr}";
+        } catch (\Exception $e) {
+            return 'Total Tenaga Alih Daya (TAD) terdaftar: '.$e->getMessage();
+        }
+    }
+
+    /**
+     * Data proses payroll & penggajian dari database.
+     */
+    private function buildPayrollText(): string
+    {
+        try {
+            $periodsCount = \App\Models\PayrollPeriod::count();
+            $latestPeriod = \App\Models\PayrollPeriod::latest()->first();
+
+            if (!$latestPeriod) {
+                return "Belum ada periode payroll yang dibuat di sistem.";
+            }
+
+            $resultsCount = \App\Models\PayrollResult::where('payroll_period_id', $latestPeriod->id)->count();
+            $totalTHP = \App\Models\PayrollResult::where('payroll_period_id', $latestPeriod->id)->sum('take_home_pay');
+
+            return "Total Periode Payroll: {$periodsCount} periode\n"
+                ."Periode Terbaru: {$latestPeriod->period_name} ({$latestPeriod->status})\n"
+                ."- Karyawan Diproses: {$resultsCount} orang\n"
+                ."- Total Take Home Pay (THP): Rp " . number_format($totalTHP, 0, ',', '.') . "\n"
+                ."- Status SAP Posting: " . ($latestPeriod->is_posted_sap ? 'Sudah Di-Posting ke SAP' : 'Belum Di-Posting');
+        } catch (\Exception $e) {
+            return "Payroll Data: Belum ada periode payroll aktif.";
+        }
+    }
+
+    /**
+     * Data Pranota & Nota Billing SAP.
+     */
+    private function buildBillingText(): string
+    {
+        try {
+            $pranotaCount = \App\Models\PranotaBilling::count();
+            $pranotaSum = \App\Models\PranotaBilling::sum('total_amount');
+
+            $notaCount = \App\Models\NotaBilling::count();
+            $notaSum = \App\Models\NotaBilling::sum('total_amount');
+            $postedNotaCount = \App\Models\NotaBilling::where('sap_posted', 1)->count();
+
+            return "Pranota Billing: {$pranotaCount} dokumen | Total Nominal: Rp " . number_format($pranotaSum, 0, ',', '.') . "\n"
+                ."Nota Billing (Invoice): {$notaCount} dokumen | Total Nominal: Rp " . number_format($notaSum, 0, ',', '.') . "\n"
+                ."- Invoices Ter-posting ke SAP AR: {$postedNotaCount} dari {$notaCount} nota";
+        } catch (\Exception $e) {
+            return "Billing Data: Belum dapat dimuat.";
+        }
+    }
+
+    /**
+     * Data Employee Self Service (ESS) Approvals.
+     */
+    private function buildEssText(): string
+    {
+        try {
+            $pendingLeave = \App\Models\LeaveRequest::where('status', 'Pending')->count();
+            $approvedLeave = \App\Models\LeaveRequest::where('status', 'Approved')->count();
+
+            $pendingCico = \App\Models\CicoCorrection::where('status', 'Pending')->count();
+            $approvedCico = \App\Models\CicoCorrection::where('status', 'Approved')->count();
+
+            return "Permohonan Cuti/Izin: {$pendingLeave} menunggu persetujuan (Approved: {$approvedLeave})\n"
+                ."Koreksi Absensi (CICO): {$pendingCico} menunggu persetujuan (Approved: {$approvedCico})";
+        } catch (\Exception $e) {
+            return "ESS Data: Belum dapat dimuat.";
+        }
+    }
+
+    /**
+     * Data Time Management & Jadwal Shift.
+     */
+    private function buildTimeManagementText(): string
+    {
+        try {
+            $scheduleGroups = \App\Models\ScheduleGroup::count();
+            $assignments = \App\Models\ScheduleAssignment::count();
+            $absentTypes = \App\Models\AbsentType::count();
+
+            return "Grup Jadwal Shift: {$scheduleGroups} grup\n"
+                ."Penugasan Jadwal ESS: {$assignments} penugasan karyawan\n"
+                ."Tipe Absensi & Cuti: {$absentTypes} tipe terdaftar";
+        } catch (\Exception $e) {
+            return "Time Management Data: Belum dapat dimuat.";
         }
     }
 
@@ -210,20 +381,6 @@ Aturan Penting saat Menjawab:
         return "Bulan {$month}: {$total} proyek aktif | Total anggaran aktif: {$budgetFormatted}"
             . "\n- Per Regional: {$regionalText}"
             . "\n- Per Segment: {$segmentText}";
-    }
-
-    /**
-     * Mengambil total karyawan TAD dari database.
-     */
-    private function buildEmployeesText(): string
-    {
-        try {
-            $totalEmployees = Employee::count();
-
-            return "Total Tenaga Alih Daya (TAD) terdaftar: {$totalEmployees} orang.";
-        } catch (\Exception $e) {
-            return 'Total Tenaga Alih Daya (TAD) terdaftar: 120 orang (Fallback).';
-        }
     }
 
     /**
@@ -277,6 +434,109 @@ Aturan Penting saat Menjawab:
     private function connectionErrorMessage(\Exception $e): string
     {
         return "❌ **Gagal menghubungi Gemini API:**\n\nError: `{$e->getMessage()}`\n\nPastikan Kunci API di file `.env` Anda valid dan memiliki kuota aktif.";
+    }
+
+    /**
+     * Memproses perintah perubahan hak akses langsung dari pesan user.
+     */
+    private function tryHandlePermissionCommand(string $userMessage): ?string
+    {
+        $lower = strtolower($userMessage);
+
+        // Memeriksa kata kunci aksi
+        $isEnable = str_contains($lower, 'buka') || str_contains($lower, 'aktif') || str_contains($lower, 'berikan') || str_contains($lower, 'tambah');
+        $isDisable = str_contains($lower, 'tutup') || str_contains($lower, 'mati') || str_contains($lower, 'cabut') || str_contains($lower, 'hapus');
+
+        if (! ($isEnable || $isDisable) || ! (str_contains($lower, 'akses') || str_contains($lower, 'izin') || str_contains($lower, 'permission'))) {
+            return null;
+        }
+
+        $targetState = $isEnable;
+
+        $rolesMap = [
+            'hr manager' => 'HR Manager',
+            'hr' => 'HR Manager',
+            'finance manager' => 'Finance Manager',
+            'finance' => 'Finance Manager',
+            'project manager' => 'Project Manager',
+            'project' => 'Project Manager',
+            'employee' => 'Employee',
+            'regular employee' => 'Employee',
+            'admin' => 'Admin',
+        ];
+
+        $permsMap = [
+            'payroll' => 'payroll',
+            'gaji' => 'payroll',
+            'penggajian' => 'payroll',
+            'projects' => 'projects',
+            'proyek' => 'projects',
+            'employees' => 'employees',
+            'karyawan' => 'employees',
+            'pegawai' => 'employees',
+            'invoices' => 'invoices',
+            'billing' => 'invoices',
+            'nota' => 'invoices',
+            'reports' => 'reports',
+            'laporan' => 'reports',
+            'schedules' => 'schedules',
+            'jadwal' => 'schedules',
+            'attendance' => 'attendance',
+            'absensi' => 'attendance',
+            'settings' => 'settings',
+            'pengaturan' => 'settings',
+        ];
+
+        $matchedRole = null;
+        foreach ($rolesMap as $key => $roleName) {
+            if (str_contains($lower, $key)) {
+                $matchedRole = $roleName;
+                break;
+            }
+        }
+
+        $matchedPerm = null;
+        foreach ($permsMap as $key => $permKey) {
+            if (str_contains($lower, $key)) {
+                $matchedPerm = $permKey;
+                break;
+            }
+        }
+
+        if ($matchedRole && $matchedPerm) {
+            \App\Models\RolePermission::updateOrCreate(
+                ['role' => $matchedRole, 'permission' => $matchedPerm],
+                ['is_enabled' => $targetState]
+            );
+
+            $statusText = $targetState ? 'BERHASIL DIAKTIFKAN ✅' : 'BERHASIL DIMATIKAN ❌';
+            return "✅ **Pembaruan Hak Akses Diterapkan!**\n\nHak akses modul **'{$matchedPerm}'** untuk peran **'{$matchedRole}'** telah {$statusText}.\n\n*Pengguna dengan peran {$matchedRole} akan langsung melihat perubahan visibilitas menu di sidebar setelah halaman di-refresh.*";
+        }
+
+        return null;
+    }
+
+    /**
+     * Memproses tag aksi otomatis dari AI jika ada.
+     */
+    private function processAiActionTags(string $aiText): string
+    {
+        if (preg_match('/\[ACTION_PERM:(.*?):(.*?):(true|false)\]/i', $aiText, $matches)) {
+            $role = trim($matches[1]);
+            $perm = trim($matches[2]);
+            $state = strtolower(trim($matches[3])) === 'true';
+
+            \App\Models\RolePermission::updateOrCreate(
+                ['role' => $role, 'permission' => $perm],
+                ['is_enabled' => $state]
+            );
+
+            $cleanText = preg_replace('/\[ACTION_PERM:.*?\]/i', '', $aiText);
+            $statusStr = $state ? 'diaktifkan' : 'dimatikan';
+            return trim($cleanText) . "\n\n*(Sistem telah otomatis memperbarui database: Akses '{$perm}' untuk peran '{$role}' telah {$statusStr})*";
+        }
+
+        return $aiText;
     }
 
     /**

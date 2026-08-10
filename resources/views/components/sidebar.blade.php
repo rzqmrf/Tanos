@@ -457,7 +457,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'personal_data' ? '' : 'personal_data')" 
                                     :style="activeSubMenu === 'personal_data' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-350 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Master Data</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'personal_data' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -478,7 +478,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'org_structure' ? '' : 'org_structure')" 
                                     :style="activeSubMenu === 'org_structure' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Organizational Structure</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'org_structure' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -497,14 +497,14 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'employee' ? '' : 'employee')" 
                                     :style="activeSubMenu === 'employee' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Employee</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'employee' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'employee'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('schedules.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSchedules ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Schedule Assignment</a>
+                                <a href="{{ route('org.schedules.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSchedules ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Schedule Assignment</a>
                                 <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Schedule Config</a>
                                 <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Actions</a>
                             </div>
@@ -516,7 +516,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'career' ? '' : 'career')" 
                                     :style="activeSubMenu === 'career' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Career</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'career' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -535,7 +535,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'time_management' ? '' : 'time_management')" 
                                     :style="activeSubMenu === 'time_management' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Time Management</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'time_management' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -556,7 +556,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'attendance_rekap' ? '' : 'attendance_rekap')" 
                                     :style="activeSubMenu === 'attendance_rekap' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Employee Self Service</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'attendance_rekap' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -576,7 +576,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'proses_payroll' ? '' : 'proses_payroll')" 
                                     :style="activeSubMenu === 'proses_payroll' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Payroll</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'proses_payroll' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -595,7 +595,7 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'hc_report' ? '' : 'hc_report')" 
                                     :style="activeSubMenu === 'hc_report' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                                 <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Report</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'hc_report' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
