@@ -62,12 +62,8 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('employees', EmployeeController::class)->middleware('permission:employees');
 
     Route::get('reports', function () {
-        return view('analytics.reports');
+        return view('finance.reports');
     })->name('reports.index')->middleware('permission:reports');
-
-    Route::get('clients', function () {
-        return view('operations.clients');
-    })->name('clients.index')->middleware('permission:clients');
 
     Route::resource('attendances', AttendanceController::class)->middleware('permission:attendance');
 
@@ -147,26 +143,6 @@ Route::prefix('dashboard')->group(function () {
     Route::post('billing/pranota/{id}/approve', [\App\Http\Controllers\BillingController::class, 'approvePranota'])->name('billing.pranota.approve')->middleware('permission:invoices');
     Route::post('billing/nota', [\App\Http\Controllers\BillingController::class, 'doNota'])->name('billing.nota.store')->middleware('permission:invoices');
     Route::post('billing/nota/{id}/post-sap', [\App\Http\Controllers\BillingController::class, 'postNota'])->name('billing.nota.post-sap')->middleware('permission:invoices');
-
-    Route::get('expenses', function () {
-        return view('finance.expenses');
-    })->name('expenses.index')->middleware('permission:expenses');
-
-    Route::get('recruitment', function () {
-        return view('hr.recruitment');
-    })->name('recruitment.index')->middleware('permission:recruitment');
-
-    Route::get('evaluations', function () {
-        return view('hr.evaluations');
-    })->name('evaluations.index')->middleware('permission:evaluations');
-
-    Route::get('certifications', function () {
-        return view('hr.certifications');
-    })->name('certifications.index')->middleware('permission:certifications');
-
-    Route::get('schedules', function () {
-        return view('operations.schedules');
-    })->name('schedules.index')->middleware('permission:schedules');
 
     Route::get('notifications', [NotificationController::class, 'page'])->name('notifications.page');
     Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');

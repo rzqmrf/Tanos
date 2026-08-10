@@ -452,23 +452,23 @@
                          x-data="{ activeSubMenu: '{{ $hcActiveSub }}' }"
                          x-transition class="mt-1 pl-4 space-y-1.5 border-l border-slate-100 dark:border-slate-800 ml-4.5" style="display: none;">
                         
-                        <!-- Nested: Personal Data TAD -->
+                        <!-- Nested: Master Data -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'employees'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'personal_data' ? '' : 'personal_data')" 
                                     :style="activeSubMenu === 'personal_data' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-350 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold mt-0.5">•</span>Personal Data TAD</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Master Data</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'personal_data' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'personal_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('employees.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEmployees ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Employee data</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Employee insurance</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Employee Education</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Employee Skill Training</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Custom date</a>
+                                <a href="{{ route('employees.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEmployees ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Data</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Insurance</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Education</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Skill Training</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Custom Date</a>
                             </div>
                         </div>
                         @endif
@@ -479,33 +479,53 @@
                             <button @click="activeSubMenu = (activeSubMenu === 'org_structure' ? '' : 'org_structure')" 
                                     :style="activeSubMenu === 'org_structure' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold mt-0.5">•</span>Struktur Organisasi</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Organizational Structure</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'org_structure' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'org_structure'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('org.sto.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSto ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">STO Chart</a>
-                                <a href="{{ route('org.job.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isJob ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Job Position</a>
-                                <a href="{{ route('org.ecn.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEcn ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Employee Change Notice</a>
+                                <a href="{{ route('org.sto.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSto ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>STO Chart</a>
+                                <a href="{{ route('org.job.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isJob ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Job Position</a>
+                                <a href="{{ route('org.ecn.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEcn ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Change Notice</a>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: Schedule Group -->
-                        @if(\App\Models\RolePermission::hasPermission($role, 'schedules'))
+                        <!-- Nested: Employee -->
+                        @if(\App\Models\RolePermission::hasPermission($role, 'employees'))
                         <div class="space-y-1">
-                            <button @click="activeSubMenu = (activeSubMenu === 'schedule_group' ? '' : 'schedule_group')" 
-                                    :style="activeSubMenu === 'schedule_group' ? 'background-color: #100b60 !important; color: white !important;' : ''"
+                            <button @click="activeSubMenu = (activeSubMenu === 'employee' ? '' : 'employee')" 
+                                    :style="activeSubMenu === 'employee' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold mt-0.5">•</span>Schedule Group</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'schedule_group' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Employee</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'employee' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
-                            <div x-show="activeSubMenu === 'schedule_group'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('schedules.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSchedules ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Schedule Assignment ESS</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Schedule Config</a>
+                            <div x-show="activeSubMenu === 'employee'" x-transition class="pl-4 space-y-1" style="display: none;">
+                                <a href="{{ route('schedules.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isSchedules ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Schedule Assignment</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Schedule Config</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Actions</a>
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Nested: Career -->
+                        @if(\App\Models\RolePermission::hasPermission($role, 'employees'))
+                        <div class="space-y-1">
+                            <button @click="activeSubMenu = (activeSubMenu === 'career' ? '' : 'career')" 
+                                    :style="activeSubMenu === 'career' ? 'background-color: #100b60 !important; color: white !important;' : ''"
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Career</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'career' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div x-show="activeSubMenu === 'career'" x-transition class="pl-4 space-y-1" style="display: none;">
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Career Development</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Succession Planning</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Training & Certification</a>
                             </div>
                         </div>
                         @endif
@@ -516,56 +536,75 @@
                             <button @click="activeSubMenu = (activeSubMenu === 'time_management' ? '' : 'time_management')" 
                                     :style="activeSubMenu === 'time_management' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>Time Management</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Time Management</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'time_management' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'time_management'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Time Valuation Master</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Attendance Type</a>
-                                <a href="{{ route('org.absent-types.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isAbsentTypes ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Absent Type</a>
-                                <a href="{{ route('org.evaluations.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isTimeEvaluations ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Time Evaluation (Attendance Parameter)</a>
-                                <a href="{{ route('org.periods.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isTimePeriods ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Time Period</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Time Valuation Master</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Attendance Type</a>
+                                <a href="{{ route('org.absent-types.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isAbsentTypes ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Absent Type</a>
+                                <a href="{{ route('org.evaluations.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isTimeEvaluations ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Time Evaluation</a>
+                                <a href="{{ route('org.periods.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isTimePeriods ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Time Period</a>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: Attendance / Rekap Absensi -->
+                        <!-- Nested: Employee Self Service -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'attendance'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'attendance_rekap' ? '' : 'attendance_rekap')" 
                                     :style="activeSubMenu === 'attendance_rekap' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>Attendance / Rekap Absensi</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Employee Self Service</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'attendance_rekap' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'attendance_rekap'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('attendances.index') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Upload Attendance</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Get My Intan (MyPelindo)</a>
-                                <a href="{{ route('ess.admin.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEssAdmin ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Cico Correction</a>
-                                <a href="{{ route('attendances.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Employee Absent</a>
+                                <a href="{{ route('attendances.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('attendances.index') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Upload Attendance</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Get My Intan (MyPelindo)</a>
+                                <a href="{{ route('ess.admin.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isEssAdmin ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Cico Correction</a>
+                                <a href="{{ route('attendances.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Absent</a>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: Proses Payroll -->
+                        <!-- Nested: Payroll -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'payroll'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'proses_payroll' ? '' : 'proses_payroll')" 
                                     :style="activeSubMenu === 'proses_payroll' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>Proses Payroll</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Payroll</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'proses_payroll' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'proses_payroll'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('payrolls.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPayroll ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Period Payroll</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Assignment Employee Payroll</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Payroll Formulation</a>
+                                <a href="{{ route('payrolls.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPayroll ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Period Payroll</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Assignment Employee Payroll</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Payroll Formulation</a>
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Nested: Report -->
+                        @if(\App\Models\RolePermission::hasPermission($role, 'reports') || \App\Models\RolePermission::hasPermission($role, 'employees'))
+                        <div class="space-y-1">
+                            <button @click="activeSubMenu = (activeSubMenu === 'hc_report' ? '' : 'hc_report')" 
+                                    :style="activeSubMenu === 'hc_report' ? 'background-color: #100b60 !important; color: white !important;' : ''"
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Report</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'hc_report' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div x-show="activeSubMenu === 'hc_report'" x-transition class="pl-4 space-y-1" style="display: none;">
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Attendance Report</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Payroll Report</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Report</a>
                             </div>
                         </div>
                         @endif
@@ -602,82 +641,83 @@
                          x-data="{ activeSubMenu: '{{ $psActiveSub }}' }"
                          x-transition class="mt-1 pl-4 space-y-1.5 border-l border-slate-100 dark:border-slate-800 ml-4.5" style="display: none;">
                         
-                        <!-- Nested: MASTER DATA -->
+                        <!-- Nested: Master -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'projects'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'master_data' ? '' : 'master_data')" 
                                     :style="activeSubMenu === 'master_data' ? 'background-color: #100b60 !important; color: white !important;' : ''"
                                     class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold mt-0.5">•</span>MASTER DATA</span>
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-blue-600 dark:text-blue-400 font-extrabold">•</span>Master</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'master_data' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Project Category</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Contract Type</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Project Role</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Project Type</a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Status</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Category</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Contract Type</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Role</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Type</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Status</a>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: PROJECT -->
+                        <!-- Nested: Project -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'projects'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'project' ? '' : 'project')" 
                                     :style="activeSubMenu === 'project' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-400 dark:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>PROJECT</span>
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Project</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'project' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'project'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('projects.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isProjects ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Project Definition</a>
-                                <a href="{{ route('rab.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isRab ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">RAB Budget</a>
-                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isWbs ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">WBS</a>
+                                <a href="{{ route('projects.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isProjects ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Project Definition</a>
+                                <a href="{{ route('rab.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isRab ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>RAB Budget</a>
+                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isWbs ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>WBS</a>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: BUDGETTING -->
+                        <!-- Nested: Budgeting -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'projects') || \App\Models\RolePermission::hasPermission($role, 'payroll'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'budgeting' ? '' : 'budgeting')" 
                                     :style="activeSubMenu === 'budgeting' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-400 dark:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>BUDGETTING</span>
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Budgeting</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'budgeting' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'budgeting'" x-transition class="pl-4 space-y-1" style="display: none;">
                                 @if(\App\Models\RolePermission::hasPermission($role, 'projects'))
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Budget Expense SAP</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Budget Expense SAP</a>
                                 @endif
                                 @if(\App\Models\RolePermission::hasPermission($role, 'payroll'))
-                                <a href="{{ route('posting_payrolls.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPostingPayroll ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Posting Payroll</a>
+                                <a href="{{ route('posting_payrolls.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPostingPayroll ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Posting Payroll</a>
                                 @endif
                             </div>
                         </div>
                         @endif
 
-                        <!-- Nested: BILLING -->
+                        <!-- Nested: Nota -->
                         @if(\App\Models\RolePermission::hasPermission($role, 'invoices'))
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'billing' ? '' : 'billing')" 
                                     :style="activeSubMenu === 'billing' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-400 dark:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>BILLING</span>
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Nota</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'billing' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'billing'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('billing.index', ['tab' => 'pranota']) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'pranota' ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Pranota</a>
-                                <a href="{{ route('billing.index', ['tab' => 'nota']) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'nota' ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">Billing</a>
+                                <a href="{{ route('billing.index', ['tab' => 'pranota']) }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'pranota' ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Pranota</a>
+                                <a href="{{ route('billing.index', ['tab' => 'nota']) }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'nota' ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Nota Billing</a>
+                                <a href="{{ route('invoices.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('invoices.index') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>Invoice</a>
                             </div>
                         </div>
                         @endif
@@ -687,21 +727,41 @@
                         <div class="space-y-1">
                             <button @click="activeSubMenu = (activeSubMenu === 'reports' ? '' : 'reports')" 
                                     :style="activeSubMenu === 'reports' ? 'background-color: #100b60 !important; color: white !important;' : ''"
-                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-slate-550 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200">
-                                <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold mt-0.5">•</span>Reports</span>
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Reports</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'reports' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'reports'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isReports ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}">WBS Report</a>
-                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">Profit Loss per Segment</a>
+                                <a href="{{ route('reports.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isReports ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>WBS Report</a>
+                                <a href="{{ route('reports.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Profit Loss per Segment</a>
                             </div>
                         </div>
                         @endif
 
-                    </div>
+                        <!-- Nested: Monitoring API -->
+                        @if(\App\Models\RolePermission::hasPermission($role, 'settings'))
+                        <div class="space-y-1">
+                            <button @click="activeSubMenu = (activeSubMenu === 'monitoring_api' ? '' : 'monitoring_api')" 
+                                    :style="activeSubMenu === 'monitoring_api' ? 'background-color: #100b60 !important; color: white !important;' : ''"
+                                    class="w-full text-left flex items-center justify-between py-1.5 px-2 text-[13px] font-semibold rounded-lg transition-colors cursor-pointer text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-200">
+                                <span class="flex items-center text-left"><span class="mr-1.5 text-xs text-primary dark:text-blue-400 font-extrabold">•</span>Monitoring API</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" :class="activeSubMenu === 'monitoring_api' ? 'rotate-180 text-white' : ''" class="w-2.5 h-2.5 transition-transform duration-150">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <div x-show="activeSubMenu === 'monitoring_api'" x-transition class="pl-4 space-y-1" style="display: none;">
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>API Status</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>API Log</a>
+                                <a href="#" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Integration Config</a>
+                            </div>
+                        </div>
+                        @endif
+
+
                 </div>
+
                 @endif
             @endif
         </nav>
