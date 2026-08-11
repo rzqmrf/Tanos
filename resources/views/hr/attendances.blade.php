@@ -41,7 +41,7 @@
                 <select name="regional" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-lg text-xs focus:outline-none focus:border-blue-500 cursor-pointer">
                     <option value="All" {{ $selectedRegional == 'All' ? 'selected' : '' }}>Semua Regional</option>
                     @foreach($regionals as $reg)
-                        @php $rName = getSafeName($reg); @endphp
+                        @php $rName = is_object($reg) ? ($reg->name ?? '') : $reg; @endphp
                         <option value="{{ $rName }}" {{ $selectedRegional == $rName ? 'selected' : '' }}>{{ $rName }}</option>
                     @endforeach
                 </select>
@@ -51,7 +51,7 @@
                 <select name="segment" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-lg text-xs focus:outline-none focus:border-blue-500 cursor-pointer">
                     <option value="All" {{ $selectedSegment == 'All' ? 'selected' : '' }}>Semua Segment</option>
                     @foreach($segments as $seg)
-                        @php $sName = getSafeName($seg); @endphp
+                        @php $sName = is_object($seg) ? ($seg->name ?? '') : $seg; @endphp
                         <option value="{{ $sName }}" {{ $selectedSegment == $sName ? 'selected' : '' }}>{{ $sName }}</option>
                     @endforeach
                 </select>
