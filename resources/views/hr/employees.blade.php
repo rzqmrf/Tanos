@@ -37,6 +37,7 @@
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     @php
         $totalEmp = $employees->total();
+        $segmentsBySeg = $employees->getCollection()->groupBy('segment');
     @endphp
     <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
         <div class="flex items-center justify-between mb-2">

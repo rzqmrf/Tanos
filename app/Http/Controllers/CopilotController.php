@@ -212,7 +212,7 @@ Aturan Penting saat Menjawab Pertanyaan User:
             }
 
             $totalRab = \App\Models\RabBudget::count();
-            $sumRab = \App\Models\RabBudget::sum('total_budget');
+            $sumRab = \App\Models\RabBudget::sum('total_revenue');
             $totalWbs = \App\Models\WbsElement::count();
 
             $lines[] = "RAB & WBS Overview:\n- Total Rencana Anggaran Biaya (RAB): {$totalRab} dokumen | Alokasi Rp " . number_format($sumRab, 0, ',', '.') . "\n- Total Elemen WBS: {$totalWbs} elemen terstruktur";
@@ -433,9 +433,7 @@ Aturan Penting saat Menjawab Pertanyaan User:
     private function buildCrossModuleMatrixText(): string
     {
         try {
-            $projects = Project::withCount('employees')
-                ->with(['rabBudget', 'payrollPeriods.results', 'notaBillings'])
-                ->get();
+            $projects = Project::with(['rabBudget', 'payrollPeriods.results', 'notaBillings'])->get();
 
             if ($projects->isEmpty()) {
                 return "Belum ada data detail proyek terdaftar.";
@@ -443,8 +441,9 @@ Aturan Penting saat Menjawab Pertanyaan User:
 
             $matrix = [];
             foreach ($projects as $prj) {
-                $rabTotal = $prj->rabBudget ? $prj->rabBudget->total_budget : $prj->cost;
-                
+                // RAB: kolom yang tersedia adalah total_revenue / total_cost (bukan total_budget)
+                $rabTotal = $prj->rabBudget ? $prj->rabBudget->total_revenue : $prj->cost;
+
                 // Total THP dari hasil payroll yang terkait dengan proyek ini
                 $totalPayroll = 0;
                 foreach ($prj->payrollPeriods as $period) {
@@ -456,10 +455,13 @@ Aturan Penting saat Menjawab Pertanyaan User:
                 $notaSum = $prj->notaBillings->sum('total_amount');
                 $postedCount = $prj->notaBillings->where('sap_posted', 1)->count();
 
+                // Jumlah pegawai yang ditempatkan di proyek ini (via employees.project_id)
+                $employeesCount = \App\Models\Employee::where('project_id', $prj->id)->count();
+
                 $matrix[] = "- Proyek: [ID {$prj->id}] {$prj->project_name} ({$prj->project_code})\n"
                     . "  • Regional: {$prj->regional} | Segment: {$prj->segment} | Status: " . ($prj->active ? 'Aktif' : 'Non-Aktif') . "\n"
                     . "  • Total Anggaran / RAB: Rp " . number_format($rabTotal, 0, ',', '.') . "\n"
-                    . "  • Penempatan SDM (TAD): {$prj->employees_count} orang pegawai\n"
+                    . "  • Penempatan SDM (TAD): {$employeesCount} orang pegawai\n"
                     . "  • Total Payroll (Net THP): Rp " . number_format($totalPayroll, 0, ',', '.') . "\n"
                     . "  • SAP Billing: {$notaCount} nota (Total Rp " . number_format($notaSum, 0, ',', '.') . ") | Ter-posted SAP: {$postedCount} nota";
             }
