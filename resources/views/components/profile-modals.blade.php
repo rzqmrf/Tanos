@@ -181,10 +181,12 @@
                     <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Default Filter Regional</label>
                     <select x-model="settings.defaultRegional" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                         <option value="All">Semua Regional</option>
-                        <option value="Regional 1">Regional 1</option>
-                        <option value="Regional 2">Regional 2</option>
-                        <option value="Regional 3">Regional 3</option>
-                        <option value="Regional 4">Regional 4</option>
+                        <option value="Regional Jawa">Regional Jawa</option>
+                        <option value="Regional Jakarta">Regional Jakarta</option>
+                        <option value="Regional Sumatra">Regional Sumatra</option>
+                        <option value="Regional Kalimantan">Regional Kalimantan</option>
+                        <option value="Regional Bali Nusra">Regional Bali Nusra</option>
+                        <option value="Regional Sulawesi">Regional Sulawesi</option>
                     </select>
                 </div>
 

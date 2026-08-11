@@ -144,49 +144,56 @@ class CopilotController extends Controller
         $essText = $this->buildEssText();
         $timeText = $this->buildTimeManagementText();
         $attendanceText = $this->buildAttendanceText($today);
+        $crossModuleText = $this->buildCrossModuleMatrixText();
 
         return "Anda adalah Tanos Copilot, asisten AI cerdas untuk Tanos ERP (Enterprise Resource Planning) yang digunakan oleh PT Pelindo untuk mengelola Tenaga Alih Daya (TAD), Struktur Organisasi, Payroll, Billing, dan Proyek System.
 
 Berikut adalah data terintegrasi secara REAL-TIME dari database Tanos ERP untuk membantu Anda menjawab pertanyaan user secara presisi:
 
 =========================================
-1. DATA PROYEK AKTIF, RAB, & WBS (Project System):
+1. DATA MATRIKS INTEGRASI LINTAS MODUL (PROYEK + PEGAWAI + PAYROLL + BILLING SAP):
+{$crossModuleText}
+
+=========================================
+2. DATA PROYEK AKTIF, RAB, & WBS (Project System):
 {$projectsText}
 
 =========================================
-2. DATA STRUKTUR ORGANISASI (STO, JOB POSITION, ECN):
+3. DATA STRUKTUR ORGANISASI (STO, JOB POSITION, ECN):
 {$orgText}
 
 =========================================
-3. DATA TENAGA ALIH DAYA (TAD / KARYAWAN):
+4. DATA TENAGA ALIH DAYA (TAD / KARYAWAN):
 {$employeesText}
 
 =========================================
-4. DATA PROSES PAYROLL (GAJI & FORMULASI):
+5. DATA PROSES PAYROLL (GAJI & FORMULASI):
 {$payrollText}
 
 =========================================
-5. DATA BILLING (PRANOTA & NOTA BILLING SAP):
+6. DATA BILLING (PRANOTA & NOTA BILLING SAP):
 {$billingText}
 
 =========================================
-6. DATA EMPLOYEE SELF SERVICE (ESS APPROVALS):
+7. DATA EMPLOYEE SELF SERVICE (ESS APPROVALS):
 {$essText}
 
 =========================================
-7. DATA TIME MANAGEMENT & JADWAL SHIFT:
+8. DATA TIME MANAGEMENT & JADWAL SHIFT:
 {$timeText}
 
 =========================================
-8. RINGKASAN ABSENSI HARI INI (DARI DATABASE):
+9. RINGKASAN ABSENSI HARI INI (DARI DATABASE):
 {$attendanceText}
 =========================================
 
-Aturan Penting saat Menjawab:
-1. Jawablah menggunakan Bahasa Indonesia yang ramah, profesional, ringkas, dan jelas.
-2. Gunakan data di atas untuk menjawab jika user menanyakan informasi seputar proyek, STO, formasi jabatan, mutasi ECN, absensi, karyawan TAD, payroll, billing pranota/nota, atau anggaran RAB/WBS.
+Aturan Penting saat Menjawab Pertanyaan User:
+1. Jawablah menggunakan Bahasa Indonesia yang ramah, profesional, ringkas, dan sangat presisi.
+2. ANALISIS LINTAS MODUL (CROSS-MODULE QUERY): Jika user menanyakan gabungan data antar modul (seperti gabungan proyek + jumlah pegawai + total payroll + SAP billing, atau ringkasan kondisi regional tertentu seperti Regional Jawa), gunakan DATA MATRIKS INTEGRASI LINTAS MODUL di atas untuk menyajikannya secara holistik dan cerdas.
 3. JANGAN mengarang data atau memunculkan informasi fiktif di luar data di atas jika user menanyakan data internal yang spesifik. Jika data tidak tersedia di database, katakan dengan jujur bahwa datanya belum diisi.
-4. FORMAT DISPLAY: Jika user meminta data ditampilkan dalam bentuk tabel, buatlah tabel menggunakan tag HTML standar (<table>, <thead>, <tbody>, <tr>, <th>, <td>) dengan class styling Tailwind yang bersih (misal: 'min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden' dan 'px-3 py-2 text-left bg-slate-50 font-bold') agar bisa dirender dengan indah di chat bubble. JANGAN gunakan markdown table format (| Col | Col |), selalu gunakan tag HTML asli untuk tabel agar visualnya premium.
+4. FORMAT DISPLAY: 
+   - Jika user meminta data ditampilkan dalam bentuk tabel, buatlah tabel menggunakan tag HTML standar (<table>, <thead>, <tbody>, <tr>, <th>, <td>) dengan class styling Tailwind yang bersih (misal: 'min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden' dan 'px-3 py-2 text-left bg-slate-50 font-bold') agar bisa dirender dengan indah di chat bubble.
+   - Gunakan format mata uang Rupiah (contoh: Rp 1.500.000.000) untuk nilai nominal anggaran/payroll/billing.
 5. Anda dapat menjawab pertanyaan umum di luar sistem ERP (seperti salam, pertanyaan umum, saran manajemen proyek) secara ramah, tetapi arahkan kembali user ke topik Tanos ERP.
 6. PERUBAHAN HAK AKSES: Jika user meminta Anda mengubah/membuka/menutup hak akses (role permissions) suatu modul untuk peran tertentu, tambahkan tag khusus di akhir jawaban Anda: [ACTION_PERM:NamaRole:NamaPermission:true|false]. Contoh: [ACTION_PERM:HR Manager:payroll:true].";
     }
@@ -417,6 +424,49 @@ Aturan Penting saat Menjawab:
                 .'(Data riil dari tabel absensi, dihitung otomatis dari database)';
         } catch (\Exception $e) {
             return "Tanggal: {$today}\nTotal TAD: Tidak dapat dimuat (terjadi kesalahan).\nData absensi tidak tersedia saat ini.";
+        }
+    }
+
+    /**
+     * Menyusun matriks integrasi data lintas modul (Project + SDM Penempatan + Budget RAB + Payroll THP + Billing SAP).
+     */
+    private function buildCrossModuleMatrixText(): string
+    {
+        try {
+            $projects = Project::withCount('employees')
+                ->with(['rabBudget', 'payrollPeriods.results', 'notaBillings'])
+                ->get();
+
+            if ($projects->isEmpty()) {
+                return "Belum ada data detail proyek terdaftar.";
+            }
+
+            $matrix = [];
+            foreach ($projects as $prj) {
+                $rabTotal = $prj->rabBudget ? $prj->rabBudget->total_budget : $prj->cost;
+                
+                // Total THP dari hasil payroll yang terkait dengan proyek ini
+                $totalPayroll = 0;
+                foreach ($prj->payrollPeriods as $period) {
+                    $totalPayroll += $period->results()->sum('net_salary');
+                }
+
+                // Status Nota Billing SAP
+                $notaCount = $prj->notaBillings->count();
+                $notaSum = $prj->notaBillings->sum('total_amount');
+                $postedCount = $prj->notaBillings->where('sap_posted', 1)->count();
+
+                $matrix[] = "- Proyek: [ID {$prj->id}] {$prj->project_name} ({$prj->project_code})\n"
+                    . "  • Regional: {$prj->regional} | Segment: {$prj->segment} | Status: " . ($prj->active ? 'Aktif' : 'Non-Aktif') . "\n"
+                    . "  • Total Anggaran / RAB: Rp " . number_format($rabTotal, 0, ',', '.') . "\n"
+                    . "  • Penempatan SDM (TAD): {$prj->employees_count} orang pegawai\n"
+                    . "  • Total Payroll (Net THP): Rp " . number_format($totalPayroll, 0, ',', '.') . "\n"
+                    . "  • SAP Billing: {$notaCount} nota (Total Rp " . number_format($notaSum, 0, ',', '.') . ") | Ter-posted SAP: {$postedCount} nota";
+            }
+
+            return implode("\n\n", $matrix);
+        } catch (\Exception $e) {
+            return "Cross-Module Matrix Data: " . $e->getMessage();
         }
     }
 

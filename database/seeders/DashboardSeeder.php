@@ -13,6 +13,7 @@ use App\Models\JobPosition;
 use App\Models\RabBudget;
 use App\Models\RabBudgetItem;
 use App\Models\EmployeeMovement;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DashboardSeeder extends Seeder
@@ -46,7 +47,7 @@ class DashboardSeeder extends Seeder
         $faker = \Faker\Factory::create('id_ID');
 
         $regionals = [
-            'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'
+            'Regional Jawa', 'Regional Jakarta', 'Regional Sumatra', 'Regional Kalimantan', 'Regional Bali Nusra', 'Regional Sulawesi'
         ];
 
         $segments = [

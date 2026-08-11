@@ -256,21 +256,26 @@
                     <div class="w-title">Halo! Saya Tanos Copilot</div>
                     <div class="w-sub" style="margin:6px auto 0;">Saya siap membantu Anda menganalisis data operasional Pelindo secara real-time. Pilih topik di bawah atau ketik pertanyaan Anda.</div>
                 </div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:520px;">
-                    <button @click="submitPrompt('Tampilkan rangkuman budget proyek')" class="p-card">
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:620px;">
+                    <button @click="submitPrompt('Berapa project aktif bulan ini dan tampilkan project dengan budget terbesar')" class="p-card">
                         <div style="font-size:20px;">📊</div>
-                        <div class="p-card-title">Budget Proyek</div>
-                        <div class="p-card-sub">Anggaran proyek aktif</div>
+                        <div class="p-card-title">Proyek & Anggaran RAB</div>
+                        <div class="p-card-sub">Project aktif & budget terbesar</div>
                     </button>
-                    <button @click="submitPrompt('Bagaimana kehadiran TAD hari ini?')" class="p-card">
-                        <div style="font-size:20px;">📅</div>
-                        <div class="p-card-title">Absensi TAD</div>
-                        <div class="p-card-sub">Rekap kehadiran harian</div>
+                    <button @click="submitPrompt('Berapa pegawai yang ditempatkan di tiap project dan berapa total payroll bulan ini?')" class="p-card">
+                        <div style="font-size:20px;">👥</div>
+                        <div class="p-card-title">Penempatan SDM & Payroll</div>
+                        <div class="p-card-sub">Distribusi pegawai & total gaji</div>
                     </button>
-                    <button @click="submitPrompt('Siapa saja TAD yang sertifikasinya mau habis?')" class="p-card">
-                        <div style="font-size:20px;">⚠️</div>
-                        <div class="p-card-title">Sertifikasi</div>
-                        <div class="p-card-sub">Status masa berlaku</div>
+                    <button @click="submitPrompt('Project mana yang memiliki jumlah pegawai terbanyak dan berapa total payroll-nya?')" class="p-card" style="grid-column: span 2;">
+                        <div style="font-size:20px;">🔀</div>
+                        <div class="p-card-title">Analisis Lintas Modul (Cross-Module Join)</div>
+                        <div class="p-card-sub">Proyek dengan pegawai terbanyak + total THP payroll-nya</div>
+                    </button>
+                    <button @click="submitPrompt('Buatkan ringkasan kondisi project di regional jawa')" class="p-card" style="grid-column: span 2;">
+                        <div style="font-size:20px;">📝</div>
+                        <div class="p-card-title">Ringkasan Eksekutif Regional</div>
+                        <div class="p-card-sub">Sintesis holistik proyek, pegawai, budget & billing Regional Jawa</div>
                     </button>
                 </div>
             </div>

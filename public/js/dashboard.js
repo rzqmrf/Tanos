@@ -183,28 +183,38 @@ function initPegawaiRegionalChart(data) {
     const values = items.map(i => i.value);
     renderChart('pegawaiRegionalChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: 240 },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 250 },
         series: [{ name: 'Jumlah Pegawai', data: values }],
         xaxis: {
             categories: labels,
-            labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } },
-            axisBorder: { show: false }, axisTicks: { show: false },
+            labels: { 
+                style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 },
+                rotate: -20,
+                rotateAlways: false
+            },
+            axisBorder: { show: false }, 
+            axisTicks: { show: false },
         },
-        yaxis: { labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } } },
-        colors: [COLORS.purple],
+        yaxis: { labels: { style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT } } },
+        colors: [COLORS.blue, COLORS.emerald, COLORS.amber, COLORS.purple, COLORS.cyan, COLORS.rose],
         plotOptions: {
-            bar: { borderRadius: 6, columnWidth: '45%' },
+            bar: { 
+                distributed: true,
+                borderRadius: 8, 
+                columnWidth: '55%',
+                dataLabels: { position: 'top' }
+            },
         },
-        dataLabels: { enabled: false },
-        fill: {
-            type: 'gradient',
-            gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
-                         gradientToColors: [COLORS.indigo], stops: [0, 100] },
+        dataLabels: { 
+            enabled: true,
+            offsetY: -20,
+            style: { fontSize: '11px', fontWeight: 700, colors: [isDark() ? '#cbd5e1' : '#475569'] },
+            formatter: v => v > 0 ? v.toLocaleString('id-ID') : ''
         },
-        legend: { ...legendStyle },
+        legend: { show: false },
         tooltip: {
             ...baseOptions.tooltip,
-            y: { formatter: v => v.toLocaleString('id-ID') + ' orang' },
+            y: { formatter: v => v.toLocaleString('id-ID') + ' Orang TAD' },
         },
     });
 }

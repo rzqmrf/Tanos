@@ -13,6 +13,7 @@ class Employee extends Model
         'regional',
         'sub_regional',
         'segment',
+        'religion',
         'nipp',
         'bank_name',
         'bank_account_number',

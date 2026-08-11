@@ -82,6 +82,12 @@ Route::prefix('dashboard')->group(function () {
     Route::delete('rab-budgets/{rabId}/items/{itemId}', [RabBudgetController::class, 'destroyItem'])->name('rab.items.destroy')->middleware('permission:projects');
     Route::post('rab-budgets/{id}/send-sap', [RabBudgetController::class, 'sendToSap'])->name('rab.send-sap')->middleware('permission:projects');
 
+    // Human Capital Master Data (Regional, Job Class, Job Field, Employee Status, Religion, Job Status)
+    Route::get('hc-master/{category?}', [\App\Http\Controllers\HcMasterDataController::class, 'index'])->name('hc.master.index')->middleware('permission:employees');
+    Route::post('hc-master/{category}', [\App\Http\Controllers\HcMasterDataController::class, 'store'])->name('hc.master.store')->middleware('permission:employees');
+    Route::put('hc-master/update/{id}', [\App\Http\Controllers\HcMasterDataController::class, 'update'])->name('hc.master.update')->middleware('permission:employees');
+    Route::delete('hc-master/{id}', [\App\Http\Controllers\HcMasterDataController::class, 'destroy'])->name('hc.master.destroy')->middleware('permission:employees');
+
     // Organizational Structure Modules (STO, Job Position, ECN)
     Route::get('org-structure/sto', [OrgStructureController::class, 'stoIndex'])->name('org.sto.index')->middleware('permission:employees');
     Route::post('org-structure/sto', [OrgStructureController::class, 'stoStore'])->name('org.sto.store')->middleware('permission:employees');

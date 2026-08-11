@@ -22,11 +22,17 @@ class EmployeeController extends Controller
         $segments = Segment::orderBy('name')->get();
         $months = $dashboardService->getMonths();
 
+        $religions = \App\Models\HcMasterData::where('category', 'religion')->where('active', true)->orderBy('name')->pluck('name');
+        if ($religions->isEmpty()) {
+            $religions = collect(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Khonghucu']);
+        }
+
         return view('hr.employees', [
             'employees' => Employee::oldest()->paginate(25),
             'regionals' => $regionals,
             'subRegionals' => $subRegionals,
             'segments' => $segments,
+            'religions' => $religions,
             'months' => $months,
         ]);
     }
@@ -41,6 +47,7 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
+            'religion' => 'nullable|string|max:100',
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'sub_regional' => 'nullable|string|max:255',
@@ -99,6 +106,7 @@ class EmployeeController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
+            'religion' => 'nullable|string|max:100',
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'sub_regional' => 'nullable|string|max:255',

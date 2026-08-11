@@ -31,14 +31,21 @@ class ProjectController extends Controller
             'contract_number' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'cost_center' => 'required|string|max:255',
-            'fund_center' => 'required|string|max:255',
+            'cost_center' => 'nullable|string|max:255',
+            'fund_center' => 'nullable|string|max:255',
             'month' => 'required|string|max:255',
             'regional' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
             'cost' => 'required|numeric',
             'active' => 'required|integer',  // 1 untuk aktif, 0 untuk non-aktif
         ]);
+
+        if (empty($validData['cost_center'])) {
+            $validData['cost_center'] = 'CC-' . strtoupper(str_replace([' ', '-'], '', $validData['project_code']));
+        }
+        if (empty($validData['fund_center'])) {
+            $validData['fund_center'] = 'FC-' . strtoupper(str_replace([' ', '-'], '', $validData['project_code']));
+        }
 
         $project = Project::create($validData);
 

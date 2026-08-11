@@ -59,7 +59,7 @@
                         <input type="text"
                                 id="username"
                                 name="username"
-                                value="{{ old('username', 'rozaq') }}"
+                                value="{{ old('username') }}"
                                 placeholder="Username"
                                 required
                                 class="w-full bg-transparent border-b border-blue-400/30 text-white placeholder-blue-300/40 py-2.5 focus:outline-none focus:border-blue-300 text-sm transition-colors rounded-none px-0 mt-1">
@@ -74,7 +74,6 @@
                                     id="password"
                                     name="password"
                                     placeholder="Password"
-                                    value="admin123"
                                     required
                                     class="w-full bg-transparent border-b border-blue-400/30 text-white placeholder-blue-300/40 py-2.5 pr-8 focus:outline-none focus:border-blue-300 text-sm transition-colors rounded-none px-0">
 

@@ -143,7 +143,7 @@ class ProjectConfigController extends Controller
     private function ensureDefaultSeeded(): void
     {
         if (Regional::count() === 0) {
-            $defaults = ['Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'];
+            $defaults = ['Regional Jawa', 'Regional Jakarta', 'Regional Sumatra', 'Regional Kalimantan', 'Regional Bali Nusra', 'Regional Sulawesi'];
             foreach ($defaults as $name) {
                 Regional::create(['name' => $name]);
             }

@@ -14,7 +14,7 @@ class DashboardService
     private array $months = [];
 
     private array $defaultRegionals = [
-        'Regional 1', 'Regional 2', 'Regional 3', 'Regional 4'
+        'Regional Jawa', 'Regional Jakarta', 'Regional Sumatra', 'Regional Kalimantan', 'Regional Bali Nusra', 'Regional Sulawesi'
     ];
 
     private array $defaultSegments = [
@@ -47,6 +47,24 @@ class DashboardService
     public function getMonths(): array
     {
         return $this->months;
+    }
+
+    private function parseMonthToDateEnd(string $monthStr): ?string
+    {
+        $parts = explode(' ', trim($monthStr));
+        if (count($parts) === 2) {
+            $monthsIndo = [
+                'Januari' => '01', 'Februari' => '02', 'Maret' => '03', 'April' => '04',
+                'Mei' => '05', 'Juni' => '06', 'Juli' => '07', 'Agustus' => '08',
+                'September' => '09', 'Oktober' => '10', 'November' => '11', 'Desember' => '12'
+            ];
+            $mName = $parts[0];
+            $year = $parts[1];
+            if (isset($monthsIndo[$mName])) {
+                return \Carbon\Carbon::createFromDate((int)$year, (int)$monthsIndo[$mName], 1)->endOfMonth()->format('Y-m-d');
+            }
+        }
+        return null;
     }
 
     public function getRegionals(): array
@@ -82,8 +100,24 @@ class DashboardService
                 ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
         };
 
+        $employeeFilter = function ($query) use ($selectedMonth, $selectedReg, $selectedSeg) {
+            return $query
+                ->when($selectedMonth !== 'All', function($q) use ($selectedMonth) {
+                    $endDate = $this->parseMonthToDateEnd($selectedMonth);
+                    if ($endDate) {
+                        $q->where(function($sub) use ($selectedMonth, $endDate) {
+                            $sub->whereNull('tmt_date')
+                                ->orWhere('tmt_date', '<=', $endDate)
+                                ->orWhere('month', $selectedMonth);
+                        });
+                    }
+                })
+                ->when($selectedReg !== 'All', fn($q) => $q->where('regional', $selectedReg))
+                ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
+        };
+
         $projectQuery = $filter(Project::query());
-        $employeeQuery = $filter(Employee::query());
+        $employeeQuery = $employeeFilter(Employee::query());
         $invoiceQuery = $filter(Invoice::query());
 
         $totalActive = (clone $projectQuery)->where('active', true)->count();
@@ -104,9 +138,7 @@ class DashboardService
             ->when($selectedMonth !== 'All', fn($q) => $q->where('month', $selectedMonth))
             ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
 
-        $employeeQueryNoReg = Employee::query()
-            ->when($selectedMonth !== 'All', fn($q) => $q->where('month', $selectedMonth))
-            ->when($selectedSeg !== 'All', fn($q) => $q->where('segment', $selectedSeg));
+        $employeeQueryNoReg = $employeeFilter(Employee::query());
 
         return [
             'stats' => [

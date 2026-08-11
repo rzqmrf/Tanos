@@ -132,9 +132,44 @@ class DatabaseSeeder extends Seeder
         ];
         $currentMonthStr = $monthsIndo[(int) date('n')].' '.date('Y');
 
-        // 100 id
-        $keepIds = Employee::orderBy('id')->take(100)->pluck('id');
-        Employee::whereNotIn('id', $keepIds)->delete();
+        // Realistic enterprise distribution across regionals
+        $regionalsMap = [
+            'Regional Jawa' => 385,
+            'Regional Jakarta' => 310,
+            'Regional Sumatra' => 245,
+            'Regional Kalimantan' => 190,
+            'Regional Sulawesi' => 165,
+            'Regional Bali Nusra' => 120,
+        ];
+        
+        $roles = ['Staff Operasional', 'Staff Administrasi', 'Supervisor'];
+        $faker = \Faker\Factory::create('id_ID');
+
+        foreach ($regionalsMap as $rName => $targetCount) {
+            $existing = Employee::where('regional', $rName)->count();
+            $needed = $targetCount - $existing;
+            for ($i = 0; $i < $needed; $i++) {
+                $empName = $faker->name;
+                $roleName = $roles[$i % count($roles)];
+                Employee::create([
+                    'name' => $empName,
+                    'role' => $roleName,
+                    'month' => $currentMonthStr,
+                    'regional' => $rName,
+                    'segment' => $faker->randomElement(['Enterprise', 'Corporate', 'Government', 'SME', 'Retail']),
+                    'religion' => $faker->randomElement(['Islam', 'Islam', 'Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']),
+                    'nipp' => 'NIPP-' . $faker->unique()->numberBetween(100000, 999999),
+                    'bank_name' => $faker->randomElement(['Bank Mandiri', 'BRI', 'BNI', 'BCA']),
+                    'bank_account_number' => $faker->numerify('##########'),
+                    'bank_account_name' => $empName,
+                    'ptkp_status' => $faker->randomElement(['TK/0', 'TK/1', 'K/0', 'K/1', 'K/2']),
+                    'tmt_date' => $faker->dateTimeBetween('-3 years', 'now')->format('Y-m-d'),
+                    'bpjs_kesehatan_number' => $faker->numerify('#############'),
+                    'bpjs_ketenagakerjaan_number' => $faker->numerify('###########'),
+                ]);
+            }
+            Employee::where('regional', $rName)->update(['month' => $currentMonthStr]);
+        }
         // ----------------------------------------------------------------------
 
         // 4. Auto-generate User accounts for ALL Employees

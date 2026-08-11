@@ -37,7 +37,6 @@
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     @php
         $totalEmp = $employees->total();
-        $segments = $employees->getCollection()->groupBy('segment');
     @endphp
     <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
         <div class="flex items-center justify-between mb-3">
@@ -260,6 +259,7 @@
                             ['label'=>'Regional','id'=>'detail-regional'],
                             ['label'=>'Sub-Area','id'=>'detail-sub-regional'],
                             ['label'=>'Segment','id'=>'detail-segment'],
+                            ['label'=>'Agama','id'=>'detail-religion'],
                             ['label'=>'Bulan Proyek','id'=>'detail-month'],
                             ['label'=>'TMT','id'=>'detail-tmt'],
                         ] as $f)
@@ -351,7 +351,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Segment <span class="text-red-400">*</span></label>
                             <select name="segment" required class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
-                                @foreach($segments as $seg)<option value="{{ $seg->name }}">{{ $seg->name }}</option>@endforeach
+                                @foreach($segments as $seg)
+                                    <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -359,16 +361,28 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Regional <span class="text-red-400">*</span></label>
                             <select name="regional" required class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
-                                @foreach($regionals as $reg)<option value="{{ $reg->name }}">{{ $reg->name }}</option>@endforeach
+                                @foreach($regionals as $reg)
+                                    <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Sub-Area</label>
                             <select name="sub_regional" class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
                                 <option value="">Opsional</option>
-                                @foreach($subRegionals as $sub)<option value="{{ $sub->name }}">{{ $sub->name }}</option>@endforeach
+                                @foreach($subRegionals as $sub)
+                                    <option value="{{ $sub->name }}">{{ $sub->name }}</option>
+                                @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Agama / Kepercayaan</label>
+                        <select name="religion" class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
+                            @foreach($religions as $rel)
+                                <option value="{{ $rel }}">{{ $rel }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -473,7 +487,9 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Segment</label>
                             <select id="edit-segment" name="segment" required class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
-                                @foreach($segments as $seg)<option value="{{ $seg->name }}">{{ $seg->name }}</option>@endforeach
+                                @foreach($segments as $seg)
+                                    <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -481,16 +497,28 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Regional</label>
                             <select id="edit-regional" name="regional" required class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
-                                @foreach($regionals as $reg)<option value="{{ $reg->name }}">{{ $reg->name }}</option>@endforeach
+                                @foreach($regionals as $reg)
+                                    <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Sub-Area</label>
                             <select id="edit-sub-regional" name="sub_regional" class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
                                 <option value="">Opsional</option>
-                                @foreach($subRegionals as $sub)<option value="{{ $sub->name }}">{{ $sub->name }}</option>@endforeach
+                                @foreach($subRegionals as $sub)
+                                    <option value="{{ $sub->name }}">{{ $sub->name }}</option>
+                                @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Agama / Kepercayaan</label>
+                        <select id="edit-religion" name="religion" class="w-full px-3 py-2.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition">
+                            @foreach($religions as $rel)
+                                <option value="{{ $rel }}">{{ $rel }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -580,6 +608,7 @@ function openDetailModal(emp) {
     document.getElementById('detail-regional').innerText = emp.regional || '—';
     document.getElementById('detail-sub-regional').innerText = emp.sub_regional || 'Tidak ada';
     document.getElementById('detail-segment').innerText = emp.segment || '—';
+    document.getElementById('detail-religion').innerText = emp.religion || 'Islam';
     document.getElementById('detail-month').innerText = emp.month || '—';
     document.getElementById('detail-tmt').innerText = emp.tmt_date
         ? new Date(emp.tmt_date).toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'})
@@ -607,6 +636,9 @@ function openEditModal(emp) {
     document.getElementById('edit-regional').value = emp.regional || '';
     document.getElementById('edit-sub-regional').value = emp.sub_regional || '';
     document.getElementById('edit-segment').value = emp.segment || '';
+    if (document.getElementById('edit-religion')) {
+        document.getElementById('edit-religion').value = emp.religion || 'Islam';
+    }
     document.getElementById('edit-ptkp-status').value = emp.ptkp_status || 'TK/0';
     document.getElementById('edit-bank-name').value = emp.bank_name || '';
     document.getElementById('edit-bank-account-number').value = emp.bank_account_number || '';

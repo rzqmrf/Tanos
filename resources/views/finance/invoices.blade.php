@@ -117,7 +117,7 @@
                 <select name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
                     <option value="">-- Pilih Regional --</option>
                     @foreach($regionals as $reg)
-                        <option value="{{ $reg->name }}">{{ $reg->name }}</option>
+                        <option value="{{ getSafeName($reg) }}">{{ getSafeName($reg) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -126,7 +126,7 @@
                 <select name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 dark:focus:border-blue-400">
                     <option value="">-- Pilih Segment --</option>
                     @foreach($segments as $seg)
-                        <option value="{{ $seg->name }}">{{ $seg->name }}</option>
+                        <option value="{{ getSafeName($seg) }}">{{ getSafeName($seg) }}</option>
                     @endforeach
                 </select>
             </div>
