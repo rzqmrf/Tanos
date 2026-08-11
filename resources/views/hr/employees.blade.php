@@ -111,8 +111,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
             </div>
-            <input id="search-employee" type="text" placeholder="Cari nama, NIPP, jabatan..." oninput="filterTable()"
-                class="w-full pl-9 pr-4 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition">
+            <input id="search-employee" type="text" placeholder="Cari nama, NIPP, jabatan..." oninput="filterTable()" style="padding-left: 2.75rem !important;"
+                class="w-full !pl-11 pr-4 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition">
         </div>
         <select id="filter-regional" onchange="filterTable()"
             class="px-3.5 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition cursor-pointer">
