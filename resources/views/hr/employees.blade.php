@@ -106,24 +106,24 @@
 <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 shadow-sm mb-4">
     <div class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 absolute left-3 top.5 -translate-y-1/2 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             <input id="search-employee" type="text" placeholder="Cari nama, NIPP, jabatan..." oninput="filterTable()"
-                class="w-full pl-9 pr-4 py-2.5 text-xs font-medium border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition">
+                class="w-full pl-9 pr-4 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition">
         </div>
         <select id="filter-regional" onchange="filterTable()"
-            class="px-3 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition cursor-pointer">
-            <option value="" class="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-100">Semua Regional</option>
+            class="px-3.5 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition cursor-pointer">
+            <option value="" class="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 font-medium">Semua Regional</option>
             @foreach($regionals as $reg)
-                <option value="{{ $reg->name }}" class="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-100">{{ $reg->name }}</option>
+                <option value="{{ $reg->name }}" class="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 font-medium">{{ $reg->name }}</option>
             @endforeach
         </select>
         <select id="filter-segment" onchange="filterTable()"
-            class="px-3 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition cursor-pointer">
-            <option value="" class="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-100">Semua Segment</option>
+            class="px-3.5 py-2.5 text-xs font-semibold border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition cursor-pointer">
+            <option value="" class="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 font-medium">Semua Segment</option>
             @foreach($segments as $seg)
-                <option value="{{ $seg->name }}" class="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-100">{{ $seg->name }}</option>
+                <option value="{{ $seg->name }}" class="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100 font-medium">{{ $seg->name }}</option>
             @endforeach
         </select>
     </div>
