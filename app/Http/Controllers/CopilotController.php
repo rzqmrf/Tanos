@@ -23,6 +23,31 @@ class CopilotController extends Controller
     protected const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta';
 
     /**
+     * Whitelist role yang diizinkan untuk dikonfigurasi melalui Copilot.
+     */
+    protected const ALLOWED_ROLES = [
+        'Admin',
+        'HR Manager',
+        'Finance Manager',
+        'Project Manager',
+        'Employee',
+    ];
+
+    /**
+     * Whitelist permission yang diizinkan untuk dikonfigurasi melalui Copilot.
+     */
+    protected const ALLOWED_PERMISSIONS = [
+        'payroll',
+        'projects',
+        'employees',
+        'invoices',
+        'reports',
+        'schedules',
+        'attendance',
+        'settings',
+    ];
+
+    /**
      * Menampilkan halaman Copilot.
      */
     public function index()
@@ -48,8 +73,15 @@ class CopilotController extends Controller
         }
 
         try {
+            $sessionUser = session('user');
+            $isAdmin = false;
+            if ($sessionUser) {
+                $role = is_array($sessionUser) ? ($sessionUser['role'] ?? null) : ($sessionUser->role ?? null);
+                $isAdmin = strtolower($role) === 'admin';
+            }
+
             // Cek apakah ada perintah perubahan akses (Permission Command)
-            $actionResult = $this->tryHandlePermissionCommand($request->input('message'));
+            $actionResult = $this->tryHandlePermissionCommand($request->input('message'), $isAdmin);
             if ($actionResult !== null) {
                 return $this->jsonResponse($actionResult);
             }
@@ -67,7 +99,7 @@ class CopilotController extends Controller
                 ?? 'Maaf, AI tidak mengembalikan respon valid.';
 
             // Periksa jika AI merekomendasikan aksi perubahan izin secara otomatis
-            $aiText = $this->processAiActionTags($aiText);
+            $aiText = $this->processAiActionTags($aiText, $isAdmin);
 
             return $this->jsonResponse($aiText);
         } catch (\Exception $e) {
@@ -493,7 +525,7 @@ Aturan Penting saat Menjawab Pertanyaan User:
     /**
      * Memproses perintah perubahan hak akses langsung dari pesan user.
      */
-    private function tryHandlePermissionCommand(string $userMessage): ?string
+    private function tryHandlePermissionCommand(string $userMessage, bool $isAdmin): ?string
     {
         $lower = strtolower($userMessage);
 
@@ -503,6 +535,10 @@ Aturan Penting saat Menjawab Pertanyaan User:
 
         if (! ($isEnable || $isDisable) || ! (str_contains($lower, 'akses') || str_contains($lower, 'izin') || str_contains($lower, 'permission'))) {
             return null;
+        }
+
+        if (! $isAdmin) {
+            return "❌ **Akses Ditolak!** Anda tidak memiliki izin untuk memodifikasi konfigurasi hak akses modul.";
         }
 
         $targetState = $isEnable;
@@ -558,6 +594,10 @@ Aturan Penting saat Menjawab Pertanyaan User:
         }
 
         if ($matchedRole && $matchedPerm) {
+            if (! in_array($matchedRole, self::ALLOWED_ROLES) || ! in_array($matchedPerm, self::ALLOWED_PERMISSIONS)) {
+                return "❌ **Gagal Mengubah Akses!** Peran atau modul yang diminta tidak terdaftar dalam konfigurasi sistem yang diizinkan.";
+            }
+
             \App\Models\RolePermission::updateOrCreate(
                 ['role' => $matchedRole, 'permission' => $matchedPerm],
                 ['is_enabled' => $targetState]
@@ -573,19 +613,28 @@ Aturan Penting saat Menjawab Pertanyaan User:
     /**
      * Memproses tag aksi otomatis dari AI jika ada.
      */
-    private function processAiActionTags(string $aiText): string
+    private function processAiActionTags(string $aiText, bool $isAdmin): string
     {
         if (preg_match('/\[ACTION_PERM:(.*?):(.*?):(true|false)\]/i', $aiText, $matches)) {
             $role = trim($matches[1]);
             $perm = trim($matches[2]);
             $state = strtolower(trim($matches[3])) === 'true';
 
+            $cleanText = preg_replace('/\[ACTION_PERM:.*?\]/i', '', $aiText);
+
+            if (! $isAdmin) {
+                return trim($cleanText) . "\n\n*(Sistem menolak perubahan otomatis hak akses karena Anda bukan pengguna Admin)*";
+            }
+
+            if (! in_array($role, self::ALLOWED_ROLES) || ! in_array($perm, self::ALLOWED_PERMISSIONS)) {
+                return trim($cleanText) . "\n\n*(Sistem menolak perubahan otomatis hak akses: peran '{$role}' atau modul '{$perm}' tidak terdaftar)*";
+            }
+
             \App\Models\RolePermission::updateOrCreate(
                 ['role' => $role, 'permission' => $perm],
                 ['is_enabled' => $state]
             );
 
-            $cleanText = preg_replace('/\[ACTION_PERM:.*?\]/i', '', $aiText);
             $statusStr = $state ? 'diaktifkan' : 'dimatikan';
             return trim($cleanText) . "\n\n*(Sistem telah otomatis memperbarui database: Akses '{$perm}' untuk peran '{$role}' telah {$statusStr})*";
         }
