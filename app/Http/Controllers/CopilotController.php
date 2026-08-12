@@ -15,7 +15,7 @@ class CopilotController extends Controller
     /**
      * Model Gemini yang digunakan untuk chat.
      */
-    protected const GEMINI_MODEL = 'gemini-3.5-flash';
+    protected const GEMINI_MODEL = 'gemini-flash-latest';
 
     /**
      * URL API Gemini (tanpa key, key dikirim via header).
@@ -37,6 +37,8 @@ class CopilotController extends Controller
      */
     public function chat(Request $request): JsonResponse
     {
+        set_time_limit(120);
+
         $request->validate([
             'message' => 'required|string',
         ]);
@@ -86,7 +88,7 @@ class CopilotController extends Controller
      */
     private function askGemini(string $userMessage, string $context)
     {
-        return Http::timeout(60)->withHeaders([
+        return Http::withoutVerifying()->timeout(90)->withHeaders([
             'Content-Type' => 'application/json',
             'X-Goog-Api-Key' => config('services.gemini.api_key'),
         ])->post($this->geminiUrl(), [

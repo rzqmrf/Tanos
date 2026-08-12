@@ -12,6 +12,7 @@ class HcMasterDataController extends Controller
      */
     protected const CATEGORIES = [
         'regional' => 'Regional',
+        'segment' => 'Segment',
         'job_class' => 'Job Class',
         'job_field' => 'Job Field',
         'employee_status' => 'Employee Status',
@@ -117,6 +118,19 @@ class HcMasterDataController extends Controller
                 ['code' => 'REG-KALIMANTAN', 'name' => 'Regional Kalimantan', 'description' => 'Wilayah Kerja Operasional Regional Kalimantan'],
                 ['code' => 'REG-BALINUSRA', 'name' => 'Regional Bali Nusra', 'description' => 'Wilayah Kerja Operasional Regional Bali Nusra'],
                 ['code' => 'REG-SULAWESI', 'name' => 'Regional Sulawesi', 'description' => 'Wilayah Kerja Operasional Regional Sulawesi'],
+            ],
+            'segment' => [
+                ['code' => 'SEG-01', 'name' => '01. Tenaga Alih Daya Operasional', 'description' => 'Segmentasi Layanan TAD Operasional Pelabuhan'],
+                ['code' => 'SEG-02', 'name' => '02. Tenaga Alih Daya Pengamanan', 'description' => 'Segmentasi Layanan TAD Keamanan & Security'],
+                ['code' => 'SEG-03', 'name' => '03. Pemborongan Pengamanan', 'description' => 'Segmentasi Layanan Pemborongan Sistem Pengamanan'],
+                ['code' => 'SEG-04', 'name' => '04. Cleaning Service', 'description' => 'Segmentasi Layanan Kebersihan Fasilitas Pelabuhan'],
+                ['code' => 'SEG-05', 'name' => '05. Pemeliharaan Taman', 'description' => 'Segmentasi Layanan Pertamanan & RTH Pelabuhan'],
+                ['code' => 'SEG-06', 'name' => '06. Pelayanan Pas', 'description' => 'Segmentasi Layanan Pas Masuk & Gate Terminal'],
+                ['code' => 'SEG-08', 'name' => '08. Tenaga Hantaran Kendaraan', 'description' => 'Segmentasi Layanan Pengemudi & Hantaran Armada'],
+                ['code' => 'SEG-09', 'name' => '09. Tenaga Operator', 'description' => 'Segmentasi Operator Alat Berat Dermaga & Container'],
+                ['code' => 'SEG-11', 'name' => '11. Lain Lain', 'description' => 'Segmentasi Layanan Pendukung Lainnya'],
+                ['code' => 'SEG-14', 'name' => '14. Kebersihan', 'description' => 'Segmentasi Kebersihan & Hygiene Lingkungan Kerja'],
+                ['code' => 'SEG-15', 'name' => '15. Operasional', 'description' => 'Segmentasi Layanan Teknis Operasional Lapangan'],
             ],
             'job_class' => [
                 ['code' => 'JC-01', 'name' => 'Grade 1 - Executive / Direksi', 'description' => 'Kelas Jabatan Manajemen Eksekutif'],

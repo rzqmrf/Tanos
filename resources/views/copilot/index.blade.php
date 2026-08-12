@@ -311,12 +311,7 @@
                             </svg>
                         </div>
                         <div class="bub-ai">
-                            <template x-if="msg.html">
-                                <div style="overflow-x:auto;" x-html="msg.text"></div>
-                            </template>
-                            <template x-if="!msg.html">
-                                <div style="white-space:pre-line;" x-html="formatMarkdown(msg.text)"></div>
-                            </template>
+                            <div style="overflow-x:auto;white-space:pre-line;" x-html="formatMarkdown(msg.text)"></div>
                         </div>
                     </div>
                 </template>
@@ -433,13 +428,20 @@ function copilotChat() {
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 body: JSON.stringify({ message }),
             })
-                .then(r => r.json())
+                .then(async r => {
+                    const data = await r.json().catch(() => null);
+                    if (!r.ok || !data) {
+                        throw new Error((data && data.response) ? data.response : `HTTP Error ${r.status}`);
+                    }
+                    return data;
+                })
                 .then(data => {
-                    const text = data.response || '';
+                    const text = data.response || 'Maaf, tidak ada respon dari AI.';
                     this.addMessage('ai', text, this.isHtmlContent(text));
                 })
-                .catch(() => {
-                    this.addMessage('ai', 'Gagal menghubungi API. Silakan coba lagi.', false);
+                .catch(err => {
+                    const errorMsg = (err && err.message) ? err.message : 'Gagal menghubungi API. Silakan coba lagi.';
+                    this.addMessage('ai', '⚠️ ' + errorMsg, false);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -452,9 +454,9 @@ function copilotChat() {
             if (!text) return '';
             return text
                 // **tebal**
-                .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight:700;">$1</strong>')
+                .replace(/\*\*([\s\S]*?)\*\*/g, '<strong style="font-weight:700;">$1</strong>')
                 // *miring*
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\*([^\*\n]+)\*/g, '<em>$1</em>')
                 // `kode inline`
                 .replace(/`(.*?)`/g, '<code style="padding:1px 6px;background:rgba(99,102,241,0.12);color:#6366f1;border-radius:4px;font-size:10px;font-family:monospace;">$1</code>')
                 // # judul
