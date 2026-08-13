@@ -389,7 +389,7 @@
                 $dbUser = \App\Models\User::where('username', $username)->orWhere('email', $username)->first();
             }
             $navName = $dbUser?->name ?? session('user.name', 'Guest User');
-            $navRole = session('user.role', 'Staff Member');
+            $navRole = $dbUser?->role ?? session('user.role', 'Staff Member');
             $navWords = explode(' ', $navName);
             $navInitials = '';
             foreach ($navWords as $w) { if (!empty($w)) $navInitials .= strtoupper(substr($w, 0, 1)); }

@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
 
     public function showLoginForm()
     {
-        if (session()->has('user')) {
+        if (Auth::check()) {
             return redirect()->route('dashboard.index');
         }
 
@@ -47,6 +48,9 @@ class AuthController extends Controller
         if ($dbUser && Hash::check($password, $dbUser->password)) {
             RateLimiter::clear($throttleKey);
 
+            Auth::login($dbUser);
+            $request->session()->regenerate();
+            // Keep legacy session keys for existing views
             session([
                 'user' => [
                     'id' => $dbUser->id,
@@ -73,8 +77,9 @@ class AuthController extends Controller
     // logout
     public function logout()
     {
-        session()->forget('user');
-        session()->flush();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('login');
     }

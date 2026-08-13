@@ -39,7 +39,7 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
             abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
         }
 
@@ -98,7 +98,7 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
-        if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
             abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
         }
 
@@ -127,7 +127,7 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-        if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
             abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
         }
 

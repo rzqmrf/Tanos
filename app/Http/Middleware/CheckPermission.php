@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\RolePermission;
+use Illuminate\Support\Facades\Auth;
 
 class CheckPermission
 {
@@ -14,15 +14,13 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, string $permission): Response
     {
-        $role = 'Employee';
-        if (session()->has('user')) {
-            $dbUser = \App\Models\User::find(session('user.id'));
-            if ($dbUser) {
-                $role = $dbUser->role;
-            }
-        } else {
+        $user = Auth::user();
+
+        if (! $user) {
             return redirect()->route('login')->withErrors(['username' => 'Silakan masuk terlebih dahulu.']);
         }
+
+        $role = $user->role;
 
         // Check permission in matrix
         if (!RolePermission::hasPermission($role, $permission)) {

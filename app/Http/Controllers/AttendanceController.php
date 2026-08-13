@@ -14,7 +14,7 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $employeeId = session('user.employee_id');
+            $employeeId = auth()->user()?->employee_id;
 
         // 1. Tampilan Self-Service Karyawan Regular
         if ($employeeId) {
@@ -84,7 +84,7 @@ class AttendanceController extends Controller
     {
         // A. Self-Service Clock In / Clock Out dari User Karyawan
         if ($request->has('action')) {
-            $employeeId = session('user.employee_id');
+        $employeeId = auth()->user()?->employee_id;
             if (!$employeeId) {
                 return back()->withErrors(['error' => 'Akses ditolak. Lu gak terhubung ke data pegawai mana pun!']);
             }

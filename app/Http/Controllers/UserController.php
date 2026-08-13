@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,11 +15,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // Redirect to login if user is not in session or not Admin
-        if (!session()->has('user')) {
+        $user = Auth::user();
+
+        if (! $user) {
             return redirect()->route('login');
         }
-        if (session('user.role') !== 'Admin') {
+        if ($user->role !== 'Admin') {
             return redirect()->route('dashboard.index')->withErrors(['error' => 'Akses ditolak. Hanya Administrator yang dapat mengakses menu ini.']);
         }
 
@@ -51,7 +53,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (!session()->has('user') || session('user.role') !== 'Admin') {
+        $user = Auth::user();
+        if (! $user || $user->role !== 'Admin') {
             return redirect()->back()->withErrors(['error' => 'Akses ditolak.']);
         }
 
@@ -81,7 +84,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if (!session()->has('user') || session('user.role') !== 'Admin') {
+        $authUser = Auth::user();
+        if (! $authUser || $authUser->role !== 'Admin') {
             return redirect()->back()->withErrors(['error' => 'Akses ditolak.']);
         }
 
@@ -110,7 +114,7 @@ class UserController extends Controller
         $user->update($updateData);
 
         // If currently logged-in user updates their own details, refresh session
-        if ($user->id === session('user.id')) {
+        if ($user->id === Auth::id()) {
             session([
                 'user' => [
                     'id' => $user->id,
@@ -130,12 +134,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if (!session()->has('user') || session('user.role') !== 'Admin') {
+        $authUser = Auth::user();
+        if (! $authUser || $authUser->role !== 'Admin') {
             return redirect()->back()->withErrors(['error' => 'Akses ditolak.']);
         }
 
         // Prevent self-deletion
-        if ($user->id === session('user.id')) {
+        if ($user->id === Auth::id()) {
             return redirect()->back()->withErrors(['error' => 'Anda tidak diperbolehkan menghapus akun Anda sendiri yang sedang aktif!']);
         }
 

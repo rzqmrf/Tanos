@@ -15,11 +15,7 @@ class EssController extends Controller
 {
     private function getSessionUser()
     {
-        if (!session()->has('user')) {
-            return null;
-        }
-        $username = session('user.username');
-        return User::where('username', $username)->first();
+        return \Illuminate\Support\Facades\Auth::user();
     }
 
     /**

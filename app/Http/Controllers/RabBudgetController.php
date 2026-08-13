@@ -16,7 +16,7 @@ class RabBudgetController extends Controller
             $routeAction = $request->route()->getActionMethod();
             $modifyingActions = ['storeItem', 'updateItem', 'destroyItem', 'sendToSap'];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager'])) {
+                if (!in_array(auth()->user()?->role, ['Admin', 'Project Manager', 'Finance Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin, Project Manager, dan Finance Manager yang dapat melakukan aksi ini.');
                 }
             }

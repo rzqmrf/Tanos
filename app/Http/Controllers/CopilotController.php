@@ -72,16 +72,13 @@ class CopilotController extends Controller
             return $this->jsonResponse($this->missingApiKeyMessage());
         }
 
-        try {
-            $sessionUser = session('user');
-            $isAdmin = false;
-            if ($sessionUser) {
-                $role = is_array($sessionUser) ? ($sessionUser['role'] ?? null) : ($sessionUser->role ?? null);
-                $isAdmin = strtolower($role) === 'admin';
-            }
+try {
+                // Determine if caller has admin role
+                $isAdmin = \Illuminate\Support\Facades\Auth::check() && 
+                           (\Illuminate\Support\Facades\Auth::user()->role ?? '') === 'admin';
 
-            // Cek apakah ada perintah perubahan akses (Permission Command)
-            $actionResult = $this->tryHandlePermissionCommand($request->input('message'), $isAdmin);
+                // Cek apakah ada perintah perubahan akses (Permission Command)
+                $actionResult = $this->tryHandlePermissionCommand($request->input('message'), $isAdmin);
             if ($actionResult !== null) {
                 return $this->jsonResponse($actionResult);
             }

@@ -14,7 +14,7 @@ class WbsController extends Controller
             $routeAction = $request->route()->getActionMethod();
             $modifyingActions = ['store', 'update', 'destroy', 'sendToSap'];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager'])) {
+                if (!in_array(auth()->user()?->role, ['Admin', 'Project Manager', 'Finance Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin, Project Manager, dan Finance Manager yang dapat melakukan aksi ini.');
                 }
             }

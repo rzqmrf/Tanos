@@ -26,16 +26,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Redirect to login if user is not in session
-        if (!session()->has('user')) {
+        $user = auth()->user();
+        if (! $user) {
             return redirect()->route('login');
         }
 
         // If logged-in user is an Employee, serve their custom dashboard view
-        if (session('user.role') === 'Employee') {
-            $employeeId = session('user.employee_id');
+        if ($user->role === 'Employee') {
+            $employeeId = $user->employee_id;
             $employee = $employeeId ? Employee::find($employeeId) : null;
-            $userId = session('user.id');
+            $userId = $user->id;
+
 
             // Fetch dynamic filters for navbar layout alignment
             $months = $this->dashboardService->getMonths();

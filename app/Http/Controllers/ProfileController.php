@@ -7,16 +7,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
     private function getSessionUser()
     {
-        if (!session()->has('user')) {
-            return null;
-        }
-        $username = session('user.username');
-        return User::where('username', $username)->first();
+        return \Illuminate\Support\Facades\Auth::user();
     }
 
     public function edit(Request $request)
@@ -53,11 +50,7 @@ class ProfileController extends Controller
 
         $user->update($validated);
 
-        // Sync with custom session
-        session([
-            'user.name' => $user->name,
-            'user.username' => $user->email
-        ]);
+
 
         return response()->json([
             'message' => 'Profil berhasil diperbarui',

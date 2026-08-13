@@ -16,7 +16,7 @@ class BillingController extends Controller
             $routeAction = $request->route()->getActionMethod();
             $modifyingActions = ['storePranota', 'approvePranota', 'doNota', 'postNota'];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(session('user.role'), ['Admin', 'Finance Manager'])) {
+                if (!in_array(auth()->user()?->role, ['Admin', 'Finance Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin dan Finance Manager yang dapat melakukan aksi ini.');
                 }
             }

@@ -22,7 +22,7 @@ class OrgStructureController extends Controller
                 'ecnStore', 'ecnComplete', 'ecnSendSap'
             ];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+                if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat melakukan aksi ini.');
                 }
             }
@@ -83,7 +83,7 @@ class OrgStructureController extends Controller
 
         // Mock SAP log
         \App\Models\Notification::create([
-            'user_id' => session('user')['id'] ?? 1,
+            'user_id' => Auth::id() ?? 1,
             'title' => 'Unit Sent to MDM SAP',
             'message' => 'Unit ' . $division->name . ' (' . $division->code . ') telah dikirim ke MDM SAP.',
             'type' => 'hcm',
@@ -161,7 +161,7 @@ class OrgStructureController extends Controller
         $job->update(['sent_to_sap' => true]);
 
         \App\Models\Notification::create([
-            'user_id' => session('user')['id'] ?? 1,
+            'user_id' => Auth::id() ?? 1,
             'title' => 'Job Position Sent to SAP',
             'message' => 'Formasi Jabatan ' . $job->name . ' (' . $job->code . ') telah disinkronkan ke SAP.',
             'type' => 'hcm',
@@ -241,7 +241,7 @@ class OrgStructureController extends Controller
         $movement->update(['sent_to_sap' => true]);
 
         \App\Models\Notification::create([
-            'user_id' => session('user')['id'] ?? 1,
+            'user_id' => Auth::id() ?? 1,
             'title' => 'ECN Sent to SAP',
             'message' => 'Dokumen ECN / SK #' . $movement->reference_number . ' telah dikirim & diposting ke SAP.',
             'type' => 'hcm',

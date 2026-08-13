@@ -13,12 +13,7 @@ class NotificationController extends Controller
      */
     private function getAuthenticatedUser()
     {
-        if (!session()->has('user')) {
-            return null;
-        }
-
-        $username = session('user.username');
-        return User::where('username', $username)->first();
+        return \Illuminate\Support\Facades\Auth::user();
     }
 
     /**

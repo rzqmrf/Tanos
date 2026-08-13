@@ -32,28 +32,11 @@
             </div>
         </div>
 
-        @php
-            $name = session('user.name', 'Guest User');
-            $role = session('user.role', 'Staff Member');
-            
-            if (session()->has('user')) {
-                $realUser = \App\Models\User::find(session('user.id'));
-                if ($realUser) {
-                    $name = $realUser->name;
-                    $role = $realUser->role ?? 'Employee';
-                }
-            }
-
-            // Extract initials
-            $words = explode(' ', $name);
-            $initials = '';
-            foreach ($words as $w) {
-                if (!empty($w)) {
-                    $initials .= strtoupper(substr($w, 0, 1));
-                }
-            }
-            $initials = substr($initials, 0, 2);
-        @endphp
+@php
+    $user = auth()->user();
+    $name = $user?->name ?? 'Guest User';
+    $role = $user?->role ?? 'Staff Member';
+@endphp
 
         <!-- User Profile Card -->
         <div class="px-3 py-3 mb-5 bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center space-x-3">

@@ -30,7 +30,7 @@ class TimeManagementController extends Controller
                 'periodStore', 'periodCalculate', 'periodDestroy'
             ];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(session('user.role'), ['Admin', 'HR Manager'])) {
+                if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat melakukan aksi ini.');
                 }
             }
