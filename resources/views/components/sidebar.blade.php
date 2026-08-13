@@ -178,7 +178,7 @@
                     @endif
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'kalender'))
-                        <a href="#" 
+                        <a href="{{ route('reports.index') }}" 
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
@@ -188,7 +188,7 @@
                     @endif
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'laporan'))
-                        <a href="#" 
+                        <a href="{{ route('reports.index') }}" 
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25" />
@@ -287,13 +287,13 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer
                                 </a>
                             </div>
@@ -310,34 +310,34 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_fa'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cost Center
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank Account
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>CoA
                                 </a>
                             </div>
@@ -354,22 +354,22 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'setting_fa'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>FI Settings
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Budget Management
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Set Budget tolerance Profile
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cash Flow Setting
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Coa Mapping Persediaan
                                 </a>
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Open Item Check
                                 </a>
                             </div>
@@ -413,14 +413,14 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'equipment_master'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="#" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Equipment
                                 </a>
                             </div>
                         </div>
 
                         <!-- Nested: Outline Agreement -->
-                        <a href="#" class="block py-1.5 px-3 text-[13px] font-semibold rounded-lg text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
+                        <a href="{{ route('reports.index') }}" class="block py-1.5 px-3 text-[13px] font-semibold rounded-lg text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
                             <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-current font-extrabold mt-0.5">•</span>Outline Agreement</span>
                         </a>
                     </div>

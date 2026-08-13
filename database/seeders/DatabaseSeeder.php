@@ -145,6 +145,9 @@ class DatabaseSeeder extends Seeder
         $roles = ['Staff Operasional', 'Staff Administrasi', 'Supervisor'];
         $faker = \Faker\Factory::create('id_ID');
 
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        Employee::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
         foreach ($regionalsMap as $rName => $targetCount) {
             $existing = Employee::where('regional', $rName)->count();
             $needed = $targetCount - $existing;
