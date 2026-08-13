@@ -18,7 +18,17 @@ class DashboardService
     ];
 
     private array $defaultSegments = [
-        'Enterprise', 'Corporate', 'Government', 'SME', 'Retail'
+        '01. Tenaga Alih Daya Operasional',
+        '02. Tenaga Alih Daya Pengamanan',
+        '03. Pemborongan Pengamanan',
+        '04. Cleaning Service',
+        '05. Pemeliharaan Taman',
+        '06. Pelayanan Pas',
+        '08. Tenaga Hantaran Kendaraan',
+        '09. Tenaga Operator',
+        '11. Lain Lain',
+        '14. Kebersihan',
+        '15. Operasional'
     ];
 
     public function __construct()

@@ -310,8 +310,20 @@
                                 <path d="M9.813 15.904L9 21l-.813-5.096L3 15l5.096-.813L9 9l.813 5.096L15 15l-5.187.904z"/>
                             </svg>
                         </div>
-                        <div class="bub-ai">
-                            <div style="overflow-x:auto;white-space:pre-line;" x-html="formatMarkdown(msg.text)"></div>
+                        <div class="bub-ai relative group">
+                            <div class="bub-text" style="overflow-x:auto;white-space:pre-line;" x-html="formatMarkdown(msg.text)"></div>
+                            <div class="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 text-[11px] text-slate-400">
+                                <span class="font-medium text-slate-400 dark:text-slate-500">Tanos AI Assistant</span>
+                                <div class="flex items-center gap-2">
+                                    <button @click="exportTableToCSV($event)" title="Export Tabel ke CSV/Excel" class="hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 font-semibold transition-colors cursor-pointer">
+                                        📊 Export Excel
+                                    </button>
+                                    <span class="text-slate-300 dark:text-slate-700">•</span>
+                                    <button @click="printAiReport($event)" title="Cetak / Download PDF" class="hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 font-semibold transition-colors cursor-pointer">
+                                        🖨️ Cetak / PDF
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -463,6 +475,76 @@ function copilotChat() {
                 .replace(/^#{1,3}\s+(.*?)$/gm, '<div style="font-weight:700;font-size:13px;margin-top:8px;margin-bottom:4px;">$1</div>')
                 // - bullet
                 .replace(/^\s*[-*]\s+(.*?)$/gm, '<div style="display:flex;align-items:flex-start;gap:6px;margin:2px 0;"><span style="color:#6366f1;flex-shrink:0;">&#8226;</span><span>$1</span></div>');
+        },
+
+        exportTableToCSV(event) {
+            const container = event.target.closest('.bub-ai');
+            if (!container) return;
+
+            const table = container.querySelector('table');
+            let csvContent = "";
+
+            if (table) {
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cols = row.querySelectorAll('th, td');
+                    const rowData = [];
+                    cols.forEach(col => {
+                        let text = col.innerText.replace(/"/g, '""').trim();
+                        rowData.push('"' + text + '"');
+                    });
+                    csvContent += rowData.join(',') + "\n";
+                });
+            } else {
+                let text = container.innerText.replace(/\n+/g, '\n').trim();
+                csvContent = text;
+            }
+
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Tanos_AI_Report_" + new Date().toISOString().slice(0,10) + ".csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+
+        printAiReport(event) {
+            const container = event.target.closest('.bub-ai');
+            if (!container) return;
+
+            const contentHtml = container.querySelector('.bub-text')?.innerHTML || container.innerHTML;
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>TANOS ERP - Laporan AI Copilot</title>
+                    <style>
+                        body { font-family: 'Plus Jakarta Sans', Arial, sans-serif; padding: 24px; color: #1e293b; }
+                        h2 { color: #100b60; margin-bottom: 4px; }
+                        .subtitle { font-size: 12px; color: #64748b; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+                        th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+                        th { background-color: #f8fafc; font-weight: bold; }
+                        .footer { margin-top: 24px; font-size: 10px; color: #94a3b8; text-align: right; }
+                    </style>
+                </head>
+                <body>
+                    <h2>TANOS ERP - Reports & Analytics</h2>
+                    <div class="subtitle">Laporan Hasil Sintesis AI Copilot | Tanggal Cetak: \${new Date().toLocaleString('id-ID')}</div>
+                    <div>\${contentHtml}</div>
+                    <div class="footer">Dicetak dari TANOS ERP System - PT Pelindo ISMA</div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function(){ window.close(); }, 500);
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         },
     };
 }

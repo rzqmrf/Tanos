@@ -61,20 +61,14 @@
                 <div id="projectSegmentChart" class="w-full h-full"></div>
             </div>
             <!-- Custom HTML Legend -->
-            <div class="flex-1 w-full space-y-2 pl-0 sm:pl-4 min-w-0">
+            <div class="flex-1 w-full space-y-1.5 pl-0 sm:pl-4 min-w-0 max-h-52 overflow-y-auto pr-1">
                 <template x-for="(item, index) in chartData.projectsPerSegment" :key="item.category">
-                    <div class="flex items-center justify-between text-xs font-semibold">
+                    <div class="flex items-center justify-between text-xs font-semibold py-0.5">
                         <div class="flex items-center space-x-2.5 min-w-0">
-                            <span :class="[
-                                index === 0 ? 'bg-[#1b3bb6]' : '',
-                                index === 1 ? 'bg-emerald-500' : '',
-                                index === 2 ? 'bg-amber-500' : '',
-                                index === 3 ? 'bg-purple-500' : '',
-                                index === 4 ? 'bg-slate-400' : ''
-                            ]" class="w-3 h-3 rounded-md shrink-0"></span>
-                            <span x-text="item.category" class="text-slate-500 dark:text-slate-400 truncate"></span>
+                            <span :style="'background-color: ' + (['#00a8ff', '#5f27cd', '#10ac84', '#ff9f43', '#ff6b6b', '#ee5253', '#0abde3', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4'][index % 11])" class="w-3 h-3 rounded-md shrink-0"></span>
+                            <span x-text="item.category" class="text-slate-700 dark:text-slate-200 truncate"></span>
                         </div>
-                        <div class="text-slate-700 dark:text-slate-300 shrink-0 pl-2">
+                        <div class="text-slate-800 dark:text-slate-200 shrink-0 pl-2">
                             <span x-text="item.value"></span>
                             <span class="text-slate-400 dark:text-slate-500 font-medium ml-1"
                                   x-text="'(' + (stats.totalActiveProjects.raw > 0 ? ((item.value / stats.totalActiveProjects.raw) * 100).toFixed(1) : 0) + '%)' "></span>

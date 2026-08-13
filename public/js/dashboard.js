@@ -106,7 +106,7 @@ function initProjectSegmentChart(data) {
         chart: { ...baseOptions.chart, type: 'donut', height: 176 },
         series: values,
         labels: labels,
-        colors: PALETTE,
+        colors: ['#00a8ff', '#5f27cd', '#10ac84', '#ff9f43', '#ff6b6b', '#ee5253', '#0abde3', '#10b981', '#f59e0b', '#8b5cf6', '#06b6d4'],
         plotOptions: {
             pie: {
                 donut: {
