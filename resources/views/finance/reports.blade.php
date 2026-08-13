@@ -18,7 +18,7 @@
     
     <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Halaman Sedang Dalam Pengembangan</h1>
     <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mb-8 leading-relaxed">
-        Kami sedang menyiapkan modul Penggajian (Payroll) otomatis. Fitur ini akan mengintegrasikan slip gaji bulanan, rincian tunjangan, potongan pajak, serta BPJS untuk setiap pegawai.
+        Modul ini sedang dalam tahap pengembangan dan penyempurnaan fitur sistem.
     </p>
     
     <a href="{{ route('dashboard.index') }}" class="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-5 py-3 rounded-xl shadow-md shadow-blue-500/10 transition-all duration-150 cursor-pointer">
