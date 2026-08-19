@@ -252,8 +252,8 @@
                                    class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isAccessControls ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Access Controls
                                 </a>
-                                <a href="{{ route('project.config') }}" 
-                                   class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isProjectConfig ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('peo.index') }}" 
+                                   class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('peo.*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>PEO Setting
                                 </a>
                             </div>

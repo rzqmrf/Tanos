@@ -14,11 +14,13 @@
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Master Data: Projects</h1>
-                <p class="text-sm text-slate-400 dark:text-slate-500">Manajemen kontrak, alokasi anggaran, integrasi SAP Cost/Fund Center, dan struktur WBS proyek.</p>
+                <p class="text-sm text-slate-400 dark:text-slate-500">Manajemen proyek, alokasi Cost Center & Fund Center untuk pencatatan Expense, Revenue, & Budgeting.</p>
             </div>
         </div>
         @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
-        <button onclick="document.getElementById('modal-create-project').classList.remove('hidden')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition shrink-0 cursor-pointer">
+        <button onclick="document.getElementById('modal-create-project').classList.remove('hidden')" 
+            style="background-color: #007bff; color: #ffffff;"
+            class="hover:opacity-90 text-white px-4 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition shrink-0 cursor-pointer border-0">
             + Tambah Project
         </button>
         @endif
@@ -51,7 +53,7 @@
                         <th class="p-4 align-middle w-[160px] min-w-[160px]">No. Kontrak (OA)</th>
                         <th class="p-4 align-middle w-[220px] min-w-[220px]">Masa Berlaku</th>
                         <th class="p-4 align-middle w-[150px] min-w-[150px]">Segmen & Region</th>
-                        <th class="p-4 align-middle w-[140px] min-w-[140px]">SAP Center</th>
+                        <th class="p-4 align-middle w-[180px] min-w-[180px]">Cost & Fund Center SAP</th>
                         <th class="p-4 align-middle text-right w-[140px] min-w-[140px]">Cost Budget</th>
                         <th class="p-4 align-middle text-center w-[100px] min-w-[100px]">Status</th>
                         <th class="p-4 align-middle text-center w-[120px] min-w-[120px]">Aksi</th>
@@ -79,8 +81,8 @@
                             <span class="block text-slate-400 dark:text-slate-500 font-normal mt-0.5">{{ $item->regional }}</span>
                         </td>
                         <td class="p-4 align-middle text-[11px] font-mono whitespace-nowrap">
-                            <span class="block text-slate-500 dark:text-slate-450"><span class="font-bold text-slate-400/80">CC:</span> {{ $item->cost_center ?? '-' }}</span>
-                            <span class="block text-slate-500 dark:text-slate-450 mt-0.5"><span class="font-bold text-slate-400/80">FC:</span> {{ $item->fund_center ?? '-' }}</span>
+                            <span class="block text-slate-700 dark:text-slate-200"><span class="font-bold text-blue-600 dark:text-blue-400">CC:</span> {{ $item->cost_center ?? ('CC-' . strtoupper(str_replace([' ', '-'], '', $item->project_code))) }}</span>
+                            <span class="block text-slate-700 dark:text-slate-200 mt-0.5"><span class="font-bold text-purple-600 dark:text-purple-400">FC:</span> {{ $item->fund_center ?? ('FC-' . strtoupper(str_replace([' ', '-'], '', $item->project_code))) }}</span>
                         </td>
                         <td class="p-4 align-middle text-right font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
                             Rp {{ number_format($item->cost, 0, ',', '.') }}
@@ -101,13 +103,13 @@
                                     </svg>
                                 </a>
                                 @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
-                                <button onclick="openEditModal({{ json_encode($item) }})" class="p-1.5 text-blue-650 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-950/30 rounded-lg transition cursor-pointer" title="Ubah Proyek">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" /></svg>
+                                <button onclick="openEditModal({{ json_encode($item) }})" class="p-1.5 text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg transition" title="Edit Proyek">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" /></svg>
                                 </button>
-                                <form action="/dashboard/projects/{{ $item->id }}" method="POST" onsubmit="return confirm('Yakin hapus project ini?')" class="inline">
+                                <form action="/dashboard/projects/{{ $item->id }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus proyek ini?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="p-1.5 text-red-650 dark:text-red-400 hover:text-red-855 dark:hover:text-red-300 bg-red-50 dark:bg-red-950/30 rounded-lg transition cursor-pointer" title="Hapus Proyek">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9 9m12 6c0 1.66-1.34 3-3 3H6c-1.34 0-3-1.34-3-3V7h18v8Z" /></svg>
+                                    <button type="submit" class="p-1.5 text-rose-600 dark:text-rose-400 hover:text-rose-800 bg-rose-50 dark:bg-rose-950/30 rounded-lg transition" title="Hapus Proyek">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
                                     </button>
                                 </form>
                                 @endif
@@ -116,33 +118,29 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="p-12 text-center">
-                            <div class="rounded-xl bg-slate-50 dark:bg-slate-800/10 border border-slate-200 dark:border-slate-800 p-6 max-w-md mx-auto">
-                                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Data project belum ditambahkan.</p>
-                            </div>
-                        </td>
+                        <td colspan="9" class="p-8 text-center text-slate-400">Belum ada data proyek.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
+        
         <div class="mt-4">
             {{ $projects->links() }}
         </div>
     </div>
 </div>
 
-<!-- MODAL TAMBAH -->
+<!-- MODAL CREATE PROJECT -->
 <div id="modal-create-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
-            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Tambah Data Project</h3>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">+ Tambah Data Project (Entry Project)</h3>
             <button onclick="document.getElementById('modal-create-project').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
             </button>
         </div>
-        <form action="/dashboard/projects" method="POST" class="space-y-4">
+        <form action="{{ route('projects.store') }}" method="POST" class="space-y-4">
             @csrf
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -151,29 +149,29 @@
                     <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Detail Kontrak & Proyek</h4>
                     
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Kode Proyek / SAP</label>
-                        <input type="text" name="project_code" required placeholder="Contoh: S/PS-2026-01-0001" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Kode Proyek / SAP *</label>
+                        <input type="text" name="project_code" required placeholder="Contoh: S/PS-2024-04-00062" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Proyek</label>
-                        <input type="text" name="project_name" required placeholder="Contoh: Jasa TAD Terminal Belawan" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Proyek *</label>
+                        <input type="text" name="project_name" required placeholder="Contoh: PBR - BJTI - PENGAMANAN SURABAYA" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pelanggan (Customer)</label>
-                        <input type="text" name="customer_name" required placeholder="Contoh: PT Pelindo Multi Terminal" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pelanggan (Customer) *</label>
+                        <input type="text" name="customer_name" required placeholder="Contoh: PT BERLIAN JASA TERMINAL INDONESIA" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA)</label>
-                        <input type="text" name="contract_number" required placeholder="Contoh: OA-2026-0819" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA) *</label>
+                        <input type="text" name="contract_number" required placeholder="Contoh: OA-2024-0098" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Mulai</label>
-                            <input type="date" name="start_date" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Mulai *</label>
+                            <input type="date" name="start_date" value="{{ date('Y-m-d') }}" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Selesai</label>
-                            <input type="date" name="end_date" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Selesai *</label>
+                            <input type="date" name="end_date" value="{{ date('Y-12-31') }}" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
                 </div>
@@ -183,9 +181,8 @@
                     <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Integrasi SAP & Anggaran</h4>
                     
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan Pengikatan</label>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan Pengikatan *</label>
                         <select name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                            <option value="">-- Pilih Bulan --</option>
                             @foreach($months as $m)
                                 <option value="{{ $m }}">{{ $m }}</option>
                             @endforeach
@@ -193,7 +190,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
+                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional *</label>
                             <select name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                                 <option value="">-- Pilih Regional --</option>
                                 @foreach($regionals as $reg)
@@ -202,7 +199,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
+                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment *</label>
                             <select name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                                 <option value="">-- Pilih Segment --</option>
                                 @foreach($segments as $seg)
@@ -211,22 +208,32 @@
                             </select>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Center SAP</label>
-                            <input type="text" name="cost_center" required placeholder="Contoh: CC1001" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+
+                    {{-- Cost Center & Fund Center Auto-Generation Container --}}
+                    <div class="p-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/70 rounded-xl space-y-2">
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-blue-900 dark:text-blue-200">
+                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 10.5 10.875v-1.5a3.375 3.375 0 0 0-3.375-3.375H4.5" /></svg>
+                            <span>Otomatis Membuat Wadah SAP:</span>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Fund Center SAP</label>
-                            <input type="text" name="fund_center" required placeholder="Contoh: FC1001" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <div class="grid grid-cols-2 gap-2 text-[11px]">
+                            <div>
+                                <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1">Cost Center SAP</label>
+                                <input type="text" name="cost_center" placeholder="Otomatis: CC-[KODE]" class="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-lg text-xs font-mono focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1">Fund Center SAP</label>
+                                <input type="text" name="fund_center" placeholder="Otomatis: FC-[KODE]" class="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-lg text-xs font-mono focus:outline-none focus:border-blue-500">
+                            </div>
                         </div>
+                        <p class="text-[10px] text-blue-700 dark:text-blue-300 font-medium">Bila dikosongkan, sistem otomatis menerbitkan Cost Center & Fund Center sebagai wadah Expense, Revenue, & Budgeting proyek.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Budget (IDR) *</label>
+                        <input type="number" name="cost" required placeholder="Contoh: 500000000" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Budget (IDR)</label>
-                        <input type="number" name="cost" required placeholder="Nominal Anggaran" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Status Proyek</label>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Status Proyek *</label>
                         <select name="active" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
@@ -237,13 +244,13 @@
 
             <div class="flex justify-end space-x-2 pt-4 border-t border-slate-150 dark:border-slate-800">
                 <button type="button" onclick="document.getElementById('modal-create-project').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">Batal</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer">Simpan Data</button>
+                <button type="submit" style="background-color: #007bff; color: #ffffff;" class="px-4 py-2 hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer border-0">Simpan Data</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- MODAL EDIT -->
+<!-- MODAL EDIT PROJECT -->
 <div id="modal-edit-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
@@ -256,21 +263,21 @@
             @csrf @method('PUT')
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Kolom Kiri: Detail Proyek & Pelanggan -->
+                <!-- Kolom Kiri -->
                 <div class="space-y-4">
                     <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Detail Kontrak & Proyek</h4>
                     
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Kode Proyek / SAP</label>
-                        <input type="text" id="edit-project-code" name="project_code" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <input type="text" id="edit-project-code" name="project_code" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Proyek</label>
-                        <input type="text" id="edit-project-name" name="project_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <input type="text" id="edit-project-name" name="project_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pelanggan (Customer)</label>
-                        <input type="text" id="edit-customer-name" name="customer_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <input type="text" id="edit-customer-name" name="customer_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA)</label>
@@ -288,7 +295,7 @@
                     </div>
                 </div>
 
-                <!-- Kolom Kanan: Finansial & SAP Integration -->
+                <!-- Kolom Kanan -->
                 <div class="space-y-4">
                     <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Integrasi SAP & Anggaran</h4>
                     
@@ -321,11 +328,11 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Center SAP</label>
-                            <input type="text" id="edit-cost-center" name="cost_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                            <input type="text" id="edit-cost-center" name="cost_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Fund Center SAP</label>
-                            <input type="text" id="edit-fund-center" name="fund_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                            <input type="text" id="edit-fund-center" name="fund_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
                         </div>
                     </div>
                     <div>
@@ -344,45 +351,36 @@
 
             <div class="flex justify-end space-x-2 pt-4 border-t border-slate-150 dark:border-slate-800">
                 <button type="button" onclick="document.getElementById('modal-edit-project').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">Batal</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer">Simpan Perubahan</button>
+                <button type="submit" style="background-color: #007bff; color: #ffffff;" class="px-4 py-2 hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer border-0">Simpan Perubahan</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function openEditModal(project) {
-        const modal = document.getElementById('modal-edit-project');
-        const form = document.getElementById('form-edit-project');
-        form.action = `/dashboard/projects/${project.id}`;
-        
-        document.getElementById('edit-project-code').value = project.project_code || '';
-        document.getElementById('edit-project-name').value = project.project_name || '';
-        document.getElementById('edit-customer-name').value = project.customer_name || '';
-        document.getElementById('edit-contract-number').value = project.contract_number || '';
-        
-        // Handle dates formatting (YYYY-MM-DD)
-        let startDateStr = '';
-        if (project.start_date) {
-            startDateStr = project.start_date.substring(0, 10);
-        }
-        let endDateStr = '';
-        if (project.end_date) {
-            endDateStr = project.end_date.substring(0, 10);
-        }
-        
-        document.getElementById('edit-start-date').value = startDateStr;
-        document.getElementById('edit-end-date').value = endDateStr;
-        
-        document.getElementById('edit-cost-center').value = project.cost_center || '';
-        document.getElementById('edit-fund-center').value = project.fund_center || '';
-        document.getElementById('edit-month').value = project.month || '';
-        document.getElementById('edit-regional').value = project.regional || '';
-        document.getElementById('edit-segment').value = project.segment || '';
-        document.getElementById('edit-cost').value = project.cost || '';
-        document.getElementById('edit-active').value = project.active !== undefined ? (project.active ? '1' : '0') : '1';
-        
-        modal.classList.remove('hidden');
+function openEditModal(project) {
+    document.getElementById('form-edit-project').action = '/dashboard/projects/' + project.id;
+    document.getElementById('edit-project-code').value = project.project_code || '';
+    document.getElementById('edit-project-name').value = project.project_name || '';
+    document.getElementById('edit-customer-name').value = project.customer_name || '';
+    document.getElementById('edit-contract-number').value = project.contract_number || '';
+    
+    if (project.start_date) {
+        document.getElementById('edit-start-date').value = project.start_date.substring(0, 10);
     }
+    if (project.end_date) {
+        document.getElementById('edit-end-date').value = project.end_date.substring(0, 10);
+    }
+
+    document.getElementById('edit-month').value = project.month || '';
+    document.getElementById('edit-regional').value = project.regional || '';
+    document.getElementById('edit-segment').value = project.segment || '';
+    document.getElementById('edit-cost-center').value = project.cost_center || '';
+    document.getElementById('edit-fund-center').value = project.fund_center || '';
+    document.getElementById('edit-cost').value = project.cost || 0;
+    document.getElementById('edit-active').value = project.active ? 1 : 0;
+
+    document.getElementById('modal-edit-project').classList.remove('hidden');
+}
 </script>
 @endsection

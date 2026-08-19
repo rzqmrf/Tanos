@@ -13,9 +13,28 @@ use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $dashboardService = new DashboardService();
+
+        $perPage = (int) $request->get('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
+        $query = Employee::query();
+
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%")
+                  ->orWhere('identity_card_number', 'like', "%{$search}%")
+                  ->orWhere('npwp_number', 'like', "%{$search}%")
+                  ->orWhere('place_of_birth', 'like', "%{$search}%")
+                  ->orWhere('nipp', 'like', "%{$search}%");
+            });
+        }
 
         $regionals = Regional::with('subRegionals')->orderBy('name')->get();
         $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
@@ -28,12 +47,21 @@ class EmployeeController extends Controller
         }
 
         return view('hr.employees', [
-            'employees' => Employee::oldest()->paginate(25),
+            'employees' => $query->orderBy('id', 'asc')->paginate($perPage)->withQueryString(),
+            'perPage' => $perPage,
+            'search' => $request->get('search', ''),
             'regionals' => $regionals,
             'subRegionals' => $subRegionals,
             'segments' => $segments,
             'religions' => $religions,
             'months' => $months,
+        ]);
+    }
+
+    public function show(Employee $employee)
+    {
+        return view('hr.employee-detail', [
+            'employee' => $employee,
         ]);
     }
 

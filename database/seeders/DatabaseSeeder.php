@@ -148,17 +148,76 @@ class DatabaseSeeder extends Seeder
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         Employee::truncate();
         \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
         foreach ($regionalsMap as $rName => $targetCount) {
             $existing = Employee::where('regional', $rName)->count();
             $needed = $targetCount - $existing;
             for ($i = 0; $i < $needed; $i++) {
                 $empName = $faker->name;
                 $roleName = $roles[$i % count($roles)];
+                $gender = $faker->randomElement(['Laki-Laki', 'Laki-Laki', 'Perempuan']);
                 Employee::create([
                     'name' => $empName,
                     'role' => $roleName,
                     'month' => $currentMonthStr,
                     'regional' => $rName,
+                    'place_of_birth' => $faker->randomElement(['SURABAYA', 'JAKARTA', 'MEDAN', 'MAKASSAR', 'SEMARANG', 'BANDUNG']),
+                    'date_of_birth' => $faker->dateTimeBetween('-40 years', '-20 years')->format('Y-m-d'),
+                    'gender' => $gender,
+                    'identity_card_number' => $faker->numerify('350722##########'),
+                    'npwp_number' => $faker->randomElement([$faker->numerify('###############'), '-']),
+                    'valid_from' => '2024-08-' . sprintf('%02d', $faker->numberBetween(1, 20)),
+                    'valid_to' => '9999-12-31',
+                    'external_id' => '000' . $faker->numberBetween(48730, 99999),
+                    'document_status' => 'Completed',
+                    'segment' => $faker->randomElement([
+                        '01. Tenaga Alih Daya Operasional',
+                        '02. Tenaga Alih Daya Pengamanan',
+                        '03. Pemborongan Pengamanan',
+                        '04. Cleaning Service',
+                        '05. Pemeliharaan Taman',
+                        '06. Pelayanan Pas',
+                        '08. Tenaga Hantaran Kendaraan',
+                        '09. Tenaga Operator',
+                        '11. Lain Lain',
+                        '14. Kebersihan',
+                        '15. Operasional'
+                    ]),
+                    'religion' => $faker->randomElement(['Islam', 'Islam', 'Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha']),
+                    'nipp' => 'NIPP-' . $faker->unique()->numberBetween(100000, 999999),
+                    'bank_name' => $faker->randomElement(['Bank Mandiri', 'BRI', 'BNI', 'BCA']),
+                    'bank_account_number' => $faker->numerify('##########'),
+                    'bank_account_name' => $empName,
+                    'ptkp_status' => $faker->randomElement(['TK/0', 'TK/1', 'K/0', 'K/1', 'K/2']),
+                    'tmt_date' => $faker->dateTimeBetween('-3 years', 'now')->format('Y-m-d'),
+                    'bpjs_kesehatan_number' => $faker->numerify('#############'),
+                    'bpjs_ketenagakerjaan_number' => $faker->numerify('###########'),
+                ]);
+            }
+            Employee::where('regional', $rName)->update(['month' => $currentMonthStr]);
+        }
+
+        foreach ($regionalsMap as $rName => $targetCount) {
+            $existing = Employee::where('regional', $rName)->count();
+            $needed = $targetCount - $existing;
+            for ($i = 0; $i < $needed; $i++) {
+                $empName = $faker->name;
+                $roleName = $roles[$i % count($roles)];
+                $gender = $faker->randomElement(['Laki-Laki', 'Laki-Laki', 'Perempuan']);
+                Employee::create([
+                    'name' => $empName,
+                    'role' => $roleName,
+                    'month' => $currentMonthStr,
+                    'regional' => $rName,
+                    'place_of_birth' => $faker->randomElement(['SURABAYA', 'JAKARTA', 'MEDAN', 'MAKASSAR', 'SEMARANG', 'BANDUNG']),
+                    'date_of_birth' => $faker->dateTimeBetween('-40 years', '-20 years')->format('Y-m-d'),
+                    'gender' => $gender,
+                    'identity_card_number' => $faker->numerify('350722##########'),
+                    'npwp_number' => $faker->randomElement([$faker->numerify('###############'), '-']),
+                    'valid_from' => '2024-08-' . sprintf('%02d', $faker->numberBetween(1, 20)),
+                    'valid_to' => '9999-12-31',
+                    'external_id' => '000' . $faker->numberBetween(48730, 99999),
+                    'document_status' => 'Completed',
                     'segment' => $faker->randomElement([
                         '01. Tenaga Alih Daya Operasional',
                         '02. Tenaga Alih Daya Pengamanan',

@@ -17,6 +17,7 @@ use App\Http\Controllers\EssController;
 use App\Http\Controllers\RabBudgetController;
 use App\Http\Controllers\OrgStructureController;
 use App\Http\Controllers\TimeManagementController;
+use App\Http\Controllers\PeoSettingController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -55,6 +56,12 @@ Route::prefix('dashboard')->group(function () {
         ]);
         Route::post('access-controls/roles', [AccessControlController::class, 'addRole'])->name('access.controls.add-role');
         Route::resource('users', UserController::class);
+
+        Route::get('peo-settings', [PeoSettingController::class, 'index'])->name('peo.index');
+        Route::post('peo-settings', [PeoSettingController::class, 'store'])->name('peo.store');
+        Route::get('peo-settings/{id}', [PeoSettingController::class, 'show'])->name('peo.show');
+        Route::put('peo-settings/{id}', [PeoSettingController::class, 'update'])->name('peo.update');
+        Route::delete('peo-settings/{id}', [PeoSettingController::class, 'destroy'])->name('peo.destroy');
     });
 
     Route::resource('projects', ProjectController::class)->middleware('permission:projects');

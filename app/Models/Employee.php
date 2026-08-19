@@ -14,6 +14,17 @@ class Employee extends Model
         'sub_regional',
         'segment',
         'religion',
+        'place_of_birth',
+        'date_of_birth',
+        'gender',
+        'identity_card_number',
+        'npwp_number',
+        'valid_from',
+        'valid_to',
+        'external_id',
+        'document_status',
+        'name_and_title',
+        'suku',
         'nipp',
         'bank_name',
         'bank_account_number',
@@ -28,6 +39,9 @@ class Employee extends Model
 
     protected $casts = [
         'tmt_date' => 'date',
+        'date_of_birth' => 'date',
+        'valid_from' => 'date',
+        'valid_to' => 'date',
     ];
 
     public function attendances()

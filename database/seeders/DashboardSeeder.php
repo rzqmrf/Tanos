@@ -72,6 +72,134 @@ class DashboardSeeder extends Seeder
             Segment::firstOrCreate(['name' => $seg]);
         }
 
+        // Seed PEO Settings
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        \App\Models\PeoSetting::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+        $peoRecords = [
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT BERLIAN JASA TERMINAL INDONESIA',
+                'project_name' => 'PBR - BJTI - PENGAMANAN DAN CLEANING SERVICE SURABAYA',
+                'project_code' => 'S/PS-2024-04-00062',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT BERLIAN JASA TERMINAL INDONESIA',
+                'project_name' => 'PBR - BJTI - PENGAMANAN CY EKS.INDONESIA POWER SURABAYA',
+                'project_code' => 'S/PS-2024-03-00006',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT BERLIAN JASA TERMINAL INDONESIA',
+                'project_name' => 'TAD - BJTI - JOPRO SURABAYA',
+                'project_code' => 'S/PS-2024-01-00013',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT BERLIAN JASA TERMINAL INDONESIA',
+                'project_name' => 'PBR - BJTI - OPERASIONAL DAN PENGAMANAN EKS.CY UDATIN SURABAYA',
+                'project_code' => 'S/PS-2024-01-00241',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT PELINDO MARINE SERVICE',
+                'project_name' => 'TAD - PMS - JOPRO MAKASSAR',
+                'project_code' => 'S/PS-2024-01-00417',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT PELINDO MARINE SERVICE',
+                'project_name' => 'TAD - PMS - JOPRO BONTANG',
+                'project_code' => 'S/PS-2024-01-00364',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Berita Acara',
+                'customer' => 'PT PELINDO MARINE SERVICE',
+                'project_name' => 'TAD - PMS - JOPRO AMBON',
+                'project_code' => 'S/PS-2024-01-00368',
+                'tab_category' => 'Berita Acara'
+            ],
+            [
+                'document_type' => 'Surat Keluar',
+                'customer' => 'PT BERLIAN JASA TERMINAL INDONESIA',
+                'project_name' => 'SK - BJTI - OPERASIONAL TERMINAL SURABAYA',
+                'project_code' => 'SK/PS-2024-05-00102',
+                'tab_category' => 'Surat Keluar'
+            ],
+            [
+                'document_type' => 'Surat Keluar',
+                'customer' => 'PT PELINDO MARINE SERVICE',
+                'project_name' => 'SK - PMS - LAYANAN KAPAL MAKASSAR',
+                'project_code' => 'SK/PS-2024-05-00108',
+                'tab_category' => 'Surat Keluar'
+            ],
+        ];
+
+        foreach ($peoRecords as $rec) {
+            $setting = \App\Models\PeoSetting::create($rec);
+
+            // Seed Penandatangan (Signers) matching screenshot
+            \App\Models\PeoSigner::create([
+                'peo_setting_id' => $setting->id,
+                'no' => 1,
+                'jenis_pihak' => 'Internal',
+                'kode_jabatan' => '80099710',
+                'nama_jabatan' => 'General Manager Dukungan Bisnis PT Pelindo Daya Sejahtera',
+                'nama_pegawai' => 'Sayudi - 0171050001',
+                'pihak' => 2,
+                'priority' => 1,
+            ]);
+
+            \App\Models\PeoSigner::create([
+                'peo_setting_id' => $setting->id,
+                'no' => 2,
+                'jenis_pihak' => 'External',
+                'kode_jabatan' => '80131477',
+                'nama_jabatan' => 'Vice President SDM dan Umum',
+                'nama_pegawai' => 'Subiyanto - 102621',
+                'pihak' => 1,
+                'priority' => 1,
+            ]);
+
+            // Seed Pemaraf (Initialers) matching screenshot
+            \App\Models\PeoInitial::create([
+                'peo_setting_id' => $setting->id,
+                'no' => 1,
+                'jenis_pihak' => 'Internal',
+                'kode_jabatan' => '80099586',
+                'nama_jabatan' => 'Superintendent Operasi dan HSSE',
+                'nama_pegawai' => 'Muhammad Ilham Permana - 19931101685',
+                'priority' => 1,
+            ]);
+
+            \App\Models\PeoInitial::create([
+                'peo_setting_id' => $setting->id,
+                'no' => 2,
+                'jenis_pihak' => 'Internal',
+                'kode_jabatan' => '80099585',
+                'nama_jabatan' => 'Manager Operasi dan HSSE',
+                'nama_pegawai' => 'Mahar Bagus Utomo - 105975',
+                'priority' => 1,
+            ]);
+
+            \App\Models\PeoInitial::create([
+                'peo_setting_id' => $setting->id,
+                'no' => 3,
+                'jenis_pihak' => 'Internal',
+                'kode_jabatan' => '80099914',
+                'nama_jabatan' => 'Manager Keuangan',
+                'nama_pegawai' => 'Mamu Yuwono - 102714',
+                'priority' => 1,
+            ]);
+        }
+
         // Seed Absent Types
         $absents = [
             ['code' => 'CT', 'name' => 'Cuti Tahunan', 'gender' => 'All', 'priority_level' => 1, 'deduction_absent' => 'No', 'valid_from' => '2024-01-01', 'valid_to' => '9999-12-31', 'active' => true],
