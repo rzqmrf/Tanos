@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\EmployeeMovement;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class OrgStructureController extends Controller

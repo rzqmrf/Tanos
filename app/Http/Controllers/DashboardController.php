@@ -120,7 +120,7 @@ class DashboardController extends Controller
     public function apiData(Request $request)
     {
         // Return 401 Unauthorized for API requests if not logged in
-        if (!session()->has('user')) {
+        if (!auth()->user()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

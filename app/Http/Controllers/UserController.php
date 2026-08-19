@@ -113,19 +113,6 @@ class UserController extends Controller
 
         $user->update($updateData);
 
-        // If currently logged-in user updates their own details, refresh session
-        if ($user->id === Auth::id()) {
-            session([
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'username' => $user->username,
-                    'role' => $user->role,
-                    'employee_id' => $user->employee_id,
-                ]
-            ]);
-        }
-
         return redirect()->back()->with('success', 'Akun user berhasil diperbarui!');
     }
 

@@ -24,7 +24,12 @@ class AttendanceController extends Controller
             return view('hr.attendances-employee', [
                 'employee'        => $employee,
                 'todayAttendance' => Attendance::where('employee_id', $employeeId)->where('date', $today)->first(),
-                'history'         => Attendance::where('employee_id', $employeeId)->latest('date')->paginate(10)->withQueryString(),
+                'history'         => Attendance::where('employee_id', $employeeId)
+                                        ->where('date', '<=', $today)
+                                        ->latest('date')->paginate(10)->withQueryString(),
+                'upcoming'        => Attendance::where('employee_id', $employeeId)
+                                        ->where('date', '>', $today)
+                                        ->oldest('date')->get(),
                 'today'           => $today,
             ]);
         }
@@ -121,7 +126,11 @@ class AttendanceController extends Controller
             }
         }
 
-        // B. CRUD Input/Edit Presensi Manual dari Admin
+        // B. CRUD Input/Edit Presensi Manual dari Admin (HR/Admin only)
+        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
+            abort(403, 'Hanya Admin/HR yang boleh input manual presensi.');
+        }
+
         $validData = $request->validate([
             'employee_id'    => 'required|exists:employees,id',
             'date'           => 'required',
@@ -165,6 +174,10 @@ class AttendanceController extends Controller
 
     public function destroy(Attendance $attendance)
     {
+        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
+            abort(403, 'Hanya Admin/HR yang boleh hapus presensi.');
+        }
+
         $attendance->delete();
         return back()->with('success', 'Catatan kehadiran berhasil dihapus!');
     }

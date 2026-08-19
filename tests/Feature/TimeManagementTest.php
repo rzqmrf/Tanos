@@ -75,7 +75,7 @@ class TimeManagementTest extends TestCase
 
     public function test_absent_types_index_accessible_by_admin()
     {
-        $response = $this->withSession(['user' => $this->admin])->get(route('org.absent-types.index'));
+        $response = $this->actingAs($this->admin)->get(route('org.absent-types.index'));
         $response->assertStatus(200);
     }
 
@@ -91,14 +91,14 @@ class TimeManagementTest extends TestCase
             'valid_to' => '2026-08-31',
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->post(route('org.absent-types.store'), $data);
+        $response = $this->actingAs($this->admin)->post(route('org.absent-types.store'), $data);
         $response->assertRedirect();
         $this->assertDatabaseHas('absent_types', ['code' => 'CT_TEST']);
     }
 
     public function test_schedules_index_accessible_by_admin()
     {
-        $response = $this->withSession(['user' => $this->admin])->get(route('org.schedules.index'));
+        $response = $this->actingAs($this->admin)->get(route('org.schedules.index'));
         $response->assertStatus(200);
     }
 
@@ -111,7 +111,7 @@ class TimeManagementTest extends TestCase
             'work_end' => '06:00',
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->post(route('org.schedules.group.store'), $data);
+        $response = $this->actingAs($this->admin)->post(route('org.schedules.group.store'), $data);
         $response->assertRedirect();
         $this->assertDatabaseHas('schedule_groups', ['name' => 'Group Shift Malam']);
     }
@@ -132,7 +132,7 @@ class TimeManagementTest extends TestCase
             'valid_to' => '2026-08-31'
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->post(route('org.schedules.assign.store'), $data);
+        $response = $this->actingAs($this->admin)->post(route('org.schedules.assign.store'), $data);
         $response->assertRedirect();
         $this->assertDatabaseHas('schedule_assignments', ['employee_id' => $this->employee->id]);
     }
@@ -148,7 +148,7 @@ class TimeManagementTest extends TestCase
             'early_departure_minutes' => 10
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->post(route('org.evaluations.store'), $data);
+        $response = $this->actingAs($this->admin)->post(route('org.evaluations.store'), $data);
         $response->assertRedirect();
         $this->assertDatabaseHas('time_evaluations', ['name' => 'Aturan Test 1', 'is_active' => true]);
     }
@@ -219,7 +219,7 @@ class TimeManagementTest extends TestCase
             'status' => 'Draft'
         ]);
 
-        $response = $this->withSession(['user' => $this->admin])->post(route('org.periods.calculate', $period->id));
+        $response = $this->actingAs($this->admin)->post(route('org.periods.calculate', $period->id));
         $response->assertRedirect();
         
         // Assert results are computed:
@@ -261,11 +261,11 @@ class TimeManagementTest extends TestCase
             'active' => false
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->put(route('org.absent-types.update', $type->id), $updateData);
+        $response = $this->actingAs($this->admin)->put(route('org.absent-types.update', $type->id), $updateData);
         $response->assertRedirect();
         $this->assertDatabaseHas('absent_types', ['code' => 'CT_U2', 'active' => false]);
 
-        $response = $this->withSession(['user' => $this->admin])->delete(route('org.absent-types.destroy', $type->id));
+        $response = $this->actingAs($this->admin)->delete(route('org.absent-types.destroy', $type->id));
         $response->assertRedirect();
         $this->assertDatabaseMissing('absent_types', ['id' => $type->id]);
     }
@@ -287,7 +287,7 @@ class TimeManagementTest extends TestCase
             'is_active' => false
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->put(route('org.schedules.group.update', $group->id), $updateData);
+        $response = $this->actingAs($this->admin)->put(route('org.schedules.group.update', $group->id), $updateData);
         $response->assertRedirect();
         $this->assertDatabaseHas('schedule_groups', ['name' => 'Group U2', 'is_active' => false]);
 
@@ -298,11 +298,11 @@ class TimeManagementTest extends TestCase
             'valid_to' => '2026-08-31'
         ]);
 
-        $response = $this->withSession(['user' => $this->admin])->delete(route('org.schedules.assign.destroy', $assign->id));
+        $response = $this->actingAs($this->admin)->delete(route('org.schedules.assign.destroy', $assign->id));
         $response->assertRedirect();
         $this->assertDatabaseMissing('schedule_assignments', ['id' => $assign->id]);
 
-        $response = $this->withSession(['user' => $this->admin])->delete(route('org.schedules.group.destroy', $group->id));
+        $response = $this->actingAs($this->admin)->delete(route('org.schedules.group.destroy', $group->id));
         $response->assertRedirect();
         $this->assertDatabaseMissing('schedule_groups', ['id' => $group->id]);
     }
@@ -327,11 +327,11 @@ class TimeManagementTest extends TestCase
             'is_active' => false
         ];
 
-        $response = $this->withSession(['user' => $this->admin])->put(route('org.evaluations.update', $eval->id), $updateData);
+        $response = $this->actingAs($this->admin)->put(route('org.evaluations.update', $eval->id), $updateData);
         $response->assertRedirect();
         $this->assertDatabaseHas('time_evaluations', ['name' => 'Aturan U2', 'is_active' => false]);
 
-        $response = $this->withSession(['user' => $this->admin])->delete(route('org.evaluations.destroy', $eval->id));
+        $response = $this->actingAs($this->admin)->delete(route('org.evaluations.destroy', $eval->id));
         $response->assertRedirect();
         $this->assertDatabaseMissing('time_evaluations', ['id' => $eval->id]);
     }
@@ -346,7 +346,7 @@ class TimeManagementTest extends TestCase
             'status' => 'Draft'
         ]);
 
-        $response = $this->withSession(['user' => $this->admin])->delete(route('org.periods.destroy', $period->id));
+        $response = $this->actingAs($this->admin)->delete(route('org.periods.destroy', $period->id));
         $response->assertRedirect();
         $this->assertDatabaseMissing('time_periods', ['id' => $period->id]);
     }

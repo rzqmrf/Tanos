@@ -49,7 +49,7 @@ class EssTest extends TestCase
             'employee_id' => $employee->id
         ]);
 
-        $response = $this->withSession(['user' => $user])->get(route('ess.index'));
+        $response = $this->actingAs($user)->get(route('ess.index'));
 
         $response->assertStatus(200);
         $response->assertSee('John Doe');
@@ -78,7 +78,7 @@ class EssTest extends TestCase
             'employee_id' => $employee->id
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->post(route('ess.leave.store'), [
                 'type' => 'Cuti Tahunan',
                 'start_date' => Carbon::tomorrow()->format('Y-m-d'),
@@ -120,7 +120,7 @@ class EssTest extends TestCase
             'employee_id' => $employee->id
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->post(route('ess.cico.store'), [
                 'date' => Carbon::today()->format('Y-m-d'),
                 'clock_in' => '08:00',
@@ -154,7 +154,7 @@ class EssTest extends TestCase
             'role' => 'Admin'
         ]);
 
-        $response = $this->withSession(['user' => $user])->get(route('ess.admin.index'));
+        $response = $this->actingAs($user)->get(route('ess.admin.index'));
 
         $response->assertStatus(200);
         $response->assertSee('Panel Persetujuan ESS');
@@ -173,7 +173,7 @@ class EssTest extends TestCase
             'role' => 'Employee'
         ]);
 
-        $response = $this->withSession(['user' => $user])->get(route('ess.admin.index'));
+        $response = $this->actingAs($user)->get(route('ess.admin.index'));
 
         $response->assertStatus(302);
         $response->assertRedirect(route('dashboard.index'));
@@ -210,7 +210,7 @@ class EssTest extends TestCase
             'status' => 'Submitted'
         ]);
 
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('ess.admin.leave.action', [$leave->id, 'Approved']));
 
         $response->assertStatus(302);
@@ -259,7 +259,7 @@ class EssTest extends TestCase
             'status' => 'Submitted'
         ]);
 
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('ess.admin.cico.action', [$cico->id, 'Approved']));
 
         $response->assertStatus(302);

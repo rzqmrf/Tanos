@@ -146,5 +146,41 @@
             {{ $history->links() }}
         </div>
     </div>
+
+    <!-- Upcoming Leave / Attendance Section -->
+    @if($upcoming->isNotEmpty())
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Pengajuan Akan Datang</h3>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                            <th class="p-4">Tanggal</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4">Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-300">
+                        @foreach($upcoming as $item)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+                                <td class="p-4 font-semibold text-slate-800 dark:text-slate-100">
+                                    {{ \Carbon\Carbon::parse($item->date)->translatedFormat('d F Y') }}
+                                </td>
+                                <td class="p-4">
+                                    <span class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400 rounded-md text-xs font-bold">
+                                        {{ $item->status }}
+                                    </span>
+                                </td>
+                                <td class="p-4 text-slate-400 italic">
+                                    {{ $item->notes ?? '-' }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 </div>
 @endsection

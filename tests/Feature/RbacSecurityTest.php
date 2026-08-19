@@ -92,7 +92,7 @@ class RbacSecurityTest extends TestCase
     public function test_employee_and_org_structure_protected_from_regular_employees()
     {
         // Try to add employee as regular Employee user -> 403 Forbidden
-        $response = $this->withSession(['user' => $this->employeeUser])
+        $response = $this->actingAs($this->employeeUser)
             ->post(route('employees.store'), [
                 'name' => 'New Kid',
                 'role' => 'Staff',
@@ -102,7 +102,7 @@ class RbacSecurityTest extends TestCase
         $response->assertStatus(403);
 
         // Try to add unit as regular Employee user -> 403 Forbidden
-        $response = $this->withSession(['user' => $this->employeeUser])
+        $response = $this->actingAs($this->employeeUser)
             ->post(route('org.sto.store'), [
                 'code' => 'DEPT-X',
                 'name' => 'Secret Dept',
@@ -111,7 +111,7 @@ class RbacSecurityTest extends TestCase
         $response->assertStatus(403);
 
         // Try to create absent type as regular Employee user -> 403 Forbidden
-        $response = $this->withSession(['user' => $this->employeeUser])
+        $response = $this->actingAs($this->employeeUser)
             ->post(route('org.absent-types.store'), [
                 'code' => 'XYZ',
                 'name' => 'Invalid Absent Type',
@@ -125,7 +125,7 @@ class RbacSecurityTest extends TestCase
     public function test_hr_manager_can_access_hr_management_actions()
     {
         // HR Manager can add employee -> redirects (302) or created
-        $response = $this->withSession(['user' => $this->hrManager])
+        $response = $this->actingAs($this->hrManager)
             ->post(route('employees.store'), [
                 'name' => 'New Staff',
                 'role' => 'Staff Operasional',
@@ -162,17 +162,17 @@ class RbacSecurityTest extends TestCase
         ]);
 
         // Regular Employee cannot calculate payroll -> 403
-        $response = $this->withSession(['user' => $this->employeeUser])
+        $response = $this->actingAs($this->employeeUser)
             ->post(route('payrolls.calculate', $period->id), ['action' => 'Payroll']);
         $response->assertStatus(403);
 
         // HR Manager cannot calculate payroll -> 403
-        $response = $this->withSession(['user' => $this->hrManager])
+        $response = $this->actingAs($this->hrManager)
             ->post(route('payrolls.calculate', $period->id), ['action' => 'Payroll']);
         $response->assertStatus(403);
 
         // Finance Manager CAN calculate payroll -> 302 redirect
-        $response = $this->withSession(['user' => $this->financeManager])
+        $response = $this->actingAs($this->financeManager)
             ->post(route('payrolls.calculate', $period->id), ['action' => 'Payroll']);
         $response->assertStatus(302);
     }
@@ -183,7 +183,7 @@ class RbacSecurityTest extends TestCase
     public function test_wbs_and_rab_budget_protected_from_regular_employees()
     {
         // Try to add WBS element as Employee user -> 403
-        $response = $this->withSession(['user' => $this->employeeUser])
+        $response = $this->actingAs($this->employeeUser)
             ->post(route('projects.wbs.store', $this->project->id), [
                 'wbs_code' => 'WBS-XYZ',
                 'wbs_name' => 'Hack Attempt',
@@ -193,7 +193,7 @@ class RbacSecurityTest extends TestCase
         $response->assertStatus(403);
 
         // Try to add WBS element as Project Manager -> 302 success redirect
-        $response = $this->withSession(['user' => $this->projectManager])
+        $response = $this->actingAs($this->projectManager)
             ->post(route('projects.wbs.store', $this->project->id), [
                 'wbs_code' => 'WBS-XYZ',
                 'wbs_name' => 'Correct Wbs',

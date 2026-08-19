@@ -89,7 +89,7 @@ class PayrollTest extends TestCase
         $admin = $this->createAdminUser();
         $data = $this->setupProjectAndEmployee();
 
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('payrolls.store'), [
                 'project_id' => $data['project']->id,
                 'name' => 'Gaji Security Perak Ags 2026',
@@ -152,7 +152,7 @@ class PayrollTest extends TestCase
         ]);
 
         // Calculate Simulation
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('payrolls.calculate', $period->id), ['action' => 'Simulation']);
 
         $response->assertRedirect();
@@ -160,7 +160,7 @@ class PayrollTest extends TestCase
         $this->assertEquals('Simulated', $period->fresh()->status);
 
         // Calculate Real Payroll
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('payrolls.calculate', $period->id), ['action' => 'Payroll']);
 
         $this->assertEquals('Completed', $period->fresh()->status);
@@ -208,7 +208,7 @@ class PayrollTest extends TestCase
         ]);
 
         // Post to SAP
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('payrolls.post-sap', $period->id));
 
         $this->assertEquals('Posted', $period->fresh()->status);
@@ -240,7 +240,7 @@ class PayrollTest extends TestCase
         ]);
 
         // Do Nota
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('billing.nota.store'), [
                 'pranota_ids' => [$pranota->id],
                 'project_id' => $data['project']->id,
@@ -257,7 +257,7 @@ class PayrollTest extends TestCase
         $nota = NotaBilling::where('nota_number', 'NOTA-TEST-001')->first();
 
         // Post AR Nota to SAP
-        $response = $this->withSession(['user' => $admin])
+        $response = $this->actingAs($admin)
             ->post(route('billing.nota.post-sap', $nota->id));
 
         $this->assertEquals('Completed', $nota->fresh()->status);

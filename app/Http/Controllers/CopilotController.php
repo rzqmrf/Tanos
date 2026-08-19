@@ -74,8 +74,8 @@ class CopilotController extends Controller
 
 try {
                 // Determine if caller has admin role
-                $isAdmin = \Illuminate\Support\Facades\Auth::check() && 
-                           (\Illuminate\Support\Facades\Auth::user()->role ?? '') === 'admin';
+                $isAdmin = \Illuminate\Support\Facades\Auth::check() &&
+                           (\Illuminate\Support\Facades\Auth::user()->role ?? '') === 'Admin';
 
                 // Cek apakah ada perintah perubahan akses (Permission Command)
                 $actionResult = $this->tryHandlePermissionCommand($request->input('message'), $isAdmin);

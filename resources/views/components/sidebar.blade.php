@@ -42,7 +42,7 @@
         <div class="px-3 py-3 mb-5 bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center space-x-3">
             <div class="relative flex-shrink-0">
                 <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-[#100b60] text-white flex items-center justify-center font-bold text-xs select-none shadow-sm">
-                    {{ $initials }}
+                    {{ $initials ?? strtoupper(substr(auth()->user()->name ?? 'US', 0, 2)) }}
                 </div>
                 <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-slate-50 dark:ring-slate-900 bg-emerald-500" title="Online"></span>
             </div>

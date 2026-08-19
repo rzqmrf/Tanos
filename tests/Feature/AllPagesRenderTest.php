@@ -2,13 +2,19 @@
 namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AllPagesRenderTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_all_admin_pages_render(): void
     {
-        $user = User::where('username', 'rozaq')->first();
-        $this->withSession(['user' => ['id' => $user->id, 'name' => $user->name, 'username' => $user->username, 'role' => $user->role, 'employee_id' => null]]);
+        $user = User::firstOrCreate(
+            ['username' => 'rozaq'],
+            ['name' => 'Rozaq', 'email' => 'rozaq@tanos.com', 'password' => bcrypt('password'), 'role' => 'Admin']
+        );
+        $this->actingAs($user);
 
         $routes = [
             '/', '/dashboard/employees', '/dashboard/attendances', '/dashboard/projects',

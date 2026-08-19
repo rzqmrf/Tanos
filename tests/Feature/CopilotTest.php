@@ -30,7 +30,7 @@ class CopilotTest extends TestCase
             'role' => 'admin',
         ]);
 
-        $response = $this->withSession(['user' => $user])->get(route('copilot.index'));
+        $response = $this->actingAs($user)->get(route('copilot.index'));
 
         $response->assertStatus(200);
         $response->assertSee('Tanos AI Copilot');
@@ -46,7 +46,7 @@ class CopilotTest extends TestCase
             'role' => 'admin',
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'Tampilkan data proyek Pelindo',
             ]);
@@ -65,7 +65,7 @@ class CopilotTest extends TestCase
             'role' => 'Admin',
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'aktifkan akses payroll untuk HR Manager',
             ]);
@@ -99,7 +99,7 @@ class CopilotTest extends TestCase
             ['is_enabled' => false]
         );
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'aktifkan akses payroll untuk HR Manager',
             ]);
@@ -142,7 +142,7 @@ class CopilotTest extends TestCase
             ], 200)
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'aktifkan akses root_database untuk SuperUser',
             ]);
@@ -191,7 +191,7 @@ class CopilotTest extends TestCase
             ['is_enabled' => false]
         );
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'Tampilkan data payroll',
             ]);
@@ -240,7 +240,7 @@ class CopilotTest extends TestCase
             ['is_enabled' => false]
         );
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'Tampilkan data payroll',
             ]);
@@ -283,7 +283,7 @@ class CopilotTest extends TestCase
             ], 200)
         ]);
 
-        $response = $this->withSession(['user' => $user])
+        $response = $this->actingAs($user)
             ->postJson(route('copilot.chat'), [
                 'message' => 'Tampilkan data root',
             ]);
