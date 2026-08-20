@@ -228,7 +228,7 @@ class TimeManagementController extends Controller
                     // Late calculation
                     if ($att->clock_in && $stdStart) {
                         $diffInMins = Carbon::parse($att->clock_in)->diffInMinutes(Carbon::parse($stdStart), false);
-                        // if diff is negative, it means they clocked in AFTER stdStart
+                        // if diff is negative, it means they clocked in AFTER stdStart (telat)
                         if ($diffInMins < 0 && abs($diffInMins) > $rule->late_tolerance_minutes) {
                             $late++;
                         }

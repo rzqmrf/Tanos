@@ -19,18 +19,10 @@ return new class extends Migration
         ];
 
         foreach ($hrPermissions as $permission) {
-            $exists = DB::table('role_permissions')
-                ->where('role', 'HR Manager')
-                ->where('permission', $permission)
-                ->exists();
-
-            if (! $exists) {
-                DB::table('role_permissions')->insert([
-                    'role'       => 'HR Manager',
-                    'permission' => $permission,
-                    'is_enabled' => true,
-                ]);
-            }
+            DB::table('role_permissions')->updateOrInsert(
+                ['role' => 'HR Manager', 'permission' => $permission],
+                ['is_enabled' => true]
+            );
         }
     }
 

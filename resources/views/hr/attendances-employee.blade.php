@@ -44,7 +44,7 @@
     <form action="{{ route('attendances.store') }}" method="POST">
         @csrf
         <input type="hidden" name="action" value="clock_in">
-        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition">
+        <button type="submit" class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition mx-auto">
             CLOCK IN MASUK
         </button>
     </form>
@@ -65,7 +65,7 @@
     <form action="{{ route('attendances.store') }}" method="POST">
         @csrf
         <input type="hidden" name="action" value="clock_out">
-        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition">
+        <button type="submit" class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition mx-auto">
             CLOCK OUT KELUAR
         </button>
     </form>

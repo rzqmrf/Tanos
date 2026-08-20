@@ -138,7 +138,7 @@ class EssController extends Controller
     public function adminIndex(Request $request)
     {
         $user = $this->getSessionUser();
-        if (!$user || !in_array($user->role, ['Admin', 'HR'])) {
+        if (!$user || !in_array($user->role, ['Admin', 'HR Manager'])) {
             return redirect()->route('dashboard.index')->withErrors(['error' => 'Akses ditolak. Menu ini hanya untuk Admin/HR.']);
         }
 
@@ -154,7 +154,7 @@ class EssController extends Controller
     public function actionLeave(Request $request, $id, $status)
     {
         $user = $this->getSessionUser();
-        if (!$user || !in_array($user->role, ['Admin', 'HR'])) {
+        if (!$user || !in_array($user->role, ['Admin', 'HR Manager'])) {
             return response()->json(['error' => 'Akses ditolak.'], 403);
         }
 
@@ -201,7 +201,7 @@ class EssController extends Controller
     public function actionCico(Request $request, $id, $status)
     {
         $user = $this->getSessionUser();
-        if (!$user || !in_array($user->role, ['Admin', 'HR'])) {
+        if (!$user || !in_array($user->role, ['Admin', 'HR Manager'])) {
             return response()->json(['error' => 'Akses ditolak.'], 403);
         }
 

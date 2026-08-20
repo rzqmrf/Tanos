@@ -511,7 +511,7 @@
                         @endif
 
                         <!-- Nested: Time Management -->
-                        @if(\App\Models\RolePermission::hasPermission($role, 'attendance'))
+                        @if(\App\Models\RolePermission::hasPermission($role, 'employees'))
                         <div class="space-y-1" x-data="{ tmSub: '' }">
                             <button @click="activeSubMenu = (activeSubMenu === 'time_management' ? '' : 'time_management')" 
                                     :style="activeSubMenu === 'time_management' ? 'background-color: #100b60 !important; color: white !important;' : ''"

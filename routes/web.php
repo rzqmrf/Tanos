@@ -113,10 +113,10 @@ Route::prefix('dashboard')->group(function () {
     Route::post('org-structure/ecn/{id}/send-sap', [OrgStructureController::class, 'ecnSendSap'])->name('org.ecn.send-sap')->middleware('permission:employees');
 
     // HCM Time Management & Evaluation (Absent Type, Schedules, Tolerances, Periods)
-    Route::get('time-management/absent-types', [TimeManagementController::class, 'absentTypesIndex'])->name('org.absent-types.index')->middleware('permission:attendance');
-    Route::post('time-management/absent-types', [TimeManagementController::class, 'absentTypesStore'])->name('org.absent-types.store')->middleware('permission:attendance');
-    Route::put('time-management/absent-types/{id}', [TimeManagementController::class, 'absentTypesUpdate'])->name('org.absent-types.update')->middleware('permission:attendance');
-    Route::delete('time-management/absent-types/{id}', [TimeManagementController::class, 'absentTypesDestroy'])->name('org.absent-types.destroy')->middleware('permission:attendance');
+    Route::get('time-management/absent-types', [TimeManagementController::class, 'absentTypesIndex'])->name('org.absent-types.index')->middleware('permission:employees');
+    Route::post('time-management/absent-types', [TimeManagementController::class, 'absentTypesStore'])->name('org.absent-types.store')->middleware('permission:employees');
+    Route::put('time-management/absent-types/{id}', [TimeManagementController::class, 'absentTypesUpdate'])->name('org.absent-types.update')->middleware('permission:employees');
+    Route::delete('time-management/absent-types/{id}', [TimeManagementController::class, 'absentTypesDestroy'])->name('org.absent-types.destroy')->middleware('permission:employees');
 
     Route::get('time-management/schedules', [TimeManagementController::class, 'schedulesIndex'])->name('org.schedules.index')->middleware('permission:schedules');
     Route::post('time-management/schedules/group', [TimeManagementController::class, 'scheduleGroupStore'])->name('org.schedules.group.store')->middleware('permission:schedules');
@@ -125,16 +125,16 @@ Route::prefix('dashboard')->group(function () {
     Route::post('time-management/schedules/assign', [TimeManagementController::class, 'scheduleAssignStore'])->name('org.schedules.assign.store')->middleware('permission:schedules');
     Route::delete('time-management/schedules/assign/{id}', [TimeManagementController::class, 'scheduleAssignDestroy'])->name('org.schedules.assign.destroy')->middleware('permission:schedules');
 
-    Route::get('time-management/evaluations', [TimeManagementController::class, 'evaluationIndex'])->name('org.evaluations.index')->middleware('permission:attendance');
-    Route::post('time-management/evaluations', [TimeManagementController::class, 'evaluationStore'])->name('org.evaluations.store')->middleware('permission:attendance');
-    Route::put('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationUpdate'])->name('org.evaluations.update')->middleware('permission:attendance');
-    Route::delete('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationDestroy'])->name('org.evaluations.destroy')->middleware('permission:attendance');
+    Route::get('time-management/evaluations', [TimeManagementController::class, 'evaluationIndex'])->name('org.evaluations.index')->middleware('permission:employees');
+    Route::post('time-management/evaluations', [TimeManagementController::class, 'evaluationStore'])->name('org.evaluations.store')->middleware('permission:employees');
+    Route::put('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationUpdate'])->name('org.evaluations.update')->middleware('permission:employees');
+    Route::delete('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationDestroy'])->name('org.evaluations.destroy')->middleware('permission:employees');
 
-    Route::get('time-management/periods', [TimeManagementController::class, 'periodsIndex'])->name('org.periods.index')->middleware('permission:attendance');
-    Route::post('time-management/periods', [TimeManagementController::class, 'periodStore'])->name('org.periods.store')->middleware('permission:attendance');
-    Route::get('time-management/periods/{id}', [TimeManagementController::class, 'periodShow'])->name('org.periods.show')->middleware('permission:attendance');
-    Route::post('time-management/periods/{id}/calculate', [TimeManagementController::class, 'periodCalculate'])->name('org.periods.calculate')->middleware('permission:attendance');
-    Route::delete('time-management/periods/{id}', [TimeManagementController::class, 'periodDestroy'])->name('org.periods.destroy')->middleware('permission:attendance');
+    Route::get('time-management/periods', [TimeManagementController::class, 'periodsIndex'])->name('org.periods.index')->middleware('permission:employees');
+    Route::post('time-management/periods', [TimeManagementController::class, 'periodStore'])->name('org.periods.store')->middleware('permission:employees');
+    Route::get('time-management/periods/{id}', [TimeManagementController::class, 'periodShow'])->name('org.periods.show')->middleware('permission:employees');
+    Route::post('time-management/periods/{id}/calculate', [TimeManagementController::class, 'periodCalculate'])->name('org.periods.calculate')->middleware('permission:employees');
+    Route::delete('time-management/periods/{id}', [TimeManagementController::class, 'periodDestroy'])->name('org.periods.destroy')->middleware('permission:employees');
 
     // HCM Period Payroll & Component Formulation
     Route::get('payrolls', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payrolls.index')->middleware('permission:payroll');
@@ -168,11 +168,11 @@ Route::prefix('dashboard')->group(function () {
     Route::get('copilot', [CopilotController::class, 'index'])->name('copilot.index')->middleware('permission:dashboard');
     Route::post('copilot/chat', [CopilotController::class, 'chat'])->name('copilot.chat')->middleware('permission:dashboard');
 
-    // employee self service (ess)
-    Route::get('ess', [EssController::class, 'index'])->name('ess.index')->middleware('permission:dashboard');
-    Route::post('ess/leave', [EssController::class, 'storeLeave'])->name('ess.leave.store')->middleware('permission:dashboard');
-    Route::post('ess/cico', [EssController::class, 'storeCico'])->name('ess.cico.store')->middleware('permission:dashboard');
-    Route::get('admin/ess', [EssController::class, 'adminIndex'])->name('ess.admin.index')->middleware('permission:dashboard');
-    Route::post('admin/ess/leave/{id}/{status}', [EssController::class, 'actionLeave'])->name('ess.admin.leave.action')->middleware('permission:dashboard');
-    Route::post('admin/ess/cico/{id}/{status}', [EssController::class, 'actionCico'])->name('ess.admin.cico.action')->middleware('permission:dashboard');
+    // employee self service (ess) — batasi ke yg pegang attendance
+    Route::get('ess', [EssController::class, 'index'])->name('ess.index')->middleware('permission:attendance');
+    Route::post('ess/leave', [EssController::class, 'storeLeave'])->name('ess.leave.store')->middleware('permission:attendance');
+    Route::post('ess/cico', [EssController::class, 'storeCico'])->name('ess.cico.store')->middleware('permission:attendance');
+    Route::get('admin/ess', [EssController::class, 'adminIndex'])->name('ess.admin.index')->middleware('permission:attendance');
+    Route::post('admin/ess/leave/{id}/{status}', [EssController::class, 'actionLeave'])->name('ess.admin.leave.action')->middleware('permission:attendance');
+    Route::post('admin/ess/cico/{id}/{status}', [EssController::class, 'actionCico'])->name('ess.admin.cico.action')->middleware('permission:attendance');
 });
