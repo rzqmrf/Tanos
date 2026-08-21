@@ -99,18 +99,7 @@ class WbsController extends Controller
     {
         $project = Project::findOrFail($projectId);
         
-        // Mock sending to SAP
-        WbsElement::where('project_id', $projectId)->update(['sent_to_sap' => true]);
-
-        // Create notification
-        foreach (\App\Models\User::all() as $u) {
-            \App\Models\Notification::create([
-                'user_id' => $u->id,
-                'title' => 'WBS Sent to SAP',
-                'message' => 'Struktur WBS untuk proyek segment ' . $project->segment . ' telah sukses dibuat & diposting ke SAP.',
-                'type' => 'project',
-            ]);
-        }
+        \App\Jobs\SyncWbsToSapJob::dispatchSync($projectId);
 
         return redirect()->back()->with('success', 'Struktur WBS sukses dikirim & disinkronkan ke SAP! Status: WBS Structure SAP Created.');
     }

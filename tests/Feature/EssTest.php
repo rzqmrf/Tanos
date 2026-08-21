@@ -15,6 +15,12 @@ class EssTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        (new \Database\Seeders\FixEmployeeAttendancePermissionSeeder())->run();
+    }
+
     /**
      * Test that an unauthenticated user is redirected to login for ESS index.
      */

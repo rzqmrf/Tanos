@@ -188,9 +188,9 @@ function initPegawaiRegionalChart(data) {
         xaxis: {
             categories: labels,
             labels: { 
-                style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 },
-                rotate: -20,
-                rotateAlways: false
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT, fontWeight: 600 },
+                rotate: -45,
+                rotateAlways: true
             },
             axisBorder: { show: false }, 
             axisTicks: { show: false },
@@ -270,10 +270,10 @@ function initCostRegionalChart(data) {
         xaxis: {
             categories: labels,
             labels: { 
-                style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT },
-                rotate: 0, 
-                rotateAlways: false,
-                trim: true 
+                style: { colors: LABEL_CLR, fontSize: '9px', fontFamily: FONT },
+                rotate: -45, 
+                rotateAlways: true,
+                trim: false 
             },
             axisBorder: { show: false }, axisTicks: { show: false },
         },

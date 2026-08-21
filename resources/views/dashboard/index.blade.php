@@ -61,7 +61,7 @@
                 <div id="projectSegmentChart" class="w-full h-full"></div>
             </div>
             <!-- Custom HTML Legend -->
-            <div class="flex-1 w-full space-y-1.5 pl-0 sm:pl-4 min-w-0 max-h-52 overflow-y-auto pr-1">
+            <div class="flex-1 w-full space-y-1.5 pl-0 sm:pl-4 min-w-0 max-h-52 overflow-y-auto pr-1 no-scrollbar">
                 <template x-for="(item, index) in chartData.projectsPerSegment" :key="item.category">
                     <div class="flex items-center justify-between text-xs font-semibold py-0.5">
                         <div class="flex items-center space-x-2.5 min-w-0">

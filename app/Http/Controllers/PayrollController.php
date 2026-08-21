@@ -124,106 +124,18 @@ class PayrollController extends Controller
     public function calculate(Request $request, $id)
     {
         $period = PayrollPeriod::findOrFail($id);
-        $project = $period->project;
         $action = $request->input('action', 'Simulation'); // Simulation or Payroll
 
-        // Fetch project employees
-        $employees = Employee::where('month', $project->month)
-            ->where('regional', $project->regional)
-            ->where('segment', $project->segment)
-            ->get();
+        \App\Jobs\ProcessPayrollCalculationJob::dispatchSync($period->id, $action);
 
-        // Get configured payroll components
-        $components = PayrollComponent::where('payroll_period_id', $period->id)->get();
-
-        // Clear existing results
-        PayrollResult::where('payroll_period_id', $period->id)->delete();
-
-        foreach ($employees as $employee) {
-            // Try to find a calculated TimeResult for the same period dates
-            $timeResult = \App\Models\TimeResult::where('employee_id', $employee->id)
-                ->whereHas('timePeriod', function($q) use ($period) {
-                    $q->where('start_date', $period->start_date)
-                      ->where('end_date', $period->end_date);
-                })->first();
-
-            if ($timeResult) {
-                $daysPresent = $timeResult->present_days;
-                $overtimeHours = (float) $timeResult->overtime_hours;
-                $extraDeductions = (float) $timeResult->deduction_amount;
-            } else {
-                // Fallback to raw attendances count
-                $daysPresent = Attendance::where('employee_id', $employee->id)
-                    ->whereBetween('date', [$period->start_date, $period->end_date])
-                    ->where('status', 'Hadir')
-                    ->count();
-
-                $overtimeHours = Attendance::where('employee_id', $employee->id)
-                    ->whereBetween('date', [$period->start_date, $period->end_date])
-                    ->sum('overtime_hours');
-
-                $extraDeductions = 0.00;
-            }
-
-            // Calculate components
-            $basicSalary = 0;
-            $transportAllowance = 0;
-            $overtimePay = 0;
-            $deductions = 0;
-
-            foreach ($components as $comp) {
-                $val = floatval($comp->amount);
-                
-                if ($comp->type === 'Formula') {
-                    if (str_contains($comp->formula_expression, '{days_present}')) {
-                        $compVal = $daysPresent * $val;
-                    } elseif (str_contains($comp->formula_expression, '{overtime_hours}')) {
-                        $compVal = $overtimeHours * $val;
-                    } else {
-                        $compVal = $val;
-                    }
-                } else {
-                    $compVal = $val;
-                }
-
-                // Group by type/name
-                if ($comp->code === 'W001' || str_contains(strtolower($comp->name), 'pokok')) {
-                    $basicSalary += $compVal;
-                } elseif ($comp->code === 'W002' || str_contains(strtolower($comp->name), 'transport')) {
-                    $transportAllowance += $compVal;
-                } elseif ($comp->code === 'W004' || str_contains(strtolower($comp->name), 'lembur')) {
-                    $overtimePay += $compVal;
-                } elseif ($compVal < 0) {
-                    $deductions += abs($compVal);
-                } else {
-                    $basicSalary += $compVal; // general allowance
-                }
-            }
-
-            $deductionsTotal = $deductions + $extraDeductions;
-            $netSalary = $basicSalary + $transportAllowance + $overtimePay - $deductionsTotal;
-
-            PayrollResult::create([
-                'payroll_period_id' => $period->id,
-                'employee_id' => $employee->id,
-                'days_present' => $daysPresent,
-                'overtime_hours' => $overtimeHours,
-                'basic_salary' => $basicSalary,
-                'transport_allowance' => $transportAllowance,
-                'overtime_pay' => $overtimePay,
-                'deductions' => $deductionsTotal,
-                'net_salary' => $netSalary,
-            ]);
-        }
-
-        // Update Period Status
+        // Update Period Status message
         if ($action === 'Simulation') {
-            $period->update(['status' => 'Simulated']);
             $msg = 'Simulasi perhitungan payroll selesai dilakukan!';
         } else {
-            $period->update(['status' => 'Completed']);
             $msg = 'Perhitungan payroll resmi digenerate & dikunci!';
         }
+
+        \App\Helpers\AuditLogger::log('Calculate Payroll', $period, [], ['action' => $action]);
 
         return redirect()->back()->with('success', $msg);
     }
@@ -271,65 +183,9 @@ class PayrollController extends Controller
     {
         $period = PayrollPeriod::findOrFail($id);
         
-        // Mock Send to SAP (Jurnal Payroll for Payment)
-        $sapDoc = 'SAP-PR-' . Carbon::now()->format('Ymd') . sprintf('%04d', $period->id);
-        $period->update([
-            'status' => 'Posted'
-        ]);
+        \App\Jobs\PostPayrollGlJob::dispatchSync($id);
 
-        // Save doc number to all results
-        PayrollResult::where('payroll_period_id', $period->id)->update([
-            'sap_doc_number' => $sapDoc,
-            'posted_at' => Carbon::now()
-        ]);
-
-        // Core business integration: Auto-Generate PRANOTA Billing (Halaman 9)
-        $sumBasic = PayrollResult::where('payroll_period_id', $period->id)->sum('basic_salary');
-        $sumTransport = PayrollResult::where('payroll_period_id', $period->id)->sum('transport_allowance');
-        $sumOvertime = PayrollResult::where('payroll_period_id', $period->id)->sum('overtime_pay');
-
-        $pranotaNo = 'PRAN-' . Carbon::now()->format('Ymd') . sprintf('%04d', $period->id);
-        
-        $pranota = PranotaBilling::create([
-            'payroll_period_id' => $period->id,
-            'project_id' => $period->project_id,
-            'pranota_number' => $pranotaNo,
-            'amount' => 0, // Will be updated as the sum of items
-            'status' => 'Belum Terbilling',
-        ]);
-
-        $totalPranotaAmount = 0;
-        $itemsToCreate = [
-            'Upah Pokok Tenaga Kerja' => $sumBasic,
-            'Uang Transport' => $sumTransport,
-            'Uang Lembur / Overtime' => $sumOvertime,
-        ];
-
-        foreach ($itemsToCreate as $name => $dpp) {
-            if ($dpp > 0) {
-                $feeRate = 10.00;
-                $feeAmount = $dpp * ($feeRate / 100);
-                $ppnRate = 11.00;
-                $ppnAmount = ($dpp + $feeAmount) * ($ppnRate / 100);
-                $totalItemAmount = $dpp + $feeAmount + $ppnAmount;
-
-                \App\Models\PranotaBillingItem::create([
-                    'pranota_billing_id' => $pranota->id,
-                    'item_name' => $name,
-                    'dpp_amount' => $dpp,
-                    'management_fee_rate' => $feeRate,
-                    'management_fee_amount' => $feeAmount,
-                    'ppn_rate' => $ppnRate,
-                    'ppn_amount' => $ppnAmount,
-                    'total_amount' => $totalItemAmount,
-                ]);
-
-                $totalPranotaAmount += $totalItemAmount;
-            }
-        }
-
-        // Update total amount on the header
-        $pranota->update(['amount' => $totalPranotaAmount]);
+        $sapDoc = PayrollResult::where('payroll_period_id', $period->id)->value('sap_doc_number') ?? 'SAP-PR-' . Carbon::now()->format('Ymd');
 
         return redirect()->back()->with('success', 'Jurnal Payroll sukses diposting ke SAP (Doc: ' . $sapDoc . ') & Dokumen Pranota Billing telah sukses ter-generate!');
     }
