@@ -22,7 +22,7 @@ use App\Http\Controllers\PeoSettingController;
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post')->middleware('throttle:login');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('permission:dashboard');

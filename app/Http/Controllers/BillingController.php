@@ -104,7 +104,19 @@ class BillingController extends Controller
             'nota_number' => 'required|string|unique:nota_billings,nota_number',
         ]);
 
-        $pranotas = PranotaBilling::whereIn('id', $request->pranota_ids)->with('items')->get();
+        // Pastikan semua pranota berasal dari project yang sama (cegah nota tercampur antar project)
+        $pranotas = PranotaBilling::whereIn('id', $request->pranota_ids)
+            ->where('project_id', $request->project_id)
+            ->with('items')
+            ->get();
+
+        // Jika ada pranota dari project berbeda, tolak permintaan
+        if ($pranotas->count() !== count($request->pranota_ids)) {
+            return redirect()->back()->withErrors([
+                'error' => 'Terdapat pranota yang berasal dari project berbeda. Nota hanya boleh berisi pranota dari project yang sama.'
+            ]);
+        }
+
         $totalAmount = $pranotas->sum('amount');
 
         // Create Nota Billing (Page 11-12)

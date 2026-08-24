@@ -144,6 +144,14 @@ class PayrollTest extends TestCase
         PayrollComponent::create([
             'payroll_period_id' => $period->id,
             'wbs_element_id' => $data['wbs']->id,
+            'code' => 'W003',
+            'name' => 'Tunjangan Kinerja',
+            'type' => 'Valuation',
+            'amount' => 500000,
+        ]);
+        PayrollComponent::create([
+            'payroll_period_id' => $period->id,
+            'wbs_element_id' => $data['wbs']->id,
             'code' => 'W004',
             'name' => 'Uang Lembur',
             'type' => 'Formula',
@@ -169,15 +177,16 @@ class PayrollTest extends TestCase
         // Basic: 4.000.000
         // Transport: 5 days * 20.000 = 100.000
         // Overtime: 10 hours * 30.000 = 300.000
-        // Net: 4.400.000
+        // Net: 4.900.000
         $this->assertDatabaseHas('payroll_results', [
             'employee_id' => $data['employee']->id,
             'days_present' => 5,
             'overtime_hours' => 10.00,
             'basic_salary' => 4000000,
             'transport_allowance' => 100000,
+            'allowances' => 500000,
             'overtime_pay' => 300000,
-            'net_salary' => 4400000,
+            'net_salary' => 4900000,
         ]);
     }
 
@@ -203,8 +212,9 @@ class PayrollTest extends TestCase
             'overtime_hours' => 10.00,
             'basic_salary' => 4000000,
             'transport_allowance' => 100000,
+            'allowances' => 500000,
             'overtime_pay' => 300000,
-            'net_salary' => 4400000,
+            'net_salary' => 4900000,
         ]);
 
         // Post to SAP
@@ -223,7 +233,7 @@ class PayrollTest extends TestCase
             'payroll_period_id' => $period->id,
             'project_id' => $data['project']->id,
             'status' => 'Belum Terbilling',
-            'amount' => 5372400.00
+            'amount' => 5982900.00
         ]);
     }
 

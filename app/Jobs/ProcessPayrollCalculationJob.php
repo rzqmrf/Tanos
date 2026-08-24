@@ -68,6 +68,7 @@ class ProcessPayrollCalculationJob implements ShouldQueue
 
             $basicSalary = 0;
             $transportAllowance = 0;
+            $allowances = 0;
             $overtimePay = 0;
             $deductions = 0;
 
@@ -89,6 +90,8 @@ class ProcessPayrollCalculationJob implements ShouldQueue
                     $basicSalary += $compVal;
                 } elseif ($comp->code === 'W002' || str_contains(strtolower($comp->name), 'transport')) {
                     $transportAllowance += $compVal;
+                } elseif ($comp->code === 'W003' || str_contains(strtolower($comp->name), 'tunjangan')) {
+                    $allowances += $compVal;
                 } elseif ($comp->code === 'W004' || str_contains(strtolower($comp->name), 'lembur')) {
                     $overtimePay += $compVal;
                 } elseif ($compVal < 0) {
@@ -99,7 +102,7 @@ class ProcessPayrollCalculationJob implements ShouldQueue
             }
 
             $deductionsTotal = $deductions + $extraDeductions;
-            $netSalary = $basicSalary + $transportAllowance + $overtimePay - $deductionsTotal;
+            $netSalary = $basicSalary + $transportAllowance + $allowances + $overtimePay - $deductionsTotal;
 
             PayrollResult::create([
                 'payroll_period_id' => $period->id,
@@ -108,6 +111,7 @@ class ProcessPayrollCalculationJob implements ShouldQueue
                 'overtime_hours' => $overtimeHours,
                 'basic_salary' => $basicSalary,
                 'transport_allowance' => $transportAllowance,
+                'allowances' => $allowances,
                 'overtime_pay' => $overtimePay,
                 'deductions' => $deductionsTotal,
                 'net_salary' => $netSalary,

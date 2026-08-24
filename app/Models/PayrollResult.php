@@ -14,6 +14,7 @@ class PayrollResult extends Model
         'overtime_hours',
         'basic_salary',
         'transport_allowance',
+        'allowances',
         'overtime_pay',
         'deductions',
         'net_salary',

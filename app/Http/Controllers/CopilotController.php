@@ -595,9 +595,22 @@ Aturan Penting saat Menjawab Pertanyaan User:
                 return "❌ **Gagal Mengubah Akses!** Peran atau modul yang diminta tidak terdaftar dalam konfigurasi sistem yang diizinkan.";
             }
 
-            \App\Models\RolePermission::updateOrCreate(
+            $perm = \App\Models\RolePermission::updateOrCreate(
                 ['role' => $matchedRole, 'permission' => $matchedPerm],
                 ['is_enabled' => $targetState]
+            );
+
+            // Audit log: catat perubahan permission via perintah chat
+            \App\Helpers\AuditLogger::log(
+                'Copilot Change Permission',
+                $perm,
+                [],
+                [
+                    'role'       => $matchedRole,
+                    'permission' => $matchedPerm,
+                    'is_enabled' => $targetState,
+                    'source'     => 'chat_command',
+                ]
             );
 
             $statusText = $targetState ? 'BERHASIL DIAKTIFKAN ✅' : 'BERHASIL DIMATIKAN ❌';
@@ -627,9 +640,22 @@ Aturan Penting saat Menjawab Pertanyaan User:
                 return trim($cleanText) . "\n\n*(Sistem menolak perubahan otomatis hak akses: peran '{$role}' atau modul '{$perm}' tidak terdaftar)*";
             }
 
-            \App\Models\RolePermission::updateOrCreate(
+            $permModel = \App\Models\RolePermission::updateOrCreate(
                 ['role' => $role, 'permission' => $perm],
                 ['is_enabled' => $state]
+            );
+
+            // Audit log: catat perubahan permission via AI action tag
+            \App\Helpers\AuditLogger::log(
+                'Copilot AI Auto Permission',
+                $permModel,
+                [],
+                [
+                    'role'       => $role,
+                    'permission' => $perm,
+                    'is_enabled' => $state,
+                    'source'     => 'ai_action_tag',
+                ]
             );
 
             $statusStr = $state ? 'diaktifkan' : 'dimatikan';

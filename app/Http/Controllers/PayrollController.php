@@ -182,7 +182,14 @@ class PayrollController extends Controller
     public function postSap($id)
     {
         $period = PayrollPeriod::findOrFail($id);
-        
+
+        // Cegah posting ulang periode yang sudah di-Post ke SAP (hindari pranota ganda)
+        if (in_array($period->status, ['Posted', 'Voided'])) {
+            return redirect()->back()->withErrors([
+                'error' => 'Periode sudah di-posting ke SAP (status: ' . $period->status . '), tidak dapat di-posting ulang.'
+            ]);
+        }
+
         \App\Jobs\PostPayrollGlJob::dispatchSync($id);
 
         $sapDoc = PayrollResult::where('payroll_period_id', $period->id)->value('sap_doc_number') ?? 'SAP-PR-' . Carbon::now()->format('Ymd');

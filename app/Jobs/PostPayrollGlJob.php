@@ -41,6 +41,7 @@ class PostPayrollGlJob implements ShouldQueue
 
         $sumBasic = PayrollResult::where('payroll_period_id', $period->id)->sum('basic_salary');
         $sumTransport = PayrollResult::where('payroll_period_id', $period->id)->sum('transport_allowance');
+        $sumAllowances = PayrollResult::where('payroll_period_id', $period->id)->sum('allowances');
         $sumOvertime = PayrollResult::where('payroll_period_id', $period->id)->sum('overtime_pay');
 
         $pranotaNo = 'PRAN-' . Carbon::now()->format('Ymd') . sprintf('%04d', $period->id);
@@ -57,6 +58,7 @@ class PostPayrollGlJob implements ShouldQueue
         $itemsToCreate = [
             'Upah Pokok Tenaga Kerja' => $sumBasic,
             'Uang Transport' => $sumTransport,
+            'Tunjangan' => $sumAllowances,
             'Uang Lembur / Overtime' => $sumOvertime,
         ];
 
