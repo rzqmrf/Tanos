@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\PranotaBilling;
 use App\Models\NotaBilling;
+use App\Services\BillingService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -97,53 +98,11 @@ class BillingController extends Controller
 
     public function doNota(Request $request)
     {
-        $request->validate([
-            'pranota_ids' => 'required|array',
-            'pranota_ids.*' => 'exists:pranota_billings,id',
-            'project_id' => 'required|exists:projects,id',
-            'nota_number' => 'required|string|unique:nota_billings,nota_number',
-        ]);
+        $result = app(BillingService::class)->createNotaFromPranotas($request);
 
-        // Pastikan semua pranota berasal dari project yang sama (cegah nota tercampur antar project)
-        $pranotas = PranotaBilling::whereIn('id', $request->pranota_ids)
-            ->where('project_id', $request->project_id)
-            ->with('items')
-            ->get();
-
-        // Jika ada pranota dari project berbeda, tolak permintaan
-        if ($pranotas->count() !== count($request->pranota_ids)) {
-            return redirect()->back()->withErrors([
-                'error' => 'Terdapat pranota yang berasal dari project berbeda. Nota hanya boleh berisi pranota dari project yang sama.'
-            ]);
+        if ($result instanceof \Illuminate\Http\RedirectResponse) {
+            return $result;
         }
-
-        $totalAmount = $pranotas->sum('amount');
-
-        // Create Nota Billing (Page 11-12)
-        $nota = NotaBilling::create([
-            'project_id' => $request->project_id,
-            'nota_number' => $request->nota_number,
-            'amount' => $totalAmount,
-            'status' => 'Draft',
-        ]);
-
-        // Copy Pranota items to Nota Billing items
-        foreach ($pranotas as $pranota) {
-            foreach ($pranota->items as $pItem) {
-                \App\Models\NotaBillingItem::create([
-                    'nota_billing_id' => $nota->id,
-                    'pranota_billing_id' => $pranota->id,
-                    'item_name' => $pItem->item_name,
-                    'dpp_amount' => $pItem->dpp_amount,
-                    'management_fee_amount' => $pItem->management_fee_amount,
-                    'ppn_amount' => $pItem->ppn_amount,
-                    'total_amount' => $pItem->total_amount,
-                ]);
-            }
-        }
-
-        // Update Pranotas to Sudah Terbilling
-        PranotaBilling::whereIn('id', $request->pranota_ids)->update(['status' => 'Sudah Terbilling']);
 
         return redirect()->back()->with('success', 'Nota Billing (Invoice) sukses dibuat dari pengelompokan pranota!');
     }
