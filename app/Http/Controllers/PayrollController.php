@@ -21,8 +21,8 @@ class PayrollController extends Controller
             $routeAction = $request->route()->getActionMethod();
             $modifyingActions = ['store', 'calculate', 'copyFormula', 'postSap'];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(auth()->user()?->role, ['Admin', 'Finance Manager'])) {
-                    abort(403, 'Akses ditolak. Hanya Admin dan Finance Manager yang dapat melakukan aksi ini.');
+                if (!\App\Models\RolePermission::hasPermission(auth()->user()?->role, 'payroll')) {
+                    abort(403, 'Akses ditolak. Role Anda tidak memiliki izin payroll.');
                 }
             }
             return $next($request);

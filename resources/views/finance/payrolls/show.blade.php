@@ -156,6 +156,7 @@
                                 <th class="p-3 text-center">Lembur (jam)</th>
                                 <th class="p-3">Gaji Pokok</th>
                                 <th class="p-3">Transport</th>
+                                <th class="p-3">Tunjangan</th>
                                 <th class="p-3">Uang Lembur</th>
                                 <th class="p-3">Potongan</th>
                                 <th class="p-3">Net Gaji</th>
@@ -170,6 +171,7 @@
                                     <td class="p-3 text-center">{{ floatval($res->overtime_hours) }}</td>
                                     <td class="p-3">Rp {{ number_format($res->basic_salary, 0, ',', '.') }}</td>
                                     <td class="p-3 text-emerald-600 dark:text-emerald-400">+Rp {{ number_format($res->transport_allowance, 0, ',', '.') }}</td>
+                                    <td class="p-3 text-emerald-600 dark:text-emerald-400">+Rp {{ number_format($res->allowances, 0, ',', '.') }}</td>
                                     <td class="p-3 text-emerald-600 dark:text-emerald-400">+Rp {{ number_format($res->overtime_pay, 0, ',', '.') }}</td>
                                     <td class="p-3 text-rose-600 dark:text-rose-400">-Rp {{ number_format($res->deductions, 0, ',', '.') }}</td>
                                     <td class="p-3 font-black text-slate-900 dark:text-slate-100">Rp {{ number_format($res->net_salary, 0, ',', '.') }}</td>
@@ -179,7 +181,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="p-8 text-center text-slate-400">Belum ada hasil generate. Tekan "Generate" atau "Simulation Period" untuk memulai hitungan.</td>
+                                    <td colspan="10" class="p-8 text-center text-slate-400">Belum ada hasil generate. Tekan "Generate" atau "Simulation Period" untuk memulai hitungan.</td>
                                 </tr>
                             @endforelse
                         </tbody>

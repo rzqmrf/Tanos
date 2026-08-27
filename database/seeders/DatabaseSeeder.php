@@ -123,6 +123,18 @@ class DatabaseSeeder extends Seeder
                 'expected_end' => now()->endOfMonth(),
                 'sent_to_sap' => true,
             ]);
+
+            \App\Models\WbsElement::create([
+                'project_id' => $proj->id,
+                'parent_id' => $root->id,
+                'wbs_code' => 'WBS-' . sprintf('%03d', $proj->id) . '.3',
+                'wbs_name' => 'Tunjangan Kinerja',
+                'wbs_category' => 'Tunjangan Kinerja',
+                'weight' => 10,
+                'expected_start' => now()->startOfMonth(),
+                'expected_end' => now()->endOfMonth(),
+                'sent_to_sap' => true,
+            ]);
         }
 
         // truncate 100 orang saja
