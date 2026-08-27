@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Employee;
-use App\Models\Attendance;
 use App\Models\PayrollPeriod;
-use App\Models\PayrollComponent;
 use App\Models\PayrollResult;
-use App\Models\PranotaBilling;
-use App\Models\WbsElement;
+use App\Services\PayrollService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -65,39 +62,7 @@ class PayrollController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        $period = PayrollPeriod::create($validData);
-
-        // Generate default WBS-mapped components
-        $project = Project::find($period->project_id);
-        $wbsList = WbsElement::where('project_id', $project->id)->get();
-
-        // Helper to find WBS by category
-        $findWbsId = function ($category) use ($wbsList) {
-            $wbs = $wbsList->firstWhere('wbs_category', $category);
-            return $wbs ? $wbs->id : null;
-        };
-
-        // Create default payroll components
-        $defaultComponents = [
-            ['code' => 'W001', 'name' => 'Upah Pokok', 'type' => 'Valuation', 'amount' => 4500000, 'wbs_cat' => 'Upah Pokok'],
-            ['code' => 'W002', 'name' => 'Uang Transport', 'type' => 'Formula', 'amount' => 25000, 'wbs_cat' => 'Uang Transport', 'formula' => '{days_present} * {amount}'],
-            ['code' => 'W003', 'name' => 'Tunjangan Kinerja', 'type' => 'Valuation', 'amount' => 500000, 'wbs_cat' => 'Tunjangan Kinerja'],
-            ['code' => 'W004', 'name' => 'Uang Lembur', 'type' => 'Formula', 'amount' => 30000, 'wbs_cat' => 'Lembur', 'formula' => '{overtime_hours} * {amount}'],
-            ['code' => 'W005', 'name' => 'BPJS Kesehatan', 'type' => 'Valuation', 'amount' => -100000, 'wbs_cat' => 'BPJS Kesehatan'],
-            ['code' => 'W006', 'name' => 'BPJS Ketenagakerjaan', 'type' => 'Valuation', 'amount' => -150000, 'wbs_cat' => 'BPJS Ketenagakerjaan'],
-        ];
-
-        foreach ($defaultComponents as $comp) {
-            PayrollComponent::create([
-                'payroll_period_id' => $period->id,
-                'wbs_element_id' => $findWbsId($comp['wbs_cat']),
-                'code' => $comp['code'],
-                'name' => $comp['name'],
-                'type' => $comp['type'],
-                'amount' => $comp['amount'],
-                'formula_expression' => $comp['formula'] ?? null,
-            ]);
-        }
+        $period = app(PayrollService::class)->createPeriodWithDefaults($validData);
 
         return redirect()->route('payrolls.show', $period->id)->with('success', 'Periode payroll sukses dibuat dengan komponen bawaan!');
     }
@@ -146,35 +111,7 @@ class PayrollController extends Controller
             'source_period_id' => 'required|exists:payroll_periods,id',
         ]);
 
-        $targetPeriod = PayrollPeriod::findOrFail($id);
-        $sourceComponents = PayrollComponent::where('payroll_period_id', $request->source_period_id)->get();
-
-        // Clear existing
-        PayrollComponent::where('payroll_period_id', $id)->delete();
-
-        // Project WBS mapping lookup
-        $project = Project::find($targetPeriod->project_id);
-        $targetWbsList = WbsElement::where('project_id', $project->id)->get();
-
-        foreach ($sourceComponents as $sourceComp) {
-            // Match WBS by category name if possible
-            $sourceWbs = WbsElement::find($sourceComp->wbs_element_id);
-            $mappedWbsId = null;
-            if ($sourceWbs) {
-                $targetWbs = $targetWbsList->firstWhere('wbs_category', $sourceWbs->wbs_category);
-                $mappedWbsId = $targetWbs ? $targetWbs->id : null;
-            }
-
-            PayrollComponent::create([
-                'payroll_period_id' => $id,
-                'wbs_element_id' => $mappedWbsId,
-                'code' => $sourceComp->code,
-                'name' => $sourceComp->name,
-                'type' => $sourceComp->type,
-                'amount' => $sourceComp->amount,
-                'formula_expression' => $sourceComp->formula_expression,
-            ]);
-        }
+        app(PayrollService::class)->copyFormula($id, $request->source_period_id);
 
         return redirect()->back()->with('success', 'Formulasi payroll sukses disalin dari periode asal!');
     }
