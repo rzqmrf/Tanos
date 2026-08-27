@@ -18,6 +18,7 @@ use App\Http\Controllers\RabBudgetController;
 use App\Http\Controllers\OrgStructureController;
 use App\Http\Controllers\TimeManagementController;
 use App\Http\Controllers\PeoSettingController;
+use App\Http\Controllers\ReportController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -68,9 +69,8 @@ Route::prefix('dashboard')->group(function () {
     Route::resource('invoices', InvoiceController::class)->middleware('permission:invoices');
     Route::resource('employees', EmployeeController::class)->middleware('permission:employees');
 
-    Route::get('reports', function () {
-        return view('finance.reports');
-    })->name('reports.index')->middleware('permission:reports');
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index')->middleware('permission:reports');
+    Route::get('reports/export', [ReportController::class, 'export'])->name('reports.export')->middleware('permission:reports');
 
     Route::resource('attendances', AttendanceController::class)->middleware('permission:attendance');
 
