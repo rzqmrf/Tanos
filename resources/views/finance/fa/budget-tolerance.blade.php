@@ -1,0 +1,1 @@
+<x-under-development-page title="Budget Tolerance Profile" module="Finance & Accounting Settings" description="Modul Pengaturan Batas Toleransi Pelampauan Budget Proyek sedang dalam tahap pengembangan." />

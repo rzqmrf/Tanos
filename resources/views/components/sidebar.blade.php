@@ -161,12 +161,15 @@
                     @endif
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'kalender'))
-                        <a href="{{ route('under.construction') }}" 
-                           class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                            </svg>
-                            <span class="text-sm">Kalender</span>
+                        <a href="{{ route('general.calendar') }}" 
+                           class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-150 group text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold">
+                            <div class="flex items-center space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                <span class="text-sm">Kalender</span>
+                            </div>
+                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                         </a>
                     @endif
 
@@ -270,14 +273,17 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type
+                                <a href="{{ route('general.partner-type') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner
+                                <a href="{{ route('general.partner') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer
+                                <a href="{{ route('general.bank-acs') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
                             </div>
                         </div>
@@ -293,35 +299,45 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_fa'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax
+                                <a href="{{ route('fa.tax') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center
+                                <a href="{{ route('fa.profit-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cost Center
+                                <a href="{{ route('fa.cost-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cost Center</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center
+                                <a href="{{ route('fa.fund-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency
+                                <a href="{{ route('fa.currency') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate
+                                <a href="{{ route('fa.currency-rate') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank Account
+                                <a href="{{ route('fa.bank-account') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank Account</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period
+                                <a href="{{ route('fa.period') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group
+                                <a href="{{ route('fa.account-group') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>CoA
+                                <a href="{{ route('fa.coa') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>CoA</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
                             </div>
                         </div>
@@ -337,23 +353,29 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'setting_fa'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>FI Settings
+                                <a href="{{ route('fa.fi-settings') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>FI Settings</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Budget Management
+                                <a href="{{ route('fa.budget-management') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Budget Management</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Set Budget tolerance Profile
+                                <a href="{{ route('fa.budget-tolerance') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Set Budget tolerance Profile</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cash Flow Setting
+                                <a href="{{ route('fa.cash-flow') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cash Flow Setting</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Coa Mapping Persediaan
+                                <a href="{{ route('fa.coa-mapping') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Coa Mapping Persediaan</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Open Item Check
+                                <a href="{{ route('fa.open-item') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Open Item Check</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
                             </div>
                         </div>
@@ -396,15 +418,17 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'equipment_master'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Equipment
+                                <a href="{{ route('material.equipment') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Equipment</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Nested: Outline Agreement -->
-                        <a href="{{ route('under.construction') }}" class="block py-1.5 px-3 text-[13px] font-semibold rounded-lg text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
-                            <span class="flex items-start text-left"><span class="mr-1.5 text-xs text-current font-extrabold mt-0.5">•</span>Outline Agreement</span>
+                        <a href="{{ route('material.outline-agreement') }}" class="flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg text-[#100b60] hover:text-slate-800 dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
+                            <span><span class="mr-1.5 text-xs text-current font-extrabold mt-0.5">•</span>Outline Agreement</span>
+                            <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                         </a>
                     </div>
                 </div>
@@ -620,7 +644,10 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'hc_report'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Search Based on Employee</a>
+                                <a href="{{ route('hc.search-employee') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 font-extrabold text-current">•</span>Search Based on Employee</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                </a>
                                 <a href="{{ route('employees.index') }}" class="flex items-center py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Employee Curriculum Vitae</a>
                             </div>
                         </div>
@@ -751,9 +778,18 @@
                             </button>
                             <div x-show="activeSubMenu === 'ps_reports'" x-transition class="pl-4 space-y-1" style="display: none;">
                                 <a href="{{ route('reports.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isReports ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 font-extrabold text-current">•</span>WBS Report</a>
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>WBS Report - New</a>
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Profit Loss Per Segment</a>
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>PS - Procure to Pay</a>
+                                <a href="{{ route('ps.wbs-report-new') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 font-extrabold text-current">•</span>WBS Report - New</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                </a>
+                                <a href="{{ route('ps.profit-loss-segment') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 font-extrabold text-current">•</span>Profit Loss Per Segment</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                </a>
+                                <a href="{{ route('ps.procure-to-pay') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                                    <span><span class="mr-1.5 font-extrabold text-current">•</span>PS - Procure to Pay</span>
+                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                </a>
                             </div>
                         </div>
                         @endif

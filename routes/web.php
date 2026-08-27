@@ -75,6 +75,38 @@ Route::prefix('dashboard')->group(function () {
         return view('general.under-construction');
     })->name('under.construction');
 
+    // Dedicated WIP Module Routes
+    Route::get('general/partner-type', fn() => view('general.partner-type'))->name('general.partner-type');
+    Route::get('general/partner', fn() => view('general.partner'))->name('general.partner');
+    Route::get('general/bank-acs', fn() => view('general.bank-acs'))->name('general.bank-acs');
+    Route::get('general/calendar', fn() => view('general.calendar'))->name('general.calendar');
+
+    Route::get('fa/tax', fn() => view('finance.fa.tax'))->name('fa.tax');
+    Route::get('fa/profit-center', fn() => view('finance.fa.profit-center'))->name('fa.profit-center');
+    Route::get('fa/cost-center', fn() => view('finance.fa.cost-center'))->name('fa.cost-center');
+    Route::get('fa/fund-center', fn() => view('finance.fa.fund-center'))->name('fa.fund-center');
+    Route::get('fa/currency', fn() => view('finance.fa.currency'))->name('fa.currency');
+    Route::get('fa/currency-rate', fn() => view('finance.fa.currency-rate'))->name('fa.currency-rate');
+    Route::get('fa/bank-account', fn() => view('finance.fa.bank-account'))->name('fa.bank-account');
+    Route::get('fa/period', fn() => view('finance.fa.period'))->name('fa.period');
+    Route::get('fa/account-group', fn() => view('finance.fa.account-group'))->name('fa.account-group');
+    Route::get('fa/coa', fn() => view('finance.fa.coa'))->name('fa.coa');
+
+    Route::get('fa/fi-settings', fn() => view('finance.fa.fi-settings'))->name('fa.fi-settings');
+    Route::get('fa/budget-management', fn() => view('finance.fa.budget-management'))->name('fa.budget-management');
+    Route::get('fa/budget-tolerance', fn() => view('finance.fa.budget-tolerance'))->name('fa.budget-tolerance');
+    Route::get('fa/cash-flow', fn() => view('finance.fa.cash-flow'))->name('fa.cash-flow');
+    Route::get('fa/coa-mapping', fn() => view('finance.fa.coa-mapping'))->name('fa.coa-mapping');
+    Route::get('fa/open-item', fn() => view('finance.fa.open-item'))->name('fa.open-item');
+
+    Route::get('material/equipment', fn() => view('material.equipment'))->name('material.equipment');
+    Route::get('material/outline-agreement', fn() => view('material.outline-agreement'))->name('material.outline-agreement');
+
+    Route::get('hc/search-employee', fn() => view('hr.search-employee'))->name('hc.search-employee');
+    Route::get('ps/wbs-report-new', fn() => view('operations.wbs-report-new'))->name('ps.wbs-report-new');
+    Route::get('ps/profit-loss-segment', fn() => view('operations.profit-loss-segment'))->name('ps.profit-loss-segment');
+    Route::get('ps/procure-to-pay', fn() => view('operations.procure-to-pay'))->name('ps.procure-to-pay');
+
     Route::resource('attendances', AttendanceController::class)->middleware('permission:attendance');
 
     // Projects WBS System

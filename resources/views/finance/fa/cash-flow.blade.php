@@ -1,0 +1,1 @@
+<x-under-development-page title="Cash Flow Setting" module="Finance & Accounting Settings" description="Modul Pengaturan & Proyeksi Arus Kas (Cash Flow) Perusahaan sedang dalam tahap pengembangan." />

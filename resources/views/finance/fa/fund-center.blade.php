@@ -1,0 +1,1 @@
+<x-under-development-page title="Fund Center Master" module="Finance & Accounting" description="Modul Pengelolaan Pusat Dana (Fund Center) untuk pengawasan budget proyek sedang dalam tahap pengembangan." />
