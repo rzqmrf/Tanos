@@ -71,6 +71,9 @@ Route::prefix('dashboard')->group(function () {
 
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index')->middleware('permission:reports');
     Route::get('reports/export', [ReportController::class, 'export'])->name('reports.export')->middleware('permission:reports');
+    Route::get('under-construction', function () {
+        return view('general.under-construction');
+    })->name('under.construction');
 
     Route::resource('attendances', AttendanceController::class)->middleware('permission:attendance');
 
