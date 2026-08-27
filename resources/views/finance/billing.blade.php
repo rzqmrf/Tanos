@@ -58,7 +58,7 @@
             </div>
         </div>
         
-        @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
+        @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
         <div class="flex gap-2">
             <button @click="showManualModal = true" class="bg-indigo-650 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
                 + Pranota Manual
@@ -115,7 +115,7 @@
             <div class="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Terpilih <span class="text-indigo-600" x-text="selectedPranotas.length"></span> Pranota | Total: <span class="text-indigo-600" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(totalSelectedAmount)"></span>
             </div>
-            @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
+            @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
             <button @click="showDoNotaModal = true" class="px-5 py-2.5 bg-indigo-650 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer transition">
                 Do Nota (Gabung Invoice)
             </button>
@@ -163,7 +163,7 @@
                                             class="p-1.5 text-blue-650 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-950/30 rounded-lg transition cursor-pointer" title="Lihat Rincian">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
                                     </button>
-                                    @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
+                                    @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
                                     <form action="{{ route('billing.pranota.approve', $item->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded-lg transition cursor-pointer">
@@ -296,7 +296,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
                                 </button>
                                 @if($nota->status === 'Draft')
-                                    @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
+                                    @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
                                         <form action="{{ route('billing.nota.post-sap', $nota->id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold rounded-lg transition cursor-pointer">

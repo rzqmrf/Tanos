@@ -19,7 +19,7 @@
                 <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Manajemen periode penggajian karyawan Pelindo Group per Project.</p>
             </div>
         </div>
-        @if(in_array(session('user.role'), ['Admin', 'Finance Manager']))
+        @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'payroll'))
         <button @click="showCreateModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
             + Buat Periode Payroll
         </button>

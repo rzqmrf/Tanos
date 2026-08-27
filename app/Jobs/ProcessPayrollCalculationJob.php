@@ -40,6 +40,7 @@ class ProcessPayrollCalculationJob implements ShouldQueue
 
         $components = PayrollComponent::where('payroll_period_id', $period->id)->get();
 
+        \DB::transaction(function () use ($employees, $period, $components) {
         PayrollResult::where('payroll_period_id', $period->id)->delete();
 
         foreach ($employees as $employee) {
@@ -117,6 +118,7 @@ class ProcessPayrollCalculationJob implements ShouldQueue
                 'net_salary' => $netSalary,
             ]);
         }
+        });
 
         if ($this->action === 'Simulation') {
             $period->update(['status' => 'Simulated']);
