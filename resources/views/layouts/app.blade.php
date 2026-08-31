@@ -100,7 +100,7 @@
     </div>
 
     <script>
-        window.__initialChartData = @json($initialData['charts'] ?? []);
+        window.__initialChartData = {!! json_encode($initialData['charts'] ?? []) !!};
     </script>
 
     @if(request()->is('/') || request()->routeIs('dashboard.index'))

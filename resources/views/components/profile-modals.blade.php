@@ -240,8 +240,28 @@
     </div>
 </div>
 
+@php
+    $modalInitData = [
+        'settings' => [
+            'language' => $dbUser?->settings['language'] ?? 'id',
+            'defaultRegional' => $dbUser?->settings['defaultRegional'] ?? 'All',
+            'defaultSegment' => $dbUser?->settings['defaultSegment'] ?? 'All',
+            'notifyInvoice' => (bool)($dbUser?->settings['notifyInvoice'] ?? true),
+            'notifyEmployee' => (bool)($dbUser?->settings['notifyEmployee'] ?? true),
+            'notifyDeadline' => (bool)($dbUser?->settings['notifyDeadline'] ?? true),
+        ],
+        'profile' => [
+            'name' => $dbUser?->name ?? session('user.name', ''),
+            'email' => $dbUser?->email ?? session('user.username', ''),
+            'phone' => $dbUser?->phone ?? '',
+        ],
+    ];
+@endphp
+
 <script>
 document.addEventListener('alpine:init', () => {
+    const initData = {!! json_encode($modalInitData) !!};
+
     Alpine.data('profileModalsData', () => ({
         showProfileModal: false,
         showPasswordModal: false,
@@ -251,25 +271,14 @@ document.addEventListener('alpine:init', () => {
         isLoadingSettings: false,
         profilePreview: null,
         
-        settings: {
-            language: @json($dbUser?->settings['language'] ?? 'id'),
-            defaultRegional: @json($dbUser?->settings['defaultRegional'] ?? 'All'),
-            defaultSegment: @json($dbUser?->settings['defaultSegment'] ?? 'All'),
-            notifyInvoice: @json((bool)($dbUser?->settings['notifyInvoice'] ?? true)),
-            notifyEmployee: @json((bool)($dbUser?->settings['notifyEmployee'] ?? true)),
-            notifyDeadline: @json((bool)($dbUser?->settings['notifyDeadline'] ?? true))
-        },
+        settings: { ...initData.settings },
         
         toast: {
             show: false,
             message: ''
         },
         
-        profile: {
-            name: @json($dbUser?->name ?? session("user.name", "")),
-            email: @json($dbUser?->email ?? session("user.username", "")),
-            phone: @json($dbUser?->phone ?? "")
-        },
+        profile: { ...initData.profile },
         
         password: {
             current_password: '',
