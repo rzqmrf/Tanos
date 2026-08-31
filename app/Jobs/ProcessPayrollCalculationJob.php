@@ -33,9 +33,8 @@ class ProcessPayrollCalculationJob implements ShouldQueue
         if (!$period) return;
 
         $project = $period->project;
-        $employees = Employee::where('month', $project->month)
+        $employees = Employee::where('month', $period->month)
             ->where('regional', $project->regional)
-            ->where('segment', $project->segment)
             ->get();
 
         $components = PayrollComponent::where('payroll_period_id', $period->id)->get();

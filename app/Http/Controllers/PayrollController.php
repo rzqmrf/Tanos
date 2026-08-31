@@ -72,9 +72,8 @@ class PayrollController extends Controller
         $period = PayrollPeriod::with(['project', 'components.wbsElement', 'results.employee'])->findOrFail($id);
         
         $project = $period->project;
-        $employees = Employee::where('month', $project->month)
+        $employees = Employee::where('month', $period->month)
             ->where('regional', $project->regional)
-            ->where('segment', $project->segment)
             ->get();
 
         $allPeriods = PayrollPeriod::where('id', '!=', $id)->orderBy('name')->get();
@@ -120,11 +119,14 @@ class PayrollController extends Controller
     {
         $period = PayrollPeriod::findOrFail($id);
 
+        // Cegah double-post: cek pranota existing (periode yang sudah pernah bikin pranota gak boleh diposting ulang)
+        if (\App\Models\PranotaBilling::where('payroll_period_id', $period->id)->exists()) {
+            return redirect()->back()->with('error', 'Periode ini sudah pernah di-posting (Pranota sudah ada untuk periode ini). Tidak dapat di-posting ulang.');
+        }
+
         // Cegah posting ulang periode yang sudah di-Post ke SAP (hindari pranota ganda)
         if (in_array($period->status, ['Posted', 'Voided'])) {
-            return redirect()->back()->withErrors([
-                'error' => 'Periode sudah di-posting ke SAP (status: ' . $period->status . '), tidak dapat di-posting ulang.'
-            ]);
+            return redirect()->back()->with('error', 'Periode sudah di-posting ke SAP (status: ' . $period->status . '), tidak dapat di-posting ulang.');
         }
 
         \App\Jobs\PostPayrollGlJob::dispatchSync($id);

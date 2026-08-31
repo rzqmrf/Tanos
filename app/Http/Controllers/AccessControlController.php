@@ -38,7 +38,7 @@ class AccessControlController extends Controller
                     RolePermission::create([
                         'role' => $r,
                         'permission' => $permKey,
-                        'is_enabled' => ($r === 'Admin') || in_array($permKey, ['dashboard', 'attendance', 'rekap_absensi', 'pengajuan_cuti', 'kalender', 'laporan'])
+                        'is_enabled' => ($r === 'Admin')
                     ]);
                 }
             }

@@ -29,6 +29,16 @@ class PostPayrollGlJob implements ShouldQueue
         $period = PayrollPeriod::find($this->periodId);
         if (!$period) return;
 
+        // H-3 layer-2: cegah double-post — kalau pranota udah ada buat period ini, jangan insert lagi
+        // (postSap juga ngeguard; ini tambahan biar aman kalo job di-call langsung / queue retry)
+        if (PranotaBilling::where('payroll_period_id', $period->id)->exists()) {
+            \App\Helpers\AuditLogger::log('PostPayrollGlJob Skipped (pranota exists)', $period, [], [
+                'reason' => 'pranota_already_exists_for_period',
+                'period_id' => $period->id,
+            ]);
+            return;
+        }
+
         $sapDoc = 'SAP-PR-' . Carbon::now()->format('Ymd') . sprintf('%04d', $period->id);
         $period->update([
             'status' => 'Posted'

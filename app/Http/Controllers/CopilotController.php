@@ -93,7 +93,7 @@ class CopilotController extends Controller
      */
     private function askGemini(string $userMessage, string $context)
     {
-        return Http::withoutVerifying()->timeout(60)->withHeaders([
+        return Http::timeout(60)->withHeaders([
             'Content-Type' => 'application/json',
             'X-Goog-Api-Key' => config('services.gemini.api_key'),
         ])->post($this->geminiUrl(), [
@@ -257,8 +257,25 @@ EOD;
     {
         $lower = strtolower(trim($userMessage));
 
-        if (! str_contains($lower, 'absensi') && ! str_contains($lower, 'attendance')) {
+        if (! str_contains($lower, 'absensi')
+            && ! str_contains($lower, 'absen')
+            && ! str_contains($lower, 'attendance')
+            && ! str_contains($lower, 'presensi')) {
             return null;
+        }
+
+        // Handler tanggal spesifik (misal: "27 Agustus 2026")
+        if (preg_match('/(\d{1,2})\s+(januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)(?:\s+(\d{4}))?/i', $lower, $m)) {
+            $day = (int) $m[1];
+            $months = ['januari'=>1,'februari'=>2,'maret'=>3,'april'=>4,'mei'=>5,'juni'=>6,'juli'=>7,'agustus'=>8,'september'=>9,'oktober'=>10,'november'=>11,'desember'=>12];
+            $month = $months[strtolower($m[2])];
+            $year = !empty($m[3]) ? (int) $m[3] : (int) date('Y');
+
+            if (checkdate($month, $day, $year)) {
+                $dateStr = Carbon::create($year, $month, $day)->format('Y-m-d');
+                $labelStr = Carbon::create($year, $month, $day)->format('d M Y');
+                return $this->buildAttendanceDateText($dateStr, $labelStr);
+            }
         }
 
         if (str_contains($lower, 'hari ini') || str_contains($lower, 'today')) {
@@ -280,7 +297,31 @@ EOD;
             }
         }
 
-        return 'Saya bisa bantu rekap absensi hari ini, bulan ini, bulan lalu, atau bulan tertentu (misal: "bulan juli 2026"). Sebutkan periodenya, biar gue ambil data langsung dari database.';
+        return 'Saya bisa bantu rekap absensi harian (misal: "27 Agustus 2026"), bulan ini, bulan lalu, atau bulan tertentu. Sebutkan periodenya.';
+    }
+
+    /**
+     * Menyusun ringkasan absensi untuk tanggal tertentu dari data riil database.
+     */
+    private function buildAttendanceDateText(string $date, string $label): string
+    {
+        try {
+            $hadir = Attendance::where('date', $date)->where('status', 'Hadir')->count();
+            $izin = Attendance::where('date', $date)->where('status', 'Izin')->count();
+            $sakit = Attendance::where('date', $date)->where('status', 'Sakit')->count();
+            $alfa = Attendance::where('date', $date)->where('status', 'Alfa')->count();
+            $total = $hadir + $izin + $sakit + $alfa;
+
+            return "Tanggal: {$label}\n"
+                ."Total record absensi: {$total}\n"
+                ."Hadir: {$hadir} orang\n"
+                ."Izin: {$izin} orang\n"
+                ."Sakit: {$sakit} orang\n"
+                ."Alfa: {$alfa} orang\n"
+                .'(Data riil dari tabel absensi, dihitung otomatis dari database)';
+        } catch (\Exception $e) {
+            return "Tanggal: {$label}\nData absensi tidak tersedia saat ini.";
+        }
     }
 
     /**

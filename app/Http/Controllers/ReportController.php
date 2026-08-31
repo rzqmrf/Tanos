@@ -118,9 +118,9 @@ class ReportController extends Controller
         $payrollList = $payrollQuery->get();
 
         $payrollReports = $payrollList->map(function ($period) {
-            $totalBasic = $period->results->sum('gaji_pokok');
-            $totalAllowance = $period->results->sum('total_tunjangan');
-            $totalThp = $period->results->sum('take_home_pay');
+            $totalBasic = $period->results->sum('basic_salary');
+            $totalAllowance = $period->results->sum('allowances');
+            $totalThp = $period->results->sum('net_salary');
             $employeeCount = $period->results->count();
 
             if ($employeeCount === 0) {
@@ -217,9 +217,9 @@ class ReportController extends Controller
                 fputcsv($file, ['Periode', 'Project', 'Regional', 'Jumlah TAD', 'Gaji Pokok (Rp)', 'Tunjangan (Rp)', 'Total THP (Rp)', 'Status']);
                 $periods = PayrollPeriod::with(['project', 'results'])->get();
                 foreach ($periods as $period) {
-                    $totalBasic = $period->results->sum('gaji_pokok');
-                    $totalAllowance = $period->results->sum('total_tunjangan');
-                    $totalThp = $period->results->sum('take_home_pay');
+                    $totalBasic = $period->results->sum('basic_salary');
+                    $totalAllowance = $period->results->sum('allowances');
+                    $totalThp = $period->results->sum('net_salary');
                     fputcsv($file, [
                         $period->name,
                         $period->project?->project_name ?? '-',

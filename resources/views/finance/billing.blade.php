@@ -141,9 +141,8 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-600 dark:text-slate-350">
                     <!-- Tab Belum Terbilling -->
-                    <template x-if="pranotaTab === 'belum'">
                         @forelse($belumTerbilling as $item)
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+                        <tr x-show="pranotaTab === 'belum'" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                             <td class="p-4 font-bold text-slate-800 dark:text-slate-200 font-mono text-[13px]">{{ $item->pranota_number }}</td>
                             <td class="p-4 font-semibold">
                                 <span class="block text-slate-700 dark:text-slate-200">{{ $item->project->project_name ?? '-' }}</span>
@@ -175,16 +174,14 @@
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        <tr x-show="pranotaTab === 'belum'">
                             <td colspan="7" class="p-12 text-center text-slate-400">Belum ada pranota dalam proses pengajuan.</td>
                         </tr>
                         @endforelse
-                    </template>
 
                     <!-- Tab Siap Terbilling -->
-                    <template x-if="pranotaTab === 'siap'">
                         @forelse($siapTerbilling as $item)
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+                        <tr x-show="pranotaTab === 'siap'" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                             <td class="p-4 text-center">
                                 <input type="checkbox" :checked="selectedPranotas.includes({{ $item->id }})" 
                                        @change="updateSelected({{ $item->id }}, {{ $item->amount }}, '{{ $item->project_id }}')"
@@ -211,16 +208,14 @@
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        <tr x-show="pranotaTab === 'siap'">
                             <td colspan="8" class="p-12 text-center text-slate-400">Belum ada pranota siap billing. Selesaikan/Setujui pranota terlebih dahulu.</td>
                         </tr>
                         @endforelse
-                    </template>
 
                     <!-- Tab Sudah Terbilling -->
-                    <template x-if="pranotaTab === 'sudah'">
                         @forelse($sudahTerbilling as $item)
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
+                        <tr x-show="pranotaTab === 'sudah'" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition">
                             <td class="p-4 font-bold text-slate-800 dark:text-slate-200 font-mono text-[13px]">{{ $item->pranota_number }}</td>
                             <td class="p-4 font-semibold">
                                 <span class="block text-slate-700 dark:text-slate-200">{{ $item->project->project_name ?? '-' }}</span>
@@ -242,11 +237,10 @@
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        <tr x-show="pranotaTab === 'sudah'">
                             <td colspan="7" class="p-12 text-center text-slate-400">Belum ada pranota yang resmi ditagihkan.</td>
                         </tr>
                         @endforelse
-                    </template>
                 </tbody>
             </table>
         </div>

@@ -3,6 +3,13 @@
 @section('title', 'Payroll Detail — Tanos ERP')
 
 @section('content')
+
+@if (session('error'))
+    <div class="p-3.5 mb-4 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 rounded-xl text-xs font-semibold">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="space-y-6" x-data="{ showCopyModal: false }">
     
     <!-- Top Bar Navigation -->
