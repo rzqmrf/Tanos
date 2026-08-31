@@ -515,6 +515,7 @@ function copilotChat() {
             if (!container) return;
 
             const contentHtml = container.querySelector('.bub-text')?.innerHTML || container.innerHTML;
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary')?.trim() || '#100b60';
             const printWindow = window.open('', '_blank', 'width=800,height=600');
             printWindow.document.write(`
                 <html>
@@ -522,7 +523,7 @@ function copilotChat() {
                     <title>TANOS ERP - Laporan AI Copilot</title>
                     <style>
                         body { font-family: 'Plus Jakarta Sans', Arial, sans-serif; padding: 24px; color: #1e293b; }
-                        h2 { color: #100b60; margin-bottom: 4px; }
+                        h2 { color: ${primaryColor}; margin-bottom: 4px; }
                         .subtitle { font-size: 12px; color: #64748b; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
                         table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
                         th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }

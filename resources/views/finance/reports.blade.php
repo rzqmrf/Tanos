@@ -8,7 +8,7 @@
     <!-- Page Header & Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-5 rounded-3xl shadow-sm">
         <div class="flex items-center space-x-3.5">
-            <div class="p-3 bg-blue-50 dark:bg-blue-950/50 text-[#100b60] dark:text-blue-400 rounded-2xl shrink-0">
+            <div class="p-3 bg-primary-light text-primary rounded-2xl shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
@@ -135,7 +135,7 @@
 
             <!-- Submit Button -->
             <div class="flex items-end space-x-2">
-                <button type="submit" class="w-full bg-[#100b60] hover:bg-blue-900 text-white text-xs font-bold py-2 px-4 rounded-xl transition cursor-pointer">
+                <button type="submit" class="w-full bg-primary hover:bg-primary-hover text-white text-xs font-bold py-2 px-4 rounded-xl shadow-md shadow-primary transition cursor-pointer">
                     Terapkan
                 </button>
                 <a href="{{ route('reports.index') }}" class="bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-xs font-bold py-2 px-3 rounded-xl transition">
@@ -218,7 +218,7 @@
                             <td class="py-3.5 px-4 text-center w-36">
                                 <div class="flex items-center space-x-2">
                                     <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ $proj['realization_pct'] }}%"></div>
+                                        <div class="bg-primary h-2 rounded-full" :style="'width: ' + {{ $proj['realization_pct'] }} + '%'"></div>
                                     </div>
                                     <span class="text-[11px] font-bold shrink-0">{{ $proj['realization_pct'] }}%</span>
                                 </div>

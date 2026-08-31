@@ -100,8 +100,7 @@
     </div>
 
     <script>
-        // Pakai JSON.parse dibungkus kutip biar text editor lu gak pusing membaca syntax Laravel
-        window.__initialChartData = JSON.parse('{!! json_encode($initialData['charts'] ?? []) !!}');
+        window.__initialChartData = @json($initialData['charts'] ?? []);
     </script>
 
     @if(request()->is('/') || request()->routeIs('dashboard.index'))

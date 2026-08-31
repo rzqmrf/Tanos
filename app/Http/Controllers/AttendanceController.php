@@ -8,13 +8,14 @@ use App\Models\Regional;
 use App\Models\Segment;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-            $employeeId = auth()->user()?->employee_id;
+        $employeeId = Auth::user()?->employee_id;
 
         // 1. Tampilan Self-Service Karyawan Regular
         if ($employeeId) {
@@ -89,7 +90,7 @@ class AttendanceController extends Controller
     {
         // A. Self-Service Clock In / Clock Out dari User Karyawan
         if ($request->has('action')) {
-        $employeeId = auth()->user()?->employee_id;
+            $employeeId = Auth::user()?->employee_id;
             if (!$employeeId) {
                 return back()->withErrors(['error' => 'Akses ditolak. Lu gak terhubung ke data pegawai mana pun!']);
             }
@@ -127,7 +128,7 @@ class AttendanceController extends Controller
         }
 
         // B. CRUD Input/Edit Presensi Manual dari Admin (HR/Admin only)
-        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
+        if (!in_array(Auth::user()?->role, ['Admin', 'HR Manager'])) {
             abort(403, 'Hanya Admin/HR yang boleh input manual presensi.');
         }
 
@@ -174,7 +175,7 @@ class AttendanceController extends Controller
 
     public function destroy(Attendance $attendance)
     {
-        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
+        if (!in_array(Auth::user()?->role, ['Admin', 'HR Manager'])) {
             abort(403, 'Hanya Admin/HR yang boleh hapus presensi.');
         }
 

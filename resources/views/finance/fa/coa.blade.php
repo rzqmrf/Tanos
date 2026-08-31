@@ -55,7 +55,7 @@
     <!-- Page Header & Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-[#100b60] dark:text-blue-400 uppercase tracking-wider mb-1">
+            <div class="flex items-center space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
                 <span>Finance & Accounting</span>
                 <span>•</span>
                 <span>Bagan Akun Standar</span>
@@ -67,7 +67,7 @@
         </div>
 
         <button @click="openCreate()"
-                class="px-5 py-2.5 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-950/20 transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
+                class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-lg shadow-primary transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -78,7 +78,7 @@
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-[#100b60] dark:text-blue-400 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5-3h7.5M8.25 9.75h.008v.008H8.25V9.75Z" />
                 </svg>
@@ -119,7 +119,7 @@
         <form method="GET" action="{{ route('fa.coa') }}" class="flex flex-wrap items-center gap-2 flex-1">
             <div class="relative min-w-[220px] flex-1 max-w-sm">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode akun atau nama CoA..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-medium">
+                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-medium">
                 <div class="absolute left-3 top-2.5 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -128,7 +128,7 @@
             </div>
 
             <select name="account_group_id" onchange="this.form.submit()"
-                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500">
+                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-primary">
                 <option value="">Semua Account Group</option>
                 @foreach($accountGroups as $grp)
                     <option value="{{ $grp->id }}" {{ request('account_group_id') == $grp->id ? 'selected' : '' }}>{{ $grp->name }}</option>
@@ -136,13 +136,13 @@
             </select>
 
             <select name="normal_balance" onchange="this.form.submit()"
-                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500">
+                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-primary">
                 <option value="">Semua Pos Saldo</option>
                 <option value="debit" {{ request('normal_balance') == 'debit' ? 'selected' : '' }}>Saldo Normal: Debit</option>
                 <option value="credit" {{ request('normal_balance') == 'credit' ? 'selected' : '' }}>Saldo Normal: Kredit</option>
             </select>
 
-            <button type="submit" class="px-4 py-2 bg-[#100b60] text-white rounded-xl text-xs font-bold hover:bg-[#0c084d] transition cursor-pointer">Filter</button>
+            <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-md shadow-primary transition cursor-pointer">Filter</button>
             @if(request('search') || request('account_group_id') || request('normal_balance'))
                 <a href="{{ route('fa.coa') }}" class="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200 transition">Reset</a>
             @endif
@@ -180,12 +180,15 @@
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $accounts->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
                                 <span class="px-2.5 py-1 font-mono font-bold rounded-md text-[11px] border
-                                    {{ $item->is_header ? 'bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 dark:border-slate-700' : 'bg-blue-50 dark:bg-blue-950/50 text-[#100b60] dark:text-blue-300 border-blue-100 dark:border-blue-900' }}">
+                                    {{ $item->is_header ? 'bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 dark:border-slate-700' : 'bg-primary-light text-primary border-primary-subtle' }}">
                                     {{ $item->code }}
                                 </span>
                             </td>
                             <td class="py-3.5 px-4">
-                                <div class="flex items-center space-x-2" style="padding-left: {{ ($item->level - 1) * 1.25 }}rem;">
+                                @php
+                                    $indentPixels = max(0, ($item->level - 1) * 20);
+                                @endphp
+                                <div class="flex items-center space-x-2" style="padding-left: {{ $indentPixels }}px;">
                                     @if($item->level > 1)
                                         <span class="text-slate-400 font-mono text-[10px]">└─</span>
                                     @endif
@@ -194,11 +197,11 @@
                                     </span>
                                 </div>
                                 @if($item->description)
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5" style="padding-left: {{ ($item->level - 1) * 1.25 }}rem;">
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5" style="padding-left: {{ $indentPixels }}px;">
                                         {{ $item->description }}
                                     </span>
                                 @endif
-                            </td>
+                            </td>   </td>
                             <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">
                                 <span class="text-[11px] font-semibold">{{ $item->accountGroup?->name ?? '—' }}</span>
                             </td>
@@ -364,14 +367,14 @@
 
                     <div class="flex items-center space-x-2 pt-1">
                         <input type="checkbox" id="coaActiveToggle" name="active" value="1" x-model="form.active"
-                               class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                               class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer">
                         <label for="coaActiveToggle" class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">Status Akun Aktif</label>
                     </div>
                 </div>
 
                 <div class="pt-4 flex items-center justify-end space-x-2 border-t border-slate-100 dark:border-slate-800">
                     <button type="button" @click="showModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Akun CoA'"></button>
+                    <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Akun CoA'"></button>
                 </div>
             </form>
         </div>

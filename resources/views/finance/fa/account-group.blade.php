@@ -43,7 +43,7 @@
     <!-- Page Header & Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-[#100b60] dark:text-blue-400 uppercase tracking-wider mb-1">
+            <div class="flex items-center space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
                 <span>Finance & Accounting</span>
                 <span>•</span>
                 <span>Chart of Accounts</span>
@@ -55,7 +55,7 @@
         </div>
 
         <button @click="openCreate()"
-                class="px-5 py-2.5 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-950/20 transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
+                class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-lg shadow-primary transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -66,7 +66,7 @@
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-[#100b60] dark:text-blue-400 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
@@ -107,7 +107,7 @@
         <form method="GET" action="{{ route('fa.account-group') }}" class="flex flex-wrap items-center gap-2 flex-1 max-w-lg">
             <div class="relative min-w-[220px] flex-1">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kode grup akun..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-medium">
+                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-medium">
                 <div class="absolute left-3 top-2.5 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -116,13 +116,13 @@
             </div>
 
             <select name="category" onchange="this.form.submit()"
-                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500">
+                    class="py-2 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-primary">
                 <option value="">Semua Kategori</option>
                 <option value="balance_sheet" {{ request('category') == 'balance_sheet' ? 'selected' : '' }}>Neraca (Balance Sheet)</option>
                 <option value="income_statement" {{ request('category') == 'income_statement' ? 'selected' : '' }}>Laba Rugi (Income Statement)</option>
             </select>
 
-            <button type="submit" class="px-4 py-2 bg-[#100b60] text-white rounded-xl text-xs font-bold hover:bg-[#0c084d] transition cursor-pointer">Filter</button>
+            <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-md shadow-primary transition cursor-pointer">Filter</button>
             @if(request('search') || request('category'))
                 <a href="{{ route('fa.account-group') }}" class="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200 transition">Reset</a>
             @endif
@@ -159,7 +159,7 @@
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $accountGroups->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-1 bg-blue-50 dark:bg-blue-950/50 text-[#100b60] dark:text-blue-300 font-mono font-bold rounded-md text-[11px] border border-blue-100 dark:border-blue-900">
+                                <span class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle">
                                     {{ $item->code }}
                                 </span>
                             </td>
@@ -195,7 +195,7 @@
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end space-x-1.5">
                                     <button @click="openEdit({{ json_encode($item) }})"
-                                            class="p-1.5 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition cursor-pointer" title="Edit Group">
+                                            class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light rounded-lg transition cursor-pointer" title="Edit Group">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                         </svg>
@@ -254,19 +254,19 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Kode Group <span class="text-rose-500">*</span></label>
                     <input type="text" name="code" x-model="form.code" required placeholder="Contoh: 100, 200, 400"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-mono font-bold">
+                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-mono font-bold">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Account Group <span class="text-rose-500">*</span></label>
                     <input type="text" name="name" x-model="form.name" required placeholder="Contoh: Aset Lancar / Liabilitas Jangka Pendek"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-semibold">
+                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-semibold">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Kategori Pelaporan <span class="text-rose-500">*</span></label>
                     <select name="category" x-model="form.category" required
-                            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-bold">
+                            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-bold">
                         <option value="balance_sheet">Pos Neraca (Balance Sheet)</option>
                         <option value="income_statement">Laba Rugi (Income Statement)</option>
                     </select>
@@ -275,18 +275,18 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Deskripsi / Keterangan</label>
                     <textarea name="description" x-model="form.description" rows="3" placeholder="Keterangan pengelompokan akun..."
-                              class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500"></textarea>
+                              class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary"></textarea>
                 </div>
 
                 <div class="flex items-center space-x-2 pt-2">
                     <input type="checkbox" id="groupActiveToggle" name="active" value="1" x-model="form.active"
-                           class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                           class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer">
                     <label for="groupActiveToggle" class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">Status Group Aktif</label>
                 </div>
 
                 <div class="pt-4 flex items-center justify-end space-x-2 border-t border-slate-100 dark:border-slate-800">
                     <button type="button" @click="showModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Group'"></button>
+                    <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Group'"></button>
                 </div>
             </form>
         </div>

@@ -190,7 +190,7 @@
 {{-- MODAL CREATE PEO SETTING --}}
 <div id="modal-create-peo" class="hidden fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-        <div style="background-color: #100b60; color: #ffffff;" class="px-6 py-4 text-white flex items-center justify-between">
+        <div class="px-6 py-4 bg-primary text-white flex items-center justify-between">
             <h3 class="text-sm font-bold text-white">+ Tambah Mapping PEO Setting</h3>
             <button onclick="document.getElementById('modal-create-peo').classList.add('hidden')" class="text-white hover:text-slate-200 font-bold">&times;</button>
         </div>
@@ -226,7 +226,7 @@
 {{-- MODAL EDIT PEO SETTING --}}
 <div id="modal-edit-peo" class="hidden fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
-        <div style="background-color: #100b60; color: #ffffff;" class="px-6 py-4 text-white flex items-center justify-between">
+        <div class="px-6 py-4 bg-primary text-white flex items-center justify-between">
             <h3 class="text-sm font-bold text-white">Edit Mapping PEO Setting</h3>
             <button onclick="document.getElementById('modal-edit-peo').classList.add('hidden')" class="text-white hover:text-slate-200 font-bold">&times;</button>
         </div>

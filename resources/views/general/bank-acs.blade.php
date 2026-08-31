@@ -49,7 +49,7 @@
     <!-- Page Header & Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-[#100b60] dark:text-blue-400 uppercase tracking-wider mb-1">
+            <div class="flex items-center space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
                 <span>General Master</span>
                 <span>•</span>
                 <span>Banking & ACS</span>
@@ -61,7 +61,7 @@
         </div>
 
         <button @click="openCreate()"
-                class="px-5 py-2.5 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-950/20 transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
+                class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-lg shadow-primary transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -72,7 +72,7 @@
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-[#100b60] dark:text-blue-400 flex items-center justify-center font-bold">
+            <div class="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6H2.25m0 0v8.25m0-8.25a60.073 60.073 0 0 1 15.797-2.101C18.774 3.95 19.5 4.49 19.5 5.244V6m0 0v8.25m0-8.25h.75a.75.75 0 0 1 .75.75v.75m0 0v8.25m0-8.25a60.07 60.07 0 0 1-15.797 2.101C3.726 17.05 3 16.51 3 15.756V15" />
                 </svg>
@@ -113,14 +113,14 @@
         <form method="GET" action="{{ route('general.bank-acs') }}" class="flex items-center space-x-2 flex-1 max-w-md">
             <div class="relative w-full">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama bank, no rekening, nama pemilik, mitra..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-medium">
+                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-medium">
                 <div class="absolute left-3 top-2.5 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                 </div>
             </div>
-            <button type="submit" class="px-4 py-2 bg-[#100b60] text-white rounded-xl text-xs font-bold hover:bg-[#0c084d] transition cursor-pointer">Cari</button>
+            <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-md shadow-primary transition cursor-pointer">Cari</button>
             @if(request('search'))
                 <a href="{{ route('general.bank-acs') }}" class="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200 transition">Reset</a>
             @endif
@@ -158,12 +158,12 @@
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $bankAccounts->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
                                 <span class="font-bold text-slate-800 dark:text-slate-100 block">{{ $item->partner?->name ?? '—' }}</span>
-                                <span class="text-[10px] font-mono font-semibold text-blue-600 dark:text-blue-400 block">{{ $item->partner?->code ?? '' }}</span>
+                                <span class="text-[10px] font-mono font-semibold text-primary block">{{ $item->partner?->code ?? '' }}</span>
                             </td>
                             <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-200">
                                 {{ $item->bank_name }}
                             </td>
-                            <td class="py-3.5 px-4 font-mono font-bold text-[#100b60] dark:text-blue-300">
+                            <td class="py-3.5 px-4 font-mono font-bold text-primary">
                                 {{ $item->account_number }}
                             </td>
                             <td class="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-semibold">
@@ -174,7 +174,7 @@
                             </td>
                             <td class="py-3.5 px-4 text-center">
                                 @if($item->is_primary)
-                                    <span class="px-2.5 py-1 text-[10px] font-extrabold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg inline-flex items-center">
+                                    <span class="px-2.5 py-1 text-[10px] font-extrabold bg-primary-light text-primary border border-primary-subtle rounded-lg inline-flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 mr-1">
                                             <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z" clip-rule="evenodd" />
                                         </svg>
@@ -189,7 +189,7 @@
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end space-x-1.5">
                                     <button @click="openEdit({{ json_encode($item) }})"
-                                            class="p-1.5 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition cursor-pointer" title="Edit Rekening">
+                                            class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light rounded-lg transition cursor-pointer" title="Edit Rekening">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                         </svg>
@@ -246,7 +246,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Mitraniaga Pemilik <span class="text-rose-500">*</span></label>
                     <select name="partner_id" x-model="form.partner_id" required
-                            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-bold">
+                            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-bold">
                         @foreach($partners as $partner)
                             <option value="{{ $partner->id }}">{{ $partner->name }} ({{ $partner->code }})</option>
                         @endforeach
@@ -257,13 +257,13 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Bank <span class="text-rose-500">*</span></label>
                         <input type="text" name="bank_name" x-model="form.bank_name" required placeholder="Mandiri / BNI / BRI / BCA"
-                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-bold">
+                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-bold">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nomor Rekening <span class="text-rose-500">*</span></label>
                         <input type="text" name="account_number" x-model="form.account_number" required placeholder="Contoh: 120-00-1234567-8"
-                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-mono font-bold">
+                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-mono font-bold">
                     </div>
                 </div>
 
@@ -271,25 +271,25 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Atas Nama Rekening <span class="text-rose-500">*</span></label>
                         <input type="text" name="account_holder" x-model="form.account_holder" required placeholder="Nama pemilik rekening sesuai buku tabungan"
-                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-semibold">
+                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-semibold">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Kantor Cabang</label>
                         <input type="text" name="branch" x-model="form.branch" placeholder="KCU Tanjung Priok"
-                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500">
+                               class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary">
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2 pt-2">
                     <input type="checkbox" id="primaryToggle" name="is_primary" value="1" x-model="form.is_primary"
-                           class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                           class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer">
                     <label for="primaryToggle" class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">Jadikan Rekening Penampungan Utama (Primary)</label>
                 </div>
 
                 <div class="pt-4 flex items-center justify-end space-x-2 border-t border-slate-100 dark:border-slate-800">
                     <button type="button" @click="showModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Rekening'"></button>
+                    <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Rekening'"></button>
                 </div>
             </form>
         </div>

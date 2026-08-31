@@ -53,7 +53,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Partner Type baru berhasil ditambahkan!');
     }
 
-    public function partnerTypeUpdate(Request $request, $id)
+    public function partnerTypeUpdate(Request $request, int $id)
     {
         $type = PartnerType::findOrFail($id);
 
@@ -74,7 +74,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Data Partner Type berhasil diperbarui!');
     }
 
-    public function partnerTypeDestroy($id)
+    public function partnerTypeDestroy(int $id)
     {
         $type = PartnerType::findOrFail($id);
 
@@ -173,7 +173,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Partner Mitraniaga baru berhasil ditambahkan!');
     }
 
-    public function partnerUpdate(Request $request, $id)
+    public function partnerUpdate(Request $request, int $id)
     {
         $partner = Partner::findOrFail($id);
 
@@ -214,7 +214,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Data Partner berhasil diperbarui!');
     }
 
-    public function partnerDestroy($id)
+    public function partnerDestroy(int $id)
     {
         $partner = Partner::findOrFail($id);
         $partner->delete();
@@ -278,7 +278,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Rekening Bank ACS Mitra berhasil ditambahkan!');
     }
 
-    public function bankAcsUpdate(Request $request, $id)
+    public function bankAcsUpdate(Request $request, int $id)
     {
         $account = PartnerBankAccount::findOrFail($id);
 
@@ -309,7 +309,7 @@ class PartnerController extends Controller
         return redirect()->back()->with('success', 'Rekening Bank ACS berhasil diperbarui!');
     }
 
-    public function bankAcsDestroy($id)
+    public function bankAcsDestroy(int $id)
     {
         $account = PartnerBankAccount::findOrFail($id);
         $account->delete();

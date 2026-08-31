@@ -222,7 +222,7 @@
 {{-- MODAL CREATE NEW EMPLOYEE --}}
 <div id="modal-create-employee" class="hidden fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div style="background-color: #100b60; color: #ffffff;" class="px-6 py-4 text-white flex items-center justify-between sticky top-0 z-10">
+        <div class="px-6 py-4 bg-primary text-white flex items-center justify-between sticky top-0 z-10">
             <h3 class="text-sm font-bold text-white">+ Tambah Data Pegawai Baru</h3>
             <button onclick="document.getElementById('modal-create-employee').classList.add('hidden')" class="text-white hover:text-slate-200 font-bold">&times;</button>
         </div>

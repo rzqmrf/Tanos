@@ -60,7 +60,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Account Group baru berhasil ditambahkan!');
     }
 
-    public function accountGroupUpdate(Request $request, $id)
+    public function accountGroupUpdate(Request $request, int $id)
     {
         $group = FaAccountGroup::findOrFail($id);
 
@@ -83,7 +83,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Data Account Group berhasil diperbarui!');
     }
 
-    public function accountGroupDestroy($id)
+    public function accountGroupDestroy(int $id)
     {
         $group = FaAccountGroup::findOrFail($id);
 
@@ -162,7 +162,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Akun CoA baru berhasil ditambahkan!');
     }
 
-    public function coaUpdate(Request $request, $id)
+    public function coaUpdate(Request $request, int $id)
     {
         $account = ChartOfAccount::findOrFail($id);
 
@@ -193,7 +193,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Data Akun CoA berhasil diperbarui!');
     }
 
-    public function coaDestroy($id)
+    public function coaDestroy(int $id)
     {
         $account = ChartOfAccount::findOrFail($id);
 
@@ -257,7 +257,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Master Tarif Pajak baru berhasil ditambahkan!');
     }
 
-    public function taxUpdate(Request $request, $id)
+    public function taxUpdate(Request $request, int $id)
     {
         $tax = TaxMaster::findOrFail($id);
 
@@ -282,7 +282,7 @@ class FinanceMasterController extends Controller
         return redirect()->back()->with('success', 'Data Tarif Pajak berhasil diperbarui!');
     }
 
-    public function taxDestroy($id)
+    public function taxDestroy(int $id)
     {
         $tax = TaxMaster::findOrFail($id);
         $tax->delete();

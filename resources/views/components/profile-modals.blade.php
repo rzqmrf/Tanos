@@ -252,12 +252,12 @@ document.addEventListener('alpine:init', () => {
         profilePreview: null,
         
         settings: {
-            language: '{{ $dbUser?->settings['language'] ?? 'id' }}',
-            defaultRegional: '{{ $dbUser?->settings['defaultRegional'] ?? 'All' }}',
-            defaultSegment: '{{ $dbUser?->settings['defaultSegment'] ?? 'All' }}',
-            notifyInvoice: {{ ($dbUser?->settings['notifyInvoice'] ?? true) ? 'true' : 'false' }},
-            notifyEmployee: {{ ($dbUser?->settings['notifyEmployee'] ?? true) ? 'true' : 'false' }},
-            notifyDeadline: {{ ($dbUser?->settings['notifyDeadline'] ?? true) ? 'true' : 'false' }}
+            language: @json($dbUser?->settings['language'] ?? 'id'),
+            defaultRegional: @json($dbUser?->settings['defaultRegional'] ?? 'All'),
+            defaultSegment: @json($dbUser?->settings['defaultSegment'] ?? 'All'),
+            notifyInvoice: @json((bool)($dbUser?->settings['notifyInvoice'] ?? true)),
+            notifyEmployee: @json((bool)($dbUser?->settings['notifyEmployee'] ?? true)),
+            notifyDeadline: @json((bool)($dbUser?->settings['notifyDeadline'] ?? true))
         },
         
         toast: {
@@ -266,9 +266,9 @@ document.addEventListener('alpine:init', () => {
         },
         
         profile: {
-            name: '{{ $dbUser?->name ?? session("user.name", "") }}',
-            email: '{{ $dbUser?->email ?? session("user.username", "") }}',
-            phone: '{{ $dbUser?->phone ?? "" }}'
+            name: @json($dbUser?->name ?? session("user.name", "")),
+            email: @json($dbUser?->email ?? session("user.username", "")),
+            phone: @json($dbUser?->phone ?? "")
         },
         
         password: {

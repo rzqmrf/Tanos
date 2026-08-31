@@ -8,7 +8,7 @@
     <!-- Page Header & Title -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-bold text-[#100b60] dark:text-blue-400 uppercase tracking-wider mb-1">
+            <div class="flex items-center space-x-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
                 <span>Human Capital</span>
                 <span>•</span>
                 <span>Master Data</span>
@@ -20,7 +20,7 @@
         </div>
 
         <button @click="editMode = false; form = { id: null, code: '', name: '', description: '', active: true }; showModal = true"
-                class="px-5 py-2.5 bg-[#100b60] hover:bg-[#0c084d] text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-950/20 transition flex items-center space-x-2 self-start sm:self-auto">
+                class="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-lg shadow-primary transition flex items-center space-x-2 self-start sm:self-auto cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -32,7 +32,7 @@
     <div class="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800 overflow-x-auto pb-1 no-scrollbar">
         @foreach($categories as $key => $title)
             <a href="{{ route('hc.master.index', ['category' => $key]) }}"
-               class="px-4 py-2.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap flex items-center space-x-2 {{ $currentCategory === $key ? 'bg-[#100b60] text-white shadow-md shadow-blue-950/20' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800' }}">
+               class="px-4 py-2.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap flex items-center space-x-2 {{ $currentCategory === $key ? 'bg-primary text-white shadow-md shadow-primary' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800' }}">
                 <span>{{ $title }}</span>
             </a>
         @endforeach
@@ -43,7 +43,7 @@
         <form method="GET" action="{{ route('hc.master.index', ['category' => $currentCategory]) }}" class="flex items-center space-x-2 flex-1 max-w-md">
             <div class="relative w-full">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau kode {{ strtolower($categoryTitle) }}..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-medium">
+                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-medium">
                 <div class="absolute left-3 top-2.5 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -82,7 +82,7 @@
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $items->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-1 bg-blue-50 dark:bg-blue-950/50 text-[#100b60] dark:text-blue-300 font-mono font-bold rounded-md text-[11px] border border-blue-100 dark:border-blue-900">
+                                <span class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle">
                                     {{ $item->code ?? '—' }}
                                 </span>
                             </td>
@@ -102,7 +102,7 @@
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end space-x-2">
                                     <button @click="editMode = true; form = { id: {{ $item->id }}, code: '{{ addslashes($item->code) }}', name: '{{ addslashes($item->name) }}', description: '{{ addslashes($item->description) }}', active: {{ $item->active ? 'true' : 'false' }} }; showModal = true"
-                                            class="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded-lg transition" title="Edit Data">
+                                            class="p-1.5 text-primary hover:bg-primary-light rounded-lg transition" title="Edit Data">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                         </svg>
@@ -159,27 +159,27 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">Kode Referensi</label>
-                    <input type="text" name="code" x-model="form.code" placeholder="Misal: REG-1, JC-01" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-mono font-semibold">
+                    <input type="text" name="code" x-model="form.code" placeholder="Misal: REG-1, JC-01" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-primary font-mono font-semibold">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">Nama {{ $categoryTitle }} <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" x-model="form.name" required placeholder="Nama {{ strtolower($categoryTitle) }}" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-semibold">
+                    <input type="text" name="name" x-model="form.name" required placeholder="Nama {{ strtolower($categoryTitle) }}" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-primary font-semibold">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">Keterangan / Deskripsi</label>
-                    <textarea name="description" x-model="form.description" rows="3" placeholder="Deskripsi singkat atau catatan opsional" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-blue-500 font-medium"></textarea>
+                    <textarea name="description" x-model="form.description" rows="3" placeholder="Deskripsi singkat atau catatan opsional" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-xs focus:outline-none focus:border-primary font-medium"></textarea>
                 </div>
 
                 <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" name="active" value="1" id="activeCheck" x-model="form.active" class="w-4 h-4 text-[#100b60] rounded border-slate-300 focus:ring-blue-500">
+                    <input type="checkbox" name="active" value="1" id="activeCheck" x-model="form.active" class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
                     <label for="activeCheck" class="text-xs font-bold text-slate-700 dark:text-slate-300 select-none">Status Aktif</label>
                 </div>
 
                 <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                     <button type="button" @click="showModal = false" class="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-[#100b60] hover:bg-[#0c084d] text-white rounded-xl text-xs font-bold shadow-md transition">Simpan Data</button>
+                    <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-md shadow-primary transition">Simpan Data</button>
                 </div>
             </form>
         </div>
