@@ -44,6 +44,18 @@
                 Expenses & Procurement
             @elseif(request()->routeIs('notifications.page'))
                 Notifications & Activity Log
+            @elseif(request()->routeIs('general.partner-type*'))
+                Partner Type Master
+            @elseif(request()->routeIs('general.partner*'))
+                Partner / Mitraniaga Master
+            @elseif(request()->routeIs('general.bank-acs*'))
+                Bank ACS Master
+            @elseif(request()->routeIs('fa.account-group*'))
+                Account Group Master
+            @elseif(request()->routeIs('fa.coa*'))
+                Chart of Accounts (CoA)
+            @elseif(request()->routeIs('fa.tax*'))
+                Tax Master (Tarif Pajak)
             @else
                 Tanos ERP
             @endif

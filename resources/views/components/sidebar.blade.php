@@ -62,8 +62,10 @@
             $isProjectConfig = request()->routeIs('project.config');
             $isAccessControls = request()->routeIs('access.controls');
             $isUsers = request()->routeIs('users.index') || request()->routeIs('users.show') || request()->routeIs('users.create') || request()->routeIs('users.edit');
-            $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers;
-            $isGeneralActive = $isSettingsActive;
+            $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers || request()->routeIs('peo.*');
+            $isMasterDataActive = request()->routeIs('general.partner*') || request()->routeIs('general.bank-acs*');
+            $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*');
+            $isGeneralActive = $isSettingsActive || $isMasterDataActive || $isMasterFaActive;
 
             // --- MATERIAL ACTIVE STATE ---
             $isMaterialActive = false;
@@ -102,6 +104,8 @@
             // Determine active sub-group for General
             $generalActiveSub = '';
             if ($isSettingsActive) { $generalActiveSub = 'settings'; }
+            elseif ($isMasterDataActive) { $generalActiveSub = 'master_data'; }
+            elseif ($isMasterFaActive) { $generalActiveSub = 'master_fa'; }
 
             // Determine active sub-group for HC
             $hcActiveSub = '';
@@ -273,17 +277,14 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('general.partner-type') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('general.partner-type') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner-type*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type
                                 </a>
-                                <a href="{{ route('general.partner') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('general.partner') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner
                                 </a>
-                                <a href="{{ route('general.bank-acs') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('general.bank-acs') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.bank-acs*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer
                                 </a>
                             </div>
                         </div>
@@ -299,9 +300,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_fa'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('fa.tax') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.tax') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.tax*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax
                                 </a>
                                 <a href="{{ route('fa.profit-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
                                     <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center</span>
@@ -331,13 +331,11 @@
                                     <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period</span>
                                     <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('fa.account-group') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.account-group') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.account-group*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group
                                 </a>
-                                <a href="{{ route('fa.coa') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>CoA</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.coa') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.coa*') ? 'text-[#100b60] dark:text-white font-extrabold bg-blue-50/40 dark:bg-slate-800' : 'text-[#100b60]/85 hover:text-[#100b60] dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>CoA
                                 </a>
                             </div>
                         </div>

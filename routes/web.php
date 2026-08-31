@@ -20,6 +20,9 @@ use App\Http\Controllers\TimeManagementController;
 use App\Http\Controllers\PeoSettingController;
 use App\Http\Controllers\ReportController;
 
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\FinanceMasterController;
+
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post')->middleware('throttle:login');
@@ -75,13 +78,40 @@ Route::prefix('dashboard')->group(function () {
         return view('general.under-construction');
     })->name('under.construction');
 
-    // Dedicated WIP Module Routes
-    Route::get('general/partner-type', fn() => view('general.partner-type'))->name('general.partner-type');
-    Route::get('general/partner', fn() => view('general.partner'))->name('general.partner');
-    Route::get('general/bank-acs', fn() => view('general.bank-acs'))->name('general.bank-acs');
+    // General Master Data: Partners & Bank ACS
+    Route::get('general/partner-type', [PartnerController::class, 'partnerTypeIndex'])->name('general.partner-type')->middleware('permission:settings');
+    Route::post('general/partner-type', [PartnerController::class, 'partnerTypeStore'])->name('general.partner-type.store')->middleware('permission:settings');
+    Route::put('general/partner-type/{id}', [PartnerController::class, 'partnerTypeUpdate'])->name('general.partner-type.update')->middleware('permission:settings');
+    Route::delete('general/partner-type/{id}', [PartnerController::class, 'partnerTypeDestroy'])->name('general.partner-type.destroy')->middleware('permission:settings');
+
+    Route::get('general/partner', [PartnerController::class, 'partnerIndex'])->name('general.partner')->middleware('permission:settings');
+    Route::post('general/partner', [PartnerController::class, 'partnerStore'])->name('general.partner.store')->middleware('permission:settings');
+    Route::put('general/partner/{id}', [PartnerController::class, 'partnerUpdate'])->name('general.partner.update')->middleware('permission:settings');
+    Route::delete('general/partner/{id}', [PartnerController::class, 'partnerDestroy'])->name('general.partner.destroy')->middleware('permission:settings');
+
+    Route::get('general/bank-acs', [PartnerController::class, 'bankAcsIndex'])->name('general.bank-acs')->middleware('permission:settings');
+    Route::post('general/bank-acs', [PartnerController::class, 'bankAcsStore'])->name('general.bank-acs.store')->middleware('permission:settings');
+    Route::put('general/bank-acs/{id}', [PartnerController::class, 'bankAcsUpdate'])->name('general.bank-acs.update')->middleware('permission:settings');
+    Route::delete('general/bank-acs/{id}', [PartnerController::class, 'bankAcsDestroy'])->name('general.bank-acs.destroy')->middleware('permission:settings');
+
     Route::get('general/calendar', fn() => view('general.calendar'))->name('general.calendar');
 
-    Route::get('fa/tax', fn() => view('finance.fa.tax'))->name('fa.tax');
+    // Finance & Accounting (FA) Masters
+    Route::get('fa/tax', [FinanceMasterController::class, 'taxIndex'])->name('fa.tax')->middleware('permission:settings');
+    Route::post('fa/tax', [FinanceMasterController::class, 'taxStore'])->name('fa.tax.store')->middleware('permission:settings');
+    Route::put('fa/tax/{id}', [FinanceMasterController::class, 'taxUpdate'])->name('fa.tax.update')->middleware('permission:settings');
+    Route::delete('fa/tax/{id}', [FinanceMasterController::class, 'taxDestroy'])->name('fa.tax.destroy')->middleware('permission:settings');
+
+    Route::get('fa/account-group', [FinanceMasterController::class, 'accountGroupIndex'])->name('fa.account-group')->middleware('permission:settings');
+    Route::post('fa/account-group', [FinanceMasterController::class, 'accountGroupStore'])->name('fa.account-group.store')->middleware('permission:settings');
+    Route::put('fa/account-group/{id}', [FinanceMasterController::class, 'accountGroupUpdate'])->name('fa.account-group.update')->middleware('permission:settings');
+    Route::delete('fa/account-group/{id}', [FinanceMasterController::class, 'accountGroupDestroy'])->name('fa.account-group.destroy')->middleware('permission:settings');
+
+    Route::get('fa/coa', [FinanceMasterController::class, 'coaIndex'])->name('fa.coa')->middleware('permission:settings');
+    Route::post('fa/coa', [FinanceMasterController::class, 'coaStore'])->name('fa.coa.store')->middleware('permission:settings');
+    Route::put('fa/coa/{id}', [FinanceMasterController::class, 'coaUpdate'])->name('fa.coa.update')->middleware('permission:settings');
+    Route::delete('fa/coa/{id}', [FinanceMasterController::class, 'coaDestroy'])->name('fa.coa.destroy')->middleware('permission:settings');
+
     Route::get('fa/profit-center', fn() => view('finance.fa.profit-center'))->name('fa.profit-center');
     Route::get('fa/cost-center', fn() => view('finance.fa.cost-center'))->name('fa.cost-center');
     Route::get('fa/fund-center', fn() => view('finance.fa.fund-center'))->name('fa.fund-center');
@@ -89,8 +119,6 @@ Route::prefix('dashboard')->group(function () {
     Route::get('fa/currency-rate', fn() => view('finance.fa.currency-rate'))->name('fa.currency-rate');
     Route::get('fa/bank-account', fn() => view('finance.fa.bank-account'))->name('fa.bank-account');
     Route::get('fa/period', fn() => view('finance.fa.period'))->name('fa.period');
-    Route::get('fa/account-group', fn() => view('finance.fa.account-group'))->name('fa.account-group');
-    Route::get('fa/coa', fn() => view('finance.fa.coa'))->name('fa.coa');
 
     Route::get('fa/fi-settings', fn() => view('finance.fa.fi-settings'))->name('fa.fi-settings');
     Route::get('fa/budget-management', fn() => view('finance.fa.budget-management'))->name('fa.budget-management');
