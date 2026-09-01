@@ -5,7 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\FaAccountGroup;
 use App\Models\ChartOfAccount;
 use App\Models\TaxMaster;
+use App\Models\FaProfitCenter;
+use App\Models\FaCostCenter;
+use App\Models\FaFundCenter;
+use App\Models\FaCurrency;
+use App\Models\FaCurrencyRate;
+use App\Models\FaCompanyBankAccount;
+use App\Models\FaFiscalPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class FinanceMasterController extends Controller
 {
@@ -537,4 +546,597 @@ class FinanceMasterController extends Controller
             TaxMaster::create($tax + ['active' => true]);
         }
     }
+
+    /* -------------------------------------------------------------------------- */
+    /* PROFIT CENTERS                                                             */
+    /* -------------------------------------------------------------------------- */
+    public function profitCenterIndex(Request $request)
+    {
+        $query = FaProfitCenter::withCount('costCenters');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('segment', 'like', "%{$search}%")
+                  ->orWhere('person_in_charge', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('segment')) {
+            $query->where('segment', $request->segment);
+        }
+
+        $profitCenters = $query->orderBy('code')->paginate(10)->withQueryString();
+        $totalAll = FaProfitCenter::count();
+        $totalActive = FaProfitCenter::where('active', true)->count();
+        $segments = FaProfitCenter::whereNotNull('segment')->distinct()->pluck('segment');
+
+        return view('finance.fa.profit-center', compact('profitCenters', 'totalAll', 'totalActive', 'segments'));
+    }
+
+    public function profitCenterStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50|unique:fa_profit_centers,code',
+            'name' => 'required|string|max:255',
+            'segment' => 'nullable|string|max:100',
+            'person_in_charge' => 'nullable|string|max:150',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        FaProfitCenter::create([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'segment' => $request->segment,
+            'person_in_charge' => $request->person_in_charge,
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : true,
+        ]);
+
+        return redirect()->back()->with('success', 'Profit Center baru berhasil ditambahkan!');
+    }
+
+    public function profitCenterUpdate(Request $request, int $id)
+    {
+        $pc = FaProfitCenter::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:fa_profit_centers,code,' . $id,
+            'name' => 'required|string|max:255',
+            'segment' => 'nullable|string|max:100',
+            'person_in_charge' => 'nullable|string|max:150',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        $pc->update([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'segment' => $request->segment,
+            'person_in_charge' => $request->person_in_charge,
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Profit Center berhasil diperbarui!');
+    }
+
+    public function profitCenterDestroy(int $id)
+    {
+        $pc = FaProfitCenter::findOrFail($id);
+
+        if ($pc->costCenters()->exists()) {
+            return redirect()->back()->with('error', 'Tidak dapat menghapus Profit Center karena masih memiliki Cost Center terkait.');
+        }
+
+        $pc->delete();
+        return redirect()->back()->with('success', 'Profit Center berhasil dihapus!');
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* COST CENTERS                                                               */
+    /* -------------------------------------------------------------------------- */
+    public function costCenterIndex(Request $request)
+    {
+        $query = FaCostCenter::with('profitCenter');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('department', 'like', "%{$search}%")
+                  ->orWhere('person_in_charge', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('profit_center_id')) {
+            $query->where('profit_center_id', $request->profit_center_id);
+        }
+
+        $costCenters = $query->orderBy('code')->paginate(10)->withQueryString();
+        $profitCenters = FaProfitCenter::where('active', true)->orderBy('code')->get();
+        $totalAll = FaCostCenter::count();
+        $totalActive = FaCostCenter::where('active', true)->count();
+
+        return view('finance.fa.cost-center', compact('costCenters', 'profitCenters', 'totalAll', 'totalActive'));
+    }
+
+    public function costCenterStore(Request $request)
+    {
+        $request->validate([
+            'profit_center_id' => 'nullable|exists:fa_profit_centers,id',
+            'code' => 'required|string|max:50|unique:fa_cost_centers,code',
+            'name' => 'required|string|max:255',
+            'department' => 'nullable|string|max:100',
+            'person_in_charge' => 'nullable|string|max:150',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        FaCostCenter::create([
+            'profit_center_id' => $request->profit_center_id,
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'department' => $request->department,
+            'person_in_charge' => $request->person_in_charge,
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : true,
+        ]);
+
+        return redirect()->back()->with('success', 'Cost Center baru berhasil ditambahkan!');
+    }
+
+    public function costCenterUpdate(Request $request, int $id)
+    {
+        $cc = FaCostCenter::findOrFail($id);
+
+        $request->validate([
+            'profit_center_id' => 'nullable|exists:fa_profit_centers,id',
+            'code' => 'required|string|max:50|unique:fa_cost_centers,code,' . $id,
+            'name' => 'required|string|max:255',
+            'department' => 'nullable|string|max:100',
+            'person_in_charge' => 'nullable|string|max:150',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        $cc->update([
+            'profit_center_id' => $request->profit_center_id,
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'department' => $request->department,
+            'person_in_charge' => $request->person_in_charge,
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Cost Center berhasil diperbarui!');
+    }
+
+    public function costCenterDestroy(int $id)
+    {
+        $cc = FaCostCenter::findOrFail($id);
+        $cc->delete();
+
+        return redirect()->back()->with('success', 'Cost Center berhasil dihapus!');
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* FUND CENTERS                                                               */
+    /* -------------------------------------------------------------------------- */
+    public function fundCenterIndex(Request $request)
+    {
+        $query = FaFundCenter::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $fundCenters = $query->orderBy('code')->paginate(10)->withQueryString();
+        $totalAll = FaFundCenter::count();
+        $totalPagu = FaFundCenter::where('active', true)->sum('budget_limit');
+
+        return view('finance.fa.fund-center', compact('fundCenters', 'totalAll', 'totalPagu'));
+    }
+
+    public function fundCenterStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50|unique:fa_fund_centers,code',
+            'name' => 'required|string|max:255',
+            'budget_limit' => 'required|numeric|min:0',
+            'currency' => 'required|string|max:10',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        FaFundCenter::create([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'budget_limit' => $request->budget_limit,
+            'currency' => strtoupper(trim($request->currency)),
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : true,
+        ]);
+
+        return redirect()->back()->with('success', 'Fund Center / Pagu Dana baru berhasil ditambahkan!');
+    }
+
+    public function fundCenterUpdate(Request $request, int $id)
+    {
+        $fc = FaFundCenter::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:50|unique:fa_fund_centers,code,' . $id,
+            'name' => 'required|string|max:255',
+            'budget_limit' => 'required|numeric|min:0',
+            'currency' => 'required|string|max:10',
+            'description' => 'nullable|string',
+            'active' => 'nullable',
+        ]);
+
+        $fc->update([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'budget_limit' => $request->budget_limit,
+            'currency' => strtoupper(trim($request->currency)),
+            'description' => $request->description,
+            'active' => $request->has('active') ? (bool) $request->active : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Fund Center berhasil diperbarui!');
+    }
+
+    public function fundCenterDestroy(int $id)
+    {
+        $fc = FaFundCenter::findOrFail($id);
+        $fc->delete();
+
+        return redirect()->back()->with('success', 'Fund Center berhasil dihapus!');
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* CURRENCIES & RATES                                                         */
+    /* -------------------------------------------------------------------------- */
+    public function currencyIndex(Request $request)
+    {
+        $query = FaCurrency::with('latestRate');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('symbol', 'like', "%{$search}%");
+            });
+        }
+
+        $currencies = $query->orderByDesc('is_default')->orderBy('code')->paginate(10)->withQueryString();
+        $totalAll = FaCurrency::count();
+        $totalActive = FaCurrency::where('active', true)->count();
+
+        return view('finance.fa.currency', compact('currencies', 'totalAll', 'totalActive'));
+    }
+
+    public function currencyStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:10|unique:fa_currencies,code',
+            'name' => 'required|string|max:50',
+            'symbol' => 'required|string|max:10',
+            'is_default' => 'nullable',
+            'active' => 'nullable',
+        ]);
+
+        if ($request->has('is_default') && $request->is_default) {
+            FaCurrency::where('is_default', true)->update(['is_default' => false]);
+        }
+
+        FaCurrency::create([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'symbol' => $request->symbol,
+            'is_default' => $request->has('is_default') ? (bool) $request->is_default : false,
+            'active' => $request->has('active') ? (bool) $request->active : true,
+        ]);
+
+        return redirect()->back()->with('success', 'Mata Uang baru berhasil ditambahkan!');
+    }
+
+    public function currencyUpdate(Request $request, int $id)
+    {
+        $currency = FaCurrency::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|max:10|unique:fa_currencies,code,' . $id,
+            'name' => 'required|string|max:50',
+            'symbol' => 'required|string|max:10',
+            'is_default' => 'nullable',
+            'active' => 'nullable',
+        ]);
+
+        if ($request->has('is_default') && $request->is_default) {
+            FaCurrency::where('id', '!=', $id)->update(['is_default' => false]);
+        }
+
+        $currency->update([
+            'code' => strtoupper(trim($request->code)),
+            'name' => $request->name,
+            'symbol' => $request->symbol,
+            'is_default' => $request->has('is_default') ? (bool) $request->is_default : false,
+            'active' => $request->has('active') ? (bool) $request->active : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Mata Uang berhasil diperbarui!');
+    }
+
+    public function currencyDestroy(int $id)
+    {
+        $currency = FaCurrency::findOrFail($id);
+
+        if ($currency->is_default) {
+            return redirect()->back()->with('error', 'Mata uang default sistem (Base Currency) tidak dapat dihapus.');
+        }
+
+        $currency->delete();
+        return redirect()->back()->with('success', 'Mata Uang berhasil dihapus!');
+    }
+
+    public function currencyRateIndex(Request $request)
+    {
+        $query = FaCurrencyRate::with('currency');
+
+        if ($request->filled('currency_id')) {
+            $query->where('currency_id', $request->currency_id);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('currency', function ($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%");
+            })->orWhere('source', 'like', "%{$search}%");
+        }
+
+        $rates = $query->orderByDesc('effective_date')->paginate(15)->withQueryString();
+        $currencies = FaCurrency::where('code', '!=', 'IDR')->where('active', true)->orderBy('code')->get();
+        $totalAll = FaCurrencyRate::count();
+
+        return view('finance.fa.currency-rate', compact('rates', 'currencies', 'totalAll'));
+    }
+
+    public function currencyRateStore(Request $request)
+    {
+        $request->validate([
+            'currency_id' => 'required|exists:fa_currencies,id',
+            'rate_to_idr' => 'required|numeric|min:0.0001',
+            'effective_date' => 'required|date',
+            'source' => 'required|string|max:100',
+            'notes' => 'nullable|string',
+        ]);
+
+        FaCurrencyRate::updateOrCreate(
+            [
+                'currency_id' => $request->currency_id,
+                'effective_date' => $request->effective_date,
+            ],
+            [
+                'rate_to_idr' => $request->rate_to_idr,
+                'source' => $request->source,
+                'notes' => $request->notes,
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Kurs Mata Uang berhasil disimpan!');
+    }
+
+    public function currencyRateUpdate(Request $request, int $id)
+    {
+        $rate = FaCurrencyRate::findOrFail($id);
+
+        $request->validate([
+            'currency_id' => 'required|exists:fa_currencies,id',
+            'rate_to_idr' => 'required|numeric|min:0.0001',
+            'effective_date' => 'required|date',
+            'source' => 'required|string|max:100',
+            'notes' => 'nullable|string',
+        ]);
+
+        $rate->update([
+            'currency_id' => $request->currency_id,
+            'rate_to_idr' => $request->rate_to_idr,
+            'effective_date' => $request->effective_date,
+            'source' => $request->source,
+            'notes' => $request->notes,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Kurs berhasil diperbarui!');
+    }
+
+    public function currencyRateDestroy(int $id)
+    {
+        $rate = FaCurrencyRate::findOrFail($id);
+        $rate->delete();
+
+        return redirect()->back()->with('success', 'Data Kurs berhasil dihapus!');
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* COMPANY BANK ACCOUNTS                                                      */
+    /* -------------------------------------------------------------------------- */
+    public function companyBankIndex(Request $request)
+    {
+        $query = FaCompanyBankAccount::with('chartOfAccount');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('bank_name', 'like', "%{$search}%")
+                  ->orWhere('account_number', 'like', "%{$search}%")
+                  ->orWhere('account_holder', 'like', "%{$search}%")
+                  ->orWhere('branch', 'like', "%{$search}%");
+            });
+        }
+
+        $bankAccounts = $query->orderByDesc('is_primary')->orderBy('bank_name')->paginate(10)->withQueryString();
+        $coas = ChartOfAccount::where('active', true)->where('is_header', false)->orderBy('code')->get();
+        $totalAll = FaCompanyBankAccount::count();
+        $totalActive = FaCompanyBankAccount::where('active', true)->count();
+
+        return view('finance.fa.bank-account', compact('bankAccounts', 'coas', 'totalAll', 'totalActive'));
+    }
+
+    public function companyBankStore(Request $request)
+    {
+        $request->validate([
+            'bank_name' => 'required|string|max:100',
+            'account_number' => 'required|string|max:50|unique:fa_company_bank_accounts,account_number',
+            'account_holder' => 'required|string|max:150',
+            'branch' => 'nullable|string|max:100',
+            'currency' => 'required|string|max:10',
+            'chart_of_account_id' => 'nullable|exists:chart_of_accounts,id',
+            'is_primary' => 'nullable',
+            'active' => 'nullable',
+        ]);
+
+        if ($request->has('is_primary') && $request->is_primary) {
+            FaCompanyBankAccount::where('is_primary', true)->update(['is_primary' => false]);
+        }
+
+        FaCompanyBankAccount::create([
+            'bank_name' => $request->bank_name,
+            'account_number' => trim($request->account_number),
+            'account_holder' => strtoupper(trim($request->account_holder)),
+            'branch' => $request->branch,
+            'currency' => strtoupper(trim($request->currency)),
+            'chart_of_account_id' => $request->chart_of_account_id,
+            'is_primary' => $request->has('is_primary') ? (bool) $request->is_primary : false,
+            'active' => $request->has('active') ? (bool) $request->active : true,
+        ]);
+
+        return redirect()->back()->with('success', 'Rekening Bank Perusahaan baru berhasil ditambahkan!');
+    }
+
+    public function companyBankUpdate(Request $request, int $id)
+    {
+        $bank = FaCompanyBankAccount::findOrFail($id);
+
+        $request->validate([
+            'bank_name' => 'required|string|max:100',
+            'account_number' => 'required|string|max:50|unique:fa_company_bank_accounts,account_number,' . $id,
+            'account_holder' => 'required|string|max:150',
+            'branch' => 'nullable|string|max:100',
+            'currency' => 'required|string|max:10',
+            'chart_of_account_id' => 'nullable|exists:chart_of_accounts,id',
+            'is_primary' => 'nullable',
+            'active' => 'nullable',
+        ]);
+
+        if ($request->has('is_primary') && $request->is_primary) {
+            FaCompanyBankAccount::where('id', '!=', $id)->update(['is_primary' => false]);
+        }
+
+        $bank->update([
+            'bank_name' => $request->bank_name,
+            'account_number' => trim($request->account_number),
+            'account_holder' => strtoupper(trim($request->account_holder)),
+            'branch' => $request->branch,
+            'currency' => strtoupper(trim($request->currency)),
+            'chart_of_account_id' => $request->chart_of_account_id,
+            'is_primary' => $request->has('is_primary') ? (bool) $request->is_primary : false,
+            'active' => $request->has('active') ? (bool) $request->active : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Rekening Bank berhasil diperbarui!');
+    }
+
+    public function companyBankDestroy(int $id)
+    {
+        $bank = FaCompanyBankAccount::findOrFail($id);
+        $bank->delete();
+
+        return redirect()->back()->with('success', 'Rekening Bank berhasil dihapus!');
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /* FISCAL PERIODS                                                             */
+    /* -------------------------------------------------------------------------- */
+    public function fiscalPeriodIndex(Request $request)
+    {
+        $year = $request->input('year', (int) date('Y'));
+
+        $periods = FaFiscalPeriod::with('closedByUser')
+            ->where('year', $year)
+            ->orderBy('month')
+            ->get();
+
+        $availableYears = FaFiscalPeriod::distinct()->pluck('year')->toArray();
+        if (!in_array((int) date('Y'), $availableYears)) {
+            $availableYears[] = (int) date('Y');
+        }
+        sort($availableYears);
+
+        $totalOpen = FaFiscalPeriod::where('year', $year)->where('status', 'Open')->count();
+        $totalClosed = FaFiscalPeriod::where('year', $year)->where('status', 'Closed')->count();
+
+        return view('finance.fa.period', compact('periods', 'year', 'availableYears', 'totalOpen', 'totalClosed'));
+    }
+
+    public function fiscalPeriodStore(Request $request)
+    {
+        $request->validate([
+            'year' => 'required|integer|min:2020|max:2050',
+            'month' => 'required|integer|min:1|max:12',
+            'status' => 'required|in:Open,Closed,Special',
+        ]);
+
+        $monthsIndo = [
+            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+            7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember',
+        ];
+
+        $startDate = Carbon::create($request->year, $request->month, 1)->startOfMonth();
+        $endDate = Carbon::create($request->year, $request->month, 1)->endOfMonth();
+
+        FaFiscalPeriod::updateOrCreate(
+            [
+                'year' => $request->year,
+                'month' => $request->month,
+            ],
+            [
+                'period_name' => "{$monthsIndo[$request->month]} {$request->year}",
+                'start_date' => $startDate->format('Y-m-d'),
+                'end_date' => $endDate->format('Y-m-d'),
+                'status' => $request->status,
+                'closed_at' => $request->status === 'Closed' ? now() : null,
+                'closed_by' => $request->status === 'Closed' ? Auth::id() : null,
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Periode Pembukuan berhasil disimpan!');
+    }
+
+    public function fiscalPeriodToggleStatus(Request $request, int $id)
+    {
+        $period = FaFiscalPeriod::findOrFail($id);
+        $newStatus = $period->status === 'Open' ? 'Closed' : 'Open';
+
+        $period->update([
+            'status' => $newStatus,
+            'closed_at' => $newStatus === 'Closed' ? now() : null,
+            'closed_by' => $newStatus === 'Closed' ? Auth::id() : null,
+        ]);
+
+        $msg = $newStatus === 'Closed' ? "Periode {$period->period_name} resmi DITUTUP (Closed)." : "Periode {$period->period_name} DIBUKA KEMBALI (Open).";
+        return redirect()->back()->with('success', $msg);
+    }
 }
+

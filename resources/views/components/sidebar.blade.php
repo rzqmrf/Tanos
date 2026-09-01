@@ -64,11 +64,11 @@
             $isUsers = request()->routeIs('users.index') || request()->routeIs('users.show') || request()->routeIs('users.create') || request()->routeIs('users.edit');
             $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers || request()->routeIs('peo.*');
             $isMasterDataActive = request()->routeIs('general.partner*') || request()->routeIs('general.bank-acs*');
-            $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*');
+            $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*') || request()->routeIs('fa.profit-center*') || request()->routeIs('fa.cost-center*') || request()->routeIs('fa.fund-center*') || request()->routeIs('fa.currency*') || request()->routeIs('fa.bank-account*') || request()->routeIs('fa.period*');
             $isGeneralActive = $isSettingsActive || $isMasterDataActive || $isMasterFaActive;
 
             // --- MATERIAL ACTIVE STATE ---
-            $isMaterialActive = false;
+            $isMaterialActive = request()->routeIs('material.equipment*') || request()->routeIs('material.outline-agreement*');
 
             // --- HUMAN CAPITAL ACTIVE STATE ---
             $isEmployees = request()->routeIs('employees.index') || request()->routeIs('employees.show') || request()->routeIs('employees.create') || request()->routeIs('employees.edit');
@@ -303,33 +303,26 @@
                                 <a href="{{ route('fa.tax') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.tax*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Tax
                                 </a>
-                                <a href="{{ route('fa.profit-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.profit-center') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.profit-center*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Center
                                 </a>
-                                <a href="{{ route('fa.cost-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cost Center</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.cost-center') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.cost-center*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Cost Center
                                 </a>
-                                <a href="{{ route('fa.fund-center') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.fund-center') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.fund-center*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center
                                 </a>
-                                <a href="{{ route('fa.currency') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.currency') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.currency*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency
                                 </a>
-                                <a href="{{ route('fa.currency-rate') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.currency-rate') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.currency-rate*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate
                                 </a>
-                                <a href="{{ route('fa.bank-account') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank Account</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.bank-account') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.bank-account*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank Account
                                 </a>
-                                <a href="{{ route('fa.period') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('fa.period') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.period*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Period
                                 </a>
                                 <a href="{{ route('fa.account-group') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.account-group*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Account Group
@@ -403,7 +396,7 @@
                     </button>
                     
                     <div x-show="activeMenu === 'material'" 
-                         x-data="{ activeSubMenu: '' }"
+                         x-data="{ activeSubMenu: '{{ request()->routeIs('material.equipment*') ? 'equipment_master' : '' }}' }"
                          x-transition class="mt-1 pl-4 space-y-1.5 border-l border-slate-100 dark:border-slate-800 ml-4.5" style="display: none;">
                         <!-- Nested: Equipment Master -->
                         <div class="space-y-1">
@@ -416,17 +409,15 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'equipment_master'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('material.equipment') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
-                                    <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Equipment</span>
-                                    <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                                <a href="{{ route('material.equipment') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('material.equipment*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Equipment
                                 </a>
                             </div>
                         </div>
 
                         <!-- Nested: Outline Agreement -->
-                        <a href="{{ route('material.outline-agreement') }}" class="flex items-center justify-between py-1.5 px-3 text-[13px] font-semibold rounded-lg text-slate-700 hover:text-primary dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40">
-                            <span><span class="mr-1.5 text-xs text-current font-extrabold mt-0.5">•</span>Outline Agreement</span>
-                            <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
+                        <a href="{{ route('material.outline-agreement') }}" class="block py-1.5 px-3 text-[13px] font-semibold rounded-lg {{ request()->routeIs('material.outline-agreement*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-700 hover:text-primary dark:text-slate-300 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40' }}">
+                            <span class="mr-1.5 text-xs text-current font-extrabold mt-0.5">•</span>Outline Agreement
                         </a>
                     </div>
                 </div>

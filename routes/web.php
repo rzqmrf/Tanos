@@ -22,6 +22,7 @@ use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\FinanceMasterController;
+use App\Http\Controllers\MaterialController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -112,13 +113,40 @@ Route::prefix('dashboard')->group(function () {
     Route::put('fa/coa/{id}', [FinanceMasterController::class, 'coaUpdate'])->name('fa.coa.update')->middleware('permission:settings');
     Route::delete('fa/coa/{id}', [FinanceMasterController::class, 'coaDestroy'])->name('fa.coa.destroy')->middleware('permission:settings');
 
-    Route::get('fa/profit-center', fn() => view('finance.fa.profit-center'))->name('fa.profit-center');
-    Route::get('fa/cost-center', fn() => view('finance.fa.cost-center'))->name('fa.cost-center');
-    Route::get('fa/fund-center', fn() => view('finance.fa.fund-center'))->name('fa.fund-center');
-    Route::get('fa/currency', fn() => view('finance.fa.currency'))->name('fa.currency');
-    Route::get('fa/currency-rate', fn() => view('finance.fa.currency-rate'))->name('fa.currency-rate');
-    Route::get('fa/bank-account', fn() => view('finance.fa.bank-account'))->name('fa.bank-account');
-    Route::get('fa/period', fn() => view('finance.fa.period'))->name('fa.period');
+    // Phase 2 FA Masters
+    Route::get('fa/profit-center', [FinanceMasterController::class, 'profitCenterIndex'])->name('fa.profit-center')->middleware('permission:settings');
+    Route::post('fa/profit-center', [FinanceMasterController::class, 'profitCenterStore'])->name('fa.profit-center.store')->middleware('permission:settings');
+    Route::put('fa/profit-center/{id}', [FinanceMasterController::class, 'profitCenterUpdate'])->name('fa.profit-center.update')->middleware('permission:settings');
+    Route::delete('fa/profit-center/{id}', [FinanceMasterController::class, 'profitCenterDestroy'])->name('fa.profit-center.destroy')->middleware('permission:settings');
+
+    Route::get('fa/cost-center', [FinanceMasterController::class, 'costCenterIndex'])->name('fa.cost-center')->middleware('permission:settings');
+    Route::post('fa/cost-center', [FinanceMasterController::class, 'costCenterStore'])->name('fa.cost-center.store')->middleware('permission:settings');
+    Route::put('fa/cost-center/{id}', [FinanceMasterController::class, 'costCenterUpdate'])->name('fa.cost-center.update')->middleware('permission:settings');
+    Route::delete('fa/cost-center/{id}', [FinanceMasterController::class, 'costCenterDestroy'])->name('fa.cost-center.destroy')->middleware('permission:settings');
+
+    Route::get('fa/fund-center', [FinanceMasterController::class, 'fundCenterIndex'])->name('fa.fund-center')->middleware('permission:settings');
+    Route::post('fa/fund-center', [FinanceMasterController::class, 'fundCenterStore'])->name('fa.fund-center.store')->middleware('permission:settings');
+    Route::put('fa/fund-center/{id}', [FinanceMasterController::class, 'fundCenterUpdate'])->name('fa.fund-center.update')->middleware('permission:settings');
+    Route::delete('fa/fund-center/{id}', [FinanceMasterController::class, 'fundCenterDestroy'])->name('fa.fund-center.destroy')->middleware('permission:settings');
+
+    Route::get('fa/currency', [FinanceMasterController::class, 'currencyIndex'])->name('fa.currency')->middleware('permission:settings');
+    Route::post('fa/currency', [FinanceMasterController::class, 'currencyStore'])->name('fa.currency.store')->middleware('permission:settings');
+    Route::put('fa/currency/{id}', [FinanceMasterController::class, 'currencyUpdate'])->name('fa.currency.update')->middleware('permission:settings');
+    Route::delete('fa/currency/{id}', [FinanceMasterController::class, 'currencyDestroy'])->name('fa.currency.destroy')->middleware('permission:settings');
+
+    Route::get('fa/currency-rate', [FinanceMasterController::class, 'currencyRateIndex'])->name('fa.currency-rate')->middleware('permission:settings');
+    Route::post('fa/currency-rate', [FinanceMasterController::class, 'currencyRateStore'])->name('fa.currency-rate.store')->middleware('permission:settings');
+    Route::put('fa/currency-rate/{id}', [FinanceMasterController::class, 'currencyRateUpdate'])->name('fa.currency-rate.update')->middleware('permission:settings');
+    Route::delete('fa/currency-rate/{id}', [FinanceMasterController::class, 'currencyRateDestroy'])->name('fa.currency-rate.destroy')->middleware('permission:settings');
+
+    Route::get('fa/bank-account', [FinanceMasterController::class, 'companyBankIndex'])->name('fa.bank-account')->middleware('permission:settings');
+    Route::post('fa/bank-account', [FinanceMasterController::class, 'companyBankStore'])->name('fa.bank-account.store')->middleware('permission:settings');
+    Route::put('fa/bank-account/{id}', [FinanceMasterController::class, 'companyBankUpdate'])->name('fa.bank-account.update')->middleware('permission:settings');
+    Route::delete('fa/bank-account/{id}', [FinanceMasterController::class, 'companyBankDestroy'])->name('fa.bank-account.destroy')->middleware('permission:settings');
+
+    Route::get('fa/period', [FinanceMasterController::class, 'fiscalPeriodIndex'])->name('fa.period')->middleware('permission:settings');
+    Route::post('fa/period', [FinanceMasterController::class, 'fiscalPeriodStore'])->name('fa.period.store')->middleware('permission:settings');
+    Route::post('fa/period/{id}/toggle-status', [FinanceMasterController::class, 'fiscalPeriodToggleStatus'])->name('fa.period.toggle-status')->middleware('permission:settings');
 
     Route::get('fa/fi-settings', fn() => view('finance.fa.fi-settings'))->name('fa.fi-settings');
     Route::get('fa/budget-management', fn() => view('finance.fa.budget-management'))->name('fa.budget-management');
@@ -127,8 +155,16 @@ Route::prefix('dashboard')->group(function () {
     Route::get('fa/coa-mapping', fn() => view('finance.fa.coa-mapping'))->name('fa.coa-mapping');
     Route::get('fa/open-item', fn() => view('finance.fa.open-item'))->name('fa.open-item');
 
-    Route::get('material/equipment', fn() => view('material.equipment'))->name('material.equipment');
-    Route::get('material/outline-agreement', fn() => view('material.outline-agreement'))->name('material.outline-agreement');
+    // Material Management
+    Route::get('material/equipment', [MaterialController::class, 'equipmentIndex'])->name('material.equipment')->middleware('permission:settings');
+    Route::post('material/equipment', [MaterialController::class, 'equipmentStore'])->name('material.equipment.store')->middleware('permission:settings');
+    Route::put('material/equipment/{id}', [MaterialController::class, 'equipmentUpdate'])->name('material.equipment.update')->middleware('permission:settings');
+    Route::delete('material/equipment/{id}', [MaterialController::class, 'equipmentDestroy'])->name('material.equipment.destroy')->middleware('permission:settings');
+
+    Route::get('material/outline-agreement', [MaterialController::class, 'outlineAgreementIndex'])->name('material.outline-agreement')->middleware('permission:settings');
+    Route::post('material/outline-agreement', [MaterialController::class, 'outlineAgreementStore'])->name('material.outline-agreement.store')->middleware('permission:settings');
+    Route::put('material/outline-agreement/{id}', [MaterialController::class, 'outlineAgreementUpdate'])->name('material.outline-agreement.update')->middleware('permission:settings');
+    Route::delete('material/outline-agreement/{id}', [MaterialController::class, 'outlineAgreementDestroy'])->name('material.outline-agreement.destroy')->middleware('permission:settings');
 
     Route::get('hc/search-employee', fn() => view('hr.search-employee'))->name('hc.search-employee');
     Route::get('ps/wbs-report-new', fn() => view('operations.wbs-report-new'))->name('ps.wbs-report-new');
