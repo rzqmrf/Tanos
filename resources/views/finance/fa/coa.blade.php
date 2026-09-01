@@ -204,7 +204,7 @@
                                 @php
                                     $indentPixels = max(0, ($item->level - 1) * 20);
                                 @endphp
-                                <div class="flex items-center space-x-2" style="padding-left: {{ $indentPixels }}px;">
+                                <div class="flex items-center space-x-2" :style="'padding-left: ' + {{ $indentPixels }} + 'px'">
                                     @if($item->level > 1)
                                         <span class="text-slate-400 font-mono text-[10px]">└─</span>
                                     @endif
@@ -213,7 +213,7 @@
                                     </button>
                                 </div>
                                 @if($item->description)
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5" style="padding-left: {{ $indentPixels }}px;">
+                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5" :style="'padding-left: ' + {{ $indentPixels }} + 'px'">
                                         {{ $item->description }}
                                     </span>
                                 @endif

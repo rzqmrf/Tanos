@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use App\Models\Project;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\AbsentType;
 use App\Models\ScheduleGroup;
 use App\Models\ScheduleAssignment;
 use App\Models\TimeEvaluation;
 use App\Models\TimePeriod;
-use App\Models\TimeResult;
+use App\Models\TimePeriodResult;
+use App\Models\Employee;
 use App\Models\Attendance;
-use App\Models\LeaveRequest;
-use Illuminate\Http\Request;
+use App\Models\Project;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -30,7 +30,8 @@ class TimeManagementController extends Controller
                 'periodStore', 'periodCalculate', 'periodDestroy'
             ];
             if (in_array($routeAction, $modifyingActions)) {
-                if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
+                $user = Auth::user();
+                if (!$user || !in_array($user->role, ['Admin', 'HR Manager'])) {
                     abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat melakukan aksi ini.');
                 }
             }
@@ -57,21 +58,20 @@ class TimeManagementController extends Controller
             'deduction_absent' => 'required|string',
             'valid_from' => 'nullable|date',
             'valid_to' => 'nullable|date',
+            'active' => 'required|boolean'
         ]);
 
-        $valid['active'] = true;
         AbsentType::create($valid);
-
         return redirect()->back()->with('success', 'Absent Type baru berhasil ditambahkan!');
     }
 
     // ==========================================
-    // 2. SCHEDULES (GROUPS & ASSIGNMENTS)
+    // 2. SCHEDULES (SCHEME & ASSIGNMENT)
     // ==========================================
     public function schedulesIndex()
     {
-        $groups = ScheduleGroup::orderBy('name', 'asc')->get();
-        $assignments = ScheduleAssignment::with(['employee', 'scheduleGroup'])->orderBy('created_at', 'desc')->get();
+        $groups = ScheduleGroup::withCount('assignments')->orderBy('id', 'desc')->get();
+        $assignments = ScheduleAssignment::with(['employee', 'scheduleGroup'])->orderBy('id', 'desc')->paginate(10);
         $employees = Employee::orderBy('name', 'asc')->get();
 
         return view('hr.time.schedules', compact('groups', 'assignments', 'employees'));
@@ -84,12 +84,11 @@ class TimeManagementController extends Controller
             'type' => 'required|string',
             'work_start' => 'nullable|date_format:H:i',
             'work_end' => 'nullable|date_format:H:i',
+            'is_active' => 'required|boolean'
         ]);
 
-        $valid['is_active'] = true;
         ScheduleGroup::create($valid);
-
-        return redirect()->back()->with('success', 'Kelompok jadwal baru berhasil dibuat!');
+        return redirect()->back()->with('success', 'Kelompok Jadwal baru berhasil ditambahkan!');
     }
 
     public function scheduleAssignStore(Request $request)
@@ -97,21 +96,28 @@ class TimeManagementController extends Controller
         $valid = $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'schedule_group_id' => 'required|exists:schedule_groups,id',
-            'valid_from' => 'required|date',
-            'valid_to' => 'required|date',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date'
         ]);
 
-        ScheduleAssignment::create($valid);
+        ScheduleAssignment::updateOrCreate(
+            ['employee_id' => $valid['employee_id']],
+            [
+                'schedule_group_id' => $valid['schedule_group_id'],
+                'start_date' => $valid['start_date'],
+                'end_date' => $valid['end_date']
+            ]
+        );
 
-        return redirect()->back()->with('success', 'Penugasan jadwal karyawan berhasil disimpan!');
+        return redirect()->back()->with('success', 'Karyawan berhasil ditetapkan ke kelompok jadwal!');
     }
 
     // ==========================================
-    // 3. TIME EVALUATIONS (TOLERANCE PARAMETERS)
+    // 3. TIME EVALUATIONS / WORK HOUR TOLERANCE
     // ==========================================
-    public function evaluationIndex()
+    public function evaluationsIndex()
     {
-        $evaluations = TimeEvaluation::orderBy('valid_from', 'desc')->get();
+        $evaluations = TimeEvaluation::orderBy('id', 'desc')->get();
         return view('hr.time.evaluation', compact('evaluations'));
     }
 
@@ -124,26 +130,24 @@ class TimeManagementController extends Controller
             'valid_to' => 'required|date',
             'late_tolerance_minutes' => 'required|integer|min:0',
             'early_departure_minutes' => 'required|integer|min:0',
+            'is_active' => 'required|boolean'
         ]);
 
-        $valid['is_active'] = true;
-
-        // Deactivate other evaluations
-        TimeEvaluation::query()->update(['is_active' => false]);
+        if ($valid['is_active']) {
+            TimeEvaluation::where('is_active', true)->update(['is_active' => false]);
+        }
 
         TimeEvaluation::create($valid);
-
-        return redirect()->back()->with('success', 'Parameter toleransi keterlambatan baru berhasil diaktifkan!');
+        return redirect()->back()->with('success', 'Parameter toleransi jam kerja baru berhasil disimpan!');
     }
 
     // ==========================================
-    // 4. TIME PERIODS & EVALUATION CALCULATOR
+    // 4. PERIODS & REKAPITULASI KEHADIRAN (ENGINE)
     // ==========================================
     public function periodsIndex()
     {
-        $periods = TimePeriod::with('project')->orderBy('start_date', 'desc')->get();
-        $projects = Project::where('active', true)->get();
-
+        $periods = TimePeriod::with('project')->withCount('results')->orderBy('start_date', 'desc')->paginate(10);
+        $projects = Project::orderBy('name', 'asc')->get();
         return view('hr.time.periods', compact('periods', 'projects'));
     }
 
@@ -162,13 +166,13 @@ class TimeManagementController extends Controller
         return redirect()->back()->with('success', 'Periode Rekap Absensi baru berhasil dibuat!');
     }
 
-    public function periodShow($id)
+    public function periodShow(int|string $id)
     {
         $period = TimePeriod::with(['project', 'results.employee'])->findOrFail($id);
         return view('hr.time.period_show', compact('period'));
     }
 
-    public function periodCalculate($id)
+    public function periodCalculate(int|string $id)
     {
         $period = TimePeriod::findOrFail($id);
         
@@ -198,95 +202,82 @@ class TimeManagementController extends Controller
 
         // 4. Calculate stats for each employee
         foreach ($employees as $employee) {
-            // Get active schedule group assignment
-            $assignment = ScheduleAssignment::with('scheduleGroup')
-                ->where('employee_id', $employee->id)
-                ->where('valid_from', '<=', $period->end_date)
-                ->where('valid_to', '>=', $period->start_date)
-                ->first();
-
-            $sched = $assignment ? $assignment->scheduleGroup : null;
-            $stdStart = $sched ? $sched->work_start : '08:00:00';
-            $stdEnd = $sched ? $sched->work_end : '17:00:00';
-
-            // Get attendances
-            $atts = Attendance::where('employee_id', $employee->id)
+            $attendances = Attendance::where('employee_id', $employee->id)
                 ->whereBetween('date', [$period->start_date, $period->end_date])
                 ->get();
 
-            // Count CICO check-ins
             $present = 0;
             $late = 0;
-            $early = 0;
-            $otHours = 0.00;
+            $leave = 0;
+            $absent = 0;
+            $overtimeMinutes = 0;
+            $totalLateMinutes = 0;
 
-            foreach ($atts as $att) {
-                if ($att->status === 'Hadir') {
-                    $present++;
-                    $otHours += (float) $att->overtime_hours;
+            // Map attendances by date
+            $attByDate = $attendances->keyBy(function ($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+            });
 
-                    // Late calculation
-                    if ($att->clock_in && $stdStart) {
-                        $diffInMins = Carbon::parse($att->clock_in)->diffInMinutes(Carbon::parse($stdStart), false);
-                        // if diff is negative, it means they clocked in AFTER stdStart (telat)
-                        if ($diffInMins < 0 && abs($diffInMins) > $rule->late_tolerance_minutes) {
-                            $late++;
+            foreach ($datePeriod as $date) {
+                $dStr = $date->format('Y-m-d');
+                $isWeekend = $date->isWeekend();
+
+                if (isset($attByDate[$dStr])) {
+                    $att = $attByDate[$dStr];
+                    $status = strtolower($att->status);
+
+                    if (in_array($status, ['present', 'hadir', 'ontime', 'terlambat', 'late'])) {
+                        $present++;
+                        if ($att->check_in) {
+                            $checkIn = Carbon::parse($att->check_in);
+                            $standardIn = Carbon::parse($att->date . ' 08:00:00');
+                            if ($checkIn->gt($standardIn)) {
+                                $diff = $checkIn->diffInMinutes($standardIn);
+                                if ($diff > $rule->late_tolerance_minutes) {
+                                    $late++;
+                                    $totalLateMinutes += ($diff - $rule->late_tolerance_minutes);
+                                }
+                            }
+                        }
+                    } elseif (in_array($status, ['leave', 'cuti', 'izin', 'sick', 'sakit'])) {
+                        $leave++;
+                    } else {
+                        if (!$isWeekend) {
+                            $absent++;
                         }
                     }
 
-                    // Early departure calculation
-                    if ($att->clock_out && $stdEnd) {
-                        $diffOutMins = Carbon::parse($att->clock_out)->diffInMinutes(Carbon::parse($stdEnd), false);
-                        // if diff is negative, it means they clocked out BEFORE stdEnd
-                        if ($diffOutMins > 0 && $diffOutMins > $rule->early_departure_minutes) {
-                            $early++;
+                    // Overtime calculation
+                    if ($att->check_out) {
+                        $checkOut = Carbon::parse($att->check_out);
+                        $standardOut = Carbon::parse($att->date . ' 17:00:00');
+                        if ($checkOut->gt($standardOut)) {
+                            $overtimeMinutes += $checkOut->diffInMinutes($standardOut);
                         }
+                    }
+                } else {
+                    if (!$isWeekend) {
+                        $absent++;
                     }
                 }
             }
 
-            // Get approved leaves
-            $leavesCount = 0;
-            $leaves = LeaveRequest::where('employee_id', $employee->id)
-                ->where('status', 'Approved')
-                ->where('start_date', '<=', $period->end_date)
-                ->where('end_date', '>=', $period->start_date)
-                ->get();
+            // Simple deduction estimation: Rp 50.000 per absent, Rp 1.000 per late minute
+            $deduction = ($absent * 50000) + ($totalLateMinutes * 1000);
 
-            foreach ($leaves as $lv) {
-                $lvStart = Carbon::parse($lv->start_date)->max($startDate);
-                $lvEnd = Carbon::parse($lv->end_date)->min($endDate);
-                $lvPeriod = CarbonPeriod::create($lvStart, $lvEnd);
-                foreach ($lvPeriod as $d) {
-                    if (!$d->isWeekend()) {
-                        $leavesCount++;
-                    }
-                }
-            }
-
-            // Calculate absent days
-            $absent = max(0, $workdays - $present - $leavesCount);
-
-            // Deductions rule (denda):
-            // Late: Rp 50.000 / day
-            // Absent (alfa): Rp 150.000 / day
-            // Early departure: Rp 50.000 / day
-            $deduction = ($late * 50000) + ($absent * 150000) + ($early * 50000);
-
-            // Update or create result
-            TimeResult::updateOrCreate(
+            TimePeriodResult::updateOrCreate(
                 [
                     'time_period_id' => $period->id,
                     'employee_id' => $employee->id
                 ],
                 [
-                    'workdays' => $workdays,
-                    'present_days' => $present,
-                    'absent_days' => $absent,
-                    'late_days' => $late,
-                    'early_departure_days' => $early,
-                    'leave_days' => $leavesCount,
-                    'overtime_hours' => $otHours,
+                    'total_workdays' => $workdays,
+                    'total_present' => $present,
+                    'total_late' => $late,
+                    'total_leave' => $leave,
+                    'total_absent' => $absent,
+                    'total_overtime_hours' => round($overtimeMinutes / 60, 1),
+                    'total_late_minutes' => $totalLateMinutes,
                     'deduction_amount' => $deduction
                 ]
             );
@@ -297,7 +288,7 @@ class TimeManagementController extends Controller
         return redirect()->back()->with('success', 'Rekapitulasi kehadiran periode ini berhasil dievaluasi & di-generate!');
     }
 
-    public function absentTypesUpdate(Request $request, $id)
+    public function absentTypesUpdate(Request $request, int|string $id)
     {
         $type = AbsentType::findOrFail($id);
         $valid = $request->validate([
@@ -315,14 +306,14 @@ class TimeManagementController extends Controller
         return redirect()->back()->with('success', 'Absent Type berhasil diperbarui!');
     }
 
-    public function absentTypesDestroy($id)
+    public function absentTypesDestroy(int|string $id)
     {
         $type = AbsentType::findOrFail($id);
         $type->delete();
         return redirect()->back()->with('success', 'Absent Type berhasil dihapus!');
     }
 
-    public function scheduleGroupUpdate(Request $request, $id)
+    public function scheduleGroupUpdate(Request $request, int|string $id)
     {
         $group = ScheduleGroup::findOrFail($id);
         $valid = $request->validate([
@@ -337,21 +328,21 @@ class TimeManagementController extends Controller
         return redirect()->back()->with('success', 'Kelompok jadwal berhasil diperbarui!');
     }
 
-    public function scheduleGroupDestroy($id)
+    public function scheduleGroupDestroy(int|string $id)
     {
         $group = ScheduleGroup::findOrFail($id);
         $group->delete();
         return redirect()->back()->with('success', 'Kelompok jadwal berhasil dihapus!');
     }
 
-    public function scheduleAssignDestroy($id)
+    public function scheduleAssignDestroy(int|string $id)
     {
         $assign = ScheduleAssignment::findOrFail($id);
         $assign->delete();
         return redirect()->back()->with('success', 'Penugasan jadwal karyawan berhasil dihapus!');
     }
 
-    public function evaluationUpdate(Request $request, $id)
+    public function evaluationUpdate(Request $request, int|string $id)
     {
         $eval = TimeEvaluation::findOrFail($id);
         $valid = $request->validate([
@@ -372,14 +363,14 @@ class TimeManagementController extends Controller
         return redirect()->back()->with('success', 'Parameter toleransi berhasil diperbarui!');
     }
 
-    public function evaluationDestroy($id)
+    public function evaluationDestroy(int|string $id)
     {
         $eval = TimeEvaluation::findOrFail($id);
         $eval->delete();
         return redirect()->back()->with('success', 'Parameter toleransi berhasil dihapus!');
     }
 
-    public function periodDestroy($id)
+    public function periodDestroy(int|string $id)
     {
         $period = TimePeriod::findOrFail($id);
         $period->delete();

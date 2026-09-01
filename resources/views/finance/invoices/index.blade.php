@@ -159,7 +159,7 @@
 
                                 <!-- Delete (Red) -->
                                 <form action="{{ route('invoices.destroy', $item->id) }}" method="POST" class="inline"
-                                      onsubmit="return confirm('Hapus data invoice ID INV-{{ str_pad($item->id, 5, '0', STR_PAD_LEFT) }}?')">
+                                      onsubmit="return confirm(&quot;Hapus data invoice ID INV-{{ str_pad($item->id, 5, '0', STR_PAD_LEFT) }}?&quot;)">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="p-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition shadow-xs cursor-pointer" title="Delete Invoice">

@@ -7,7 +7,7 @@ use App\Models\ProjectMasterData;
 
 class ProjectMasterController extends Controller
 {
-    private function getMetaForCategory($category)
+    private function getMetaForCategory(string $category): array
     {
         $configs = [
             'feasibility_metrics' => [
@@ -82,7 +82,7 @@ class ProjectMasterController extends Controller
         ];
     }
 
-    private function renderMasterView($category, Request $request)
+    private function renderMasterView(string $category, Request $request)
     {
         $search = $request->get('search');
         $perPage = (int) $request->get('per_page', 10);
@@ -153,7 +153,7 @@ class ProjectMasterController extends Controller
         return $this->renderMasterView('wbs_payroll_category', $request);
     }
 
-    public function wbsPayrollCategoryShow($id)
+    public function wbsPayrollCategoryShow(int|string $id)
     {
         $item = ProjectMasterData::where('category', 'wbs_payroll_category')->findOrFail($id);
         $meta = $this->getMetaForCategory('wbs_payroll_category');
@@ -189,7 +189,7 @@ class ProjectMasterController extends Controller
         return back()->with('success', 'Data Master berhasil ditambahkan!');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int|string $id)
     {
         $item = ProjectMasterData::findOrFail($id);
 
@@ -211,7 +211,7 @@ class ProjectMasterController extends Controller
         return back()->with('success', 'Data Master berhasil diperbarui!');
     }
 
-    public function destroy($id)
+    public function destroy(int|string $id)
     {
         $item = ProjectMasterData::findOrFail($id);
         $item->delete();
@@ -219,7 +219,7 @@ class ProjectMasterController extends Controller
         return back()->with('success', 'Data Master berhasil dihapus!');
     }
 
-    public function export(Request $request, $category)
+    public function export(Request $request, string $category)
     {
         $items = ProjectMasterData::where('category', $category)->orderBy('id', 'asc')->get();
         $meta = $this->getMetaForCategory($category);

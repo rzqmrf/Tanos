@@ -150,13 +150,13 @@
                         </td>
                         <td class="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
                             <!-- View Detail Button -->
-                            <button @click="openDetail({{ $item }})"
+                            <button @click="openDetail({{ json_encode($item) }})"
                                     class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Lihat Detail">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                             </button>
 
                             <form action="{{ route('fa.period.toggle-status', $item->id) }}" method="POST" class="inline"
-                                  onsubmit="return confirm('Apakah Anda yakin ingin {{ $item->status === 'Open' ? 'MENUTUP' : 'MEMBUKA KEMBALI' }} periode {{ $item->period_name }}?')">
+                                  onsubmit="return confirm(&quot;Apakah Anda yakin ingin {{ $item->status === 'Open' ? 'MENUTUP' : 'MEMBUKA KEMBALI' }} periode {{ $item->period_name }}?&quot;)">
                                 @csrf
                                 @if($item->status === 'Open')
                                 <button type="submit" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 font-bold rounded-lg text-xs transition border border-rose-200 dark:border-rose-800 cursor-pointer">

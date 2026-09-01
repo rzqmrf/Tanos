@@ -260,7 +260,7 @@
 
 <script>
 document.addEventListener('alpine:init', () => {
-    const initData = {!! json_encode($modalInitData) !!};
+    const initData = @json($modalInitData);
 
     Alpine.data('profileModalsData', () => ({
         showProfileModal: false,

@@ -137,7 +137,7 @@
                 <div class="space-y-1.5">
                     @if(\App\Models\RolePermission::hasPermission($role, 'dashboard'))
                         <a href="{{ route('dashboard.index') }}" 
-                           style="{{ $isDashboard ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}"
+                           :style="'{{ $isDashboard ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}'"
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isDashboard ? 'font-bold shadow-md shadow-primary' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
                                  class="w-4.5 h-4.5 transition-colors {{ $isDashboard ? 'text-white' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
@@ -149,7 +149,7 @@
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'attendance'))
                         <a href="{{ route('attendances.index') }}" 
-                           style="{{ $isAttendance ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}"
+                           :style="'{{ $isAttendance ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}'"
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isAttendance ? 'font-bold shadow-md shadow-primary' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
                                  class="w-4.5 h-4.5 transition-colors {{ $isAttendance ? 'text-white' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
@@ -161,7 +161,7 @@
 
                     @if(\App\Models\RolePermission::hasPermission($role, 'pengajuan_cuti'))
                         <a href="{{ route('ess.index') }}" 
-                           style="{{ $isESS ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}"
+                           :style="'{{ $isESS ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}'"
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isESS ? 'font-bold shadow-md shadow-primary' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 font-semibold' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4.5 h-4.5 {{ $isESS ? 'text-white' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -200,7 +200,7 @@
                     @if(\App\Models\RolePermission::hasPermission($role, 'dashboard'))
                         <a href="{{ route('dashboard.index') }}" 
                            @click="activeMenu = ''"
-                           style="{{ $isDashboard ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}"
+                           :style="'{{ $isDashboard ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}'"
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isDashboard ? 'font-bold shadow-md shadow-primary' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40 font-semibold' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
                                  class="w-5 h-5 transition-colors {{ $isDashboard ? 'text-white' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
@@ -210,7 +210,7 @@
                         </a>
                         <a href="{{ route('copilot.index') }}" 
                            @click="activeMenu = ''"
-                           style="{{ $isCopilot ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}"
+                           :style="'{{ $isCopilot ? 'background-color: var(--color-primary) !important; color: white !important;' : '' }}'"
                            class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-150 group {{ $isCopilot ? 'font-bold shadow-md shadow-primary' : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-slate-800/40 font-semibold' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
                                  class="w-5 h-5 transition-colors {{ $isCopilot ? 'text-white' : 'text-slate-400 dark:text-slate-550 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}">
