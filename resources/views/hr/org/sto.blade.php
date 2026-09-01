@@ -30,7 +30,7 @@
                     <span class="text-slate-700 dark:text-slate-300 font-bold">Organizational Structure</span>
                 </div>
                 <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Organizational Structure</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5">Definisikan hierarki unit kerja, formasi jabatan, dan pegawai terintegrasi SAP & MDM.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5">Definisikan hierarki unit kerja, formasi jabatan, dan pegawai terintegrasi SAP & MDM.</p>
             </div>
 
             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))

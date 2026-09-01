@@ -30,7 +30,7 @@
                     <span class="text-slate-700 dark:text-slate-300 font-bold">Index</span>
                 </div>
                 <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mapping PEO Setting</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5">Pengelolaan Mapping Integrasi Dokumen PEO</p>
             </div>
 
             {{-- ACTION BUTTONS TOP RIGHT --}}

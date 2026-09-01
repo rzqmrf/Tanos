@@ -87,7 +87,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-semibold">
             {{-- Document Type --}}
             <div>
-                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Document Type</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Document Type</label>
                 <div class="relative">
                     <select disabled class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold appearance-none cursor-not-allowed">
                         <option selected>{{ $peoSetting->document_type }}</option>
@@ -98,14 +98,14 @@
 
             {{-- Customer --}}
             <div>
-                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Customer</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Customer</label>
                 <input type="text" disabled value="1000000004 - {{ $peoSetting->customer }}" 
                     class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold cursor-not-allowed">
             </div>
 
             {{-- Project --}}
             <div class="md:col-span-1">
-                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Project</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Project</label>
                 <input type="text" disabled value="{{ $peoSetting->project_code }} - {{ $peoSetting->project_name }}" 
                     class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold cursor-not-allowed">
             </div>

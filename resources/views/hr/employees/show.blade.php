@@ -19,7 +19,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-3">
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
                 <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
                     Home
@@ -35,7 +35,7 @@
             <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
                 Employee - View Detail
             </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">
                 Detail profil data pokok, status PTKP, data rekening, dan riwayat TMT kerja.
             </p>
         </div>
@@ -99,37 +99,37 @@
             <div x-show="activeTab === 'general_info'" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold">
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Full Name *</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Full Name *</label>
                         <input type="text" disabled value="{{ $employee->name }}"
                             class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold uppercase cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Place of Birth *</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Place of Birth *</label>
                         <input type="text" disabled value="{{ $employee->place_of_birth ?? 'SURABAYA' }}"
                             class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold uppercase cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Date of Birth *</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Date of Birth *</label>
                         <input type="text" disabled value="{{ $employee->date_of_birth ? $employee->date_of_birth->format('d/m/Y') : '13/01/2001' }}"
                             class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Gender *</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Gender *</label>
                         <input type="text" disabled value="{{ str_starts_with(strtolower($employee->gender ?? 'L'), 'p') ? 'Perempuan (P)' : 'Laki-Laki (L)' }}"
                             class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Document Status</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Document Status</label>
                         <input type="text" disabled value="Completed (Terverifikasi)"
                             class="w-full px-3.5 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 font-bold cursor-not-allowed">
                     </div>
 
                     <div>
-                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Status Pegawai</label>
+                        <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Status Pegawai</label>
                         <input type="text" disabled value="{{ $employee->role ?? 'Staff Operasional' }} (Aktif)"
                             class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                     </div>
@@ -139,32 +139,32 @@
             {{-- TAB 2: EMPLOYEE IDENTITY --}}
             <div x-show="activeTab === 'employee_identity'" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold" style="display: none;">
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Identity Card Number (No KTP) *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Identity Card Number (No KTP) *</label>
                     <input type="text" disabled value="{{ $employee->identity_card_number ?? sprintf('35072213%08d', $employee->id) }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">NIPP Pegawai *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">NIPP Pegawai *</label>
                     <input type="text" disabled value="{{ $employee->nipp ?? sprintf('TAD-%05d', $employee->id) }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Agama (Religion)</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Agama (Religion)</label>
                     <input type="text" disabled value="{{ $employee->religion ?? 'ISLAM' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Regional Office</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Regional Office</label>
                     <input type="text" disabled value="{{ $employee->regional ?? 'Regional Jawa' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Sub Regional</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Sub Regional</label>
                     <input type="text" disabled value="{{ $employee->sub_regional ?? '-' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Segment Bisnis</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Segment Bisnis</label>
                     <input type="text" disabled value="{{ $employee->segment ?? '01. Tenaga Alih Daya Operasional' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
@@ -173,12 +173,12 @@
             {{-- TAB 3: COMMUNICATION INFORMATION --}}
             <div x-show="activeTab === 'communication_info'" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold" style="display: none;">
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Email Perusahaan</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Email Perusahaan</label>
                     <input type="text" disabled value="{{ Str::slug($employee->name, '.') }}@pelindo.co.id"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">No Telepon / WhatsApp</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">No Telepon / WhatsApp</label>
                     <input type="text" disabled value="08123456{{ sprintf('%04d', $employee->id) }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
@@ -187,17 +187,17 @@
             {{-- TAB 4: TAX INFORMATION (PTKP & PAJAK) --}}
             <div x-show="activeTab === 'tax_info'" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold" style="display: none;">
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">NPWP Number *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">NPWP Number *</label>
                     <input type="text" disabled value="{{ $employee->npwp_number ?? sprintf('00%013d', $employee->id) }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Status PTKP (Penghasilan Tidak Kena Pajak) *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Status PTKP (Penghasilan Tidak Kena Pajak) *</label>
                     <input type="text" disabled value="{{ $employee->ptkp_status ?? 'TK/0' }}"
                         class="w-full px-3.5 py-2.5 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">KPP Pratama Terdaftar</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">KPP Pratama Terdaftar</label>
                     <input type="text" disabled value="KPP Pratama Surabaya Gubeng"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
@@ -206,17 +206,17 @@
             {{-- TAB 5: BANK ACCOUNT --}}
             <div x-show="activeTab === 'bank_account'" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold" style="display: none;">
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Bank Name *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Bank Name *</label>
                     <input type="text" disabled value="{{ $employee->bank_name ?? 'BANK MANDIRI' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Account Number (No Rekening) *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Account Number (No Rekening) *</label>
                     <input type="text" disabled value="{{ $employee->bank_account_number ?? '-' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Account Owner Name (Atas Nama) *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">Account Owner Name (Atas Nama) *</label>
                     <input type="text" disabled value="{{ $employee->bank_account_name ?? $employee->name }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-bold uppercase cursor-not-allowed">
                 </div>
@@ -225,17 +225,17 @@
             {{-- TAB 6: CUSTOM DATE (TMT MULAI KERJA) --}}
             <div x-show="activeTab === 'custom_date'" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-semibold" style="display: none;">
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">TMT Mulai Kerja (Valid From) *</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">TMT Mulai Kerja (Valid From) *</label>
                     <input type="text" disabled value="{{ $employee->valid_from ? $employee->valid_from->format('d/m/Y') : ($employee->tmt_date ? date('d/m/Y', strtotime($employee->tmt_date)) : '09/08/2024') }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">No BPJS Kesehatan</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">No BPJS Kesehatan</label>
                     <input type="text" disabled value="{{ $employee->bpjs_kesehatan_number ?? '-' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">No BPJS Ketenagakerjaan</label>
+                    <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4.5 font-bold">No BPJS Ketenagakerjaan</label>
                     <input type="text" disabled value="{{ $employee->bpjs_ketenagakerjaan_number ?? '-' }}"
                         class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 font-mono font-bold cursor-not-allowed">
                 </div>
