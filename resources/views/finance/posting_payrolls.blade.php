@@ -3,7 +3,7 @@
 @section('title', 'PS: Posting Payroll General Ledger — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm w-full"
+<div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm w-full"
      x-data="{ 
          showJournalModal: false,
          showUploadModal: false,
@@ -49,7 +49,7 @@
     @endif
 
     <!-- Table General Ledger -->
-    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
@@ -135,7 +135,7 @@
 
     {{-- MODAL: VIEW JURNAL PAYROLL --}}
     <div x-show="showJournalModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-xl p-6 shadow-2xl relative" @click.away="showJournalModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-xl p-6 shadow-2xl relative" @click.away="showJournalModal = false">
             <h3 class="text-base font-bold text-slate-850 dark:text-slate-100 mb-1">Rincian Jurnal Umum Ledger</h3>
             <p class="text-[10px] text-slate-400 font-semibold mb-4" x-text="periodName + ' (' + projectCode + ')'"></p>
 
@@ -183,7 +183,7 @@
 
     {{-- MODAL: UPLOAD FILE P-FILES TO SAP --}}
     <div x-show="showUploadModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showUploadModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showUploadModal = false">
             <h3 class="text-base font-bold text-slate-850 dark:text-slate-100 mb-1">Unggah Lampiran P-Files SAP</h3>
             <p class="text-[10px] text-slate-400 font-semibold mb-4" x-text="periodName"></p>
 

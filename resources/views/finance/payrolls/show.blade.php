@@ -13,7 +13,7 @@
 <div class="space-y-6" x-data="{ showCopyModal: false }">
     
     <!-- Top Bar Navigation -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 rounded-2xl shadow-sm">
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 rounded-xl shadow-sm">
         <div class="flex items-center space-x-3">
             <a href="{{ route('payrolls.index') }}" class="p-2 bg-slate-50 dark:bg-slate-800 text-slate-550 dark:text-slate-350 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-750 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
@@ -77,7 +77,7 @@
         <!-- Left Panel: Period & Formulation Components (Halaman 29) -->
         <div class="lg:col-span-1 space-y-6">
             
-            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
                 <h3 class="text-xs font-bold text-slate-400 uppercase mb-4">Informasi Periode</h3>
                 
                 <div class="space-y-3.5 text-xs">
@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-xs font-bold text-slate-400 uppercase">Komponen & WBS Mapping</h3>
                     <span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 dark:bg-indigo-950/20 dark:text-indigo-400 text-[10px] font-bold">WBS Configured</span>
@@ -143,7 +143,7 @@
         <!-- Right Panel: Payroll Result Sheet (Halaman 30) -->
         <div class="lg:col-span-2 space-y-6">
             
-            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+            <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5 pb-4 border-b border-slate-150 dark:border-slate-800/80">
                     <div>
                         <h3 class="text-base font-bold text-slate-850 dark:text-slate-100">Slip Payroll Result Karyawan</h3>
@@ -203,7 +203,7 @@
 
     {{-- MODAL: COPY FORMULA --}}
     <div x-show="showCopyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCopyModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCopyModal = false">
             <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-2">Salin Rumus Penggajian (Copy Formula)</h3>
             <p class="text-xs text-slate-400 mb-4 font-medium">Pilih periode asal komponen gaji yang akan disalin formulasinya ke periode aktif ini.</p>
             

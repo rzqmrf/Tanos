@@ -75,7 +75,7 @@
 
     <!-- Alert Notifications -->
     @if(session('success'))
-    <div class="p-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm">
+    <div class="p-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             <span>{{ session('success') }}</span>
@@ -84,7 +84,7 @@
     @endif
 
     <!-- Filter & Search Bar -->
-    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
         <form method="GET" action="{{ route('fa.currency-rate') }}" class="flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
                 <input type="text" name="search" value="{{ request('search') }}"
@@ -113,7 +113,7 @@
     </div>
 
     <!-- Data Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs">
                 <thead>
@@ -197,7 +197,7 @@
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
 
         <div class="flex min-h-full items-center justify-center p-4">
-            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                     <div class="flex items-center space-x-2">
                         <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-mono font-black text-xs" x-text="detailItem.currency ? detailItem.currency.code : '-'"></span>
@@ -215,7 +215,7 @@
                            x-text="'Rp ' + (detailItem.rate_to_idr ? Number(detailItem.rate_to_idr).toLocaleString('id-ID', {minimumFractionDigits: 2, maximumFractionDigits: 4}) : '0,00')"></p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
                         <div>
                             <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Tanggal Efektif</span>
                             <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5 font-mono" x-text="detailItem.effective_date"></p>
@@ -257,7 +257,7 @@
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showModal = false"></div>
 
         <div class="flex min-h-full items-center justify-center p-4">
-            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                     <h3 class="text-base font-black text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Kurs Mata Uang' : 'Input Kurs Mata Uang Baru'"></h3>
                     <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">

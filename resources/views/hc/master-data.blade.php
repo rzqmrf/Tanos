@@ -46,7 +46,7 @@
     </div>
 
     <!-- Search & Summary Bar -->
-    <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <form method="GET" action="{{ route('hc.master.index', ['category' => $currentCategory]) }}" class="flex items-center space-x-2 flex-1 max-w-md">
             <div class="relative w-full">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau kode {{ strtolower($categoryTitle) }}..."
@@ -71,7 +71,7 @@
     </div>
 
     <!-- Data Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -149,7 +149,7 @@
         <div x-show="showModal" @click.away="showModal = false"
              x-transition:enter="ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
              x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-             class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800">
+             class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800">
             
             <div class="flex items-center justify-between mb-5">
                 <h3 class="text-base font-bold text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Data {{ $categoryTitle }}' : 'Tambah {{ $categoryTitle }} Baru'"></h3>

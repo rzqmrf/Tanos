@@ -43,7 +43,7 @@
     </div>
 
     <!-- Main Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
         <form action="{{ route('invoices.update', $invoice->id) }}" method="POST" class="space-y-6 text-xs max-w-3xl">
             @csrf
             @method('PUT')

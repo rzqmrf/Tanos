@@ -16,7 +16,7 @@
     @endif
 
     {{-- BREADCRUMB & TOP CONTAINER --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-6 shadow-sm">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">
@@ -45,7 +45,7 @@
     </div>
 
     {{-- MAIN CONTENT CARD --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden p-6 space-y-6">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden p-6 space-y-6">
         {{-- Card Title --}}
         <div class="border-b border-slate-100 dark:border-slate-800 pb-3 flex items-center justify-between">
             <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100">Organizational Structure - List</h2>
@@ -305,7 +305,7 @@
 
 {{-- MODAL: CREATE UNIT --}}
 <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
         <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Tambah Unit Baru</h3>
         
         <form action="{{ route('org.sto.store') }}" method="POST" class="space-y-4">

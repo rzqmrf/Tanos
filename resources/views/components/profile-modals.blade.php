@@ -20,7 +20,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-         class="fixed bottom-6 right-6 z-[1100] flex items-center px-4 py-3 text-white bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-lg" role="alert" style="display: none;">
+         class="fixed bottom-6 right-6 z-[1100] flex items-center px-4 py-3 text-white bg-slate-900 border border-slate-800 rounded-xl shadow-2xl backdrop-blur-lg" role="alert" style="display: none;">
         <svg class="w-5 h-5 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
         </svg>
@@ -43,7 +43,7 @@
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+             class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
             
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Edit Profil</h3>
@@ -110,7 +110,7 @@
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+             class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
             
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Ubah Password</h3>
@@ -158,7 +158,7 @@
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+             class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
             
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-2">

@@ -49,7 +49,7 @@
     @endif
 
     {{-- EMPLOYEE CARD SUMMARY --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-xl p-5 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Profil Pegawai Terhubung</span>
             <span class="text-base font-bold text-slate-800 dark:text-slate-200 mt-1 block">{{ $employee->name }}</span>
@@ -79,7 +79,7 @@
     </div>
 
     {{-- TAB CONTENTS --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-xl shadow-sm overflow-hidden">
         
         {{-- LEAVE REQUEST TAB --}}
         <div x-show="activeTab === 'leaves'">
@@ -204,7 +204,7 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
         
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-xl p-6 md:p-8 shadow-2xl relative" 
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-xl p-6 md:p-8 shadow-2xl relative" 
              @click.away="leaveModal = false"
              x-data="{ 
                  selectedType: 'Cuti Tahunan',
@@ -223,7 +223,7 @@
             
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-800/40">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-800/40">
                         🏖️
                     </div>
                     <div>
@@ -249,31 +249,31 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         <button type="button" @click="selectedType = 'Cuti Tahunan'"
                                 :class="selectedType === 'Cuti Tahunan' ? 'border-indigo-600 bg-indigo-50/40 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-400 font-bold ring-2 ring-indigo-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
-                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                                class="text-left p-3 border rounded-xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
                             <span class="text-lg">🏖️</span>
                             <span>Cuti Tahunan</span>
                         </button>
                         <button type="button" @click="selectedType = 'Sakit'"
                                 :class="selectedType === 'Sakit' ? 'border-rose-600 bg-rose-50/40 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 font-bold ring-2 ring-rose-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
-                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                                class="text-left p-3 border rounded-xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
                             <span class="text-lg">🤒</span>
                             <span>Sakit</span>
                         </button>
                         <button type="button" @click="selectedType = 'Cuti Melahirkan'"
                                 :class="selectedType === 'Cuti Melahirkan' ? 'border-amber-600 bg-amber-50/40 dark:bg-amber-950/20 text-amber-700 dark:text-amber-400 font-bold ring-2 ring-amber-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
-                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                                class="text-left p-3 border rounded-xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
                             <span class="text-lg">👶</span>
                             <span>Cuti Melahirkan</span>
                         </button>
                         <button type="button" @click="selectedType = 'Izin Alasan Penting'"
                                 :class="selectedType === 'Izin Alasan Penting' ? 'border-orange-600 bg-orange-50/40 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 font-bold ring-2 ring-orange-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
-                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                                class="text-left p-3 border rounded-xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
                             <span class="text-lg">⚠️</span>
                             <span>Izin Alasan Penting</span>
                         </button>
                         <button type="button" @click="selectedType = 'Cuti Ibadah Keagamaan'"
                                 :class="selectedType === 'Cuti Ibadah Keagamaan' ? 'border-teal-600 bg-teal-50/40 dark:bg-teal-950/20 text-teal-700 dark:text-teal-400 font-bold ring-2 ring-teal-500/10' : 'border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/30'"
-                                class="text-left p-3 border rounded-2xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
+                                class="text-left p-3 border rounded-xl transition cursor-pointer text-xs flex flex-col justify-between min-h-[75px]">
                             <span class="text-lg">🕌</span>
                             <span>Ibadah Keagamaan</span>
                         </button>
@@ -281,7 +281,7 @@
                 </div>
                 
                 {{-- Date Pickers with Real-time Count Badge --}}
-                <div class="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80 rounded-2xl p-4 space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/80 rounded-xl p-4 space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-500 mb-1.5">Tanggal Mulai</label>
@@ -314,7 +314,7 @@
                 {{-- Custom File Upload Input --}}
                 <div>
                     <label class="block text-xs font-bold text-slate-500 mb-1.5">Unggah Berkas Pendukung (Opsional)</label>
-                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-2xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
+                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
                         <input type="file" name="attachment" 
                                @change="fileName = $event.target.files[0] ? $event.target.files[0].name : ''"
                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
@@ -346,13 +346,13 @@
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0">
          
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 md:p-8 shadow-2xl relative" 
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 md:p-8 shadow-2xl relative" 
              @click.away="cicoModal = false"
              x-data="{ cicoFileName: '' }">
             
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-800/40">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-800/40">
                         ⏰
                     </div>
                     <div>
@@ -397,7 +397,7 @@
                 {{-- Custom File Upload Zone --}}
                 <div>
                     <label class="block text-xs font-bold text-slate-500 mb-1.5">Unggah Foto Bukti/Surat Tugas (Opsional)</label>
-                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-2xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
+                    <div class="relative border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-800 rounded-xl p-4 flex flex-col items-center justify-center transition cursor-pointer text-center bg-slate-50/50 dark:bg-slate-950/10">
                         <input type="file" name="attachment" 
                                @change="cicoFileName = $event.target.files[0] ? $event.target.files[0].name : ''"
                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">

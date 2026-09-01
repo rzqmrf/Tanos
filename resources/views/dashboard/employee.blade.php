@@ -12,7 +12,7 @@
     {{-- ═══════════════════════════════════════════════════════════════
          1. GREETING HEADER
     ═══════════════════════════════════════════════════════════════ --}}
-    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm flex items-center justify-between flex-wrap gap-4">
+    <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/60 dark:border-slate-800/80 shadow-sm flex items-center justify-between flex-wrap gap-4">
         <div>
             <h1 class="text-xl font-extrabold text-slate-800 dark:text-white leading-tight">
                 Selamat Datang, {{ $name }} 👋
@@ -53,7 +53,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {{-- Hadir --}}
-        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm">
+        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm">
             <div class="flex items-center space-x-3.5">
                 <div class="w-11 h-11 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -76,7 +76,7 @@
         </div>
 
         {{-- Sakit / Izin --}}
-        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm">
+        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm">
             <div class="flex items-center space-x-3.5">
                 <div class="w-11 h-11 bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 rounded-full flex items-center justify-center shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -96,7 +96,7 @@
         </div>
 
         {{-- Alfa / Mangkir --}}
-        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm">
+        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm">
             <div class="flex items-center space-x-3.5">
                 <div class="w-11 h-11 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 rounded-full flex items-center justify-center shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -116,7 +116,7 @@
         </div>
 
         {{-- Total Lembur --}}
-        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm">
+        <div class="p-4 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm">
             <div class="flex items-center space-x-3.5">
                 <div class="w-11 h-11 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -142,7 +142,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
 
         {{-- ── Presensi Hari Ini ────────────────────────────────────── --}}
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm flex flex-col">
             {{-- Header --}}
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/60">
                 <h3 class="text-sm font-bold text-slate-800 dark:text-white">Presensi Hari Ini</h3>
@@ -245,7 +245,7 @@
         </div>
 
         {{-- ── Pengumuman & Notifikasi ─────────────────────────────── --}}
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-sm flex flex-col">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-xl shadow-sm flex flex-col">
             {{-- Header --}}
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/60">
                 <h3 class="text-sm font-bold text-slate-800 dark:text-white">Pengumuman & Notifikasi</h3>

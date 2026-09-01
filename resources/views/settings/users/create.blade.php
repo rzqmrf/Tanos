@@ -82,7 +82,7 @@
 
     <!-- Alert Notification -->
     @if($errors->any())
-    <div class="p-4 bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-2xl text-xs font-bold space-y-1">
+    <div class="p-4 bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 rounded-xl text-xs font-bold space-y-1">
         @foreach($errors->all() as $err)
             <div class="flex items-center space-x-1.5">
                 <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -93,7 +93,7 @@
     @endif
 
     <!-- Main Card matching Screenshot: User - Create -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
         
         <div class="pb-4 border-b border-slate-100 dark:border-slate-800">
             <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
@@ -226,7 +226,7 @@
                     </div>
 
                     <!-- Matrix Table matching Tanos Screenshot -->
-                    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 text-[11px] font-black text-slate-700 dark:text-slate-200">
@@ -321,7 +321,7 @@
 
                 <!-- TAB 2: Approval Authority -->
                 <div x-show="activeTab === 'approval_authority'" style="display: none;" class="space-y-4">
-                    <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
                         <h4 class="font-bold text-slate-800 dark:text-slate-100">Batas Otorisasi & Persetujuan Dokumen</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -355,7 +355,7 @@
     <div x-show="showEmployeeModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" @click="showEmployeeModal = false"></div>
         <div class="flex min-h-full items-center justify-center p-4">
-            <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
+            <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                     <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Pilih Data Pegawai / Employee</h3>
                     <button type="button" @click="showEmployeeModal = false" class="text-slate-400 hover:text-slate-600">✕</button>

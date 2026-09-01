@@ -53,7 +53,7 @@
     </div>
 
     <!-- Main Card Detail -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
         
         <!-- Card Header Title & Action -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between">
@@ -105,7 +105,7 @@
 
     <!-- MODAL: EDIT -->
     <div x-show="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-xs" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showEditModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showEditModal = false">
             <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Edit WBS Payroll Category</h3>
                 <button @click="showEditModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold text-lg cursor-pointer">&times;</button>

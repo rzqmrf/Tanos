@@ -53,7 +53,7 @@
 
     <!-- Alert Notification -->
     @if(session('success'))
-    <div class="p-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-xs font-bold flex items-center justify-between shadow-sm">
+    <div class="p-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-2">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             <span>{{ session('success') }}</span>
@@ -62,7 +62,7 @@
     @endif
 
     <!-- Main View Card matching Screenshot 2 -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
         
         <!-- View Card Header with Edit & Delete actions on Top-Right -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -359,7 +359,7 @@
                 <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1 text-xs">
                     Description <span class="text-rose-500">*</span>
                 </label>
-                <div class="w-full p-4 bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 rounded-2xl text-xs text-slate-800 dark:text-slate-200 leading-relaxed min-h-[80px]">
+                <div class="w-full p-4 bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 leading-relaxed min-h-[80px]">
                     {{ $partner->description ?? $partner->name }}
                 </div>
             </div>
@@ -377,7 +377,7 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-800">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
@@ -435,7 +435,7 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-800">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">
@@ -478,7 +478,7 @@
     <div x-show="showAddBankModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" @click="showAddBankModal = false"></div>
         <div class="flex min-h-full items-center justify-center p-4">
-            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
+            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
                 <h3 class="text-base font-black text-slate-800 dark:text-slate-100 pb-3 border-b border-slate-100 dark:border-slate-800">
                     Tambah Rekening Bank Rekanan
                 </h3>
@@ -528,7 +528,7 @@
     <div x-show="showAddSegmentModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" @click="showAddSegmentModal = false"></div>
         <div class="flex min-h-full items-center justify-center p-4">
-            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
+            <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
                 <h3 class="text-base font-black text-slate-800 dark:text-slate-100 pb-3 border-b border-slate-100 dark:border-slate-800">
                     Tambah Business Segment
                 </h3>

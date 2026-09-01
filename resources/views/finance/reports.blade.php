@@ -46,7 +46,7 @@
     <!-- Top KPI Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: Total RAB Budget -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl p-4 shadow-sm">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total RAB Budget</span>
             <div class="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">
                 Rp {{ number_format($kpiSummary['total_rab_budget'], 0, ',', '.') }}
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Card 2: Realisasi Cost -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl p-4 shadow-sm">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Realisasi Cost Aktual</span>
             <div class="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
                 Rp {{ number_format($kpiSummary['total_actual_cost'], 0, ',', '.') }}
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Card 3: Total Billing Nota -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl p-4 shadow-sm">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Billing (Nota SAP)</span>
             <div class="text-xl font-black text-purple-600 dark:text-purple-400 mt-1">
                 Rp {{ number_format($kpiSummary['total_billing_bruto'], 0, ',', '.') }}
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Card 4: Total Beban Payroll -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-4 shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl p-4 shadow-sm">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Beban Payroll</span>
             <div class="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">
                 Rp {{ number_format($kpiSummary['total_payroll_thp'], 0, ',', '.') }}
@@ -91,7 +91,7 @@
     </div>
 
     <!-- Filter Bar & Tabs Header -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-5 rounded-3xl shadow-sm space-y-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-5 rounded-xl shadow-sm space-y-4">
         
         <!-- Filter Form -->
         <form method="GET" action="{{ route('reports.index') }}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
@@ -183,7 +183,7 @@
     </div>
 
     <!-- TAB 1: PROYEK & RAB BUDGET REPORT TABLE -->
-    <div x-show="activeTab === 'projects'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-3xl shadow-sm overflow-hidden">
+    <div x-show="activeTab === 'projects'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-sm overflow-hidden">
         <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <h2 class="text-sm font-bold text-slate-800 dark:text-slate-200">Laporan Realisasi Anggaran RAB per Proyek</h2>
             <span class="text-xs text-slate-400 font-semibold">Total {{ count($projectReports) }} Data Proyek</span>
@@ -247,7 +247,7 @@
     </div>
 
     <!-- TAB 2: BILLING & INVOICE REPORT TABLE -->
-    <div x-show="activeTab === 'billing'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-3xl shadow-sm overflow-hidden" style="display: none;">
+    <div x-show="activeTab === 'billing'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-sm overflow-hidden" style="display: none;">
         <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <h2 class="text-sm font-bold text-slate-800 dark:text-slate-200">Laporan Rekapitulasi Billing & Nota SAP</h2>
             <span class="text-xs text-slate-400 font-semibold">Total {{ count($billingReports) }} Nota Billing</span>
@@ -306,7 +306,7 @@
     </div>
 
     <!-- TAB 3: HCM & PAYROLL REPORT TABLE -->
-    <div x-show="activeTab === 'payroll'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-3xl shadow-sm overflow-hidden" style="display: none;">
+    <div x-show="activeTab === 'payroll'" class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-sm overflow-hidden" style="display: none;">
         <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <h2 class="text-sm font-bold text-slate-800 dark:text-slate-200">Laporan Beban Payroll & Remunerasi Karyawan</h2>
             <span class="text-xs text-slate-400 font-semibold">Total {{ count($payrollReports) }} Periode Payroll</span>

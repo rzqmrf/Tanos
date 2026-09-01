@@ -3,7 +3,7 @@
 @section('title', 'HCM: Period Payroll — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm w-full"
+<div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm w-full"
      x-data="{ showCreateModal: false }">
      
     <!-- Header Section -->
@@ -69,7 +69,7 @@
     </form>
 
     <!-- Table List -->
-    <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table class="w-full text-left border-collapse">
             <thead>
                 <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
@@ -124,7 +124,7 @@
 
     {{-- MODAL: CREATE PERIOD --}}
     <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
             <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Buat Periode Gaji Baru</h3>
             
             <form action="{{ route('payrolls.store') }}" method="POST" class="space-y-4">

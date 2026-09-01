@@ -304,7 +304,7 @@
                  x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                  x-transition:leave-end="opacity-0 scale-95 translate-y-1"
                  style="display: none;"
-                 class="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/60 dark:shadow-slate-950/60 z-50 overflow-hidden origin-top-right">
+                 class="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/60 dark:shadow-slate-950/60 z-50 overflow-hidden origin-top-right">
 
                 <!-- Header -->
                 <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
@@ -434,7 +434,7 @@
                  x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                  x-transition:leave-end="opacity-0 scale-95 translate-y-1"
                  style="display: none;"
-                 class="absolute right-0 mt-3 w-60 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/60 dark:shadow-slate-950/60 z-50 overflow-hidden origin-top-right">
+                 class="absolute right-0 mt-3 w-60 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/60 dark:shadow-slate-950/60 z-50 overflow-hidden origin-top-right">
 
                 <!-- User Info Header -->
                 <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center space-x-3 bg-slate-50/50 dark:bg-slate-800/30">

@@ -53,7 +53,7 @@
     @endif
 
     <!-- Data Table Card Section -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[1350px]">
                 <thead>
@@ -143,7 +143,7 @@
 
 <!-- MODAL CREATE PROJECT -->
 <div id="modal-create-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+    <div class="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">+ Tambah Data Project (Entry Project)</h3>
             <button onclick="document.getElementById('modal-create-project').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">
@@ -262,7 +262,7 @@
 
 <!-- MODAL EDIT PROJECT -->
 <div id="modal-edit-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+    <div class="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Edit Data Project</h3>
             <button onclick="document.getElementById('modal-edit-project').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">

@@ -48,7 +48,7 @@
     </div>
 
     {{-- TAB CONTENTS --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-xl shadow-sm overflow-hidden">
         
         {{-- LEAVE VERIFICATION TAB --}}
         <div x-show="activeTab === 'leaves'">

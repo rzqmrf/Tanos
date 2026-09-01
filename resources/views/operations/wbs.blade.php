@@ -92,7 +92,7 @@
     @endif
 
     <!-- Tree View Structure -->
-    <div class="bg-slate-50/50 dark:bg-slate-950/20 border border-slate-150 dark:border-slate-800/80 rounded-2xl p-6">
+    <div class="bg-slate-50/50 dark:bg-slate-950/20 border border-slate-150 dark:border-slate-800/80 rounded-xl p-6">
         <div class="mb-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80 pb-3">
             <span class="text-xs font-bold text-slate-400 uppercase">Hierarki WBS</span>
             <span class="text-xs font-bold text-slate-500 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-md border border-slate-200/60 dark:border-slate-850">
@@ -115,7 +115,7 @@
 
     {{-- MODAL: CREATE WBS --}}
     <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-base font-bold text-slate-800 dark:text-slate-100">Tambah WBS Node</h3>
                 <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded font-semibold" x-text="'Parent: ' + parentName"></span>
@@ -177,7 +177,7 @@
 
     {{-- MODAL: EDIT WBS --}}
     <div x-show="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showEditModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showEditModal = false">
             <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Edit WBS Node</h3>
             
             <form :action="'/dashboard/projects/{{ $project->id }}/wbs/' + wbsId" method="POST" class="space-y-4">

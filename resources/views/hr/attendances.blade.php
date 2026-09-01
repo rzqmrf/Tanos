@@ -3,7 +3,7 @@
 @section('title', 'Absensi & Cuti — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm w-full">
+<div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm w-full">
     <!-- Header Section -->
     <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
         <div class="flex items-center space-x-3">
@@ -183,7 +183,7 @@
 
   <!-- ================= MODAL LOG KEHADIRAN ================= -->
   <div id="modal-log-attendance" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
+  <div class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
       <div class="flex items-center justify-between mb-4">
           <h3 id="modal-title" class="text-sm font-bold text-slate-800 dark:text-slate-100">Catat Kehadiran</h3>
           <button onclick="closeModal()" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">

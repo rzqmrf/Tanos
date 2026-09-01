@@ -39,7 +39,7 @@
 @endphp
 
         <!-- User Profile Card -->
-        <div class="px-3 py-3 mb-5 bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800/60 rounded-2xl flex items-center space-x-3">
+        <div class="px-3 py-3 mb-5 bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800/60 rounded-xl flex items-center space-x-3">
             <div class="relative flex-shrink-0">
                 <div class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xs select-none shadow-sm shadow-primary">
                     {{ $initials ?? strtoupper(substr(auth()->user()->name ?? 'US', 0, 2)) }}

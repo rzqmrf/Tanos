@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Greeting & Header Card -->
-    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between flex-wrap gap-4">
+    <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between flex-wrap gap-4">
         <div class="flex items-center space-x-4">
             <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg select-none shrink-0 uppercase">
                 {{ substr($employee->name, 0, 2) }}
@@ -35,7 +35,7 @@
     @endif
 
     <!-- Clock In / Out Panel Card -->
-    <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm text-center">
+    <div class="p-8 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm text-center">
         <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-6">Pencatatan Kehadiran Hari Ini</h2>
 
         <div class="flex flex-col items-center justify-center space-y-6">
@@ -82,7 +82,7 @@
     </div>
 
     <!-- Personal History Section -->
-    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+    <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Riwayat Kehadiran Bulan Ini</h3>
 
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -149,7 +149,7 @@
 
     <!-- Upcoming Leave / Attendance Section -->
     @if($upcoming->isNotEmpty())
-        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
             <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Pengajuan Akan Datang</h3>
 
             <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">

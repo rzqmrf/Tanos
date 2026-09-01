@@ -38,7 +38,7 @@
     </div>
 
     <!-- Main Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
         <form action="{{ route('material.outline-agreement.store') }}" method="POST" class="space-y-6 text-xs">
             @csrf
 
@@ -139,7 +139,7 @@
             <div>
                 <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Catatan & Klausul Kontrak</label>
                 <textarea name="notes" rows="3" placeholder="Keterangan lingkup pekerjaan atau klausul kontrak..."
-                          class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-800 dark:text-slate-100 focus:outline-none leading-relaxed"></textarea>
+                          class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 focus:outline-none leading-relaxed"></textarea>
             </div>
 
             <!-- Submit -->

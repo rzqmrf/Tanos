@@ -117,7 +117,7 @@
                             onerror="this.style.display='none'; document.getElementById('logo-fallback').classList.remove('hidden');">
 
                     <div id="logo-fallback" class="flex hidden flex-col items-center">
-                        <div class="w-20 h-20 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-200">
+                        <div class="w-20 h-20 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-200">
                             <span class="text-white font-extrabold text-4xl select-none">T</span>
                         </div>
                         <span class="mt-4 text-slate-800 font-extrabold text-2xl tracking-tight">Tanos ERP</span>

@@ -26,7 +26,7 @@
      }">
      
     <!-- Header Block -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center space-x-3">
                 <a href="{{ route('rab.index') }}" class="p-2 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition">
@@ -109,7 +109,7 @@
     @endif
 
     <!-- Monthly Matrix Section -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-6 shadow-sm">
         <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-4">Budgeting Line Items (Matriks Bulanan)</h3>
 
         <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -236,7 +236,7 @@
 
     {{-- MODAL: TAMBAH BUDGET LINE --}}
     <div x-show="showAddModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showAddModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showAddModal = false">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Tambah Budgeting Line (RAB)</h3>
             
             <form action="{{ route('rab.items.store', $rab->id) }}" method="POST" class="space-y-4">
@@ -293,7 +293,7 @@
 
     {{-- MODAL: EDIT BUDGET LINE --}}
     <div x-show="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showEditModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl w-full max-w-lg p-6 shadow-2xl relative" @click.away="showEditModal = false">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Ubah Rincian Anggaran (RAB)</h3>
             
             <form :action="'/dashboard/rab-budgets/' + {{ $rab->id }} + '/items/' + itemId" method="POST" class="space-y-4">

@@ -6,7 +6,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full" x-data="{ showGroupModal: false, showEditGroupModal: false, showAssignModal: false, editGroup: {} }">
     <!-- Left Column: Schedule Groups List & Create -->
     <div class="lg:col-span-1 space-y-6">
-        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Kelompok Jadwal (Groups)</h3>
                 @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
@@ -54,7 +54,7 @@
 
     <!-- Right Column: Assignments List -->
     <div class="lg:col-span-2 space-y-6">
-        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+        <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
                     <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Penugasan Jadwal Karyawan</h3>
@@ -135,7 +135,7 @@
 
     {{-- MODAL: CREATE SCHEDULE GROUP --}}
     <div x-show="showGroupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showGroupModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showGroupModal = false">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Tambah Kelompok Jadwal</h3>
             
             <form action="{{ route('org.schedules.group.store') }}" method="POST" class="space-y-4">
@@ -179,7 +179,7 @@
 
     {{-- MODAL: EDIT SCHEDULE GROUP --}}
     <div x-show="showEditGroupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showEditGroupModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showEditGroupModal = false">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Edit Kelompok Jadwal</h3>
             
             <form :action="'{{ url('dashboard/time-management/schedules/group') }}/' + editGroup.id" method="POST" class="space-y-4">
@@ -233,7 +233,7 @@
 
     {{-- MODAL: ASSIGN SCHEDULE TO EMPLOYEE --}}
     <div x-show="showAssignModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showAssignModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-sm p-6 shadow-2xl relative" @click.away="showAssignModal = false">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4 uppercase tracking-wider">Penugasan Jadwal Karyawan</h3>
             
             <form action="{{ route('org.schedules.assign.store') }}" method="POST" class="space-y-4">

@@ -3,7 +3,7 @@
 @section('title', 'Notifikasi — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm w-full">
+<div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm w-full">
     <!-- Header Section -->
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center space-x-3">

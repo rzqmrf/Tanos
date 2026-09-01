@@ -40,7 +40,7 @@
     </div>
 
     <!-- Main Create Form Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8">
         
         <form action="{{ route('general.partner.store') }}" method="POST" class="space-y-6 text-xs">
             @csrf
@@ -243,7 +243,7 @@
                     Description <span class="text-rose-500">*</span>
                 </label>
                 <textarea name="description" rows="3" required placeholder="Deskripsi lengkap rekanan..."
-                          class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none leading-relaxed">{{ old('description') }}</textarea>
+                          class="w-full p-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none leading-relaxed">{{ old('description') }}</textarea>
             </div>
 
             <!-- Submit Button -->

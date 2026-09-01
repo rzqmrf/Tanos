@@ -56,7 +56,7 @@
     </div>
 
     {{-- MAIN CARD CONTENT --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden p-6 space-y-8">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden p-6 space-y-8">
         {{-- Card Header & Title --}}
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
             <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100">
@@ -195,7 +195,7 @@
 
 {{-- MODAL EDIT DETAIL PEO SETTING --}}
 <div id="modal-edit-peo-detail" class="hidden fixed inset-0 z-50 bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div class="bg-white dark:bg-slate-900 rounded-xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
         <div class="px-6 py-4 bg-primary text-white flex items-center justify-between">
             <h3 class="text-sm font-bold text-white">Edit Mapping PEO Setting</h3>
             <button onclick="document.getElementById('modal-edit-peo-detail').classList.add('hidden')" class="text-white hover:text-slate-200 font-bold">&times;</button>

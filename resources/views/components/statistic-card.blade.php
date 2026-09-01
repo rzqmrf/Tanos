@@ -16,8 +16,8 @@
     $themeClass = $themes[$theme] ?? $themes['blue'];
 @endphp
 
-<div class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.02)] flex items-center xl:flex-col xl:items-start">
-    <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center mr-4 xl:mr-0 xl:mb-3 {{ $themeClass }}">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-4 sm:p-5 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_15px_-3px_rgba(0,0,0,0.02)] flex items-center xl:flex-col xl:items-start">
+    <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center mr-4 xl:mr-0 xl:mb-3 {{ $themeClass }}">
         {{ $slot }}
     </div>
 

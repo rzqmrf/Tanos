@@ -45,7 +45,7 @@
 }">
 
     <!-- Header Section -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-sm">
+    <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
         <div class="flex items-center space-x-3">
             <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -111,7 +111,7 @@
 
         <!-- DO NOTA Action Trigger (Only visible on Siap Terbilling tab) -->
         <div x-show="pranotaTab === 'siap' && selectedPranotas.length > 0" x-transition
-             class="flex items-center justify-between p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100/60 dark:border-indigo-900/30 rounded-2xl shadow-sm">
+             class="flex items-center justify-between p-4 bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-100/60 dark:border-indigo-900/30 rounded-xl shadow-sm">
             <div class="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Terpilih <span class="text-indigo-600" x-text="selectedPranotas.length"></span> Pranota | Total: <span class="text-indigo-600" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(totalSelectedAmount)"></span>
             </div>
@@ -125,7 +125,7 @@
         </div>
 
         <!-- Pranota Tables -->
-        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
@@ -250,7 +250,7 @@
     <!-- TAB 2: NOTA BILLING (INVOICES - Halaman 12-13) -->
     <div x-show="activeTab === 'nota'" class="space-y-6" style="display: none;">
         
-        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
@@ -321,7 +321,7 @@
 
     {{-- MODAL: CREATE PRANOTA MANUAL --}}
     <div x-show="showManualModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showManualModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showManualModal = false">
             <h3 class="text-base font-bold text-slate-850 dark:text-slate-100 mb-4">Buat Pranota Manual</h3>
             
             <form action="{{ route('billing.pranota.store') }}" method="POST" class="space-y-4">
@@ -358,7 +358,7 @@
 
     {{-- MODAL: DO NOTA ACTION --}}
     <div x-show="showDoNotaModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showDoNotaModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showDoNotaModal = false">
             <h3 class="text-base font-bold text-slate-850 dark:text-slate-100 mb-2">Konfirmasi Pengelompokan Nota</h3>
             <p class="text-xs text-slate-400 mb-4 font-medium">Buat 1 Invoice Nota Billing final untuk dikirimkan ke SAP.</p>
             
@@ -375,7 +375,7 @@
                            class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
                 </div>
 
-                <div class="p-4 bg-slate-50 dark:bg-slate-950/20 border border-slate-150 dark:border-slate-850 rounded-2xl text-xs space-y-2">
+                <div class="p-4 bg-slate-50 dark:bg-slate-950/20 border border-slate-150 dark:border-slate-850 rounded-xl text-xs space-y-2">
                     <div class="flex justify-between">
                         <span class="text-slate-400 font-semibold">Total Tagihan (Grand Total):</span>
                         <span class="font-bold text-slate-800 dark:text-slate-200" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(totalSelectedAmount)"></span>
@@ -392,7 +392,7 @@
 
     {{-- MODAL: DETAIL BREAKDOWN PRANOTA & NOTA --}}
     <div x-show="showDetailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl w-full max-w-2xl p-6 shadow-2xl relative" @click.away="showDetailModal = false">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-2xl p-6 shadow-2xl relative" @click.away="showDetailModal = false">
             <!-- Modal Header -->
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800/60">
                 <div>
@@ -410,7 +410,7 @@
             </div>
 
             <!-- Modal Body (Breakdown Table) -->
-            <div class="overflow-x-auto rounded-2xl border border-slate-150 dark:border-slate-800 bg-white dark:bg-slate-900 max-h-[350px]">
+            <div class="overflow-x-auto rounded-xl border border-slate-150 dark:border-slate-800 bg-white dark:bg-slate-900 max-h-[350px]">
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider border-b border-slate-150 dark:border-slate-800">

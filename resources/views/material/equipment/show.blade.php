@@ -57,7 +57,7 @@
     </div>
 
     <!-- Main Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
         
         <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
             <div class="flex items-center space-x-3">
@@ -141,7 +141,7 @@
 
         <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
             <label class="block font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1 text-xs">Catatan & Keterangan Tambahan</label>
-            <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-xs text-slate-800 dark:text-slate-200 leading-relaxed min-h-[60px]">
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl text-xs text-slate-800 dark:text-slate-200 leading-relaxed min-h-[60px]">
                 {{ $equipment->notes ?: 'Tidak ada catatan tambahan untuk peralatan ini.' }}
             </div>
         </div>
