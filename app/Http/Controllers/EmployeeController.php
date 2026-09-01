@@ -36,6 +36,14 @@ class EmployeeController extends Controller
             });
         }
 
+        if ($request->filled('regional')) {
+            $query->where('regional', $request->regional);
+        }
+
+        if ($request->filled('segment')) {
+            $query->where('segment', $request->segment);
+        }
+
         $regionals = Regional::with('subRegionals')->orderBy('name')->get();
         $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
         $segments = Segment::orderBy('name')->get();
@@ -46,8 +54,12 @@ class EmployeeController extends Controller
             $religions = collect(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Khonghucu']);
         }
 
-        return view('hr.employees', [
-            'employees' => $query->orderBy('id', 'asc')->paginate($perPage)->withQueryString(),
+        $employees = $query->orderBy('name')->paginate($perPage)->withQueryString();
+        $totalAll = Employee::count();
+        $totalActive = Employee::where('employment_status', '!=', 'Terminated')->count();
+
+        return view('hr.employees.index', [
+            'employees' => $employees,
             'perPage' => $perPage,
             'search' => $request->get('search', ''),
             'regionals' => $regionals,
@@ -55,22 +67,54 @@ class EmployeeController extends Controller
             'segments' => $segments,
             'religions' => $religions,
             'months' => $months,
+            'totalAll' => $totalAll,
+            'totalActive' => $totalActive,
         ]);
+    }
+
+    public function create()
+    {
+        $dashboardService = new DashboardService();
+        $regionals = Regional::with('subRegionals')->orderBy('name')->get();
+        $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
+        $segments = Segment::orderBy('name')->get();
+        $months = $dashboardService->getMonths();
+
+        $religions = \App\Models\HcMasterData::where('category', 'religion')->where('active', true)->orderBy('name')->pluck('name');
+        if ($religions->isEmpty()) {
+            $religions = collect(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Khonghucu']);
+        }
+
+        return view('hr.employees.create', compact('regionals', 'subRegionals', 'segments', 'months', 'religions'));
     }
 
     public function show(Employee $employee)
     {
-        return view('hr.employee-detail', [
+        $employee->load(['user', 'attendances', 'leaveRequests', 'mutations', 'payrollItems']);
+
+        return view('hr.employees.show', [
             'employee' => $employee,
         ]);
     }
 
-    public function store(Request $request)
+    public function edit(Employee $employee)
     {
-        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
-            abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
+        $dashboardService = new DashboardService();
+        $regionals = Regional::with('subRegionals')->orderBy('name')->get();
+        $subRegionals = SubRegional::with('regional')->orderBy('name')->get();
+        $segments = Segment::orderBy('name')->get();
+        $months = $dashboardService->getMonths();
+
+        $religions = \App\Models\HcMasterData::where('category', 'religion')->where('active', true)->orderBy('name')->pluck('name');
+        if ($religions->isEmpty()) {
+            $religions = collect(['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Khonghucu']);
         }
 
+        return view('hr.employees.edit', compact('employee', 'regionals', 'subRegionals', 'segments', 'months', 'religions'));
+    }
+
+    public function store(Request $request)
+    {
         $validData = $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
@@ -92,7 +136,6 @@ class EmployeeController extends Controller
         $employee = Employee::create($validData);
 
         // Auto-create User account supaya employee baru bisa login
-        // (username = nama depan, password default = 'password', role = Employee)
         $firstName = strtolower(explode(' ', $employee->name)[0]);
         $baseUsername = $firstName;
         $username = $baseUsername;
@@ -105,31 +148,19 @@ class EmployeeController extends Controller
         User::create([
             'username'    => $username,
             'name'        => $employee->name,
+            'jabatan'     => $employee->role,
             'email'       => strtolower(str_replace(' ', '', $employee->name)) . $employee->id . '@tanos.local',
             'password'    => Hash::make('password'),
             'employee_id' => $employee->id,
             'role'        => 'Employee',
+            'role_groups' => [['role_group' => 'Employee', 'module' => 'Human Capital', 'action' => 'Read', 'table' => '', 'column' => '', 'value' => '']],
         ]);
 
-        // Trigger notification for all users
-        foreach (\App\Models\User::all() as $u) {
-            \App\Models\Notification::create([
-                'user_id' => $u->id,
-                'title' => 'Pegawai Baru Bergabung',
-                'message' => $employee->name . ' telah bergabung sebagai ' . $employee->role . ' di ' . $employee->regional . ($employee->sub_regional ? ' (' . $employee->sub_regional . ')' : '') . '.',
-                'type' => 'employee',
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Berhasil menambah data pegawai!');
+        return redirect()->route('employees.show', $employee->id)->with('success', 'Berhasil menambah data pegawai baru!');
     }
 
     public function update(Request $request, Employee $employee)
     {
-        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
-            abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
-        }
-
         $validData = $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
@@ -150,16 +181,12 @@ class EmployeeController extends Controller
 
         $employee->update($validData);
 
-        return redirect()->back()->with('success', 'Data pegawai berhasil diperbarui!');
+        return redirect()->route('employees.show', $employee->id)->with('success', 'Data pegawai berhasil diperbarui!');
     }
 
     public function destroy(Employee $employee)
     {
-        if (!in_array(auth()->user()?->role, ['Admin', 'HR Manager'])) {
-            abort(403, 'Akses ditolak. Hanya Admin dan HR Manager yang dapat memodifikasi data karyawan.');
-        }
-
         $employee->delete();
-        return redirect()->back()->with('success', 'Pegawai berhasil dihapus!');
+        return redirect()->route('employees.index')->with('success', 'Data pegawai berhasil dihapus!');
     }
 }

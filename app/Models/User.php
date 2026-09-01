@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'jabatan',
         'email',
         'password',
         'phone',
@@ -27,6 +28,9 @@ class User extends Authenticatable
         'settings',
         'employee_id',
         'role',
+        'role_groups',
+        'approval_authority',
+        'active',
     ];
 
     /**
@@ -50,6 +54,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'settings' => 'array',
+            'role_groups' => 'array',
+            'approval_authority' => 'array',
+            'active' => 'boolean',
         ];
     }
 

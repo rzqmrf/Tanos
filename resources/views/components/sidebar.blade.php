@@ -60,9 +60,8 @@
 
             // --- GENERAL ACTIVE STATE ---
             $isProjectConfig = request()->routeIs('project.config');
-            $isAccessControls = request()->routeIs('access.controls');
-            $isUsers = request()->routeIs('users.index') || request()->routeIs('users.show') || request()->routeIs('users.create') || request()->routeIs('users.edit');
-            $isSettingsActive = $isProjectConfig || $isAccessControls || $isUsers || request()->routeIs('peo.*');
+            $isUsers = request()->routeIs('users.*');
+            $isSettingsActive = $isProjectConfig || $isUsers || request()->routeIs('peo.*');
             $isMasterDataActive = request()->routeIs('general.partner*') || request()->routeIs('general.bank-acs*');
             $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*') || request()->routeIs('fa.profit-center*') || request()->routeIs('fa.cost-center*') || request()->routeIs('fa.fund-center*') || request()->routeIs('fa.currency*') || request()->routeIs('fa.bank-account*') || request()->routeIs('fa.period*');
             $isGeneralActive = $isSettingsActive || $isMasterDataActive || $isMasterFaActive;
@@ -254,10 +253,6 @@
                                 <a href="{{ route('users.index') }}" 
                                    class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isUsers ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>User
-                                </a>
-                                <a href="{{ route('access.controls') }}" 
-                                   class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isAccessControls ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
-                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Access Controls
                                 </a>
                                 <a href="{{ route('peo.index') }}" 
                                    class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('peo.*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">

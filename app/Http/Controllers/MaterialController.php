@@ -39,7 +39,12 @@ class MaterialController extends Controller
             $query->where('project_id', $request->project_id);
         }
 
-        $equipments = $query->orderBy('equipment_code')->paginate(10)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if ($perPage < 5 || $perPage > 100) {
+            $perPage = 10;
+        }
+
+        $equipments = $query->orderBy('equipment_code')->paginate($perPage)->withQueryString();
         $projects = Project::orderBy('project_name')->get();
         $categories = MaterialEquipment::distinct()->pluck('category');
 
@@ -48,7 +53,22 @@ class MaterialController extends Controller
         $totalMaintenance = MaterialEquipment::where('condition', 'Maintenance')->count();
         $totalValuation = MaterialEquipment::where('active', true)->sum('purchase_cost');
 
-        return view('material.equipment', compact('equipments', 'projects', 'categories', 'totalAll', 'totalOperational', 'totalMaintenance', 'totalValuation'));
+        return view('material.equipment.index', compact(
+            'equipments',
+            'projects',
+            'categories',
+            'totalAll',
+            'totalOperational',
+            'totalMaintenance',
+            'totalValuation',
+            'perPage'
+        ));
+    }
+
+    public function equipmentCreate()
+    {
+        $projects = Project::orderBy('project_name')->get();
+        return view('material.equipment.create', compact('projects'));
     }
 
     public function equipmentStore(Request $request)
@@ -70,7 +90,7 @@ class MaterialController extends Controller
             'active' => 'nullable',
         ]);
 
-        MaterialEquipment::create([
+        $equipment = MaterialEquipment::create([
             'equipment_code' => strtoupper(trim($request->equipment_code)),
             'name' => $request->name,
             'category' => $request->category,
@@ -87,7 +107,20 @@ class MaterialController extends Controller
             'active' => $request->has('active') ? (bool) $request->active : true,
         ]);
 
-        return redirect()->back()->with('success', 'Data Peralatan / Alat Berat baru berhasil ditambahkan!');
+        return redirect()->route('material.equipment.show', $equipment->id)->with('success', 'Data Peralatan / Alat Berat baru berhasil ditambahkan!');
+    }
+
+    public function equipmentShow(int $id)
+    {
+        $equipment = MaterialEquipment::with('project')->findOrFail($id);
+        return view('material.equipment.show', compact('equipment'));
+    }
+
+    public function equipmentEdit(int $id)
+    {
+        $equipment = MaterialEquipment::with('project')->findOrFail($id);
+        $projects = Project::orderBy('project_name')->get();
+        return view('material.equipment.edit', compact('equipment', 'projects'));
     }
 
     public function equipmentUpdate(Request $request, int $id)
@@ -128,7 +161,7 @@ class MaterialController extends Controller
             'active' => $request->has('active') ? (bool) $request->active : false,
         ]);
 
-        return redirect()->back()->with('success', 'Data Peralatan berhasil diperbarui!');
+        return redirect()->route('material.equipment.show', $equipment->id)->with('success', 'Data Peralatan berhasil diperbarui!');
     }
 
     public function equipmentDestroy(int $id)
@@ -136,7 +169,7 @@ class MaterialController extends Controller
         $equipment = MaterialEquipment::findOrFail($id);
         $equipment->delete();
 
-        return redirect()->back()->with('success', 'Data Peralatan berhasil dihapus!');
+        return redirect()->route('material.equipment')->with('success', 'Data Peralatan berhasil dihapus!');
     }
 
     /* -------------------------------------------------------------------------- */
@@ -165,14 +198,25 @@ class MaterialController extends Controller
             $query->where('status', $request->status);
         }
 
-        $agreements = $query->orderByDesc('start_date')->paginate(10)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if ($perPage < 5 || $perPage > 100) {
+            $perPage = 10;
+        }
+
+        $agreements = $query->orderByDesc('start_date')->paginate($perPage)->withQueryString();
         $partners = Partner::where('active', true)->orderBy('name')->get();
 
         $totalAll = MaterialOutlineAgreement::count();
         $totalActive = MaterialOutlineAgreement::where('status', 'Active')->count();
         $totalTargetValue = MaterialOutlineAgreement::where('status', 'Active')->sum('target_value');
 
-        return view('material.outline-agreement', compact('agreements', 'partners', 'totalAll', 'totalActive', 'totalTargetValue'));
+        return view('material.outline-agreement.index', compact('agreements', 'partners', 'totalAll', 'totalActive', 'totalTargetValue', 'perPage'));
+    }
+
+    public function outlineAgreementCreate()
+    {
+        $partners = Partner::where('active', true)->orderBy('name')->get();
+        return view('material.outline-agreement.create', compact('partners'));
     }
 
     public function outlineAgreementStore(Request $request)
@@ -191,7 +235,7 @@ class MaterialController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        MaterialOutlineAgreement::create([
+        $agreement = MaterialOutlineAgreement::create([
             'agreement_number' => strtoupper(trim($request->agreement_number)),
             'partner_id' => $request->partner_id,
             'title' => $request->title,
@@ -205,7 +249,20 @@ class MaterialController extends Controller
             'notes' => $request->notes,
         ]);
 
-        return redirect()->back()->with('success', 'Kontrak Payung (Outline Agreement) baru berhasil ditambahkan!');
+        return redirect()->route('material.outline-agreement.show', $agreement->id)->with('success', 'Kontrak Payung (Outline Agreement) baru berhasil ditambahkan!');
+    }
+
+    public function outlineAgreementShow(int $id)
+    {
+        $agreement = MaterialOutlineAgreement::with('partner')->findOrFail($id);
+        return view('material.outline-agreement.show', compact('agreement'));
+    }
+
+    public function outlineAgreementEdit(int $id)
+    {
+        $agreement = MaterialOutlineAgreement::with('partner')->findOrFail($id);
+        $partners = Partner::where('active', true)->orderBy('name')->get();
+        return view('material.outline-agreement.edit', compact('agreement', 'partners'));
     }
 
     public function outlineAgreementUpdate(Request $request, int $id)
@@ -240,7 +297,7 @@ class MaterialController extends Controller
             'notes' => $request->notes,
         ]);
 
-        return redirect()->back()->with('success', 'Data Kontrak Payung berhasil diperbarui!');
+        return redirect()->route('material.outline-agreement.show', $agreement->id)->with('success', 'Data Kontrak Payung berhasil diperbarui!');
     }
 
     public function outlineAgreementDestroy(int $id)
@@ -248,6 +305,6 @@ class MaterialController extends Controller
         $agreement = MaterialOutlineAgreement::findOrFail($id);
         $agreement->delete();
 
-        return redirect()->back()->with('success', 'Kontrak Payung berhasil dihapus!');
+        return redirect()->route('material.outline-agreement')->with('success', 'Kontrak Payung berhasil dihapus!');
     }
 }

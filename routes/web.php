@@ -56,10 +56,6 @@ Route::prefix('dashboard')->group(function () {
         Route::put('project-config/segments/{segment}', [ProjectConfigController::class, 'updateSegment'])->name('project.config.segments.update');
         Route::delete('project-config/segments/{segment}', [ProjectConfigController::class, 'destroySegment'])->name('project.config.segments.destroy');
 
-        Route::resource('access-controls', AccessControlController::class)->names([
-            'index' => 'access.controls'
-        ]);
-        Route::post('access-controls/roles', [AccessControlController::class, 'addRole'])->name('access.controls.add-role');
         Route::resource('users', UserController::class);
 
         Route::get('peo-settings', [PeoSettingController::class, 'index'])->name('peo.index');
@@ -164,12 +160,18 @@ Route::prefix('dashboard')->group(function () {
 
     // Material Management
     Route::get('material/equipment', [MaterialController::class, 'equipmentIndex'])->name('material.equipment')->middleware('permission:settings');
+    Route::get('material/equipment/create', [MaterialController::class, 'equipmentCreate'])->name('material.equipment.create')->middleware('permission:settings');
     Route::post('material/equipment', [MaterialController::class, 'equipmentStore'])->name('material.equipment.store')->middleware('permission:settings');
+    Route::get('material/equipment/{id}', [MaterialController::class, 'equipmentShow'])->name('material.equipment.show')->middleware('permission:settings');
+    Route::get('material/equipment/{id}/edit', [MaterialController::class, 'equipmentEdit'])->name('material.equipment.edit')->middleware('permission:settings');
     Route::put('material/equipment/{id}', [MaterialController::class, 'equipmentUpdate'])->name('material.equipment.update')->middleware('permission:settings');
     Route::delete('material/equipment/{id}', [MaterialController::class, 'equipmentDestroy'])->name('material.equipment.destroy')->middleware('permission:settings');
 
     Route::get('material/outline-agreement', [MaterialController::class, 'outlineAgreementIndex'])->name('material.outline-agreement')->middleware('permission:settings');
+    Route::get('material/outline-agreement/create', [MaterialController::class, 'outlineAgreementCreate'])->name('material.outline-agreement.create')->middleware('permission:settings');
     Route::post('material/outline-agreement', [MaterialController::class, 'outlineAgreementStore'])->name('material.outline-agreement.store')->middleware('permission:settings');
+    Route::get('material/outline-agreement/{id}', [MaterialController::class, 'outlineAgreementShow'])->name('material.outline-agreement.show')->middleware('permission:settings');
+    Route::get('material/outline-agreement/{id}/edit', [MaterialController::class, 'outlineAgreementEdit'])->name('material.outline-agreement.edit')->middleware('permission:settings');
     Route::put('material/outline-agreement/{id}', [MaterialController::class, 'outlineAgreementUpdate'])->name('material.outline-agreement.update')->middleware('permission:settings');
     Route::delete('material/outline-agreement/{id}', [MaterialController::class, 'outlineAgreementDestroy'])->name('material.outline-agreement.destroy')->middleware('permission:settings');
 
