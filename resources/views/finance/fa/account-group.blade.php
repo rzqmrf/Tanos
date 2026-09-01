@@ -5,7 +5,9 @@
 @section('content')
 <div class="space-y-6" x-data="{ 
     showModal: false, 
+    showDetailModal: false,
     editMode: false, 
+    detailItem: {},
     form: { 
         id: null, 
         code: '', 
@@ -36,7 +38,12 @@
             description: item.description || '', 
             active: !!item.active 
         };
+        this.showDetailModal = false;
         this.showModal = true;
+    },
+    openDetail(item) {
+        this.detailItem = item;
+        this.showDetailModal = true;
     }
 }">
 
@@ -159,11 +166,15 @@
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $accountGroups->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle">
+                                <button @click="openDetail({{ json_encode($item) }})" class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle hover:opacity-80 transition cursor-pointer">
                                     {{ $item->code }}
-                                </span>
+                                </button>
                             </td>
-                            <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">{{ $item->name }}</td>
+                            <td class="py-3.5 px-4">
+                                <button @click="openDetail({{ json_encode($item) }})" class="font-bold text-slate-800 dark:text-slate-100 hover:text-primary transition cursor-pointer text-left">
+                                    {{ $item->name }}
+                                </button>
+                            </td>
                             <td class="py-3.5 px-4">
                                 @if($item->category === 'balance_sheet')
                                     <span class="px-2.5 py-1 text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-lg inline-flex items-center">
@@ -194,6 +205,12 @@
                             </td>
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end space-x-1.5">
+                                    <!-- View Detail Button -->
+                                    <button @click="openDetail({{ json_encode($item) }})"
+                                            class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light rounded-lg transition cursor-pointer" title="Lihat Detail">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </button>
+
                                     <button @click="openEdit({{ json_encode($item) }})"
                                             class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light rounded-lg transition cursor-pointer" title="Edit Group">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -289,6 +306,83 @@
                     <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Group'"></button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal View Detail Account Group -->
+    <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-mono font-black text-xs" x-text="detailItem.code"></span>
+                        <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Detail Account Group</h3>
+                    </div>
+                    <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Account Group</span>
+                        <p class="text-base font-black text-slate-800 dark:text-slate-100 mt-0.5" x-text="detailItem.name"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Kategori Laporan</span>
+                            <template x-if="detailItem.category === 'balance_sheet'">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 inline-block mt-1">
+                                    Neraca (Balance Sheet)
+                                </span>
+                            </template>
+                            <template x-if="detailItem.category !== 'balance_sheet'">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 inline-block mt-1">
+                                    Laba Rugi (Income Statement)
+                                </span>
+                            </template>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Status Akun</span>
+                            <template x-if="detailItem.active">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 mt-1">
+                                    AKTIF
+                                </span>
+                            </template>
+                            <template x-if="!detailItem.active">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 mt-1">
+                                    NON-AKTIF
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Deskripsi / Keterangan</span>
+                        <p class="text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed bg-slate-50 dark:bg-slate-800/30 p-3 rounded-xl border border-slate-100 dark:border-slate-800" x-text="detailItem.description || 'Tidak ada deskripsi tambahan.'"></p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex justify-between">
+                        <span>Dibuat: <span class="font-mono" x-text="detailItem.created_at ? new Date(detailItem.created_at).toLocaleString('id-ID') : '-'"></span></span>
+                        <span>Diupdate: <span class="font-mono" x-text="detailItem.updated_at ? new Date(detailItem.updated_at).toLocaleString('id-ID') : '-'"></span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showDetailModal = false"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" @click="openEdit(detailItem)"
+                            class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>Edit Data Ini</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -5,26 +5,33 @@
 @section('content')
 <div class="space-y-6" x-data="{
     showModal: false,
+    showDetailModal: false,
     editMode: false,
-    form: { id: null, profit_center_id: '', code: '', name: '', department: '', person_in_charge: '', description: '', active: true },
+    detailItem: {},
+    form: { id: null, code: '', name: '', profit_center_id: '', department: '', person_in_charge: '', description: '', active: true },
     openCreate() {
         this.editMode = false;
-        this.form = { id: null, profit_center_id: '', code: '', name: '', department: '', person_in_charge: '', description: '', active: true };
+        this.form = { id: null, code: '', name: '', profit_center_id: '', department: '', person_in_charge: '', description: '', active: true };
         this.showModal = true;
     },
     openEdit(item) {
         this.editMode = true;
         this.form = {
             id: item.id,
-            profit_center_id: item.profit_center_id || '',
             code: item.code,
             name: item.name,
+            profit_center_id: item.profit_center_id || '',
             department: item.department || '',
             person_in_charge: item.person_in_charge || '',
             description: item.description || '',
             active: !!item.active
         };
+        this.showDetailModal = false;
         this.showModal = true;
+    },
+    openDetail(item) {
+        this.detailItem = item;
+        this.showDetailModal = true;
     }
 }">
 
@@ -39,7 +46,7 @@
             <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center">
                 <span>Cost Center Master (Pusat Biaya)</span>
             </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Pengelompokan pusat pembebanan biaya departemen, proyek, dan divisi operasional.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Pengelompokan akun beban, departemen pelaksana, dan pembebanan anggaran ke Profit Center.</p>
         </div>
 
         <button @click="openCreate()"
@@ -74,7 +81,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
             <div class="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold text-lg shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             </div>
             <div>
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Cost Center</p>
@@ -93,12 +100,12 @@
         </div>
 
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg shadow-inner">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg shadow-inner">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
             </div>
             <div>
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Parent Profit Centers</p>
-                <p class="text-xl font-black text-blue-600 dark:text-blue-400 mt-0.5">{{ $profitCenters->count() }} <span class="text-xs font-normal text-slate-400">Unit</span></p>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Departemen</p>
+                <p class="text-xl font-black text-amber-600 dark:text-amber-400 mt-0.5">{{ count($departments) }} <span class="text-xs font-normal text-slate-400">Bagian</span></p>
             </div>
         </div>
     </div>
@@ -108,7 +115,7 @@
         <form method="GET" action="{{ route('fa.cost-center') }}" class="flex flex-col sm:flex-row gap-3">
             <div class="flex-1 relative">
                 <input type="text" name="search" value="{{ request('search') }}"
-                       placeholder="Cari kode, nama cost center, departemen, PIC..."
+                       placeholder="Cari kode, nama cost center, PIC..."
                        class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
                 <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             </div>
@@ -120,11 +127,18 @@
                 @endforeach
             </select>
 
+            <select name="department" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-700 dark:text-slate-200 focus:outline-none">
+                <option value="">Semua Departemen</option>
+                @foreach($departments as $dept)
+                    <option value="{{ $dept }}" {{ request('department') === $dept ? 'selected' : '' }}>{{ $dept }}</option>
+                @endforeach
+            </select>
+
             <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl transition cursor-pointer">
                 Filter
             </button>
 
-            @if(request()->hasAny(['search', 'profit_center_id']))
+            @if(request()->hasAny(['search', 'profit_center_id', 'department']))
             <a href="{{ route('fa.cost-center') }}" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl transition flex items-center justify-center">
                 Reset
             </a>
@@ -142,7 +156,7 @@
                         <th class="py-4 px-5">Nama Cost Center</th>
                         <th class="py-4 px-5">Parent Profit Center</th>
                         <th class="py-4 px-5">Departemen</th>
-                        <th class="py-4 px-5">Penanggung Jawab</th>
+                        <th class="py-4 px-5">Penanggung Jawab (PIC)</th>
                         <th class="py-4 px-5 text-center">Status</th>
                         <th class="py-4 px-5 text-right">Aksi</th>
                     </tr>
@@ -150,9 +164,15 @@
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse($costCenters as $item)
                     <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
-                        <td class="py-3.5 px-5 font-mono font-bold text-primary">{{ $item->code }}</td>
+                        <td class="py-3.5 px-5 font-mono font-bold text-primary">
+                            <button @click="openDetail({{ $item }})" class="hover:underline cursor-pointer">
+                                {{ $item->code }}
+                            </button>
+                        </td>
                         <td class="py-3.5 px-5">
-                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ $item->name }}</span>
+                            <button @click="openDetail({{ $item }})" class="text-left font-bold text-slate-800 dark:text-slate-200 hover:text-primary transition cursor-pointer">
+                                {{ $item->name }}
+                            </button>
                             @if($item->description)
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{{ $item->description }}</p>
                             @endif
@@ -162,9 +182,9 @@
                             <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-primary-light text-primary">
                                 {{ $item->profitCenter->code }}
                             </span>
-                            <span class="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">{{ $item->profitCenter->name }}</span>
+                            <span class="text-[11px] text-slate-500 dark:text-slate-400 ml-1">{{ $item->profitCenter->name }}</span>
                             @else
-                            <span class="text-slate-400">-</span>
+                            <span class="text-slate-400 italic">-</span>
                             @endif
                         </td>
                         <td class="py-3.5 px-5 text-slate-600 dark:text-slate-300 font-medium">
@@ -184,12 +204,20 @@
                             </span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
+                        <td class="py-3.5 px-5 text-right space-x-1 whitespace-nowrap">
+                            <!-- View Detail Button -->
+                            <button @click="openDetail({{ $item }})"
+                                    class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Lihat Detail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+
+                            <!-- Edit Button -->
                             <button @click="openEdit({{ $item }})"
                                     class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
 
+                            <!-- Delete Button -->
                             <form action="{{ route('fa.cost-center.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus Cost Center {{ $item->name }}?')">
                                 @csrf
                                 @method('DELETE')
@@ -217,6 +245,86 @@
         @endif
     </div>
 
+    <!-- Modal View Detail -->
+    <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-mono font-black text-xs" x-text="detailItem.code"></span>
+                        <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Detail Cost Center</h3>
+                    </div>
+                    <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Cost Center</span>
+                        <p class="text-sm font-black text-slate-800 dark:text-slate-100 mt-0.5" x-text="detailItem.name"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Parent Profit Center</span>
+                            <p class="font-bold text-primary mt-0.5" x-text="detailItem.profit_center ? (detailItem.profit_center.code + ' - ' + detailItem.profit_center.name) : '-'"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Departemen</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.department || '-'"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Penanggung Jawab (PIC)</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.person_in_charge || '-'"></p>
+                        </div>
+
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Status</span>
+                            <template x-if="detailItem.active">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 mt-1">
+                                    AKTIF
+                                </span>
+                            </template>
+                            <template x-if="!detailItem.active">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 mt-1">
+                                    NON-AKTIF
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Deskripsi / Keterangan</span>
+                        <p class="text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed bg-slate-50 dark:bg-slate-800/30 p-3 rounded-xl border border-slate-100 dark:border-slate-800" x-text="detailItem.description || 'Tidak ada catatan tambahan.'"></p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex justify-between">
+                        <span>Dibuat: <span class="font-mono" x-text="detailItem.created_at ? new Date(detailItem.created_at).toLocaleString('id-ID') : '-'"></span></span>
+                        <span>Diupdate: <span class="font-mono" x-text="detailItem.updated_at ? new Date(detailItem.updated_at).toLocaleString('id-ID') : '-'"></span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showDetailModal = false"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" @click="openEdit(detailItem)"
+                            class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>Edit Data Ini</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Create / Edit -->
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showModal = false"></div>
@@ -225,7 +333,7 @@
             <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                     <h3 class="text-base font-black text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Cost Center' : 'Tambah Cost Center Baru'"></h3>
-                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
@@ -235,6 +343,18 @@
                     <template x-if="editMode">
                         <input type="hidden" name="_method" value="PUT">
                     </template>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kode Cost Center *</label>
+                        <input type="text" name="code" x-model="form.code" required placeholder="Contoh: CC-TAD-01"
+                               class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Cost Center *</label>
+                        <input type="text" name="name" x-model="form.name" required placeholder="Contoh: Biaya Operasional Tenaga Alih Daya"
+                               class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none">
+                    </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Parent Profit Center</label>
@@ -247,22 +367,10 @@
                         </select>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kode Cost Center *</label>
-                        <input type="text" name="code" x-model="form.code" required placeholder="Contoh: CC-ADM-01"
-                               class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono font-bold text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Cost Center *</label>
-                        <input type="text" name="name" x-model="form.name" required placeholder="Contoh: Departemen HR & General Affairs"
-                               class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none">
-                    </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Departemen / Divisi</label>
-                            <input type="text" name="department" x-model="form.department" placeholder="Contoh: Human Capital"
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Departemen</label>
+                            <input type="text" name="department" x-model="form.department" placeholder="Contoh: Operasional"
                                    class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none">
                         </div>
 
@@ -275,7 +383,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Keterangan / Deskripsi</label>
-                        <textarea name="description" x-model="form.description" rows="2" placeholder="Catatan beban pengeluaran..."
+                        <textarea name="description" x-model="form.description" rows="2" placeholder="Catatan fungsi cost center..."
                                   class="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-primary/20 focus:outline-none"></textarea>
                     </div>
 
@@ -287,7 +395,7 @@
 
                     <div class="flex justify-end space-x-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                         <button type="button" @click="showModal = false"
-                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
                             Batal
                         </button>
                         <button type="submit"

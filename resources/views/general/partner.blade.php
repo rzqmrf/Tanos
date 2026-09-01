@@ -5,7 +5,9 @@
 @section('content')
 <div class="space-y-6" x-data="{ 
     showModal: false, 
+    showDetailModal: false,
     editMode: false, 
+    detailItem: {},
     form: { 
         id: null, 
         partner_type_id: '{{ $partnerTypes->first()->id ?? '' }}', 
@@ -63,7 +65,12 @@
             payment_terms_days: item.payment_terms_days || 30, 
             active: !!item.active 
         };
+        this.showDetailModal = false;
         this.showModal = true;
+    },
+    openDetail(item) {
+        this.detailItem = item;
+        this.showDetailModal = true;
     }
 }">
 
@@ -173,13 +180,15 @@
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                             <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $partners->firstItem() + $index }}</td>
                             <td class="py-3.5 px-4">
-                                <span class="px-2 py-0.5 bg-primary-light text-primary font-mono font-bold rounded text-[11px] border border-primary-subtle block w-max mb-1">
+                                <button @click="openDetail({{ json_encode($item) }})" class="px-2 py-0.5 bg-primary-light text-primary font-mono font-bold rounded text-[11px] border border-primary-subtle block w-max mb-1 hover:opacity-80 transition cursor-pointer">
                                     {{ $item->code }}
-                                </span>
+                                </button>
                                 <span class="text-[11px] text-slate-500 dark:text-slate-400 font-mono">NPWP: {{ $item->npwp ?? '—' }}</span>
                             </td>
                             <td class="py-3.5 px-4">
-                                <span class="font-bold text-slate-800 dark:text-slate-100 block">{{ $item->name }}</span>
+                                <button @click="openDetail({{ json_encode($item) }})" class="font-bold text-slate-800 dark:text-slate-100 hover:text-primary transition cursor-pointer text-left block">
+                                    {{ $item->name }}
+                                </button>
                                 <span class="text-[11px] text-slate-400 dark:text-slate-500 truncate max-w-xs block">{{ $item->address ?? '-' }}</span>
                             </td>
                             <td class="py-3.5 px-4">
@@ -221,6 +230,12 @@
                             </td>
                             <td class="py-3.5 px-4 text-right">
                                 <div class="flex items-center justify-end space-x-1.5">
+                                    <!-- View Detail Button -->
+                                    <button @click="openDetail({{ json_encode($item) }})"
+                                            class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light dark:hover:text-blue-400 dark:hover:bg-blue-950/40 rounded-lg transition cursor-pointer" title="Lihat Detail">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </button>
+
                                     <button @click="openEdit({{ json_encode($item) }})"
                                             class="p-1.5 text-slate-500 hover:text-primary hover:bg-primary-light dark:hover:text-blue-400 dark:hover:bg-blue-950/40 rounded-lg transition cursor-pointer" title="Edit Data Mitra">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -378,6 +393,97 @@
                     <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Mitra'"></button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal View Detail Mitra / Rekanan -->
+    <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-mono font-black text-xs" x-text="detailItem.code"></span>
+                        <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Detail Mitraniaga / Rekanan</h3>
+                    </div>
+                    <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Perusahaan / Rekanan</span>
+                        <p class="text-base font-black text-slate-800 dark:text-slate-100 mt-0.5" x-text="detailItem.name"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Tipe Mitra</span>
+                            <p class="font-bold text-primary mt-0.5 uppercase" x-text="detailItem.partner_type ? detailItem.partner_type.name : 'Rekanan'"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nomor Pokok Wajib Pajak (NPWP)</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5 font-mono" x-text="detailItem.npwp || '-'"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama PIC</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.pic_name || '-'"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Telepon / HP PIC</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5 font-mono" x-text="detailItem.pic_phone || detailItem.phone || '-'"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Email Kantor</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.email || '-'"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Term of Payment (TOP)</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="(detailItem.payment_terms_days || 30) + ' Hari Kalender'"></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-800/30 p-3 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Informasi Rekening Bank</span>
+                        <div class="mt-1 flex items-center space-x-2">
+                            <span class="font-bold text-slate-800 dark:text-slate-100" x-text="detailItem.bank_name || '-'"></span>
+                            <span class="text-slate-400">•</span>
+                            <span class="font-mono font-bold text-primary" x-text="detailItem.bank_account_number || '-'"></span>
+                            <span class="text-slate-400" x-show="detailItem.bank_account_holder" x-text="'(a/n ' + detailItem.bank_account_holder + ')'"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Alamat Lengkap</span>
+                        <p class="text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed bg-slate-50 dark:bg-slate-800/30 p-3 rounded-xl border border-slate-100 dark:border-slate-800" x-text="detailItem.address || 'Tidak ada alamat tercatat.'"></p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex justify-between">
+                        <span>Dibuat: <span class="font-mono" x-text="detailItem.created_at ? new Date(detailItem.created_at).toLocaleString('id-ID') : '-'"></span></span>
+                        <span>Diupdate: <span class="font-mono" x-text="detailItem.updated_at ? new Date(detailItem.updated_at).toLocaleString('id-ID') : '-'"></span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showDetailModal = false"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" @click="openEdit(detailItem)"
+                            class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>Edit Data Ini</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

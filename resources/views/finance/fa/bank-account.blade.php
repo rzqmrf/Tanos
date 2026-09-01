@@ -5,7 +5,9 @@
 @section('content')
 <div class="space-y-6" x-data="{
     showModal: false,
+    showDetailModal: false,
     editMode: false,
+    detailItem: {},
     form: { id: null, bank_name: '', account_number: '', account_holder: '', branch: '', currency: 'IDR', chart_of_account_id: '', is_primary: false, active: true },
     openCreate() {
         this.editMode = false;
@@ -25,7 +27,12 @@
             is_primary: !!item.is_primary,
             active: !!item.active
         };
+        this.showDetailModal = false;
         this.showModal = true;
+    },
+    openDetail(item) {
+        this.detailItem = item;
+        this.showDetailModal = true;
     }
 }">
 
@@ -105,10 +112,14 @@
                             <span class="w-7 h-7 rounded-lg bg-primary-light text-primary flex items-center justify-center font-black text-xs">
                                 {{ substr($item->bank_name, 0, 1) }}
                             </span>
-                            <span>{{ $item->bank_name }}</span>
+                            <button @click="openDetail({{ $item }})" class="text-left hover:text-primary transition cursor-pointer">
+                                {{ $item->bank_name }}
+                            </button>
                         </td>
                         <td class="py-3.5 px-5 font-mono font-bold text-primary">
-                            {{ $item->account_number }}
+                            <button @click="openDetail({{ $item }})" class="hover:underline cursor-pointer">
+                                {{ $item->account_number }}
+                            </button>
                             <span class="text-[10px] text-slate-400 font-sans block font-medium">{{ $item->currency }}</span>
                         </td>
                         <td class="py-3.5 px-5 font-medium text-slate-700 dark:text-slate-300">
@@ -149,12 +160,20 @@
                             </span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
+                        <td class="py-3.5 px-5 text-right space-x-1 whitespace-nowrap">
+                            <!-- View Detail Button -->
+                            <button @click="openDetail({{ $item }})"
+                                    class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Lihat Detail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+
+                            <!-- Edit Button -->
                             <button @click="openEdit({{ $item }})"
                                     class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
 
+                            <!-- Delete Button -->
                             <form action="{{ route('fa.bank-account.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus Rekening {{ $item->bank_name }} - {{ $item->account_number }}?')">
                                 @csrf
                                 @method('DELETE')
@@ -182,6 +201,87 @@
         @endif
     </div>
 
+    <!-- Modal View Detail -->
+    <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-bold text-xs" x-text="detailItem.bank_name"></span>
+                        <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Detail Rekening Bank</h3>
+                    </div>
+                    <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nomor Rekening Bank</span>
+                        <p class="text-lg font-black text-primary font-mono mt-0.5" x-text="detailItem.account_number"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Pemilik Rekening</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.account_holder"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Kantor Cabang</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.branch || '-'"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Mata Uang</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5 font-mono" x-text="detailItem.currency || 'IDR'"></p>
+                        </div>
+
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Tipe Rekening</span>
+                            <template x-if="detailItem.is_primary">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 mt-1">
+                                    REKENING UTAMA
+                                </span>
+                            </template>
+                            <template x-if="!detailItem.is_primary">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 mt-1">
+                                    Rekening Operasional
+                                </span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Mapping GL Akun (CoA)</span>
+                        <p class="text-slate-700 dark:text-slate-300 font-mono font-semibold mt-0.5 bg-slate-50 dark:bg-slate-800/30 p-3 rounded-xl border border-slate-100 dark:border-slate-800"
+                           x-text="detailItem.chart_of_account ? (detailItem.chart_of_account.code + ' - ' + detailItem.chart_of_account.name) : 'Belum dimapping ke Chart of Accounts'"></p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex justify-between">
+                        <span>Dibuat: <span class="font-mono" x-text="detailItem.created_at ? new Date(detailItem.created_at).toLocaleString('id-ID') : '-'"></span></span>
+                        <span>Diupdate: <span class="font-mono" x-text="detailItem.updated_at ? new Date(detailItem.updated_at).toLocaleString('id-ID') : '-'"></span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showDetailModal = false"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" @click="openEdit(detailItem)"
+                            class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>Edit Data Ini</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Create / Edit -->
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showModal = false"></div>
@@ -190,7 +290,7 @@
             <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                     <h3 class="text-base font-black text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Rekening Bank' : 'Tambah Rekening Bank Baru'"></h3>
-                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
@@ -262,7 +362,7 @@
 
                     <div class="flex justify-end space-x-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                         <button type="button" @click="showModal = false"
-                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
                             Batal
                         </button>
                         <button type="submit"

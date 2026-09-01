@@ -5,7 +5,9 @@
 @section('content')
 <div class="space-y-6" x-data="{
     showModal: false,
+    showDetailModal: false,
     editMode: false,
+    detailItem: {},
     form: { id: null, code: '', name: '', budget_limit: 0, currency: 'IDR', description: '', active: true },
     openCreate() {
         this.editMode = false;
@@ -23,7 +25,12 @@
             description: item.description || '',
             active: !!item.active
         };
+        this.showDetailModal = false;
         this.showModal = true;
+    },
+    openDetail(item) {
+        this.detailItem = item;
+        this.showDetailModal = true;
     }
 }">
 
@@ -111,9 +118,15 @@
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse($fundCenters as $item)
                     <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
-                        <td class="py-3.5 px-5 font-mono font-bold text-primary">{{ $item->code }}</td>
+                        <td class="py-3.5 px-5 font-mono font-bold text-primary">
+                            <button @click="openDetail({{ $item }})" class="hover:underline cursor-pointer">
+                                {{ $item->code }}
+                            </button>
+                        </td>
                         <td class="py-3.5 px-5">
-                            <span class="font-bold text-slate-800 dark:text-slate-200">{{ $item->name }}</span>
+                            <button @click="openDetail({{ $item }})" class="text-left font-bold text-slate-800 dark:text-slate-200 hover:text-primary transition cursor-pointer">
+                                {{ $item->name }}
+                            </button>
                             @if($item->description)
                             <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{{ $item->description }}</p>
                             @endif
@@ -137,12 +150,20 @@
                             </span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
+                        <td class="py-3.5 px-5 text-right space-x-1 whitespace-nowrap">
+                            <!-- View Detail Button -->
+                            <button @click="openDetail({{ $item }})"
+                                    class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Lihat Detail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+
+                            <!-- Edit Button -->
                             <button @click="openEdit({{ $item }})"
                                     class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </button>
 
+                            <!-- Delete Button -->
                             <form action="{{ route('fa.fund-center.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus Fund Center {{ $item->name }}?')">
                                 @csrf
                                 @method('DELETE')
@@ -170,6 +191,80 @@
         @endif
     </div>
 
+    <!-- Modal View Detail -->
+    <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showDetailModal = false"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 rounded-lg bg-primary-light text-primary font-mono font-black text-xs" x-text="detailItem.code"></span>
+                        <h3 class="text-base font-black text-slate-800 dark:text-slate-100">Detail Fund Center</h3>
+                    </div>
+                    <button @click="showDetailModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="mt-4 space-y-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Nama Fund Center</span>
+                        <p class="text-sm font-black text-slate-800 dark:text-slate-100 mt-0.5" x-text="detailItem.name"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Pagu Anggaran (Limit)</span>
+                            <p class="text-base font-black text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono"
+                               x-text="(detailItem.currency || 'IDR') + ' ' + (detailItem.budget_limit ? Number(detailItem.budget_limit).toLocaleString('id-ID', {minimumFractionDigits: 2}) : '0,00')"></p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Mata Uang</span>
+                            <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5" x-text="detailItem.currency || 'IDR'"></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Status Fund Center</span>
+                        <template x-if="detailItem.active">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 mt-1">
+                                AKTIF
+                            </span>
+                        </template>
+                        <template x-if="!detailItem.active">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 mt-1">
+                                NON-AKTIF
+                            </span>
+                        </template>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-400 block font-semibold uppercase tracking-wider text-[10px]">Deskripsi / Keterangan</span>
+                        <p class="text-slate-700 dark:text-slate-300 mt-0.5 leading-relaxed bg-slate-50 dark:bg-slate-800/30 p-3 rounded-xl border border-slate-100 dark:border-slate-800" x-text="detailItem.description || 'Tidak ada catatan tambahan.'"></p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex justify-between">
+                        <span>Dibuat: <span class="font-mono" x-text="detailItem.created_at ? new Date(detailItem.created_at).toLocaleString('id-ID') : '-'"></span></span>
+                        <span>Diupdate: <span class="font-mono" x-text="detailItem.updated_at ? new Date(detailItem.updated_at).toLocaleString('id-ID') : '-'"></span></span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showDetailModal = false"
+                            class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" @click="openEdit(detailItem)"
+                            class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition flex items-center space-x-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        <span>Edit Data Ini</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Create / Edit -->
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" @click="showModal = false"></div>
@@ -178,7 +273,7 @@
             <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 overflow-hidden">
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                     <h3 class="text-base font-black text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Fund Center' : 'Tambah Fund Center Baru'"></h3>
-                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
@@ -229,7 +324,7 @@
 
                     <div class="flex justify-end space-x-2 pt-4 border-t border-slate-100 dark:border-slate-800">
                         <button type="button" @click="showModal = false"
-                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                                class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer">
                             Batal
                         </button>
                         <button type="submit"
