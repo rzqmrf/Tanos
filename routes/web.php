@@ -86,9 +86,16 @@ Route::prefix('dashboard')->group(function () {
     Route::delete('general/partner-type/{id}', [PartnerController::class, 'partnerTypeDestroy'])->name('general.partner-type.destroy')->middleware('permission:settings');
 
     Route::get('general/partner', [PartnerController::class, 'partnerIndex'])->name('general.partner')->middleware('permission:settings');
+    Route::get('general/partner/create', [PartnerController::class, 'partnerCreate'])->name('general.partner.create')->middleware('permission:settings');
     Route::post('general/partner', [PartnerController::class, 'partnerStore'])->name('general.partner.store')->middleware('permission:settings');
+    Route::get('general/partner/{id}', [PartnerController::class, 'partnerShow'])->name('general.partner.show')->middleware('permission:settings');
+    Route::get('general/partner/{id}/edit', [PartnerController::class, 'partnerEdit'])->name('general.partner.edit')->middleware('permission:settings');
     Route::put('general/partner/{id}', [PartnerController::class, 'partnerUpdate'])->name('general.partner.update')->middleware('permission:settings');
     Route::delete('general/partner/{id}', [PartnerController::class, 'partnerDestroy'])->name('general.partner.destroy')->middleware('permission:settings');
+    Route::post('general/partner/{id}/banks', [PartnerController::class, 'partnerBankStore'])->name('general.partner.banks.store')->middleware('permission:settings');
+    Route::delete('general/partner/{partnerId}/banks/{bankId}', [PartnerController::class, 'partnerBankDestroy'])->name('general.partner.banks.destroy')->middleware('permission:settings');
+    Route::post('general/partner/{id}/segments', [PartnerController::class, 'partnerSegmentStore'])->name('general.partner.segments.store')->middleware('permission:settings');
+    Route::delete('general/partner/{partnerId}/segments/{segmentId}', [PartnerController::class, 'partnerSegmentDestroy'])->name('general.partner.segments.destroy')->middleware('permission:settings');
 
     Route::get('general/bank-acs', [PartnerController::class, 'bankAcsIndex'])->name('general.bank-acs')->middleware('permission:settings');
     Route::post('general/bank-acs', [PartnerController::class, 'bankAcsStore'])->name('general.bank-acs.store')->middleware('permission:settings');

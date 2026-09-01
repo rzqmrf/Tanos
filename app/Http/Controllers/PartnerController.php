@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PartnerType;
 use App\Models\Partner;
 use App\Models\PartnerBankAccount;
+use App\Models\PartnerBusinessSegment;
 use Illuminate\Http\Request;
 
 class PartnerController extends Controller
@@ -87,23 +88,28 @@ class PartnerController extends Controller
     }
 
     /**
-     * Display Partner / Mitraniaga Master
+     * Display Business Partner - List (Index Page)
      */
     public function partnerIndex(Request $request)
     {
         $this->ensurePartnerTypesSeeded();
         $this->ensurePartnersSeeded();
 
-        $query = Partner::with('partnerType');
+        $query = Partner::with(['partnerType', 'bankAccounts', 'businessSegments']);
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('code', 'like', "%{$search}%")
-                  ->orWhere('pic_name', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%")
+                  ->orWhere('npwp', 'like', "%{$search}%")
+                  ->orWhere('identity_card', 'like', "%{$search}%")
+                  ->orWhere('chief_name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                  ->orWhere('phone_1', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('kode_mdm', 'like', "%{$search}%");
             });
         }
 
@@ -111,122 +117,304 @@ class PartnerController extends Controller
             $query->where('partner_type_id', $request->partner_type_id);
         }
 
-        $partners = $query->orderBy('name')->paginate(12)->withQueryString();
+        if ($request->filled('role')) {
+            if ($request->role === 'vendor') {
+                $query->where('is_vendor', true);
+            } elseif ($request->role === 'customer') {
+                $query->where('is_customer', true);
+            }
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if ($perPage < 5 || $perPage > 100) {
+            $perPage = 10;
+        }
+
+        $partners = $query->orderBy('code')->paginate($perPage)->withQueryString();
         $partnerTypes = PartnerType::where('active', true)->orderBy('name')->get();
 
         $totalAll = Partner::count();
         $totalActive = Partner::where('active', true)->count();
-        $totalVendors = Partner::whereHas('partnerType', fn($q) => $q->where('code', 'VENDOR'))->count();
-        $totalCustomers = Partner::whereHas('partnerType', fn($q) => $q->where('code', 'CUSTOMER'))->count();
+        $totalVendors = Partner::where('is_vendor', true)->count();
+        $totalCustomers = Partner::where('is_customer', true)->count();
 
-        return view('general.partner', compact('partners', 'partnerTypes', 'totalAll', 'totalActive', 'totalVendors', 'totalCustomers'));
+        return view('general.partner.index', compact(
+            'partners',
+            'partnerTypes',
+            'totalAll',
+            'totalActive',
+            'totalVendors',
+            'totalCustomers',
+            'perPage'
+        ));
     }
 
+    /**
+     * Show Create Partner Page
+     */
+    public function partnerCreate()
+    {
+        $this->ensurePartnerTypesSeeded();
+        $partnerTypes = PartnerType::where('active', true)->orderBy('name')->get();
+
+        return view('general.partner.create', compact('partnerTypes'));
+    }
+
+    /**
+     * Store a newly created Partner
+     */
     public function partnerStore(Request $request)
     {
         $request->validate([
-            'partner_type_id' => 'required|exists:partner_types,id',
             'code' => 'required|string|max:50|unique:partners,code',
             'name' => 'required|string|max:255',
-            'npwp' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:50',
+            'partner_type_id' => 'nullable|exists:partner_types,id',
             'address' => 'nullable|string',
-            'pic_name' => 'nullable|string|max:255',
-            'pic_phone' => 'nullable|string|max:50',
-            'bank_name' => 'nullable|string|max:100',
-            'bank_account_number' => 'nullable|string|max:100',
-            'bank_account_holder' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'identity_card' => 'nullable|string|max:50',
+            'npwp' => 'nullable|string|max:50',
+            'chief_name' => 'nullable|string|max:255',
+            'chief_position' => 'nullable|string|max:255',
+            'trading_partner' => 'nullable|string|max:255',
+            'partner_group' => 'nullable|string|max:255',
+            'phone_1' => 'nullable|string|max:50',
+            'phone_2' => 'nullable|string|max:50',
+            'email' => 'nullable|email|max:255',
+            'ftp_link' => 'nullable|string|max:255',
+            'ftp_port' => 'nullable|string|max:20',
+            'ftp_user' => 'nullable|string|max:255',
+            'ftp_pass' => 'nullable|string|max:255',
+            'kode_mdm' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
             'payment_terms_days' => 'nullable|integer|min:0',
-            'active' => 'nullable',
         ]);
 
         $partner = Partner::create([
             'partner_type_id' => $request->partner_type_id,
-            'code' => strtoupper(trim($request->code)),
+            'code' => trim($request->code),
             'name' => $request->name,
-            'npwp' => $request->npwp,
-            'email' => $request->email,
-            'phone' => $request->phone,
             'address' => $request->address,
-            'pic_name' => $request->pic_name,
-            'pic_phone' => $request->pic_phone,
-            'bank_name' => $request->bank_name,
-            'bank_account_number' => $request->bank_account_number,
-            'bank_account_holder' => $request->bank_account_holder,
+            'city' => $request->city,
+            'identity_card' => $request->identity_card,
+            'npwp' => $request->npwp,
+            'is_vendor' => $request->has('is_vendor') ? (bool) $request->is_vendor : false,
+            'is_customer' => $request->has('is_customer') ? (bool) $request->is_customer : false,
+            'chief_name' => $request->chief_name,
+            'chief_position' => $request->chief_position,
+            'status_hold_dana' => $request->has('status_hold_dana') ? (bool) $request->status_hold_dana : false,
+            'auto_generate_faktur' => $request->has('auto_generate_faktur') ? (bool) $request->auto_generate_faktur : false,
+            'trading_partner' => $request->trading_partner,
+            'partner_group' => $request->partner_group,
+            'phone_1' => $request->phone_1,
+            'phone_2' => $request->phone_2,
+            'phone' => $request->phone_1 ?? $request->phone_2,
+            'email' => $request->email,
+            'ftp_link' => $request->ftp_link,
+            'ftp_port' => $request->ftp_port,
+            'ftp_user' => $request->ftp_user,
+            'ftp_pass' => $request->ftp_pass,
+            'kode_mdm' => $request->kode_mdm,
+            'description' => $request->description,
             'payment_terms_days' => $request->payment_terms_days ?? 30,
-            'active' => $request->has('active') ? (bool) $request->active : true,
+            'active' => true,
         ]);
 
-        if (!empty($request->bank_name) && !empty($request->bank_account_number)) {
+        // Optional initial bank account
+        if ($request->filled('bank_name') && $request->filled('bank_account_number')) {
             PartnerBankAccount::create([
                 'partner_id' => $partner->id,
                 'bank_name' => $request->bank_name,
                 'account_number' => $request->bank_account_number,
                 'account_holder' => $request->bank_account_holder ?? $partner->name,
-                'branch' => 'Kantor Cabang Utama',
+                'branch' => $request->bank_branch ?? 'Kantor Cabang Utama',
                 'is_primary' => true,
                 'active' => true,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Partner Mitraniaga baru berhasil ditambahkan!');
+        return redirect()->route('general.partner.show', $partner->id)->with('success', 'Data Business Partner berhasil dibuat!');
     }
 
+    /**
+     * Show Business Partner - View Page (3 Tabs: General, Banks, Business Segments)
+     */
+    public function partnerShow(int $id)
+    {
+        $partner = Partner::with(['partnerType', 'bankAccounts', 'businessSegments'])->findOrFail($id);
+
+        return view('general.partner.show', compact('partner'));
+    }
+
+    /**
+     * Show Edit Partner Page
+     */
+    public function partnerEdit(int $id)
+    {
+        $partner = Partner::with(['partnerType', 'bankAccounts', 'businessSegments'])->findOrFail($id);
+        $partnerTypes = PartnerType::where('active', true)->orderBy('name')->get();
+
+        return view('general.partner.edit', compact('partner', 'partnerTypes'));
+    }
+
+    /**
+     * Update Partner Data
+     */
     public function partnerUpdate(Request $request, int $id)
     {
         $partner = Partner::findOrFail($id);
 
         $request->validate([
-            'partner_type_id' => 'required|exists:partner_types,id',
             'code' => 'required|string|max:50|unique:partners,code,' . $id,
             'name' => 'required|string|max:255',
-            'npwp' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:50',
+            'partner_type_id' => 'nullable|exists:partner_types,id',
             'address' => 'nullable|string',
-            'pic_name' => 'nullable|string|max:255',
-            'pic_phone' => 'nullable|string|max:50',
-            'bank_name' => 'nullable|string|max:100',
-            'bank_account_number' => 'nullable|string|max:100',
-            'bank_account_holder' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'identity_card' => 'nullable|string|max:50',
+            'npwp' => 'nullable|string|max:50',
+            'chief_name' => 'nullable|string|max:255',
+            'chief_position' => 'nullable|string|max:255',
+            'trading_partner' => 'nullable|string|max:255',
+            'partner_group' => 'nullable|string|max:255',
+            'phone_1' => 'nullable|string|max:50',
+            'phone_2' => 'nullable|string|max:50',
+            'email' => 'nullable|email|max:255',
+            'ftp_link' => 'nullable|string|max:255',
+            'ftp_port' => 'nullable|string|max:20',
+            'ftp_user' => 'nullable|string|max:255',
+            'ftp_pass' => 'nullable|string|max:255',
+            'kode_mdm' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
             'payment_terms_days' => 'nullable|integer|min:0',
-            'active' => 'nullable',
         ]);
 
         $partner->update([
             'partner_type_id' => $request->partner_type_id,
-            'code' => strtoupper(trim($request->code)),
+            'code' => trim($request->code),
             'name' => $request->name,
-            'npwp' => $request->npwp,
-            'email' => $request->email,
-            'phone' => $request->phone,
             'address' => $request->address,
-            'pic_name' => $request->pic_name,
-            'pic_phone' => $request->pic_phone,
-            'bank_name' => $request->bank_name,
-            'bank_account_number' => $request->bank_account_number,
-            'bank_account_holder' => $request->bank_account_holder,
+            'city' => $request->city,
+            'identity_card' => $request->identity_card,
+            'npwp' => $request->npwp,
+            'is_vendor' => $request->has('is_vendor'),
+            'is_customer' => $request->has('is_customer'),
+            'chief_name' => $request->chief_name,
+            'chief_position' => $request->chief_position,
+            'status_hold_dana' => $request->has('status_hold_dana'),
+            'auto_generate_faktur' => $request->has('auto_generate_faktur'),
+            'trading_partner' => $request->trading_partner,
+            'partner_group' => $request->partner_group,
+            'phone_1' => $request->phone_1,
+            'phone_2' => $request->phone_2,
+            'phone' => $request->phone_1 ?? $request->phone_2,
+            'email' => $request->email,
+            'ftp_link' => $request->ftp_link,
+            'ftp_port' => $request->ftp_port,
+            'ftp_user' => $request->ftp_user,
+            'ftp_pass' => $request->ftp_pass,
+            'kode_mdm' => $request->kode_mdm,
+            'description' => $request->description,
             'payment_terms_days' => $request->payment_terms_days ?? 30,
-            'active' => $request->has('active') ? (bool) $request->active : false,
+            'active' => $request->has('active') ? (bool) $request->active : $partner->active,
         ]);
 
-        return redirect()->back()->with('success', 'Data Partner berhasil diperbarui!');
+        return redirect()->route('general.partner.show', $partner->id)->with('success', 'Data Business Partner berhasil diperbarui!');
     }
 
+    /**
+     * Delete Partner
+     */
     public function partnerDestroy(int $id)
     {
         $partner = Partner::findOrFail($id);
         $partner->delete();
 
-        return redirect()->back()->with('success', 'Data Partner berhasil dihapus!');
+        return redirect()->route('general.partner')->with('success', 'Data Business Partner berhasil dihapus!');
     }
 
     /**
-     * Display Bank ACS Master
+     * Add Bank Account from Partner Show View (Tab Banks)
+     */
+    public function partnerBankStore(Request $request, int $id)
+    {
+        $partner = Partner::findOrFail($id);
+
+        $request->validate([
+            'bank_name' => 'required|string|max:100',
+            'account_number' => 'required|string|max:100',
+            'account_holder' => 'required|string|max:255',
+            'branch' => 'nullable|string|max:255',
+            'is_primary' => 'nullable',
+        ]);
+
+        if ($request->has('is_primary')) {
+            PartnerBankAccount::where('partner_id', $partner->id)->update(['is_primary' => false]);
+        }
+
+        PartnerBankAccount::create([
+            'partner_id' => $partner->id,
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'account_holder' => $request->account_holder,
+            'branch' => $request->branch ?? 'Cabang Utama',
+            'is_primary' => $request->has('is_primary'),
+            'active' => true,
+        ]);
+
+        return redirect()->route('general.partner.show', ['id' => $partner->id, 'tab' => 'banks'])->with('success', 'Rekening Bank baru berhasil ditambahkan ke partner ini!');
+    }
+
+    /**
+     * Delete Bank Account from Partner Show View (Tab Banks)
+     */
+    public function partnerBankDestroy(int $partnerId, int $bankId)
+    {
+        $bank = PartnerBankAccount::where('partner_id', $partnerId)->findOrFail($bankId);
+        $bank->delete();
+
+        return redirect()->route('general.partner.show', ['id' => $partnerId, 'tab' => 'banks'])->with('success', 'Rekening Bank berhasil dihapus!');
+    }
+
+    /**
+     * Add Business Segment from Partner Show View (Tab Business Segments)
+     */
+    public function partnerSegmentStore(Request $request, int $id)
+    {
+        $partner = Partner::findOrFail($id);
+
+        $request->validate([
+            'segment_code' => 'required|string|max:50',
+            'segment_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        PartnerBusinessSegment::create([
+            'partner_id' => $partner->id,
+            'segment_code' => strtoupper(trim($request->segment_code)),
+            'segment_name' => $request->segment_name,
+            'description' => $request->description,
+            'active' => true,
+        ]);
+
+        return redirect()->route('general.partner.show', ['id' => $partner->id, 'tab' => 'segments'])->with('success', 'Business Segment berhasil ditambahkan!');
+    }
+
+    /**
+     * Delete Business Segment from Partner Show View (Tab Business Segments)
+     */
+    public function partnerSegmentDestroy(int $partnerId, int $segmentId)
+    {
+        $segment = PartnerBusinessSegment::where('partner_id', $partnerId)->findOrFail($segmentId);
+        $segment->delete();
+
+        return redirect()->route('general.partner.show', ['id' => $partnerId, 'tab' => 'segments'])->with('success', 'Business Segment berhasil dihapus!');
+    }
+
+    /**
+     * Display Bank ACS Customer (General Bank ACS Master)
      */
     public function bankAcsIndex(Request $request)
     {
+        $this->ensurePartnerTypesSeeded();
         $this->ensurePartnersSeeded();
 
         $query = PartnerBankAccount::with('partner');
@@ -237,16 +425,19 @@ class PartnerController extends Controller
                 $q->where('bank_name', 'like', "%{$search}%")
                   ->orWhere('account_number', 'like', "%{$search}%")
                   ->orWhere('account_holder', 'like', "%{$search}%")
-                  ->orWhereHas('partner', fn($pq) => $pq->where('name', 'like', "%{$search}%"));
+                  ->orWhere('branch', 'like', "%{$search}%")
+                  ->orWhereHas('partner', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
             });
         }
 
-        $bankAccounts = $query->orderBy('bank_name')->paginate(10)->withQueryString();
+        $bankAccounts = $query->orderBy('bank_name')->paginate(12)->withQueryString();
         $partners = Partner::where('active', true)->orderBy('name')->get();
-        $totalAccounts = PartnerBankAccount::count();
-        $primaryAccounts = PartnerBankAccount::where('is_primary', true)->count();
 
-        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAccounts', 'primaryAccounts'));
+        $totalAll = PartnerBankAccount::count();
+        $totalActive = PartnerBankAccount::where('active', true)->count();
+        $totalPrimary = PartnerBankAccount::where('is_primary', true)->count();
+
+        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAll', 'totalActive', 'totalPrimary'));
     }
 
     public function bankAcsStore(Request $request)
@@ -270,12 +461,12 @@ class PartnerController extends Controller
             'bank_name' => $request->bank_name,
             'account_number' => $request->account_number,
             'account_holder' => $request->account_holder,
-            'branch' => $request->branch ?? 'Cabang Utama',
+            'branch' => $request->branch ?? 'Kantor Cabang Utama',
             'is_primary' => $request->has('is_primary') ? (bool) $request->is_primary : false,
             'active' => $request->has('active') ? (bool) $request->active : true,
         ]);
 
-        return redirect()->back()->with('success', 'Rekening Bank ACS Mitra berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Rekening Bank ACS baru berhasil ditambahkan!');
     }
 
     public function bankAcsUpdate(Request $request, int $id)
@@ -292,8 +483,10 @@ class PartnerController extends Controller
             'active' => 'nullable',
         ]);
 
-        if ($request->has('is_primary') && $request->is_primary) {
-            PartnerBankAccount::where('partner_id', $request->partner_id)->where('id', '!=', $id)->update(['is_primary' => false]);
+        if ($request->has('is_primary')) {
+            PartnerBankAccount::where('partner_id', $request->partner_id)
+                ->where('id', '!=', $id)
+                ->update(['is_primary' => false]);
         }
 
         $account->update([
@@ -327,11 +520,12 @@ class PartnerController extends Controller
         }
 
         $defaults = [
-            ['code' => 'VENDOR', 'name' => 'Vendor / Penyedia Jasa', 'description' => 'Mitra penyedia barang & jasa operasional pelabuhan'],
-            ['code' => 'CUSTOMER', 'name' => 'Customer / Pengguna Jasa', 'description' => 'Klien penerima layanan dan pemesan proyek TAD / alih daya'],
-            ['code' => 'SUBCON', 'name' => 'Subkontraktor Spesialis', 'description' => 'Mitra pelaksana sub-pekerjaan teknik & operasional'],
-            ['code' => 'BUMN', 'name' => 'Afiliasi BUMN / Pelindo Group', 'description' => 'Perusahaan afiliasi dan anak perusahaan BUMN'],
-            ['code' => 'GOVERNMENT', 'name' => 'Instansi / Regulator', 'description' => 'Otoritas pelabuhan, kementerian, dan dinas ketenagakerjaan'],
+            ['code' => '001', 'name' => 'BUMN / Instansi Pemerintah', 'description' => 'Perusahaan BUMN, kementerian dan lembaga negara'],
+            ['code' => '002', 'name' => 'SWASTA', 'description' => 'Perusahaan Swasta Nasional & Multinasional'],
+            ['code' => '003', 'name' => 'KOPERASI', 'description' => 'Koperasi Karyawan & Usaha Bersama'],
+            ['code' => '007', 'name' => 'PERBANKAN / FINANSIAL', 'description' => 'Bank BUMN, Bank Swasta, dan Lembaga Keuangan'],
+            ['code' => 'VENDOR', 'name' => 'Vendor / Penyedia Barang & Jasa', 'description' => 'Penyedia material, alat berat, dan jasa logistik'],
+            ['code' => 'CUSTOMER', 'name' => 'Customer / Klien Pelanggan', 'description' => 'Pengguna jasa alih daya dan operasional pelabuhan'],
         ];
 
         foreach ($defaults as $type) {
@@ -340,7 +534,7 @@ class PartnerController extends Controller
     }
 
     /**
-     * Auto Seed Initial Partners if table is empty
+     * Auto Seed Initial Partners matching real Tanos screenshots
      */
     private function ensurePartnersSeeded(): void
     {
@@ -350,71 +544,175 @@ class PartnerController extends Controller
             return;
         }
 
-        $vendorType = PartnerType::where('code', 'VENDOR')->first();
-        $custType = PartnerType::where('code', 'CUSTOMER')->first();
-        $bumnType = PartnerType::where('code', 'BUMN')->first();
+        $typeSwasta = PartnerType::where('code', '002')->orWhere('code', 'SWASTA')->first();
+        $typeBank = PartnerType::where('code', '007')->orWhere('code', 'PERBANKAN / FINANSIAL')->first();
+        $typeKoperasi = PartnerType::where('code', '003')->orWhere('code', 'KOPERASI')->first();
 
         $defaults = [
             [
-                'partner_type_id' => $bumnType?->id,
-                'code' => 'PRT-PLD01',
-                'name' => 'PT Pelabuhan Indonesia (Persero) Regional 2',
-                'npwp' => '01.001.600.4-051.000',
-                'email' => 'finance.reg2@pelindo.co.id',
-                'phone' => '021-4301080',
-                'address' => 'Jl. Pasoso No. 1 Tanjung Priok, Jakarta Utara',
-                'pic_name' => 'Bambang Sudiro',
-                'pic_phone' => '081288990011',
-                'bank_name' => 'Bank Mandiri',
-                'bank_account_number' => '120-00-1122334-4',
-                'bank_account_holder' => 'PT Pelabuhan Indonesia (Persero)',
+                'partner_type_id' => $typeSwasta?->id,
+                'code' => '2000000104',
+                'name' => 'KOP PEGAWAI NEGRI PERUM PELABUHAN III BENOA',
+                'address' => 'JL. PELABUHAN BENOA, BADUNG',
+                'city' => 'BADUNG',
+                'identity_card' => null,
+                'npwp' => '015221914905000',
+                'is_vendor' => true,
+                'is_customer' => true,
+                'chief_name' => 'I Wayan Sudiarta',
+                'chief_position' => 'Ketua Koperasi',
+                'status_hold_dana' => false,
+                'auto_generate_faktur' => true,
+                'trading_partner' => null,
+                'partner_group' => null,
+                'phone_1' => '0',
+                'phone_2' => null,
+                'phone' => '0361-720123',
+                'email' => 'kop.benoa@pelindo.co.id',
+                'ftp_link' => null,
+                'ftp_port' => null,
+                'ftp_user' => null,
+                'ftp_pass' => null,
+                'kode_mdm' => '00045583',
+                'description' => 'KOP PEGAWAI NEGRI PERUM PELABUHAN III BENOA',
                 'payment_terms_days' => 30,
             ],
             [
-                'partner_type_id' => $custType?->id,
-                'code' => 'PRT-IPC01',
-                'name' => 'PT IPC Terminal Petikemas',
-                'npwp' => '02.345.678.9-012.000',
-                'email' => 'corsec@ipctpk.co.id',
-                'phone' => '021-43900222',
-                'address' => 'Gedung Terminal Petikemas Lt. 3, Tanjung Priok',
-                'pic_name' => 'Dwi Handayani',
-                'pic_phone' => '081377889900',
-                'bank_name' => 'Bank BNI',
-                'bank_account_number' => '019-8877665-0',
-                'bank_account_holder' => 'PT IPC Terminal Petikemas',
-                'payment_terms_days' => 45,
+                'partner_type_id' => $typeSwasta?->id,
+                'code' => '2000012154',
+                'name' => 'PERSEK KAP PURWANTONO, SUNGKONO & SURJA',
+                'address' => 'GD BEI TOWER II LT 7, JL JEND. SUDIRMAN',
+                'city' => 'JAKARTA SELATAN',
+                'identity_card' => null,
+                'npwp' => '021077698062000',
+                'is_vendor' => true,
+                'is_customer' => true,
+                'chief_name' => 'Purwantono Sungkono',
+                'chief_position' => 'Managing Partner',
+                'status_hold_dana' => false,
+                'auto_generate_faktur' => true,
+                'trading_partner' => null,
+                'partner_group' => 'EY Indonesia',
+                'phone_1' => '0',
+                'phone_2' => null,
+                'phone' => '021-52895000',
+                'email' => 'contact@id.ey.com',
+                'ftp_link' => null,
+                'ftp_port' => null,
+                'ftp_user' => null,
+                'ftp_pass' => null,
+                'kode_mdm' => '00046892',
+                'description' => 'PERSEK KAP PURWANTONO, SUNGKONO & SURJA',
+                'payment_terms_days' => 30,
             ],
             [
-                'partner_type_id' => $vendorType?->id,
-                'code' => 'PRT-SEC01',
-                'name' => 'PT Garda Cipta Pengamanan Mandiri',
-                'npwp' => '31.222.333.4-022.000',
-                'email' => 'ops@gardacipta.com',
-                'phone' => '021-88445566',
-                'address' => 'Kawasan Industri Pulogadung Blok B No. 4, Jakarta Timur',
-                'pic_name' => 'Agus Priyono',
-                'pic_phone' => '081199887766',
-                'bank_name' => 'Bank BCA',
-                'bank_account_number' => '542-0192837',
-                'bank_account_holder' => 'PT Garda Cipta Pengamanan Mandiri',
+                'partner_type_id' => $typeBank?->id,
+                'code' => '1000000103',
+                'name' => 'PT BANK MANDIRI (PERSERO)',
+                'address' => 'JL. JEND. GATOT SUBROTO KAV. 36-38 PLAZA MANDIRI SENAYAN, KEBAYORAN BARU',
+                'city' => 'JAKARTA SELATAN',
+                'identity_card' => null,
+                'npwp' => '010611739093000',
+                'is_vendor' => true,
+                'is_customer' => true,
+                'chief_name' => 'Darmawan Junaidi',
+                'chief_position' => 'Direktur Utama',
+                'status_hold_dana' => false,
+                'auto_generate_faktur' => true,
+                'trading_partner' => null,
+                'partner_group' => 'Himbara',
+                'phone_1' => '0',
+                'phone_2' => null,
+                'phone' => '14000',
+                'email' => 'mandiricare@bankmandiri.co.id',
+                'ftp_link' => null,
+                'ftp_port' => null,
+                'ftp_user' => null,
+                'ftp_pass' => null,
+                'kode_mdm' => '00010022',
+                'description' => 'PT BANK MANDIRI (PERSERO)',
                 'payment_terms_days' => 14,
+            ],
+            [
+                'partner_type_id' => $typeSwasta?->id,
+                'code' => '2000070678',
+                'name' => 'PT KRAKATAU BANDAR SAMUDERA',
+                'address' => 'JL. RAYA ANYER KM 13 TEGAL KEL. RATU CIWANDAN',
+                'city' => 'CILEGON',
+                'identity_card' => null,
+                'npwp' => '017548058051000',
+                'is_vendor' => true,
+                'is_customer' => true,
+                'chief_name' => 'Akbar Djohan',
+                'chief_position' => 'Direktur Utama',
+                'status_hold_dana' => false,
+                'auto_generate_faktur' => true,
+                'trading_partner' => null,
+                'partner_group' => 'Krakatau Steel Group',
+                'phone_1' => '0',
+                'phone_2' => null,
+                'phone' => '0254-311121',
+                'email' => 'commercial@cigadingport.com',
+                'ftp_link' => null,
+                'ftp_port' => null,
+                'ftp_user' => null,
+                'ftp_pass' => null,
+                'kode_mdm' => '00049912',
+                'description' => 'PT KRAKATAU BANDAR SAMUDERA',
+                'payment_terms_days' => 30,
+            ],
+            [
+                'partner_type_id' => $typeSwasta?->id,
+                'code' => '1000001107',
+                'name' => 'PT VARIA USAHA BAHARI',
+                'address' => 'JL. VETERAN BLOK A NO. 171 RT:002 RW:001 KEL. GENDING',
+                'city' => 'GRESIK',
+                'identity_card' => null,
+                'npwp' => '015682073641000',
+                'is_vendor' => true,
+                'is_customer' => true,
+                'chief_name' => 'Hadi Sucipto',
+                'chief_position' => 'Direktur',
+                'status_hold_dana' => false,
+                'auto_generate_faktur' => true,
+                'trading_partner' => null,
+                'partner_group' => 'SIG Group',
+                'phone_1' => '0',
+                'phone_2' => null,
+                'phone' => '031-3981887',
+                'email' => 'sekretariat@variausaha.co.id',
+                'ftp_link' => null,
+                'ftp_port' => null,
+                'ftp_user' => null,
+                'ftp_pass' => null,
+                'kode_mdm' => '00048102',
+                'description' => 'PT VARIA USAHA BAHARI',
+                'payment_terms_days' => 30,
             ],
         ];
 
-        foreach ($defaults as $partnerData) {
-            $partner = Partner::create($partnerData + ['active' => true]);
-            if ($partner->bank_name && $partner->bank_account_number) {
-                PartnerBankAccount::create([
-                    'partner_id' => $partner->id,
-                    'bank_name' => $partner->bank_name,
-                    'account_number' => $partner->bank_account_number,
-                    'account_holder' => $partner->bank_account_holder,
-                    'branch' => 'Kantor Cabang Utama',
-                    'is_primary' => true,
-                    'active' => true,
-                ]);
-            }
+        foreach ($defaults as $data) {
+            $partner = Partner::create($data + ['active' => true]);
+
+            // Add sample bank account
+            PartnerBankAccount::create([
+                'partner_id' => $partner->id,
+                'bank_name' => 'Bank Mandiri',
+                'account_number' => '120-00-' . rand(1000000, 9999999) . '-1',
+                'account_holder' => $partner->name,
+                'branch' => 'KC ' . ($partner->city ?? 'Jakarta'),
+                'is_primary' => true,
+                'active' => true,
+            ]);
+
+            // Add sample business segment
+            PartnerBusinessSegment::create([
+                'partner_id' => $partner->id,
+                'segment_code' => 'SEG-' . substr($partner->code, -3),
+                'segment_name' => 'Logistik & Layanan Pelabuhan',
+                'description' => 'Unit bisnis operasional bongkar muat & supply chain',
+                'active' => true,
+            ]);
         }
     }
 }

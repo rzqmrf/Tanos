@@ -13,6 +13,17 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
     --color-primary: #100b60;
     --color-primary-hover: #1a1c5d;
+    --color-primary-light: #eef2ff;
+    --color-primary-subtle: #c7d2fe;
+
+    --color-slate-150: #e2e8f0;
+    --color-slate-250: #cbd5e1;
+    --color-slate-350: #94a3b8;
+    --color-slate-450: #64748b;
+    --color-slate-550: #475569;
+    --color-slate-650: #334155;
+    --color-slate-750: #1e293b;
+    --color-slate-850: #0f172a;
 }
 
 /* Custom premium scrollbar */

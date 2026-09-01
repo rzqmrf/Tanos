@@ -280,7 +280,7 @@
                                 <a href="{{ route('general.partner-type') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner-type*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type
                                 </a>
-                                <a href="{{ route('general.partner') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('general.partner') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner
                                 </a>
                                 <a href="{{ route('general.bank-acs') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.bank-acs*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
