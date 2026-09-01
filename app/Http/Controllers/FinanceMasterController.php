@@ -154,7 +154,13 @@ class FinanceMasterController extends Controller
             'is_header' => 'nullable',
             'description' => 'nullable|string',
             'active' => 'nullable',
-        ]);
+        ], function ($validator) {
+            $errors = [];
+            $this->validateCoaParent($validator->getData(), 0, $errors);
+            foreach ($errors as $key => $message) {
+                $validator->errors()->add($key, $message);
+            }
+        });
 
         ChartOfAccount::create([
             'account_group_id' => $request->account_group_id,
@@ -185,7 +191,13 @@ class FinanceMasterController extends Controller
             'is_header' => 'nullable',
             'description' => 'nullable|string',
             'active' => 'nullable',
-        ]);
+        ], function ($validator) use ($account) {
+            $errors = [];
+            $this->validateCoaParent($validator->getData(), $account->id, $errors);
+            foreach ($errors as $key => $message) {
+                $validator->errors()->add($key, $message);
+            }
+        });
 
         $account->update([
             'account_group_id' => $request->account_group_id,
@@ -200,6 +212,50 @@ class FinanceMasterController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Data Akun CoA berhasil diperbarui!');
+    }
+
+    /**
+     * Validasi relasi parent-child CoA (H-6):
+     * - level: parent null -> level harus 1; parent ada -> level = parent.level + 1 (max 5)
+     * - cross-group: parent harus satu account_group_id
+     * - cycle: parent_id gak boleh = self / salah satu descendant (traverse iteratif max 5 level)
+     */
+    private function validateCoaParent(array $data, int $activeId = 0, array &$errors = []): void
+    {
+        if (empty($data['parent_id'])) {
+            // Root akun: harus level 1
+            if ((int) ($data['level'] ?? 0) !== 1) {
+                $errors['level'] = 'Akun tanpa parent (root) harus level 1.';
+            }
+            return;
+        }
+
+        $parent = ChartOfAccount::find($data['parent_id']);
+        if (! $parent) {
+            return; // rule exists: udah handle parent gak ketemu
+        }
+
+        // Level harus mengikuti parent (parent.level + 1)
+        if ((int) $data['level'] !== $parent->level + 1) {
+            $errors['level'] = 'Level harus ' . ($parent->level + 1) . ' (mengikuti parent "' . $parent->code . ' - ' . $parent->name . '" yang level ' . $parent->level . ').';
+        }
+
+        // Cross-group: parent wajib satu account group
+        if ((int) $data['account_group_id'] !== (int) $parent->account_group_id) {
+            $errors['account_group_id'] = 'Account Group harus sama dengan parent (' . $parent->code . '). CoA child tidak boleh beda group dari parent-nya.';
+        }
+
+        // Cycle: naiki parent chain, maks 5 level (iteratif, bukan recursive)
+        $current = $parent;
+        $depth = 0;
+        while ($current && $depth < 5) {
+            if ((int) $current->id === $activeId) {
+                $errors['parent_id'] = 'Parent tidak valid: menyebabkan siklus (cycle) pada hierarki CoA.';
+                break;
+            }
+            $current = $current->parent;
+            $depth++;
+        }
     }
 
     public function coaDestroy(int $id)

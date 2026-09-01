@@ -464,7 +464,15 @@ function copilotChat() {
         // -- Rendering --
         formatMarkdown(text) {
             if (!text) return '';
-            return text
+            // Escape HTML mentah dulu biar gak ke-inject (M-4 XSS).
+            // Urutan: & duluan biar entity yang dibikin di sini gak ke-escape ulang.
+            const esc = text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+            return esc
                 // **tebal**
                 .replace(/\*\*([\s\S]*?)\*\*/g, '<strong style="font-weight:700;">$1</strong>')
                 // *miring*
