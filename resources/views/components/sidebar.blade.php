@@ -97,7 +97,8 @@
             $isRab = request()->routeIs('rab.*');
             $isBilling = request()->routeIs('billing.index');
             $isPostingPayroll = request()->routeIs('posting_payrolls.index');
-            $isPSActive = $isProjects || $isWbs || $isRab || $isBilling || $isPostingPayroll;
+            $isPSMaster = request()->routeIs('project.master.*');
+            $isPSActive = $isProjects || $isWbs || $isRab || $isBilling || $isPostingPayroll || $isPSMaster;
 
             // Determine active group for single accordion
             $activeGroup = '';
@@ -123,7 +124,8 @@
 
             // Determine active sub-group for PS
             $psActiveSub = '';
-            if ($isProjects || $isWbs || $isRab) { $psActiveSub = 'project'; }
+            if ($isPSMaster) { $psActiveSub = 'master_data'; }
+            elseif ($isProjects || $isWbs || $isRab) { $psActiveSub = 'project'; }
             elseif ($isPostingPayroll) { $psActiveSub = 'budgeting'; }
             elseif ($isBilling) { $psActiveSub = 'billing'; }
             elseif ($isReports) { $psActiveSub = 'reports'; }
@@ -687,14 +689,30 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Feasibility Metrics</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Category</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Type</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Object Type</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Status</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Master Code</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Project Role</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>WBS Payroll Category</a>
+                                <a href="{{ route('project.master.feasibility-metrics') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.feasibility-metrics*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Feasibility Metrics
+                                </a>
+                                <a href="{{ route('project.master.categories') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.categories*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Project Category
+                                </a>
+                                <a href="{{ route('project.master.types') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.types*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Project Type
+                                </a>
+                                <a href="{{ route('project.master.object-types') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.object-types*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Object Type
+                                </a>
+                                <a href="{{ route('project.master.statuses') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.statuses*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Status
+                                </a>
+                                <a href="{{ route('project.master.codes') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.codes*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Master Code
+                                </a>
+                                <a href="{{ route('project.master.roles') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.roles*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Project Role
+                                </a>
+                                <a href="{{ route('project.master.wbs-payroll-categories') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('project.master.wbs-payroll-categories*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                    <span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS Payroll Category
+                                </a>
                             </div>
                         </div>
                         @endif
@@ -796,8 +814,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'monitoring_api'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>P2P Integration</a>
-                                <a href="{{ route('project.config') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Payroll Tagihan</a>
+                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>P2P Integration</a>
+                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 font-extrabold text-current">•</span>Payroll Tagihan</a>
                             </div>
                         </div>
                         @endif

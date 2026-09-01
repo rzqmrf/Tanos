@@ -39,23 +39,10 @@ Route::put('profile', [ProfileController::class, 'update'])->name('profile.updat
 Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 Route::put('profile/settings', [ProfileController::class, 'updateSettings'])->name('profile.settings');
 
-// crud grop
+// crud group
 Route::prefix('dashboard')->group(function () {
     // settings permission group
     Route::middleware('permission:settings')->group(function () {
-        Route::resource('project-config', ProjectConfigController::class)->names([
-            'index' => 'project.config'
-        ]);
-        Route::post('project-config/regionals', [ProjectConfigController::class, 'storeRegional'])->name('project.config.regionals.store');
-        Route::put('project-config/regionals/{regional}', [ProjectConfigController::class, 'updateRegional'])->name('project.config.regionals.update');
-        Route::delete('project-config/regionals/{regional}', [ProjectConfigController::class, 'destroyRegional'])->name('project.config.regionals.destroy');
-        Route::post('project-config/sub-regionals', [ProjectConfigController::class, 'storeSubRegional'])->name('project.config.sub-regionals.store');
-        Route::put('project-config/sub-regionals/{subRegional}', [ProjectConfigController::class, 'updateSubRegional'])->name('project.config.sub-regionals.update');
-        Route::delete('project-config/sub-regionals/{subRegional}', [ProjectConfigController::class, 'destroySubRegional'])->name('project.config.sub-regionals.destroy');
-        Route::post('project-config/segments', [ProjectConfigController::class, 'storeSegment'])->name('project.config.segments.store');
-        Route::put('project-config/segments/{segment}', [ProjectConfigController::class, 'updateSegment'])->name('project.config.segments.update');
-        Route::delete('project-config/segments/{segment}', [ProjectConfigController::class, 'destroySegment'])->name('project.config.segments.destroy');
-
         Route::resource('users', UserController::class);
 
         Route::get('peo-settings', [PeoSettingController::class, 'index'])->name('peo.index');
@@ -63,6 +50,23 @@ Route::prefix('dashboard')->group(function () {
         Route::get('peo-settings/{id}', [PeoSettingController::class, 'show'])->name('peo.show');
         Route::put('peo-settings/{id}', [PeoSettingController::class, 'update'])->name('peo.update');
         Route::delete('peo-settings/{id}', [PeoSettingController::class, 'destroy'])->name('peo.destroy');
+    });
+
+    // Project System: Master Data (8 Modules)
+    Route::middleware('permission:projects')->prefix('projects/master')->group(function () {
+        Route::get('feasibility-metrics', [\App\Http\Controllers\ProjectMasterController::class, 'feasibilityMetrics'])->name('project.master.feasibility-metrics');
+        Route::get('categories', [\App\Http\Controllers\ProjectMasterController::class, 'projectCategories'])->name('project.master.categories');
+        Route::get('types', [\App\Http\Controllers\ProjectMasterController::class, 'projectTypes'])->name('project.master.types');
+        Route::get('object-types', [\App\Http\Controllers\ProjectMasterController::class, 'objectTypes'])->name('project.master.object-types');
+        Route::get('statuses', [\App\Http\Controllers\ProjectMasterController::class, 'statuses'])->name('project.master.statuses');
+        Route::get('codes', [\App\Http\Controllers\ProjectMasterController::class, 'masterCodes'])->name('project.master.codes');
+        Route::get('roles', [\App\Http\Controllers\ProjectMasterController::class, 'projectRoles'])->name('project.master.roles');
+        Route::get('wbs-payroll-categories', [\App\Http\Controllers\ProjectMasterController::class, 'wbsPayrollCategories'])->name('project.master.wbs-payroll-categories');
+        Route::get('wbs-payroll-categories/{id}', [\App\Http\Controllers\ProjectMasterController::class, 'wbsPayrollCategoryShow'])->name('project.master.wbs-payroll-categories.show');
+        Route::post('items', [\App\Http\Controllers\ProjectMasterController::class, 'store'])->name('project.master.store');
+        Route::put('items/{id}', [\App\Http\Controllers\ProjectMasterController::class, 'update'])->name('project.master.update');
+        Route::delete('items/{id}', [\App\Http\Controllers\ProjectMasterController::class, 'destroy'])->name('project.master.destroy');
+        Route::get('export/{category}', [\App\Http\Controllers\ProjectMasterController::class, 'export'])->name('project.master.export');
     });
 
     Route::resource('projects', ProjectController::class)->middleware('permission:projects');

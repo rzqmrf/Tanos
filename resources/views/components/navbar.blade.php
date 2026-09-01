@@ -26,10 +26,8 @@
                 Invoices
             @elseif(request()->routeIs('reports.index'))
                 Reports & Analytics
-            @elseif(request()->routeIs('project.config'))
-                Project Configuration
-            @elseif(request()->routeIs('access.controls'))
-                Access Controls
+            @elseif(request()->routeIs('project.master.*'))
+                Project System Master Data
             @elseif(request()->routeIs('users.index'))
                 User Management
             @elseif(request()->routeIs('profile.edit'))
