@@ -16,44 +16,42 @@
     @endif
 
     {{-- HEADER & BREADCRUMB --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-400 mb-1">
-                    <a href="{{ route('dashboard.index') }}" class="hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-                        <span>Home</span>
-                    </a>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <a href="{{ route('peo.index') }}" class="hover:text-slate-700 dark:hover:text-slate-200">Mapping PEO Setting</a>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <span class="text-slate-600 dark:text-slate-300 font-bold">View Detail</span>
-                </div>
-                <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mapping PEO Setting</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                    Home
+                </a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>General</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>Setting</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <a href="{{ route('peo.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition">PEO Setting</a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span class="text-primary dark:text-sky-400 font-black">Detail</span>
             </div>
 
-            {{-- ACTION BUTTONS TOP RIGHT --}}
-            <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-                <a href="{{ route('peo.index') }}" 
-                    style="background-color: #64748b; color: #ffffff;"
-                    class="px-4 py-2 hover:opacity-90 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer border-0">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
-                    <span>Back</span>
-                </a>
-                <a href="{{ route('peo.index') }}" 
-                    style="background-color: #7c3aed; color: #ffffff;"
-                    class="px-4 py-2 hover:opacity-90 text-white font-bold text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer border-0">
-                    <span class="text-sm font-bold">+</span>
-                    <span>Create New</span>
-                </a>
-                <button onclick="alert('Setting berhasil di-copy.')" 
-                    style="background-color: #00c853; color: #ffffff;"
-                    class="px-4 py-2 hover:opacity-90 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25c0-.621.504-1.125 1.125-1.125h6.75c.621 0 1.125.504 1.125 1.125v9.25c0 .621-.504 1.125-1.125 1.125Z" /></svg>
-                    <span>Copy Setting</span>
-                </button>
-            </div>
+            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                Mapping PEO Setting - Detail
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+        </div>
+
+        {{-- ACTION BUTTONS TOP RIGHT --}}
+        <div class="flex items-center gap-2 shrink-0 flex-wrap self-start md:self-auto">
+            <a href="{{ route('peo.index') }}" 
+                class="px-4 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-xs cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+                <span>Kembali</span>
+            </a>
+            <button onclick="alert('Setting berhasil di-copy.')" 
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25c0-.621.504-1.125 1.125-1.125h6.75c.621 0 1.125.504 1.125 1.125v9.25c0 .621-.504 1.125-1.125 1.125Z" /></svg>
+                <span>Copy Setting</span>
+            </button>
         </div>
     </div>
 

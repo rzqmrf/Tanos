@@ -16,38 +16,42 @@
     @endif
 
     {{-- HEADER & BREADCRUMB --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">
-                    <a href="{{ route('dashboard.index') }}" class="hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-                        <span>Home</span>
-                    </a>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <span>Mapping PEO Setting</span>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <span class="text-slate-700 dark:text-slate-300 font-bold">Index</span>
-                </div>
-                <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mapping PEO Setting</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                    Home
+                </a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>General</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>Setting</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span class="text-primary dark:text-sky-400 font-black">PEO Setting</span>
             </div>
 
-            {{-- ACTION BUTTONS TOP RIGHT --}}
-            <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
-                <button onclick="document.getElementById('modal-create-peo').classList.remove('hidden')" 
-                    style="background-color: #00c853; color: #ffffff;"
-                    class="px-4 py-2.5 hover:opacity-90 active:scale-95 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer border-0">
-                    <span class="text-sm font-bold">+</span>
-                    <span>Create New</span>
-                </button>
-                <button onclick="alert('Dokumen Header Setting telah dikonfigurasi.')" 
-                    style="background-color: #007bff; color: #ffffff;"
-                    class="px-4 py-2.5 hover:opacity-90 active:scale-95 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer border-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
-                    <span>Document Header Setting</span>
-                </button>
-            </div>
+            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                Mapping PEO Setting
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+        </div>
+
+        {{-- ACTION BUTTONS TOP RIGHT --}}
+        <div class="flex items-center gap-2.5 shrink-0 flex-wrap self-start md:self-auto">
+            <button onclick="document.getElementById('modal-create-peo').classList.remove('hidden')" 
+                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Create New</span>
+            </button>
+            <button onclick="alert('Dokumen Header Setting telah dikonfigurasi.')" 
+                class="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                <span>Document Header Setting</span>
+            </button>
         </div>
     </div>
 

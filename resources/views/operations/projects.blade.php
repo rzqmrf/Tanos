@@ -3,37 +3,47 @@
 @section('title', 'Master Data: Projects — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm w-full">
-    <!-- Header Section -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.008 1.24l.885 1.77a2.25 2.25 0 0 0 2.007 1.24h1.98a2.25 2.25 0 0 0 2.007-1.24l.885-1.77a2.25 2.25 0 0 1 2.007-1.24h3.86m-18 0h18M2.25 13.5a2.25 2.25 0 0 0-2.25 2.25v3.75A2.25 2.25 0 0 0 2.25 21.75h19.5a2.25 2.25 0 0 0 2.25-2.25v-3.75a2.25 2.25 0 0 0-2.25-2.25M2.25 13.5V4.5A2.25 2.25 0 0 1 4.5 2.25h15a2.25 2.25 0 0 1 2.25 2.25v9m-18 0J" />
-                </svg>
+<div class="space-y-6 w-full">
+    <!-- Page Header & Action -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                    Home
+                </a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>Project System</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span class="text-primary dark:text-sky-400 font-black">Master Projects</span>
             </div>
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Master Data: Projects</h1>
-                <p class="text-sm text-slate-400 dark:text-slate-500">Manajemen proyek, alokasi Cost Center & Fund Center untuk pencatatan Expense, Revenue, & Budgeting.</p>
-            </div>
+
+            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                Master Data: Projects
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Manajemen proyek, alokasi Cost Center & Fund Center untuk pencatatan Expense, Revenue, & Budgeting.</p>
         </div>
+
         @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
         <button onclick="document.getElementById('modal-create-project').classList.remove('hidden')" 
-            style="background-color: #007bff; color: #ffffff;"
-            class="hover:opacity-90 text-white px-4 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition shrink-0 cursor-pointer border-0">
-            + Tambah Project
+            class="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span>Tambah Project</span>
         </button>
         @endif
     </div>
 
     @if(session('success'))
-        <div class="mb-4 p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-sm font-semibold">
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-sm font-semibold">
             {{ session('success') }}
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="mb-4 p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-xl text-sm">
+        <div class="p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-xl text-sm">
             <ul class="list-disc pl-5">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -42,9 +52,9 @@
         </div>
     @endif
 
-    <!-- Data Table Section -->
-    <div class="mt-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+    <!-- Data Table Card Section -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[1350px]">
                 <thead>
                     <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
