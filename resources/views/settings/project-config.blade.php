@@ -5,19 +5,27 @@
 @section('content')
 <div class="space-y-6 w-full">
 
-    <!-- PAGE HEADER CARD -->
-    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.774a1.119 1.119 0 0 0-.363.863v.074c0 .273.13.531.363.864l1.003.774a1.125 1.125 0 0 1 .26 1.43l-1.296 2.247a1.125 1.125 0 0 1-1.37.49l-1.216-.456a1.125 1.125 0 0 0-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281a1.125 1.125 0 0 0-.644-.87a6.52 6.52 0 0 1-.22-.127a1.125 1.125 0 0 0-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.774c.232-.333.362-.591.362-.864v-.074c0-.273-.13-.531-.362-.864l-1.004-.774a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.49l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128c.332-.183.582-.495.644-.869l.214-1.28Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
+    <!-- Page Header & Action -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-3">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                    Home
+                </a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>General</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>Setting</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span class="text-primary dark:text-sky-400 font-black">Project Config</span>
             </div>
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Project Configuration</h1>
-                <p class="text-sm text-slate-400 dark:text-slate-500">Kelola master data hirarki Regional, Sub-Regional, dan Segment.</p>
-            </div>
+
+            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                Project Configuration
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">Kelola master data hirarki Regional, Sub-Regional, dan Segment.</p>
         </div>
     </div>
 

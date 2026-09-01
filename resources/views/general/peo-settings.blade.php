@@ -24,13 +24,13 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
                         <span>Home</span>
                     </a>
-                    <span>/</span>
+                    <span class="text-slate-300 dark:text-slate-600">/</span>
                     <span>Mapping PEO Setting</span>
-                    <span>/</span>
+                    <span class="text-slate-300 dark:text-slate-600">/</span>
                     <span class="text-slate-700 dark:text-slate-300 font-bold">Index</span>
                 </div>
                 <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mapping PEO Setting</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pengelolaan Mapping Integrasi Dokumen PEO</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5">Pengelolaan Mapping Integrasi Dokumen PEO</p>
             </div>
 
             {{-- ACTION BUTTONS TOP RIGHT --}}

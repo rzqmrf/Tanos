@@ -5,29 +5,36 @@
 @section('content')
 <div class="space-y-6" x-data="{ activeTab: '{{ $activeTab }}' }">
     
-    <!-- Page Header & Actions -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 p-5 rounded-3xl shadow-sm">
-        <div class="flex items-center space-x-3.5">
-            <div class="p-3 bg-primary-light text-primary rounded-2xl shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                </svg>
+    <!-- Page Header & Action -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-3">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
+                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                    Home
+                </a>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span>Finance & Accounting</span>
+                <span class="text-slate-300 dark:text-slate-600">/</span>
+                <span class="text-primary dark:text-sky-400 font-black">Executive Reports</span>
             </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">Laporan & Analisis Eksekutif</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">Monitoring komprehensif RAB Proyek, Billing SAP, dan Remunerasi HCM.</p>
-            </div>
+
+            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+                Laporan & Analisis Eksekutif
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 font-medium">Monitoring komprehensif RAB Proyek, Billing SAP, dan Remunerasi HCM.</p>
         </div>
 
         <div class="flex items-center space-x-2.5">
             <a :href="'{{ route('reports.export') }}?tab=' + activeTab + '&year={{ $selectedYear }}&regional={{ $selectedRegional }}&segment={{ $selectedSegment }}'" 
-               class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all duration-150 cursor-pointer">
+               class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-sm transition-all duration-150 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
                 <span>Export Excel / CSV</span>
             </a>
-            <button onclick="window.print()" class="inline-flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs px-3.5 py-2.5 rounded-xl transition-all duration-150 cursor-pointer">
+            <button onclick="window.print()" class="inline-flex items-center space-x-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl shadow-xs transition-all duration-150 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231a1.125 1.125 0 0 1-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m0 0a48.1 48.1 0 0 1 10.56 0m-10.56 0V3.75C6.75 2.921 7.421 2.25 8.25 2.25h7.5c.829 0 1.5.671 1.5 1.5v3.456" />
                 </svg>

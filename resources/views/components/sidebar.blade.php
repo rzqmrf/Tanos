@@ -62,8 +62,14 @@
             $isProjectConfig = request()->routeIs('project.config');
             $isUsers = request()->routeIs('users.*');
             $isSettingsActive = $isProjectConfig || $isUsers || request()->routeIs('peo.*');
-            $isMasterDataActive = request()->routeIs('general.partner*') || request()->routeIs('general.bank-acs*');
-            $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*') || request()->routeIs('fa.profit-center*') || request()->routeIs('fa.cost-center*') || request()->routeIs('fa.fund-center*') || request()->routeIs('fa.currency*') || request()->routeIs('fa.bank-account*') || request()->routeIs('fa.period*');
+            $isPartnerType = request()->routeIs('general.partner-type*');
+            $isPartner = (request()->routeIs('general.partner') || request()->routeIs('general.partner.*')) && !$isPartnerType;
+            $isBankAcs = request()->routeIs('general.bank-acs*');
+            $isMasterDataActive = $isPartner || $isPartnerType || $isBankAcs;
+
+            $isCurrencyRate = request()->routeIs('fa.currency-rate*');
+            $isCurrency = (request()->routeIs('fa.currency') || request()->routeIs('fa.currency.*')) && !$isCurrencyRate;
+            $isMasterFaActive = request()->routeIs('fa.account-group*') || request()->routeIs('fa.coa*') || request()->routeIs('fa.tax*') || request()->routeIs('fa.profit-center*') || request()->routeIs('fa.cost-center*') || request()->routeIs('fa.fund-center*') || $isCurrency || $isCurrencyRate || request()->routeIs('fa.bank-account*') || request()->routeIs('fa.period*');
             $isGeneralActive = $isSettingsActive || $isMasterDataActive || $isMasterFaActive;
 
             // --- MATERIAL ACTIVE STATE ---
@@ -272,13 +278,13 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'master_data'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('general.partner-type') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner-type*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('general.partner-type') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPartnerType ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner Type
                                 </a>
-                                <a href="{{ route('general.partner') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.partner*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('general.partner') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPartner ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Partner
                                 </a>
-                                <a href="{{ route('general.bank-acs') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('general.bank-acs*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('general.bank-acs') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBankAcs ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Bank ACS Customer
                                 </a>
                             </div>
@@ -307,10 +313,10 @@
                                 <a href="{{ route('fa.fund-center') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.fund-center*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Fund Center
                                 </a>
-                                <a href="{{ route('fa.currency') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.currency*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('fa.currency') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isCurrency ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency
                                 </a>
-                                <a href="{{ route('fa.currency-rate') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.currency-rate*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
+                                <a href="{{ route('fa.currency-rate') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isCurrencyRate ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">
                                     <span class="mr-1.5 text-xs font-extrabold text-current">•</span>Currency Rate
                                 </a>
                                 <a href="{{ route('fa.bank-account') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('fa.bank-account*') ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}">

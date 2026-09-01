@@ -24,9 +24,9 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
                         <span>Home</span>
                     </a>
-                    <span>/</span>
+                    <span class="text-slate-300 dark:text-slate-600">/</span>
                     <a href="{{ route('peo.index') }}" class="hover:text-slate-700 dark:hover:text-slate-200">Mapping PEO Setting</a>
-                    <span>/</span>
+                    <span class="text-slate-300 dark:text-slate-600">/</span>
                     <span class="text-slate-600 dark:text-slate-300 font-bold">View Detail</span>
                 </div>
                 <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Mapping PEO Setting</h1>
@@ -87,7 +87,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-semibold">
             {{-- Document Type --}}
             <div>
-                <label class="block text-slate-600 dark:text-slate-400 mb-1.5 font-bold">Document Type</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Document Type</label>
                 <div class="relative">
                     <select disabled class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold appearance-none cursor-not-allowed">
                         <option selected>{{ $peoSetting->document_type }}</option>
@@ -98,14 +98,14 @@
 
             {{-- Customer --}}
             <div>
-                <label class="block text-slate-600 dark:text-slate-400 mb-1.5 font-bold">Customer</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Customer</label>
                 <input type="text" disabled value="1000000004 - {{ $peoSetting->customer }}" 
                     class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold cursor-not-allowed">
             </div>
 
             {{-- Project --}}
             <div class="md:col-span-1">
-                <label class="block text-slate-600 dark:text-slate-400 mb-1.5 font-bold">Project</label>
+                <label class="block text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-3 font-bold">Project</label>
                 <input type="text" disabled value="{{ $peoSetting->project_code }} - {{ $peoSetting->project_name }}" 
                     class="w-full px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold cursor-not-allowed">
             </div>
