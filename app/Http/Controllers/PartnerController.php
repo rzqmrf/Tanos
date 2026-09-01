@@ -437,7 +437,11 @@ class PartnerController extends Controller
         $totalActive = PartnerBankAccount::where('active', true)->count();
         $totalPrimary = PartnerBankAccount::where('is_primary', true)->count();
 
-        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAll', 'totalActive', 'totalPrimary'));
+        $totalAccounts = $totalAll;
+        $primaryAccounts = $totalPrimary;
+        $activeAccounts = $totalActive;
+
+        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAll', 'totalActive', 'totalPrimary', 'totalAccounts', 'primaryAccounts', 'activeAccounts'));
     }
 
     public function bankAcsStore(Request $request)
