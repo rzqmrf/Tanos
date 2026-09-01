@@ -56,7 +56,7 @@ class EmployeeController extends Controller
 
         $employees = $query->orderBy('name')->paginate($perPage)->withQueryString();
         $totalAll = Employee::count();
-        $totalActive = Employee::where('employment_status', '!=', 'Terminated')->count();
+        $totalActive = Employee::where('document_status', '!=', 'Terminated')->count();
 
         return view('hr.employees.index', [
             'employees' => $employees,
