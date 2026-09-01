@@ -59,9 +59,8 @@
             $isReports = request()->routeIs('reports.index');
 
             // --- GENERAL ACTIVE STATE ---
-            $isProjectConfig = request()->routeIs('project.config');
             $isUsers = request()->routeIs('users.*');
-            $isSettingsActive = $isProjectConfig || $isUsers || request()->routeIs('peo.*');
+            $isSettingsActive = $isUsers || request()->routeIs('peo.*');
             $isPartnerType = request()->routeIs('general.partner-type*');
             $isPartner = (request()->routeIs('general.partner') || request()->routeIs('general.partner.*')) && !$isPartnerType;
             $isBankAcs = request()->routeIs('general.bank-acs*');
