@@ -728,10 +728,10 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'project'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('projects.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isProjects ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Project Definition</a>
-                                <a href="{{ route('rab.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isRab ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>RAB Budget</a>
-                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isWbs ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS</a>
-                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Mapping WBS</a>
+                                <a href="{{ route('projects.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isProjects ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Project Definition</a>
+                                <a href="{{ route('rab.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isRab ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>RAB Budget</a>
+                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isWbs ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS</a>
+                                <a href="{{ route('projects.wbs.index', ['project' => 1]) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Mapping WBS</a>
                             </div>
                         </div>
                         @endif
@@ -748,8 +748,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'budgeting'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('rab.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Budget Expense SAP</a>
-                                <a href="{{ route('posting_payrolls.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isPostingPayroll ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Posting Payroll</a>
+                                <a href="{{ route('rab.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Budget Expense SAP</a>
+                                <a href="{{ route('posting_payrolls.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isPostingPayroll ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Posting Payroll</a>
                             </div>
                         </div>
                         @endif
@@ -766,8 +766,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'billing'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('billing.index', ['tab' => 'pranota']) }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'pranota' ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Pranota</a>
-                                <a href="{{ route('billing.index', ['tab' => 'nota']) }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'nota' ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Billing</a>
+                                <a href="{{ route('billing.index', ['tab' => 'pranota']) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'pranota' ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Pranota</a>
+                                <a href="{{ route('billing.index', ['tab' => 'nota']) }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isBilling && request()->query('tab', 'pranota') === 'nota' ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Billing</a>
                             </div>
                         </div>
                         @endif
@@ -784,16 +784,16 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'ps_reports'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('reports.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ $isReports ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS Report</a>
-                                <a href="{{ route('ps.wbs-report-new') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('reports.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ $isReports ? 'text-primary dark:text-white font-extrabold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS Report</a>
+                                <a href="{{ route('ps.wbs-report-new') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
                                     <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>WBS Report - New</span>
                                     <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('ps.profit-loss-segment') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('ps.profit-loss-segment') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
                                     <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Profit Loss Per Segment</span>
                                     <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
-                                <a href="{{ route('ps.procure-to-pay') }}" class="flex items-center justify-between py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
+                                <a href="{{ route('ps.procure-to-pay') }}" class="flex items-center justify-between py-1.5 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200">
                                     <span><span class="mr-1.5 text-xs font-extrabold text-current">•</span>PS - Procure to Pay</span>
                                     <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">WIP</span>
                                 </a>
@@ -813,8 +813,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'monitoring_api'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('p2p.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('p2p.*') ? 'text-primary dark:text-sky-400 font-bold' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>P2P Integration</a>
-                                <a href="{{ route('payroll.billing.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('payroll.billing.*') ? 'text-primary dark:text-sky-400 font-bold' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Payroll Tagihan</a>
+                                <a href="{{ route('p2p.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('p2p.*') ? 'text-primary dark:text-sky-400 font-bold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>P2P Integration</a>
+                                <a href="{{ route('payroll.billing.index') }}" class="block py-1.5 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('payroll.billing.*') ? 'text-primary dark:text-sky-400 font-bold bg-primary-light dark:bg-slate-800' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Payroll Tagihan</a>
                             </div>
                         </div>
                         @endif
