@@ -158,34 +158,60 @@ function initProjectRegionalChart(data) {
                             label: 'Total',
                             fontSize: '10px',
                             fontWeight: 700,
-                            color: isDark() ? '#94a3b8' : '#64// ─── 3. Bar: Total Pegawai per Regional ──────────────────────────────────────
+                            color: isDark() ? '#94a3b8' : '#64748b',
+                            formatter: w => w.globals.seriesTotals.reduce((a, b) => a + b, 0),
+                        },
+                        value: { fontSize: '16px', fontWeight: 800, color: isDark() ? '#f8fafc' : '#0f172a' },
+                    },
+                },
+            },
+        },
+        stroke: { width: 2 },
+        legend: { show: false },
+        dataLabels: { enabled: false },
+        tooltip: {
+            ...baseOptions.tooltip,
+            y: { formatter: (v, { seriesIndex, w }) => `${v} proyek (${((v / w.globals.seriesTotals.reduce((a,b)=>a+b,0))*100).toFixed(1)}%)` },
+        },
+    });
+}
+
+// ─── 3. Bar: Total Pegawai per Regional ──────────────────────────────────────
 function initPegawaiRegionalChart(data) {
     const items  = (data && data.pegawaiPerRegional) ? data.pegawaiPerRegional : [];
-    // Clean label names by removing redundant "Regional " prefix so labels fit horizontally
+    // Clean label names by removing redundant "Regional " prefix
     const labels = items.map(i => (i.category || '').replace(/^Regional\s+/i, ''));
     const values = items.map(i => i.value);
+
     renderChart('pegawaiRegionalChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: 260 },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 240 },
         series: [{ name: 'Jumlah Pegawai', data: values }],
         xaxis: {
             categories: labels,
             labels: { 
-                style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 },
-                rotate: 0,
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT, fontWeight: 600 },
+                rotate: -15,
                 rotateAlways: false,
                 hideOverlappingLabels: false
             },
             axisBorder: { show: false }, 
             axisTicks: { show: false },
         },
-        yaxis: { labels: { style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT } } },
+        yaxis: { 
+            min: 0,
+            forceNiceScale: true,
+            labels: { style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT } } 
+        },
+        grid: {
+            padding: { top: 10, right: 15, bottom: 5, left: 10 },
+        },
         colors: [COLORS.blue, COLORS.emerald, COLORS.amber, COLORS.purple, COLORS.cyan, COLORS.rose],
         plotOptions: {
             bar: { 
                 distributed: true,
                 borderRadius: 6, 
-                columnWidth: '45%',
+                columnWidth: '40%',
                 dataLabels: { position: 'top' }
             },
         },
@@ -208,24 +234,31 @@ function initTagihanBulanChart(data) {
     const items  = (data && data.tagihanPerBulan) ? data.tagihanPerBulan : [];
     const labels = items.map(i => i.category);
     const vals   = items.map(i => i.value);
+
     renderChart('tagihanBulanChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'area', height: 260 },
+        chart:  { ...baseOptions.chart, type: 'area', height: 240 },
         series: [{ name: 'Total Tagihan', data: vals }],
         xaxis: {
             categories: labels,
-            labels: { style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT } },
+            labels: { style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 } },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
+            min: 0,
+            forceNiceScale: true,
             labels: {
-                style: { colors: LABEL_CLR, fontSize: '11px', fontFamily: FONT },
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT },
                 formatter: v => {
-                    if (v >= 1e9) return (v / 1e9).toFixed(1) + 'M';
-                    if (v >= 1e6) return (v / 1e6).toFixed(1) + 'jt';
+                    if (v <= 0) return '0';
+                    if (v >= 1e9) return (v / 1e9).toFixed(0) + 'M';
+                    if (v >= 1e6) return (v / 1e6).toFixed(0) + 'jt';
                     return v.toLocaleString('id-ID');
                 },
             },
+        },
+        grid: {
+            padding: { top: 15, right: 25, bottom: 5, left: 10 },
         },
         colors: [COLORS.blue],
         stroke: { curve: 'smooth', width: 2.5 },
@@ -233,7 +266,7 @@ function initTagihanBulanChart(data) {
             type: 'gradient',
             gradient: { shadeIntensity: 1, opacityFrom: 0.25, opacityTo: 0.02, stops: [0, 95] },
         },
-        legend: { ...legendStyle },
+        legend: { show: false },
         markers: { size: 4, hover: { size: 6 } },
         tooltip: {
             ...baseOptions.tooltip,
@@ -247,35 +280,42 @@ function initCostRegionalChart(data) {
     const items  = (data && data.costPerRegional) ? data.costPerRegional : [];
     const labels = items.map(i => (i.category || '').replace(/^Regional\s+/i, ''));
     const values = items.map(i => i.value);
+
     renderChart('costRegionalChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: 260 },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 240 },
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
             labels: { 
-                style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 },
-                rotate: 0, 
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT, fontWeight: 600 },
+                rotate: -20, 
                 rotateAlways: false,
                 hideOverlappingLabels: false
             },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
+            min: 0,
+            forceNiceScale: true,
             labels: {
                 style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT },
                 formatter: v => {
+                    if (v <= 0) return '0';
                     if (v >= 1e9) return (v / 1e9).toFixed(0) + 'M';
                     if (v >= 1e6) return (v / 1e6).toFixed(0) + 'jt';
                     return v;
                 },
             },
         },
+        grid: {
+            padding: { top: 15, right: 15, bottom: 5, left: 10 },
+        },
         colors: [COLORS.blue],
         plotOptions: { 
             bar: { 
                 borderRadius: 6, 
-                columnWidth: '45%',
+                columnWidth: '40%',
                 dataLabels: { position: 'top' }
             } 
         },
@@ -304,45 +344,51 @@ function initCostRegionalChart(data) {
 
 // ─── 6. Bar: Total Cost per Segment ──────────────────────────────────────────
 function initCostSegmentChart(data) {
-    const items  = (data && data.costPerSegment) ? data.costPerSegment : [];
+    let items  = (data && data.costPerSegment) ? [...data.costPerSegment] : [];
+    // Sort descending so highest segments appear first
+    items.sort((a, b) => b.value - a.value);
+    // Format segment label cleanly (remove redundant prefixes)
     const labels = items.map(i => (i.category || '').replace(/^\d+\.\s*/i, ''));
     const values = items.map(i => i.value);
+
     renderChart('costSegmentChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'bar', height: 260 },
+        chart:  { ...baseOptions.chart, type: 'bar', height: 240 },
         series: [{ name: 'Total Cost', data: values }],
         xaxis: {
             categories: labels,
             labels: { 
-                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT, fontWeight: 600 },
-                rotate: 0,
-                rotateAlways: false,
-                trim: true,
-                hideOverlappingLabels: false
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT },
+                formatter: v => {
+                    if (v <= 0) return '0';
+                    if (v >= 1e9) return (v / 1e9).toFixed(0) + 'M';
+                    if (v >= 1e6) return (v / 1e6).toFixed(0) + 'jt';
+                    return v;
+                }
             },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
             labels: {
-                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT },
-                formatter: v => {
-                    if (v >= 1e9) return (v / 1e9).toFixed(0) + 'M';
-                    if (v >= 1e6) return (v / 1e6).toFixed(0) + 'jt';
-                    return v;
-                },
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT, fontWeight: 600 },
+                maxWidth: 95
             },
+        },
+        grid: {
+            padding: { top: 0, right: 35, bottom: 5, left: 10 },
         },
         colors: [COLORS.amber],
         plotOptions: { 
             bar: { 
-                borderRadius: 6, 
-                columnWidth: '45%',
+                horizontal: true,
+                borderRadius: 4, 
+                barHeight: '60%',
                 dataLabels: { position: 'top' }
             } 
         },
         dataLabels: {
             enabled: true,
-            offsetY: -18,
+            offsetX: 25,
             style: { fontSize: '10px', fontWeight: 700, colors: [isDark() ? '#cbd5e1' : '#475569'] },
             formatter: v => {
                 if (v >= 1e9) return (v / 1e9).toFixed(1) + 'M';
@@ -352,7 +398,7 @@ function initCostSegmentChart(data) {
         },
         fill: {
             type: 'gradient',
-            gradient: { shade: 'light', type: 'vertical', shadeIntensity: 0.2,
+            gradient: { shade: 'light', type: 'horizontal', shadeIntensity: 0.2,
                          gradientToColors: [COLORS.rose], stops: [0, 100] },
         },
         legend: { show: false },
@@ -368,24 +414,31 @@ function initCostBulanChart(data) {
     const items  = (data && data.costPerBulan) ? data.costPerBulan : [];
     const labels = items.map(i => i.category);
     const values = items.map(i => i.value);
+
     renderChart('costBulanChart', {
         ...baseOptions,
-        chart:  { ...baseOptions.chart, type: 'area', height: 220 },
+        chart:  { ...baseOptions.chart, type: 'area', height: 240 },
         series: [{ name: 'Trend Cost', data: values }],
         xaxis: {
             categories: labels,
-            labels: { style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT } },
+            labels: { style: { colors: getLabelClr(), fontSize: '11px', fontFamily: FONT, fontWeight: 600 } },
             axisBorder: { show: false }, axisTicks: { show: false },
         },
         yaxis: {
+            min: 0,
+            forceNiceScale: true,
             labels: {
-                style: { colors: LABEL_CLR, fontSize: '10px', fontFamily: FONT },
+                style: { colors: getLabelClr(), fontSize: '10px', fontFamily: FONT },
                 formatter: v => {
-                    if (v >= 1e9) return (v / 1e9).toFixed(1) + 'M';
-                    if (v >= 1e6) return (v / 1e6).toFixed(1) + 'jt';
+                    if (v <= 0) return '0';
+                    if (v >= 1e9) return (v / 1e9).toFixed(0) + 'M';
+                    if (v >= 1e6) return (v / 1e6).toFixed(0) + 'jt';
                     return v;
                 },
             },
+        },
+        grid: {
+            padding: { top: 15, right: 25, bottom: 5, left: 10 },
         },
         colors: [COLORS.indigo],
         stroke: { curve: 'smooth', width: 2.5 },
@@ -393,11 +446,7 @@ function initCostBulanChart(data) {
             type: 'gradient',
             gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.02, stops: [0, 95] },
         },
-        legend: {
-            ...legendStyle,
-            position: 'top',
-            horizontalAlign: 'left',
-        },
+        legend: { show: false },
         markers: { size: 4, hover: { size: 6 } },
         tooltip: {
             ...baseOptions.tooltip,
