@@ -90,7 +90,7 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
-        $employee->load(['user', 'attendances', 'leaveRequests', 'mutations', 'payrollItems']);
+        $employee->load(['user', 'attendances', 'leaveRequests', 'mutations']);
 
         return view('hr.employees.show', [
             'employee' => $employee,
