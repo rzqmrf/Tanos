@@ -35,16 +35,6 @@
         </button>
     </div>
 
-    <!-- Category Tabs Navigation -->
-    <div class="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800 overflow-x-auto pb-1 no-scrollbar">
-        @foreach($categories as $key => $title)
-            <a href="{{ route('hc.master.index', ['category' => $key]) }}"
-               class="px-4 py-2.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap flex items-center space-x-2 {{ $currentCategory === $key ? 'bg-primary text-white shadow-md shadow-primary' : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800' }}">
-                <span>{{ $title }}</span>
-            </a>
-        @endforeach
-    </div>
-
     <!-- Search & Summary Bar -->
     <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <form method="GET" action="{{ route('hc.master.index', ['category' => $currentCategory]) }}" class="flex items-center space-x-2 flex-1 max-w-md">
