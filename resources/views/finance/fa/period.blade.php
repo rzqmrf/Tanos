@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Fiscal Period Management — Tanos ERP')
 
@@ -106,7 +106,7 @@
                         <th class="py-4 px-5">Rentang Tanggal</th>
                         <th class="py-4 px-5 text-center">Status Pembukuan</th>
                         <th class="py-4 px-5">Informasi Tutup Buku</th>
-                        <th class="py-4 px-5 text-right">Aksi</th>
+                        <th class="py-4 px-5 text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -321,3 +321,4 @@
 
 </div>
 @endsection
+

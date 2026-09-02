@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Currency Exchange Rates — Tanos ERP')
 
@@ -123,7 +123,7 @@
                         <th class="py-4 px-5 text-right">Nilai Kurs ke IDR</th>
                         <th class="py-4 px-5">Sumber Kurs</th>
                         <th class="py-4 px-5">Catatan</th>
-                        <th class="py-4 px-5 text-right">Aksi</th>
+                        <th class="py-4 px-5 text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -325,3 +325,4 @@
 
 </div>
 @endsection
+

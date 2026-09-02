@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Time Evaluation Rules — Tanos ERP')
 
@@ -46,7 +46,7 @@
                         <th class="p-4 align-middle text-center">Toleransi Pulang Cepat</th>
                         <th class="p-4 align-middle">Masa Berlaku</th>
                         <th class="p-4 align-middle text-center">Status</th>
-                        <th class="p-4 align-middle text-center">Aksi</th>
+                        <th class="p-4 align-middle text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
@@ -217,3 +217,4 @@
     </div>
 </div>
 @endsection
+

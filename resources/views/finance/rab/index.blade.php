@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'RAB Budget List — Tanos ERP')
 
@@ -32,7 +32,7 @@
                     <th class="p-4 align-middle text-right">Total Biaya (Cost)</th>
                     <th class="p-4 align-middle text-center">SAP Status</th>
                     <th class="p-4 align-middle text-center">Doc Status</th>
-                    <th class="p-4 align-middle text-center">Aksi</th>
+                    <th class="p-4 align-middle text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
@@ -108,3 +108,4 @@
     </div>
 </div>
 @endsection
+

@@ -126,7 +126,7 @@
                         <th class="py-3 px-4 text-center">Jml TAD</th>
                         <th class="py-3 px-4 text-right">Total Tagihan</th>
                         <th class="py-3 px-4 text-center">Status</th>
-                        <th class="py-3 px-4 text-center">Aksi</th>
+                        <th class="py-3 px-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-200">

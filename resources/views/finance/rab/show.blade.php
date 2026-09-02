@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'RAB Budget Detail — Tanos ERP')
 
@@ -134,7 +134,7 @@
                         <th class="p-3 align-middle text-right w-[90px]">Des</th>
                         <th class="p-3 align-middle text-right w-[110px] font-bold">Total</th>
                         @if($rab->sap_status != 'Sent')
-                            <th class="p-3 align-middle text-center w-[100px]">Aksi</th>
+                            <th class="p-3 align-middle text-center w-[100px]">Action</th>
                         @endif
                     </tr>
                 </thead>
@@ -351,3 +351,4 @@
 
 </div>
 @endsection
+

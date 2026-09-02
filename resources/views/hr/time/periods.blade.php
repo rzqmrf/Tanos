@@ -43,7 +43,7 @@
                         <th class="p-4 align-middle">Scope Project</th>
                         <th class="p-4 align-middle">Rentang Tanggal</th>
                         <th class="p-4 align-middle text-center">Status</th>
-                        <th class="p-4 align-middle text-center">Aksi / Operasi</th>
+                        <th class="p-4 align-middle text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">

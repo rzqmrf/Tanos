@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'PS: Billing Pranota & Nota — Tanos ERP')
 
@@ -136,7 +136,7 @@
                         <th class="p-4">Tanggal Pengajuan</th>
                         <th class="p-4 text-right">Nilai Pranota</th>
                         <th class="p-4 text-center">Status</th>
-                        <th class="p-4 text-center">Aksi</th>
+                        <th class="p-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-600 dark:text-slate-350">
@@ -261,7 +261,7 @@
                         <th class="p-4 text-center">Status</th>
                         <th class="p-4">Doc SAP AR</th>
                         <th class="p-4">Tanggal Posting SAP</th>
-                        <th class="p-4 text-center">Aksi</th>
+                        <th class="p-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-600 dark:text-slate-350">
@@ -455,3 +455,4 @@
 
 </div>
 @endsection
+

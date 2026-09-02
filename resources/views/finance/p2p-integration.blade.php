@@ -128,7 +128,7 @@
                         <th class="py-3 px-4">HTTP Status</th>
                         <th class="py-3 px-4">Waktu Respon</th>
                         <th class="py-3 px-4">Waktu Sinkronisasi</th>
-                        <th class="py-3 px-4 text-center">Aksi</th>
+                        <th class="py-3 px-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-200">

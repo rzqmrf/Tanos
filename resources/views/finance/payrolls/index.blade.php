@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'HCM: Period Payroll — Tanos ERP')
 
@@ -80,7 +80,7 @@
                     <th class="p-4">Tanggal Mulai</th>
                     <th class="p-4">Tanggal Selesai</th>
                     <th class="p-4">Status</th>
-                    <th class="p-4 text-center">Aksi</th>
+                    <th class="p-4 text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-600 dark:text-slate-350">
@@ -185,3 +185,4 @@
 
 </div>
 @endsection
+

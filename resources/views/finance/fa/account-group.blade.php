@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Account Group Master — Finance & Accounting TANOS ERP')
 
@@ -167,7 +167,7 @@
                         <th class="py-3.5 px-4">Keterangan / Deskripsi</th>
                         <th class="py-3.5 px-4 text-center">Jumlah Akun</th>
                         <th class="py-3.5 px-4">Status</th>
-                        <th class="py-3.5 px-4 text-right">Aksi</th>
+                        <th class="py-3.5 px-4 text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
@@ -397,3 +397,4 @@
 
 </div>
 @endsection
+

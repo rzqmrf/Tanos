@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Absensi & Cuti — Tanos ERP')
 
@@ -98,7 +98,7 @@
                     <th class="p-4">Jam Keluar</th>
                     <th class="p-4">Lembur</th>
                     <th class="p-4">Catatan</th>
-                    <th class="p-4 text-center">Aksi</th>
+                    <th class="p-4 text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-300">
@@ -326,3 +326,4 @@ function closeModal() {
 }
 </script>
 @endsection
+

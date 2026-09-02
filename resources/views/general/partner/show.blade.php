@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Business Partner - View — Tanos ERP')
 
@@ -386,7 +386,7 @@
                             <th class="py-3 px-4">Atas Nama</th>
                             <th class="py-3 px-4">Kantor Cabang</th>
                             <th class="py-3 px-4 text-center">Rekening Utama</th>
-                            <th class="py-3 px-4 text-right">Aksi</th>
+                            <th class="py-3 px-4 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -442,7 +442,7 @@
                             <th class="py-3 px-4">Kode Segmen</th>
                             <th class="py-3 px-4">Nama Segmen Bisnis</th>
                             <th class="py-3 px-4">Deskripsi</th>
-                            <th class="py-3 px-4 text-right">Aksi</th>
+                            <th class="py-3 px-4 text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -564,3 +564,4 @@
 
 </div>
 @endsection
+

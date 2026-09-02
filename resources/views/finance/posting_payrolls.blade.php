@@ -61,7 +61,7 @@
                     <th class="p-4">Total Lembur & Transport</th>
                     <th class="p-4">Total Pembayaran</th>
                     <th class="p-4">Status SAP</th>
-                    <th class="p-4 text-center">Aksi Jurnal</th>
+                    <th class="p-4 text-center">Action</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-xs text-slate-600 dark:text-slate-350">
