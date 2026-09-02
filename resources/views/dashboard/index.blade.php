@@ -117,14 +117,14 @@
 
     <!-- Left Card: Total Pegawai per Regional -->
     <x-chart-card title="Total Pegawai per Regional" link="{{ route('employees.index') }}">
-        <div class="w-full h-64 min-w-0 overflow-hidden">
+        <div class="w-full h-72 min-w-0 overflow-hidden">
             <div id="pegawaiRegionalChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Total Tagihan per Bulan -->
     <x-chart-card title="Total Tagihan per Bulan" link="{{ route('invoices.index') }}">
-        <div class="w-full h-64 min-w-0 overflow-hidden">
+        <div class="w-full h-72 min-w-0 overflow-hidden">
             <div id="tagihanBulanChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
@@ -136,21 +136,21 @@
 
     <!-- Left Card: Total Cost per Regional -->
     <x-chart-card title="Total Cost per Regional" link="{{ route('projects.index') }}">
-        <div class="w-full h-60 min-w-0 overflow-hidden">
+        <div class="w-full h-72 min-w-0 overflow-hidden">
             <div id="costRegionalChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Middle Card: Total Cost per Segment -->
     <x-chart-card title="Total Cost per Segment" link="{{ route('projects.index') }}">
-        <div class="w-full h-60 min-w-0 overflow-hidden">
+        <div class="w-full h-72 min-w-0 overflow-hidden">
             <div id="costSegmentChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
 
     <!-- Right Card: Trend Cost per Bulan -->
     <x-chart-card title="Trend Cost per Bulan" link="{{ route('projects.index') }}">
-        <div class="w-full h-60 min-w-0 overflow-hidden">
+        <div class="w-full h-72 min-w-0 overflow-hidden">
             <div id="costBulanChart" class="w-full h-full"></div>
         </div>
     </x-chart-card>
