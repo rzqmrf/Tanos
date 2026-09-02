@@ -115,10 +115,15 @@ class TimeManagementController extends Controller
     // ==========================================
     // 3. TIME EVALUATIONS / WORK HOUR TOLERANCE
     // ==========================================
-    public function evaluationsIndex()
+    public function evaluationIndex()
     {
         $evaluations = TimeEvaluation::orderBy('id', 'desc')->get();
         return view('hr.time.evaluation', compact('evaluations'));
+    }
+
+    public function evaluationsIndex()
+    {
+        return $this->evaluationIndex();
     }
 
     public function evaluationStore(Request $request)
@@ -147,7 +152,7 @@ class TimeManagementController extends Controller
     public function periodsIndex()
     {
         $periods = TimePeriod::with('project')->withCount('results')->orderBy('start_date', 'desc')->paginate(10);
-        $projects = Project::orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('project_name', 'asc')->get();
         return view('hr.time.periods', compact('periods', 'projects'));
     }
 

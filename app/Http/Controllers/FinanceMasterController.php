@@ -715,10 +715,11 @@ class FinanceMasterController extends Controller
 
         $costCenters = $query->orderBy('code')->paginate(10)->withQueryString();
         $profitCenters = FaProfitCenter::where('active', true)->orderBy('code')->get();
+        $departments = FaCostCenter::whereNotNull('department')->distinct()->pluck('department');
         $totalAll = FaCostCenter::count();
         $totalActive = FaCostCenter::where('active', true)->count();
 
-        return view('finance.fa.cost-center', compact('costCenters', 'profitCenters', 'totalAll', 'totalActive'));
+        return view('finance.fa.cost-center', compact('costCenters', 'profitCenters', 'totalAll', 'totalActive', 'departments'));
     }
 
     public function costCenterStore(Request $request)

@@ -173,6 +173,21 @@ class AttendanceController extends Controller
         return back()->with('success', 'Kehadiran berhasil dicatat!');
     }
 
+    public function create()
+    {
+        return redirect()->route('attendances.index');
+    }
+
+    public function show(Attendance $attendance)
+    {
+        return redirect()->route('attendances.index');
+    }
+
+    public function edit(Attendance $attendance)
+    {
+        return redirect()->route('attendances.index');
+    }
+
     public function destroy(Attendance $attendance)
     {
         if (!in_array(Auth::user()?->role, ['Admin', 'HR Manager'])) {

@@ -45,10 +45,38 @@ class ProjectController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $dashboardService = new DashboardService();
+        return view('operations.projects', [
+            'projects' => Project::orderByRaw('CAST(id_project_humanis AS UNSIGNED) ASC')->orderBy('id', 'asc')->paginate(25),
+            'search' => '',
+            'regionals' => Regional::orderBy('name')->get(),
+            'segments' => Segment::orderBy('name')->get(),
+            'partners' => Partner::orderBy('name')->get(),
+            'months' => $dashboardService->getMonths(),
+            'openCreateModal' => true,
+        ]);
+    }
+
     public function show(Project $project)
     {
         return view('operations.project-view', [
             'project' => $project,
+        ]);
+    }
+
+    public function edit(Project $project)
+    {
+        $dashboardService = new DashboardService();
+        return view('operations.projects', [
+            'projects' => Project::orderByRaw('CAST(id_project_humanis AS UNSIGNED) ASC')->orderBy('id', 'asc')->paginate(25),
+            'search' => '',
+            'regionals' => Regional::orderBy('name')->get(),
+            'segments' => Segment::orderBy('name')->get(),
+            'partners' => Partner::orderBy('name')->get(),
+            'months' => $dashboardService->getMonths(),
+            'editProject' => $project,
         ]);
     }
 
