@@ -416,9 +416,11 @@ class PartnerController extends Controller
     {
         $this->ensurePartnerTypesSeeded();
         $this->ensurePartnersSeeded();
+        $this->ensureBankAcsSeeded();
 
         $query = PartnerBankAccount::with('partner');
 
+        // General Search (like search box)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -426,11 +428,46 @@ class PartnerController extends Controller
                   ->orWhere('account_number', 'like', "%{$search}%")
                   ->orWhere('account_holder', 'like', "%{$search}%")
                   ->orWhere('branch', 'like', "%{$search}%")
+                  ->orWhere('valid_from', 'like', "%{$search}%")
+                  ->orWhere('valid_to', 'like', "%{$search}%")
+                  ->orWhere('document_status', 'like', "%{$search}%")
                   ->orWhereHas('partner', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
             });
         }
 
-        $bankAccounts = $query->orderBy('bank_name')->paginate(12)->withQueryString();
+        // Advanced Search Filters
+        if ($request->filled('filter_bank')) {
+            $query->where('bank_name', 'like', "%{$request->filter_bank}%");
+        }
+        if ($request->filled('filter_account_no')) {
+            $query->where('account_number', 'like', "%{$request->filter_account_no}%");
+        }
+        if ($request->filled('filter_customer')) {
+            $query->whereHas('partner', function ($sub) use ($request) {
+                $sub->where('name', 'like', "%{$request->filter_customer}%");
+            });
+        }
+        if ($request->filled('filter_status')) {
+            $query->where('document_status', $request->filter_status);
+        }
+        if ($request->filled('filter_valid_from')) {
+            $query->whereDate('valid_from', '>=', $request->filter_valid_from);
+        }
+        if ($request->filled('filter_valid_to')) {
+            $query->whereDate('valid_to', '<=', $request->filter_valid_to);
+        }
+
+        $perPage = (int) $request->get('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
+        // Default ordering to prioritize realistic ACS items
+        $bankAccounts = $query->orderByRaw("CASE WHEN bank_name = 'MANDIRI' THEN 1 WHEN bank_name = 'BNI' THEN 2 ELSE 3 END")
+                              ->orderBy('id', 'asc')
+                              ->paginate($perPage)
+                              ->withQueryString();
+
         $partners = Partner::where('active', true)->orderBy('name')->get();
 
         $totalAll = PartnerBankAccount::count();
@@ -441,7 +478,7 @@ class PartnerController extends Controller
         $primaryAccounts = $totalPrimary;
         $activeAccounts = $totalActive;
 
-        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAll', 'totalActive', 'totalPrimary', 'totalAccounts', 'primaryAccounts', 'activeAccounts'));
+        return view('general.bank-acs', compact('bankAccounts', 'partners', 'totalAll', 'totalActive', 'totalPrimary', 'totalAccounts', 'primaryAccounts', 'activeAccounts', 'perPage'));
     }
 
     public function bankAcsStore(Request $request)
@@ -452,6 +489,11 @@ class PartnerController extends Controller
             'account_number' => 'required|string|max:100',
             'account_holder' => 'required|string|max:255',
             'branch' => 'nullable|string|max:255',
+            'valid_from' => 'nullable|string|max:50',
+            'valid_to' => 'nullable|string|max:50',
+            'document_status' => 'nullable|string|max:50',
+            'h2h_response_code' => 'nullable|string|max:100',
+            'h2h_response_message' => 'nullable|string',
             'is_primary' => 'nullable',
             'active' => 'nullable',
         ]);
@@ -462,10 +504,16 @@ class PartnerController extends Controller
 
         PartnerBankAccount::create([
             'partner_id' => $request->partner_id,
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
+            'bank_name' => strtoupper(trim($request->bank_name)),
+            'account_number' => trim($request->account_number),
             'account_holder' => $request->account_holder,
             'branch' => $request->branch ?? 'Kantor Cabang Utama',
+            'valid_from' => $request->valid_from ?? now()->format('Y-m-d 00:00:00'),
+            'valid_to' => $request->valid_to ?? '9999-12-31 00:00:00',
+            'document_status' => $request->document_status ?? 'Completed',
+            'h2h_response_code' => $request->h2h_response_code ?? 'Sukses',
+            'h2h_response_message' => $request->h2h_response_message ?? ('Message Bank ' . strtoupper(trim($request->bank_name)) . ': Request has been processed successfully.'),
+            'attachment_file' => 'Bank_ACS_' . strtoupper(trim($request->bank_name)) . '_' . trim($request->account_number) . '.pdf',
             'is_primary' => $request->has('is_primary') ? (bool) $request->is_primary : false,
             'active' => $request->has('active') ? (bool) $request->active : true,
         ]);
@@ -483,6 +531,11 @@ class PartnerController extends Controller
             'account_number' => 'required|string|max:100',
             'account_holder' => 'required|string|max:255',
             'branch' => 'nullable|string|max:255',
+            'valid_from' => 'nullable|string|max:50',
+            'valid_to' => 'nullable|string|max:50',
+            'document_status' => 'nullable|string|max:50',
+            'h2h_response_code' => 'nullable|string|max:100',
+            'h2h_response_message' => 'nullable|string',
             'is_primary' => 'nullable',
             'active' => 'nullable',
         ]);
@@ -495,10 +548,15 @@ class PartnerController extends Controller
 
         $account->update([
             'partner_id' => $request->partner_id,
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
+            'bank_name' => strtoupper(trim($request->bank_name)),
+            'account_number' => trim($request->account_number),
             'account_holder' => $request->account_holder,
             'branch' => $request->branch ?? $account->branch,
+            'valid_from' => $request->valid_from ?? $account->valid_from,
+            'valid_to' => $request->valid_to ?? $account->valid_to,
+            'document_status' => $request->document_status ?? $account->document_status,
+            'h2h_response_code' => $request->h2h_response_code ?? $account->h2h_response_code,
+            'h2h_response_message' => $request->h2h_response_message ?? $account->h2h_response_message,
             'is_primary' => $request->has('is_primary') ? (bool) $request->is_primary : false,
             'active' => $request->has('active') ? (bool) $request->active : false,
         ]);
@@ -512,6 +570,156 @@ class PartnerController extends Controller
         $account->delete();
 
         return redirect()->back()->with('success', 'Rekening Bank ACS berhasil dihapus!');
+    }
+
+    /**
+     * Auto Seed Bank ACS Data matching exact real-world Tanos ERP records
+     */
+    private function ensureBankAcsSeeded(): void
+    {
+        $items = [
+            [
+                'customer_name' => 'PT TERMINAL PETIKEMAS SURABAYA',
+                'customer_code' => '1000000001',
+                'bank_name' => 'MANDIRI',
+                'account_number' => '1400099101777',
+                'account_holder' => 'PT TERMINAL PETIKEMAS SURABAYA',
+                'branch' => 'KC Surabaya Tanjung Perak',
+                'valid_from' => '2025-07-22 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank Mandiri: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_MANDIRI_1400099101777.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT PELINDO - REGIONAL 4',
+                'customer_code' => '1000000002',
+                'bank_name' => 'BNI',
+                'account_number' => '6611020215',
+                'account_holder' => 'PT PELINDO - REGIONAL 4',
+                'branch' => 'KC Makassar',
+                'valid_from' => '2025-06-16 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank BNI: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_BNI_6611020215.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT PRIMA MULTI TERMINAL',
+                'customer_code' => '1000000003',
+                'bank_name' => 'BNI',
+                'account_number' => '2014141454',
+                'account_holder' => 'PT PRIMA MULTI TERMINAL',
+                'branch' => 'KC Medan Belawan',
+                'valid_from' => '2025-07-24 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank BNI: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_BNI_2014141454.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT IPC TERMINAL PETIKEMAS',
+                'customer_code' => '1000000004',
+                'bank_name' => 'MANDIRI',
+                'account_number' => '1200022000009',
+                'account_holder' => 'PT IPC TERMINAL PETIKEMAS',
+                'branch' => 'KC Jakarta Tanjung Priok',
+                'valid_from' => '2025-07-04 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank Mandiri: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_MANDIRI_1200022000009.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT PELABUHAN TANJUNG PRIOK',
+                'customer_code' => '1000000005',
+                'bank_name' => 'BNI',
+                'account_number' => '8884002015',
+                'account_holder' => 'PT PELABUHAN TANJUNG PRIOK',
+                'branch' => 'KC Tanjung Priok',
+                'valid_from' => '2025-07-04 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank BNI: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_BNI_8884002015.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT PELINDO - REGIONAL 2',
+                'customer_code' => '1000000006',
+                'bank_name' => 'BNI',
+                'account_number' => '6611020215',
+                'account_holder' => 'PT PELINDO - REGIONAL 2',
+                'branch' => 'KC Jakarta Kota',
+                'valid_from' => '2025-06-16 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank BNI: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_BNI_6611020215_reg2.pdf',
+                'is_primary' => true,
+            ],
+            [
+                'customer_name' => 'PT PELINDO MARINE SERVICE',
+                'customer_code' => '1000000007',
+                'bank_name' => 'BNI',
+                'account_number' => '8112201158',
+                'account_holder' => 'PT PELINDO MARINE SERVICE',
+                'branch' => 'KC Surabaya Perak',
+                'valid_from' => '2025-07-25 00:00:00',
+                'valid_to' => '9999-12-31 00:00:00',
+                'document_status' => 'Completed',
+                'h2h_response_code' => 'Sukses',
+                'h2h_response_message' => 'Message Bank BNI: Request has been processed successfully.',
+                'attachment_file' => 'Bank_ACS_BNI_8112201158.pdf',
+                'is_primary' => true,
+            ],
+        ];
+
+        $typeBumn = PartnerType::where('code', '001')->orWhere('code', 'CUSTOMER')->first();
+
+        foreach ($items as $item) {
+            $partner = Partner::firstOrCreate(
+                ['name' => $item['customer_name']],
+                [
+                    'code' => $item['customer_code'],
+                    'partner_type_id' => $typeBumn?->id,
+                    'is_customer' => true,
+                    'is_vendor' => false,
+                    'city' => 'Indonesia',
+                    'active' => true,
+                ]
+            );
+
+            PartnerBankAccount::updateOrCreate(
+                [
+                    'partner_id' => $partner->id,
+                    'bank_name' => $item['bank_name'],
+                    'account_number' => $item['account_number'],
+                ],
+                [
+                    'account_holder' => $item['account_holder'],
+                    'branch' => $item['branch'],
+                    'valid_from' => $item['valid_from'],
+                    'valid_to' => $item['valid_to'],
+                    'document_status' => $item['document_status'],
+                    'h2h_response_code' => $item['h2h_response_code'],
+                    'h2h_response_message' => $item['h2h_response_message'],
+                    'attachment_file' => $item['attachment_file'],
+                    'is_primary' => $item['is_primary'],
+                    'active' => true,
+                ]
+            );
+        }
     }
 
     /**

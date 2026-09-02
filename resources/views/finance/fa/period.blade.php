@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Fiscal Period Management — Tanos ERP')
 
@@ -106,7 +106,7 @@
                         <th class="py-4 px-5">Rentang Tanggal</th>
                         <th class="py-4 px-5 text-center">Status Pembukuan</th>
                         <th class="py-4 px-5">Informasi Tutup Buku</th>
-                        <th class="py-4 px-5 text-right">Action</th>
+                        <th class="py-4 px-5 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -148,26 +148,33 @@
                                 <span class="italic text-slate-400">Transaksi masih diizinkan</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-5 text-right space-x-1.5 whitespace-nowrap">
-                            <!-- View Detail Button -->
-                            <button @click="openDetail({{ json_encode($item) }})"
-                                    class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 hover:text-primary rounded-lg transition cursor-pointer" title="Lihat Detail">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                            </button>
+                        <td class="py-3.5 px-5 text-center whitespace-nowrap">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <!-- View Detail Button -->
+                                <button @click="openDetail({{ json_encode($item) }})"
+                                        style="background-color: #0091ea; color: #ffffff;"
+                                        class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="Lihat Detail">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </button>
 
-                            <form action="{{ route('fa.period.toggle-status', $item->id) }}" method="POST" class="inline"
-                                  onsubmit="return confirm(&quot;Apakah Anda yakin ingin {{ $item->status === 'Open' ? 'MENUTUP' : 'MEMBUKA KEMBALI' }} periode {{ $item->period_name }}?&quot;)">
-                                @csrf
-                                @if($item->status === 'Open')
-                                <button type="submit" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-700 dark:text-rose-300 font-bold rounded-lg text-xs transition border border-rose-200 dark:border-rose-800 cursor-pointer">
-                                    Tutup Periode
-                                </button>
-                                @else
-                                <button type="submit" class="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 font-bold rounded-lg text-xs transition border border-emerald-200 dark:border-emerald-800 cursor-pointer">
-                                    Buka Periode
-                                </button>
-                                @endif
-                            </form>
+                                <form action="{{ route('fa.period.toggle-status', $item->id) }}" method="POST" class="inline"
+                                      onsubmit="return confirm(&quot;Apakah Anda yakin ingin {{ $item->status === 'Open' ? 'MENUTUP' : 'MEMBUKA KEMBALI' }} periode {{ $item->period_name }}?&quot;)">
+                                    @csrf
+                                    @if($item->status === 'Open')
+                                    <button type="submit" 
+                                            style="background-color: #ff1744; color: #ffffff;"
+                                            class="px-3 py-1.5 hover:opacity-90 font-bold rounded-lg text-xs transition shadow-2xs cursor-pointer">
+                                        Tutup Periode
+                                    </button>
+                                    @else
+                                    <button type="submit" 
+                                            style="background-color: #00c853; color: #ffffff;"
+                                            class="px-3 py-1.5 hover:opacity-90 font-bold rounded-lg text-xs transition shadow-2xs cursor-pointer">
+                                        Buka Periode
+                                    </button>
+                                    @endif
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Business Partner - View — Tanos ERP')
 
@@ -386,7 +386,7 @@
                             <th class="py-3 px-4">Atas Nama</th>
                             <th class="py-3 px-4">Kantor Cabang</th>
                             <th class="py-3 px-4 text-center">Rekening Utama</th>
-                            <th class="py-3 px-4 text-right">Action</th>
+                            <th class="py-3 px-4 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -403,13 +403,15 @@
                                 <span class="text-slate-400 text-[11px]">-</span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-right">
+                            <td class="py-3 px-4 text-center">
                                 <form action="{{ route('general.partner.banks.destroy', [$partner->id, $bank->id]) }}" method="POST" class="inline"
                                       onsubmit="return confirm('Hapus rekening bank ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 text-slate-400 hover:text-rose-600 transition cursor-pointer" title="Hapus">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    <button type="submit" 
+                                            style="background-color: #ff1744; color: #ffffff;"
+                                            class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs inline-flex items-center justify-center cursor-pointer" title="Hapus">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
                             </td>
@@ -442,7 +444,7 @@
                             <th class="py-3 px-4">Kode Segmen</th>
                             <th class="py-3 px-4">Nama Segmen Bisnis</th>
                             <th class="py-3 px-4">Deskripsi</th>
-                            <th class="py-3 px-4 text-right">Action</th>
+                            <th class="py-3 px-4 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -451,13 +453,15 @@
                             <td class="py-3 px-4 font-mono font-bold text-primary">{{ $segment->segment_code }}</td>
                             <td class="py-3 px-4 font-bold text-slate-800 dark:text-slate-100">{{ $segment->segment_name }}</td>
                             <td class="py-3 px-4 text-slate-500 dark:text-slate-400">{{ $segment->description ?? '-' }}</td>
-                            <td class="py-3 px-4 text-right">
+                            <td class="py-3 px-4 text-center">
                                 <form action="{{ route('general.partner.segments.destroy', [$partner->id, $segment->id]) }}" method="POST" class="inline"
                                       onsubmit="return confirm('Hapus segmen bisnis ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-1 text-slate-400 hover:text-rose-600 transition cursor-pointer" title="Hapus">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    <button type="submit" 
+                                            style="background-color: #ff1744; color: #ffffff;"
+                                            class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs inline-flex items-center justify-center cursor-pointer" title="Hapus">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
                             </td>

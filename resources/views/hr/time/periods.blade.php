@@ -64,24 +64,28 @@
                             </span>
                         </td>
                         <td class="p-4 align-middle text-center whitespace-nowrap">
-                            <div class="flex items-center justify-center space-x-2">
+                            <div class="flex items-center justify-center space-x-1.5">
                                 @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
                                     <form action="{{ route('org.periods.calculate', $period->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
-                                            ⚡ Generate/Evaluate
+                                        <button type="submit" class="bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 font-bold px-2.5 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                                            ⚡ Evaluate
                                         </button>
                                     </form>
                                 @endif
-                                <a href="{{ route('org.periods.show', $period->id) }}" class="bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/30 text-blue-650 dark:text-blue-400 font-bold px-3 py-1.5 rounded-lg text-xs transition">
-                                    👁️ View
+                                <a href="{{ route('org.periods.show', $period->id) }}" 
+                                   style="background-color: #0091ea; color: #ffffff;"
+                                   class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="View Detail">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </a>
                                 @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
                                     <form action="{{ route('org.periods.destroy', $period->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus periode ini beserta seluruh hasil rekapitulasinya?')" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-rose-600 dark:text-rose-400 font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">
-                                            Delete
+                                        <button type="submit" 
+                                                style="background-color: #ff1744; color: #ffffff;"
+                                                class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="Hapus Periode">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         </button>
                                     </form>
                                 @endif

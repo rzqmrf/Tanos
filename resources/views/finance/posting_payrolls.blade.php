@@ -92,14 +92,17 @@
                         <div class="flex items-center justify-center gap-1.5">
                             <!-- Button View Jurnal (Halaman 9) -->
                             <button @click="openJournalModal('{{ $item->id }}', '{{ $item->name }}', '{{ $item->project->segment }} - {{ $item->project->regional }}', {{ $totalPay }}, {{ json_encode($item->results) }})" 
-                                    class="px-2 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-[10px] font-bold rounded-lg transition cursor-pointer">
-                                View
+                                    style="background-color: #0091ea; color: #ffffff;"
+                                    class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="View Detail Jurnal">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </button>
 
                             <!-- Button Upload Document / P-Files (Halaman 9) -->
                             <button @click="openUploadModal('{{ $item->id }}', '{{ $item->name }}')" 
-                                    class="px-2 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 rounded-lg transition cursor-pointer">
-                                Upload P-Files
+                                    style="background-color: #7c4dff; color: #ffffff;"
+                                    class="px-2.5 py-1.5 hover:opacity-90 text-[10px] font-bold rounded-lg transition shadow-2xs cursor-pointer flex items-center gap-1" title="Upload P-Files">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                P-Files
                             </button>
 
                             <!-- Button Void (Halaman 9) -->

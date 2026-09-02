@@ -17,6 +17,12 @@ class PartnerBankAccount extends Model
         'branch',
         'is_primary',
         'active',
+        'valid_from',
+        'valid_to',
+        'document_status',
+        'h2h_response_code',
+        'h2h_response_message',
+        'attachment_file',
     ];
 
     protected $casts = [

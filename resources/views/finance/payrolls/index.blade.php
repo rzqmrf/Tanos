@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'HCM: Period Payroll — Tanos ERP')
 
@@ -108,9 +108,13 @@
                         </span>
                     </td>
                     <td class="p-4 text-center">
-                        <a href="{{ route('payrolls.show', $item->id) }}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 text-[10px] font-bold rounded-lg transition inline-block">
-                            View Detail
-                        </a>
+                        <div class="flex items-center justify-center">
+                            <a href="{{ route('payrolls.show', $item->id) }}" 
+                               style="background-color: #0091ea; color: #ffffff;"
+                               class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="View Detail">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 @empty

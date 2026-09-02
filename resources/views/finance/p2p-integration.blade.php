@@ -167,10 +167,13 @@
                             {{ $log->synced_at }}
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <button @click="showDetail({{ json_encode($log) }})"
-                                    class="px-2.5 py-1 bg-slate-100 hover:bg-primary hover:text-white dark:bg-slate-800 dark:hover:bg-primary text-slate-600 dark:text-slate-300 rounded-lg text-xs font-bold transition cursor-pointer">
-                                Detail Log
-                            </button>
+                            <div class="flex items-center justify-center">
+                                <button @click="showDetail({{ json_encode($log) }})"
+                                        style="background-color: #0091ea; color: #ffffff;"
+                                        class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="Detail Log">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     @empty
