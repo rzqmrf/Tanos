@@ -813,8 +813,8 @@
                                 </svg>
                             </button>
                             <div x-show="activeSubMenu === 'monitoring_api'" x-transition class="pl-4 space-y-1" style="display: none;">
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>P2P Integration</a>
-                                <a href="{{ route('under.construction') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Payroll Tagihan</a>
+                                <a href="{{ route('p2p.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('p2p.*') ? 'text-primary dark:text-sky-400 font-bold' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>P2P Integration</a>
+                                <a href="{{ route('payroll.billing.index') }}" class="flex items-center py-1 px-2 text-xs font-semibold rounded-lg {{ request()->routeIs('payroll.billing.*') ? 'text-primary dark:text-sky-400 font-bold' : 'text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-slate-200' }}"><span class="mr-1.5 text-xs font-extrabold text-current">•</span>Payroll Tagihan</a>
                             </div>
                         </div>
                         @endif

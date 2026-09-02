@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Regional;
 use App\Models\Segment;
+use App\Models\Partner;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
 
@@ -18,6 +19,7 @@ class ProjectController extends Controller
             'projects' => Project::oldest()->paginate(25),
             'regionals' => Regional::orderBy('name')->get(),
             'segments' => Segment::orderBy('name')->get(),
+            'partners' => Partner::orderBy('name')->get(),
             'months' => $dashboardService->getMonths(),
         ]);
     }

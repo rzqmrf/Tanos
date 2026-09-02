@@ -21,6 +21,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\FinanceMasterController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\P2pMonitoringController;
+use App\Http\Controllers\PayrollBillingController;
 
 // auth
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -73,6 +75,16 @@ Route::prefix('dashboard')->group(function () {
 
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index')->middleware('permission:reports');
     Route::get('reports/export', [ReportController::class, 'export'])->name('reports.export')->middleware('permission:reports');
+    
+    // Monitoring API & P2P Integration
+    Route::get('monitoring/p2p', [P2pMonitoringController::class, 'index'])->name('p2p.index')->middleware('permission:settings');
+    Route::post('monitoring/p2p/sync', [P2pMonitoringController::class, 'syncNow'])->name('p2p.sync')->middleware('permission:settings');
+
+    // Payroll Tagihan TAD (Finance & Billing)
+    Route::get('finance/payroll-billing', [PayrollBillingController::class, 'index'])->name('payroll.billing.index')->middleware('permission:invoices');
+    Route::post('finance/payroll-billing/{id}/pranota', [PayrollBillingController::class, 'generatePranota'])->name('payroll.billing.pranota')->middleware('permission:invoices');
+    Route::post('finance/payroll-billing/{id}/post', [PayrollBillingController::class, 'postToBilling'])->name('payroll.billing.post')->middleware('permission:invoices');
+
     Route::get('under-construction', function () {
         return view('general.under-construction');
     })->name('under.construction');

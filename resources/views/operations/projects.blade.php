@@ -167,8 +167,18 @@
                         <input type="text" name="project_name" required placeholder="Contoh: PBR - BJTI - PENGAMANAN SURABAYA" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pelanggan (Customer) *</label>
-                        <input type="text" name="customer_name" required placeholder="Contoh: PT BERLIAN JASA TERMINAL INDONESIA" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">Nama Pelanggan (Customer) *</label>
+                            <a href="{{ route('general.partner') }}" target="_blank" class="text-[10px] text-primary hover:underline font-bold">+ Master Partner</a>
+                        </div>
+                        <input type="text" name="customer_name" list="partner-customer-list" required placeholder="Pilih atau ketik nama pelanggan..." class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
+                        <datalist id="partner-customer-list">
+                            @if(isset($partners))
+                                @foreach($partners as $partner)
+                                    <option value="{{ $partner->name }}">{{ $partner->code }} - {{ $partner->city ?? 'Pelindo' }}</option>
+                                @endforeach
+                            @endif
+                        </datalist>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA) *</label>
