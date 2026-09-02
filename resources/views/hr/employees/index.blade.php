@@ -110,7 +110,7 @@
                     @forelse($employees as $item)
                     <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
                         <!-- NIPP -->
-                        <td class="py-3.5 px-3 font-mono font-bold text-primary">
+                        <td class="py-3.5 px-3 font-mono font-bold text-primary dark:text-sky-400">
                             <a href="{{ route('employees.show', $item->id) }}" class="hover:underline">
                                 {{ $item->nipp ?? ('NIP-' . $item->id) }}
                             </a>

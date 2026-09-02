@@ -66,3 +66,17 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+/* High contrast primary text & badge styles in Dark Mode */
+.dark .text-primary {
+    color: #38bdf8 !important;
+}
+.dark .hover\:text-primary:hover {
+    color: #7dd3fc !important;
+}
+.dark .bg-primary-light {
+    background-color: rgba(56, 189, 248, 0.15) !important;
+}
+.dark .border-primary-subtle {
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
