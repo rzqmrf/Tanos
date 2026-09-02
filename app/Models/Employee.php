@@ -64,11 +64,6 @@ class Employee extends Model
         return $this->hasMany(CicoCorrection::class);
     }
 
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
-
     public function movements()
     {
         return $this->hasMany(EmployeeMovement::class);
