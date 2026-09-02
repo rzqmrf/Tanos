@@ -9,11 +9,21 @@ class Project extends Model
 {
     protected $fillable = [
         'project_code',
+        'id_project_humanis',
         'project_name',
+        'description',
         'customer_name',
+        'vendor',
         'contract_number',
+        'project_category',
+        'contract_type',
+        'location',
+        'regional_unit',
+        'unit_kerja',
         'start_date',
         'end_date',
+        'validity_start',
+        'validity_end',
         'cost_center',
         'fund_center',
         'month',
@@ -26,6 +36,8 @@ class Project extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'validity_start' => 'date',
+        'validity_end' => 'date',
         'active' => 'boolean',
     ];
 

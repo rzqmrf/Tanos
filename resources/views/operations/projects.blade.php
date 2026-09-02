@@ -1,406 +1,333 @@
 @extends('layouts.app')
 
-@section('title', 'Master Data: Projects — Tanos ERP')
+@section('title', 'Project Definition — Tanos ERP')
 
 @section('content')
-<div class="space-y-6 w-full">
-    <!-- Page Header & Action -->
+<div class="space-y-6 w-full" x-data="projectDefinitionManager()">
+    <!-- Header & Action -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
+            <!-- Breadcrumbs matching Tanos -->
+            <div class="flex items-center space-x-2 text-xs font-semibold text-slate-400 dark:text-slate-400 mb-1.5">
+                <a href="{{ route('dashboard.index') }}" class="hover:text-primary transition flex items-center">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
                 </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Project System</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Master Projects</span>
+                <span>/</span>
+                <span class="text-slate-600 dark:text-slate-300">Project Definition</span>
+                <span>/</span>
+                <span class="text-slate-600 dark:text-slate-300">Index</span>
             </div>
 
             <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Master Data: Projects
+                Project Definition
             </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Manajemen proyek, alokasi Cost Center & Fund Center untuk pencatatan Expense, Revenue, & Budgeting.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Project System - Project Definition</p>
         </div>
 
-        @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
-        <button onclick="document.getElementById('modal-create-project').classList.remove('hidden')" 
-            class="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Tambah Project</span>
-        </button>
-        @endif
+        <div class="flex items-center gap-2">
+            <button @click="openCreateModal()" 
+                    style="background-color: #00c853; color: #ffffff;"
+                    class="px-4 py-2 hover:opacity-90 text-xs font-bold rounded-lg shadow-xs transition flex items-center space-x-1.5 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <span>Create New</span>
+            </button>
+        </div>
     </div>
 
     @if(session('success'))
-        <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-sm font-semibold">
-            {{ session('success') }}
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-sm font-semibold flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>{{ session('success') }}</span>
         </div>
     @endif
 
-    @if ($errors->any())
-        <div class="p-4 bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-xl text-sm">
-            <ul class="list-disc pl-5">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <!-- Main Card Container matching Screenshot 2 -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-6">
+        <!-- Card Title -->
+        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-6">
+            Project Definition - List
+        </h2>
 
-    <!-- Data Table Card Section -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+        <!-- Top Controls: Export Buttons (Left) & Search (Right) -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+            <!-- 3 Export Buttons matching Tanos screenshot -->
+            <div class="flex items-center space-x-2">
+                <!-- Copy / Text Export -->
+                <button type="button" onclick="copyTableToClipboard()" title="Copy Table" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-lg transition border border-slate-200/80 dark:border-slate-700 shadow-2xs cursor-pointer">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                </button>
+                <!-- PDF Export -->
+                <button type="button" onclick="window.print()" title="Export PDF" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-lg transition border border-slate-200/80 dark:border-slate-700 shadow-2xs cursor-pointer flex items-center space-x-1">
+                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5z"/></svg>
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">PDF</span>
+                </button>
+                <!-- Excel Export -->
+                <a href="{{ route('reports.export', ['format' => 'excel']) }}" title="Export Excel" class="p-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-lg transition border border-slate-200/80 dark:border-slate-700 shadow-2xs cursor-pointer flex items-center space-x-1">
+                    <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-2.5l-1.5 2.5-1.5-2.5H9l2.5 4L9 21h2.5l1.5-2.5 1.5 2.5H17l-2.5-4 2.5-4z"/></svg>
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-slate-400">X</span>
+                </a>
+            </div>
+
+            <!-- Search matching Tanos layout: Label Search: then input -->
+            <form method="GET" action="{{ route('projects.index') }}" class="flex items-center space-x-2">
+                <label class="text-xs font-semibold text-slate-600 dark:text-slate-400">Search:</label>
+                <input type="text" name="search" value="{{ $search ?? '' }}" 
+                       class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-primary w-48 sm:w-60">
+            </form>
+        </div>
+
+        <!-- Table matching Screenshot 2: Code, Id Project Humanis, Name, Description, Action -->
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[1350px]">
+            <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
-                        <th class="p-4 align-middle w-[180px] min-w-[180px]">Kode Proyek (SAP)</th>
-                        <th class="p-4 align-middle w-[320px] min-w-[320px]">Nama Proyek / Pelanggan</th>
-                        <th class="p-4 align-middle w-[160px] min-w-[160px]">No. Kontrak (OA)</th>
-                        <th class="p-4 align-middle w-[220px] min-w-[220px]">Masa Berlaku</th>
-                        <th class="p-4 align-middle w-[150px] min-w-[150px]">Segmen & Region</th>
-                        <th class="p-4 align-middle w-[180px] min-w-[180px]">Cost & Fund Center SAP</th>
-                        <th class="p-4 align-middle text-right w-[140px] min-w-[140px]">Cost Budget</th>
-                        <th class="p-4 align-middle text-center w-[100px] min-w-[100px]">Status</th>
-                        <th class="p-4 align-middle text-center w-[120px] min-w-[120px]">Aksi</th>
+                    <tr class="border-b border-slate-200/80 dark:border-slate-800 text-slate-800 dark:text-slate-100 font-bold">
+                        <th class="py-3 px-4">Code</th>
+                        <th class="py-3 px-4">Id Project Humanis</th>
+                        <th class="py-3 px-4">Name</th>
+                        <th class="py-3 px-4">Description</th>
+                        <th class="py-3 px-4 text-center w-28">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                     @forelse($projects as $item)
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
-                        <td class="p-4 align-middle font-mono font-bold text-blue-650 dark:text-blue-400 text-[13px] whitespace-nowrap">{{ $item->project_code ?? '-' }}</td>
-                        <td class="p-4 align-middle w-[320px] min-w-[320px]">
-                            <span class="block font-bold text-slate-800 dark:text-slate-100">{{ $item->project_name ?? 'N/A' }}</span>
-                            <span class="block text-xs text-slate-400 dark:text-slate-500 mt-0.5">{{ $item->customer_name ?? '-' }}</span>
+                    <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                        <td class="py-3.5 px-4 font-mono font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                            {{ $item->project_code }}
                         </td>
-                        <td class="p-4 align-middle text-[13px] text-slate-550 dark:text-slate-400 font-semibold whitespace-nowrap">{{ $item->contract_number ?? '-' }}</td>
-                        <td class="p-4 align-middle text-xs whitespace-nowrap">
-                            <div class="flex items-center space-x-1.5 text-slate-500 dark:text-slate-450">
-                                <span class="font-semibold">{{ $item->start_date ? $item->start_date->format('d M Y') : 'N/A' }}</span>
-                                <span class="text-slate-300 dark:text-slate-700">-</span>
-                                <span class="font-semibold">{{ $item->end_date ? $item->end_date->format('d M Y') : 'N/A' }}</span>
-                            </div>
-                            <span class="block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 font-medium">Bulan: {{ $item->month }}</span>
+                        <td class="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-400">
+                            {{ $item->id_project_humanis ?? '-' }}
                         </td>
-                        <td class="p-4 align-middle text-xs font-semibold whitespace-nowrap">
-                            <span class="block text-slate-700 dark:text-slate-300">{{ $item->segment }}</span>
-                            <span class="block text-slate-400 dark:text-slate-500 font-normal mt-0.5">{{ $item->regional }}</span>
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">
+                            {{ $item->project_name }}
                         </td>
-                        <td class="p-4 align-middle text-[11px] font-mono whitespace-nowrap">
-                            <span class="block text-slate-700 dark:text-slate-200"><span class="font-bold text-blue-600 dark:text-blue-400">CC:</span> {{ $item->cost_center ?? ('CC-' . strtoupper(str_replace([' ', '-'], '', $item->project_code))) }}</span>
-                            <span class="block text-slate-700 dark:text-slate-200 mt-0.5"><span class="font-bold text-purple-600 dark:text-purple-400">FC:</span> {{ $item->fund_center ?? ('FC-' . strtoupper(str_replace([' ', '-'], '', $item->project_code))) }}</span>
+                        <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">
+                            {{ $item->description ?? 'Tenaga Alih Daya' }}
                         </td>
-                        <td class="p-4 align-middle text-right font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
-                            Rp {{ number_format($item->cost, 0, ',', '.') }}
-                        </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
-                            <span class="inline-block px-2.5 py-1 {{ $item->active == 1 ? 'bg-emerald-55/10 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400' : 'bg-rose-55/10 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400' }} rounded-md text-xs font-bold">
-                                {{ $item->active == 1 ? 'Active' : 'Inactive' }}
-                            </span>
-                        </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
+                        <td class="py-3.5 px-4 text-center">
+                            <!-- Action Buttons: Blue Magnifier (View), Purple Pencil (Edit), Red Trash (Delete) -->
                             <div class="flex items-center justify-center space-x-1.5">
-                                <a href="/dashboard/projects/{{ $item->id }}/wbs" class="p-1.5 text-indigo-650 dark:text-indigo-400 hover:text-indigo-855 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg transition" title="Kelola WBS">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                        <rect x="3" y="3" width="6" height="6" rx="1.5" />
-                                        <rect x="3" y="15" width="6" height="6" rx="1.5" />
-                                        <rect x="15" y="9" width="6" height="6" rx="1.5" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 6h3v12H9M12 12h3" />
-                                    </svg>
+                                <!-- Blue View Detail -->
+                                <a href="{{ route('projects.show', $item->id) }}" 
+                                   style="background-color: #0091ea; color: #ffffff;"
+                                   title="View Detail"
+                                   class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </a>
-                                @if(in_array(session('user.role'), ['Admin', 'Project Manager', 'Finance Manager']))
-                                <button onclick="openEditModal({{ json_encode($item) }})" class="p-1.5 text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg transition" title="Edit Proyek">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" /></svg>
+
+                                <!-- Purple Edit -->
+                                <button type="button" 
+                                        @click="openEditModal(@json($item))"
+                                        style="background-color: #7c4dff; color: #ffffff;"
+                                        title="Edit"
+                                        class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 </button>
-                                <form action="/dashboard/projects/{{ $item->id }}" method="POST" class="inline" onsubmit="return confirm('Yakin hapus proyek ini?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="p-1.5 text-rose-600 dark:text-rose-400 hover:text-rose-800 bg-rose-50 dark:bg-rose-950/30 rounded-lg transition" title="Hapus Proyek">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+
+                                <!-- Red Delete -->
+                                <form action="{{ route('projects.destroy', $item->id) }}" method="POST" class="inline"
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus Project Definition ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            style="background-color: #ff1744; color: #ffffff;"
+                                            title="Delete"
+                                            class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
-                                @endif
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="p-8 text-center text-slate-400">Belum ada data proyek.</td>
+                        <td colspan="5" class="py-8 text-center text-slate-400">
+                            Tidak ada data Project Definition yang sesuai.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        
-        <div class="mt-4">
+
+        <!-- Pagination -->
+        <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
             {{ $projects->links() }}
         </div>
     </div>
-</div>
 
-<!-- MODAL CREATE PROJECT -->
-<div id="modal-create-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
-        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
-            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">+ Tambah Data Project (Entry Project)</h3>
-            <button onclick="document.getElementById('modal-create-project').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
-            </button>
-        </div>
-        <form action="{{ route('projects.store') }}" method="POST" class="space-y-4">
-            @csrf
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Kolom Kiri: Detail Proyek & Pelanggan -->
-                <div class="space-y-4">
-                    <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Detail Kontrak & Proyek</h4>
-                    
+    <!-- MODAL CREATE / EDIT -->
+    <div x-show="isModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800" @click.outside="isModalOpen = false">
+            <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="text-base font-bold text-slate-800 dark:text-slate-100" x-text="isEdit ? 'Edit Project Definition' : 'Create New Project Definition'"></h3>
+                <button @click="isModalOpen = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <form :action="formAction" method="POST" class="space-y-4 text-xs">
+                @csrf
+                <template x-if="isEdit">
+                    <input type="hidden" name="_method" value="PUT">
+                </template>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Kode Proyek / SAP *</label>
-                        <input type="text" name="project_code" required placeholder="Contoh: S/PS-2024-04-00062" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Code *</label>
+                        <input type="text" name="project_code" x-model="formData.project_code" required placeholder="Contoh: S/PS-2024-01-00010" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary font-mono">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Proyek *</label>
-                        <input type="text" name="project_name" required placeholder="Contoh: PBR - BJTI - PENGAMANAN SURABAYA" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Id Project Humanis</label>
+                        <input type="text" name="id_project_humanis" x-model="formData.id_project_humanis" placeholder="Contoh: 108" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
                     </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Name *</label>
+                    <input type="text" name="project_name" x-model="formData.project_name" required placeholder="Contoh: TAD - REG3 - JOPRO ..." class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary uppercase">
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Description</label>
+                    <textarea name="description" x-model="formData.description" rows="2" placeholder="Deskripsi proyek..." class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase">Nama Pelanggan (Customer) *</label>
-                            <a href="{{ route('general.partner') }}" target="_blank" class="text-[10px] text-primary hover:underline font-bold">+ Master Partner</a>
-                        </div>
-                        <input type="text" name="customer_name" list="partner-customer-list" required placeholder="Pilih atau ketik nama pelanggan..." class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Vendor / Customer *</label>
+                        <input type="text" name="vendor" x-model="formData.vendor" list="partner-customer-list" required placeholder="PT Pelabuhan Indonesia (Persero)..." class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
                         <datalist id="partner-customer-list">
                             @if(isset($partners))
                                 @foreach($partners as $partner)
-                                    <option value="{{ $partner->name }}">{{ $partner->code }} - {{ $partner->city ?? 'Pelindo' }}</option>
+                                    <option value="{{ $partner->name }}">{{ $partner->code }}</option>
                                 @endforeach
                             @endif
                         </datalist>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA) *</label>
-                        <input type="text" name="contract_number" required placeholder="Contoh: OA-2024-0098" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Mulai *</label>
-                            <input type="date" name="start_date" value="{{ date('Y-m-d') }}" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Selesai *</label>
-                            <input type="date" name="end_date" value="{{ date('Y-12-31') }}" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                        </div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Location *</label>
+                        <input type="text" name="location" x-model="formData.location" placeholder="Contoh: Tanjung Perak" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
                     </div>
                 </div>
 
-                <!-- Kolom Kanan: Finansial & SAP Integration -->
-                <div class="space-y-4">
-                    <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Integrasi SAP & Anggaran</h4>
-                    
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan Pengikatan *</label>
-                        <select name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                            @foreach($months as $m)
-                                <option value="{{ $m }}">{{ $m }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional *</label>
-                            <select name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                                <option value="">-- Pilih Regional --</option>
-                                @foreach($regionals as $reg)
-                                    <option value="{{ $reg->name }}">{{ $reg->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment *</label>
-                            <select name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                                <option value="">-- Pilih Segment --</option>
-                                @foreach($segments as $seg)
-                                    <option value="{{ $seg->name }}">{{ $seg->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    {{-- Cost Center & Fund Center Auto-Generation Container --}}
-                    <div class="p-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/70 rounded-xl space-y-2">
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-blue-900 dark:text-blue-200">
-                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 10.5 10.875v-1.5a3.375 3.375 0 0 0-3.375-3.375H4.5" /></svg>
-                            <span>Otomatis Membuat Wadah SAP:</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 text-[11px]">
-                            <div>
-                                <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1">Cost Center SAP</label>
-                                <input type="text" name="cost_center" placeholder="Otomatis: CC-[KODE]" class="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-lg text-xs font-mono focus:outline-none focus:border-blue-500">
-                            </div>
-                            <div>
-                                <label class="block font-bold text-slate-600 dark:text-slate-400 mb-1">Fund Center SAP</label>
-                                <input type="text" name="fund_center" placeholder="Otomatis: FC-[KODE]" class="w-full px-3 py-1.5 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-lg text-xs font-mono focus:outline-none focus:border-blue-500">
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-blue-700 dark:text-blue-300 font-medium">Bila dikosongkan, sistem otomatis menerbitkan Cost Center & Fund Center sebagai wadah Expense, Revenue, & Budgeting proyek.</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Budget (IDR) *</label>
-                        <input type="number" name="cost" required placeholder="Contoh: 500000000" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Project Category *</label>
+                        <input type="text" name="project_category" x-model="formData.project_category" placeholder="01. Tenaga Alih Daya Operasional" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Status Proyek *</label>
-                        <select name="active" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Contract Type *</label>
+                        <input type="text" name="contract_type" x-model="formData.contract_type" placeholder="NON-JOPRO" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
                     </div>
                 </div>
-            </div>
 
-            <div class="flex justify-end space-x-2 pt-4 border-t border-slate-150 dark:border-slate-800">
-                <button type="button" onclick="document.getElementById('modal-create-project').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">Batal</button>
-                <button type="submit" style="background-color: #007bff; color: #ffffff;" class="px-4 py-2 hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer border-0">Simpan Data</button>
-            </div>
-        </form>
-    </div>
-</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Regional Unit *</label>
+                        <input type="text" name="regional_unit" x-model="formData.regional_unit" placeholder="Regional PDS Jawa" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Unit Kerja *</label>
+                        <input type="text" name="unit_kerja" x-model="formData.unit_kerja" placeholder="PT Pelabuhan Indonesia..." class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
+                    </div>
+                </div>
 
-<!-- MODAL EDIT PROJECT -->
-<div id="modal-edit-project" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-xl border border-slate-100 dark:border-slate-800">
-        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-150 dark:border-slate-800">
-            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Edit Data Project</h3>
-            <button onclick="document.getElementById('modal-edit-project').classList.add('hidden')" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
-            </button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Expected Start</label>
+                        <input type="date" name="start_date" x-model="formData.start_date" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Expected End</label>
+                        <input type="date" name="end_date" x-model="formData.end_date" class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-100 focus:outline-none focus:border-primary">
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end space-x-2">
+                    <button type="button" @click="isModalOpen = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold rounded-lg text-xs transition">
+                        Batal
+                    </button>
+                    <button type="submit" style="background-color: #00c853; color: #ffffff;" class="px-4 py-2 font-bold rounded-lg text-xs hover:opacity-90 transition">
+                        Simpan Project
+                    </button>
+                </div>
+            </form>
         </div>
-        <form id="form-edit-project" action="" method="POST" class="space-y-4">
-            @csrf @method('PUT')
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Kolom Kiri -->
-                <div class="space-y-4">
-                    <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Detail Kontrak & Proyek</h4>
-                    
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Kode Proyek / SAP</label>
-                        <input type="text" id="edit-project-code" name="project_code" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Proyek</label>
-                        <input type="text" id="edit-project-name" name="project_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nama Pelanggan (Customer)</label>
-                        <input type="text" id="edit-customer-name" name="customer_name" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 uppercase">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Nomor Kontrak (OA)</label>
-                        <input type="text" id="edit-contract-number" name="contract_number" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Mulai</label>
-                            <input type="date" id="edit-start-date" name="start_date" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Tanggal Selesai</label>
-                            <input type="date" id="edit-end-date" name="end_date" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kolom Kanan -->
-                <div class="space-y-4">
-                    <h4 class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Integrasi SAP & Anggaran</h4>
-                    
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Bulan Pengikatan</label>
-                        <select id="edit-month" name="month" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                            @foreach($months as $m)
-                                <option value="{{ $m }}">{{ $m }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Regional</label>
-                            <select id="edit-regional" name="regional" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                                @foreach($regionals as $reg)
-                                    <option value="{{ $reg->name }}">{{ $reg->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Segment</label>
-                            <select id="edit-segment" name="segment" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                                @foreach($segments as $seg)
-                                    <option value="{{ $seg->name }}">{{ $seg->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Center SAP</label>
-                            <input type="text" id="edit-cost-center" name="cost_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Fund Center SAP</label>
-                            <input type="text" id="edit-fund-center" name="fund_center" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-mono">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Cost Budget (IDR)</label>
-                        <input type="number" id="edit-cost" name="cost" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Status Proyek</label>
-                        <select id="edit-active" name="active" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-xl text-sm focus:outline-none focus:border-blue-500">
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex justify-end space-x-2 pt-4 border-t border-slate-150 dark:border-slate-800">
-                <button type="button" onclick="document.getElementById('modal-edit-project').classList.add('hidden')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">Batal</button>
-                <button type="submit" style="background-color: #007bff; color: #ffffff;" class="px-4 py-2 hover:opacity-90 text-white rounded-xl text-sm font-semibold shadow-sm cursor-pointer border-0">Simpan Perubahan</button>
-            </div>
-        </form>
     </div>
 </div>
 
 <script>
-function openEditModal(project) {
-    document.getElementById('form-edit-project').action = '/dashboard/projects/' + project.id;
-    document.getElementById('edit-project-code').value = project.project_code || '';
-    document.getElementById('edit-project-name').value = project.project_name || '';
-    document.getElementById('edit-customer-name').value = project.customer_name || '';
-    document.getElementById('edit-contract-number').value = project.contract_number || '';
-    
-    if (project.start_date) {
-        document.getElementById('edit-start-date').value = project.start_date.substring(0, 10);
+function projectDefinitionManager() {
+    return {
+        isModalOpen: false,
+        isEdit: false,
+        formAction: '{{ route("projects.store") }}',
+        formData: {
+            project_code: '',
+            id_project_humanis: '',
+            project_name: '',
+            description: 'Tenaga Alih Daya',
+            vendor: 'PT Pelabuhan Indonesia (Persero) Regional 3',
+            project_category: '01. Tenaga Alih Daya Operasional',
+            contract_type: 'NON-JOPRO',
+            location: 'Tanjung Perak',
+            regional_unit: 'Regional PDS Jawa',
+            unit_kerja: 'PT Pelabuhan Indonesia (Persero) Regional 3 - Subreg Jawa - Tanjung Perak',
+            start_date: '2025-02-19',
+            end_date: '2025-12-31',
+        },
+        openCreateModal() {
+            this.isEdit = false;
+            this.formAction = '{{ route("projects.store") }}';
+            this.formData = {
+                project_code: 'S/PS-2024-01-000' + (Math.floor(Math.random() * 90) + 10),
+                id_project_humanis: (Math.floor(Math.random() * 90) + 110).toString(),
+                project_name: '',
+                description: 'Tenaga Alih Daya',
+                vendor: 'PT Pelabuhan Indonesia (Persero) Regional 3',
+                project_category: '01. Tenaga Alih Daya Operasional',
+                contract_type: 'NON-JOPRO',
+                location: 'Tanjung Perak',
+                regional_unit: 'Regional PDS Jawa',
+                unit_kerja: 'PT Pelabuhan Indonesia (Persero) Regional 3 - Subreg Jawa - Tanjung Perak',
+                start_date: '2025-02-19',
+                end_date: '2025-12-31',
+            };
+            this.isModalOpen = true;
+        },
+        openEditModal(item) {
+            this.isEdit = true;
+            this.formAction = '/dashboard/projects/' + item.id;
+            this.formData = {
+                project_code: item.project_code || '',
+                id_project_humanis: item.id_project_humanis || '',
+                project_name: item.project_name || '',
+                description: item.description || 'Tenaga Alih Daya',
+                vendor: item.vendor || item.customer_name || '',
+                project_category: item.project_category || '01. Tenaga Alih Daya Operasional',
+                contract_type: item.contract_type || 'NON-JOPRO',
+                location: item.location || '',
+                regional_unit: item.regional_unit || '',
+                unit_kerja: item.unit_kerja || '',
+                start_date: item.start_date ? item.start_date.substring(0, 10) : '',
+                end_date: item.end_date ? item.end_date.substring(0, 10) : '',
+            };
+            this.isModalOpen = true;
+        }
     }
-    if (project.end_date) {
-        document.getElementById('edit-end-date').value = project.end_date.substring(0, 10);
-    }
+}
 
-    document.getElementById('edit-month').value = project.month || '';
-    document.getElementById('edit-regional').value = project.regional || '';
-    document.getElementById('edit-segment').value = project.segment || '';
-    document.getElementById('edit-cost-center').value = project.cost_center || '';
-    document.getElementById('edit-fund-center').value = project.fund_center || '';
-    document.getElementById('edit-cost').value = project.cost || 0;
-    document.getElementById('edit-active').value = project.active ? 1 : 0;
-
-    document.getElementById('modal-edit-project').classList.remove('hidden');
+function copyTableToClipboard() {
+    let text = "Code\tId Project Humanis\tName\tDescription\n";
+    document.querySelectorAll("tbody tr").forEach(tr => {
+        let cells = tr.querySelectorAll("td");
+        if (cells.length >= 4) {
+            text += `${cells[0].innerText.trim()}\t${cells[1].innerText.trim()}\t${cells[2].innerText.trim()}\t${cells[3].innerText.trim()}\n`;
+        }
+    });
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Data tabel Project Definition berhasil di-copy ke clipboard!");
+    });
 }
 </script>
 @endsection
