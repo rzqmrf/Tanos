@@ -1,39 +1,40 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Employee Change Notice (ECN) — Tanos ERP')
 
 @section('content')
 <div class="space-y-6 w-full" x-data="{ showCreateModal: false }">
     <!-- Header Block -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5A3.375 3.375 0 0 0 10.125 2.25H9.75m0 18.75h-1.5a3.375 3.375 0 0 1-3.375-3.375V6.108c0-1.58 1.086-2.97 2.658-3.238a42.946 42.946 0 0 1 11.233 0A3.13 3.13 0 0 1 19.5 6.108V18a3.375 3.375 0 0 1-3.375 3.375h-1.5m-9 0-.374.056a3 3 0 0 1-3.396-3.072V6.108c0-1.58 1.086-2.97 2.658-3.238a42.946 42.946 0 0 1 11.233 0a3.13 3.13 0 0 1 2.658 3.238v6.782m-3-1.5H9.75m3 3H9.75m3 3H9.75" />
-                </svg>
+    <x-page-header 
+        title="Employee Change Notice (ECN)" 
+        subtitle="Catat dan usulkan mutasi, demosi, promosi jabatan, dan perpindahan proyek karyawan."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Resource' => '#',
+            'Employee Change Notice' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+            <div class="flex items-center gap-2">
+                <button onclick="alert('Usulan ECN berhasil dikirim ke SAP')" class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                    <span>Send to SAP</span>
+                </button>
+                <button onclick="alert('Fitur Import Data ECN / Mutasi Massal siap digunakan')" class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                    <span>Import ECN Data</span>
+                </button>
+                <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Ajukan Usulan Mutasi</span>
+                </button>
             </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Employee Change Notice (ECN)</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-550 font-semibold">Catat dan usulkan mutasi, demosi, promosi jabatan, dan perpindahan proyek karyawan.</p>
-            </div>
-        </div>
-        
-        @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-        <div class="flex items-center gap-2">
-            <button onclick="alert('Usulan ECN berhasil dikirim ke SAP')" class="inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                Send to SAP
-            </button>
-            <button onclick="alert('Fitur Import Data ECN / Mutasi Massal siap digunakan')" class="inline-flex items-center gap-1.5 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
-                Import ECN Data
-            </button>
-            <button @click="showCreateModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
-                + Ajukan Usulan Mutasi
-            </button>
-        </div>
-        @endif
-    </div>
+            @endif
+        </x-slot:action>
+    </x-page-header>
 
     @if(session('success'))
         <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">

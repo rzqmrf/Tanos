@@ -6,19 +6,15 @@
 <div class="space-y-6" x-data="{ activeTab: 'leaves' }">
 
     {{-- HEADER BLOCK --}}
-    <div class="flex items-center justify-between flex-wrap gap-4">
-        <div class="flex items-center space-x-3">
-            <div class="p-2.5 bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 rounded-xl border border-violet-100/60 dark:border-violet-800/30">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Panel Persetujuan ESS</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Halaman Admin & HR untuk memproses persetujuan cuti/izin serta koreksi absensi TAD Pelindo.</p>
-            </div>
-        </div>
-    </div>
+    <x-page-header 
+        title="Panel Persetujuan ESS" 
+        subtitle="Halaman Admin & HR untuk memproses persetujuan cuti/izin serta koreksi absensi TAD Pelindo."
+        :breadcrumbs="[
+            'General' => '#',
+            'ESS' => '#',
+            'Panel Persetujuan' => ''
+        ]"
+    />
 
     {{-- NOTIFICATIONS --}}
     @if(session('success'))

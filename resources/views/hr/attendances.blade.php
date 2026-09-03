@@ -1,26 +1,27 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Absensi & Cuti — Tanos ERP')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm w-full">
     <!-- Header Section -->
-    <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+    <x-page-header 
+        title="Absensi & Cuti Pegawai" 
+        subtitle="Pencatatan dan pemantauan kehadiran pegawai harian."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Resource' => '#',
+            'Absensi & Cuti' => ''
+        ]"
+    >
+        <x-slot:action>
+            <button onclick="openCreateModal()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Absensi & Cuti Pegawai</h1>
-                <p class="text-sm text-slate-400 dark:text-slate-500">Pencatatan dan pemantauan kehadiran pegawai harian.</p>
-            </div>
-        </div>
-        <button onclick="openCreateModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-sm transition shrink-0 cursor-pointer">
-            + Catat Kehadiran
-        </button>
-    </div>
+                <span>Catat Kehadiran</span>
+            </button>
+        </x-slot:action>
+    </x-page-header>
 
     <!-- Success Alert -->
     @if(session('success'))

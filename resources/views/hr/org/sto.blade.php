@@ -15,34 +15,27 @@
     </div>
     @endif
 
-    {{-- BREADCRUMB & TOP CONTAINER --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-6 shadow-sm">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1">
-                    <a href="{{ route('dashboard.index') }}" class="hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
-                        <span>Home</span>
-                    </a>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <span>Human Resource</span>
-                    <span class="text-slate-300 dark:text-slate-600">/</span>
-                    <span class="text-slate-700 dark:text-slate-300 font-bold">Organizational Structure</span>
-                </div>
-                <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Organizational Structure</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5">Definisikan hierarki unit kerja, formasi jabatan, dan pegawai terintegrasi SAP & MDM.</p>
-            </div>
-
+    {{-- PAGE HEADER --}}
+    <x-page-header 
+        title="Organizational Structure" 
+        subtitle="Definisikan hierarki unit kerja, formasi jabatan, dan pegawai terintegrasi SAP & MDM."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Resource' => '#',
+            'Organizational Structure' => ''
+        ]"
+    >
+        <x-slot:action>
             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-            <div class="flex items-center gap-2 shrink-0">
-                <button @click="showCreateModal = true" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
-                    <span class="text-sm">+</span>
-                    <span>Create New Unit</span>
-                </button>
-            </div>
+            <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Create New Unit</span>
+            </button>
             @endif
-        </div>
-    </div>
+        </x-slot:action>
+    </x-page-header>
 
     {{-- MAIN CONTENT CARD --}}
     <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden p-6 space-y-6">

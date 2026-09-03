@@ -1,39 +1,40 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Job Positions (Formation) — Tanos ERP')
 
 @section('content')
 <div class="space-y-6 w-full" x-data="{ showCreateModal: false }">
     <!-- Header Block -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-650 dark:text-blue-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.052 21.12a11.375 11.375 0 0 1-5.022-1.883v-.109A9.375 9.375 0 0 1 15 19.128ZM15 19.128v-.003c-.5.91-.786 1.957-.786 3.07M14.214 16.058A9.337 9.337 0 0 0 10.05 15.25a9.38 9.38 0 0 0-2.624.372 4.125 4.125 0 0 0-7.533 2.493M21.5 7.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm14.25 9a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0ZM4.5 15a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                </svg>
+    <x-page-header 
+        title="Job Position (Formasi Jabatan)" 
+        subtitle="Kelola spesifikasi jabatan karyawan, cost center terkait, dan integrasi SAP."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Resource' => '#',
+            'Job Positions' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+            <div class="flex items-center gap-2">
+                <button onclick="alert('Formasi Jabatan berhasil dikirim dan terintegrasi dengan SAP')" class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                    <span>Send to SAP</span>
+                </button>
+                <button onclick="alert('Fitur Duplicate Job Formation massal siap digunakan')" class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.375v-3.5" /></svg>
+                    <span>Duplicate Formation</span>
+                </button>
+                <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Tambah Jabatan</span>
+                </button>
             </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Job Position (Formasi Jabatan)</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-550 font-semibold">Kelola spesifikasi jabatan karyawan, cost center terkait, dan integrasi SAP.</p>
-            </div>
-        </div>
-        
-        @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-        <div class="flex items-center gap-2">
-            <button onclick="alert('Formasi Jabatan berhasil dikirim dan terintegrasi dengan SAP')" class="inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                Send to SAP
-            </button>
-            <button onclick="alert('Fitur Duplicate Job Formation massal siap digunakan')" class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 px-3 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.375v-3.5" /></svg>
-                Duplicate Formation
-            </button>
-            <button @click="showCreateModal = true" class="bg-blue-650 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
-                + Tambah Jabatan
-            </button>
-        </div>
-        @endif
-    </div>
+            @endif
+        </x-slot:action>
+    </x-page-header>
 
     @if(session('success'))
         <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">

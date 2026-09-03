@@ -6,29 +6,18 @@
 <div class="space-y-6" x-data="{ activeTab: '{{ $activeTab }}' }">
     
     <!-- Page Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Finance & Accounting</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Executive Reports</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Laporan & Analisis Eksekutif
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Monitoring komprehensif RAB Proyek, Billing SAP, dan Remunerasi HCM.</p>
-        </div>
-
-        <div class="flex items-center space-x-2.5">
+    <x-page-header 
+        title="Laporan & Analisis Eksekutif" 
+        subtitle="Monitoring komprehensif RAB Proyek, Billing SAP, dan Remunerasi HCM."
+        :breadcrumbs="[
+            'General' => '#',
+            'Finance & Accounting' => '#',
+            'Executive Reports' => ''
+        ]"
+    >
+        <x-slot:action>
             <a :href="'{{ route('reports.export') }}?tab=' + activeTab + '&year={{ $selectedYear }}&regional={{ $selectedRegional }}&segment={{ $selectedSegment }}'" 
-               class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-sm transition-all duration-150 cursor-pointer">
+               class="inline-flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs transition-all duration-150 cursor-pointer border-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>

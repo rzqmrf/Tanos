@@ -5,36 +5,27 @@
 @section('content')
 <div class="space-y-6 w-full" x-data="p2pMonitoring()">
     <!-- Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Monitoring API</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">P2P Integration</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                P2P Integration & SAP Gateway
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Monitoring sinkronisasi transaksi Procure-to-Pay (P2P), integrasi SAP Project Budget, dan SAP AR Journal.</p>
-        </div>
-
-        <form action="{{ route('p2p.sync') }}" method="POST">
-            @csrf
-            <button type="submit" class="px-4 py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-2 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-                <span>Trigger Sync Manual</span>
-            </button>
-        </form>
-    </div>
+    <x-page-header 
+        title="P2P Integration & SAP Gateway" 
+        subtitle="Monitoring sinkronisasi transaksi Procure-to-Pay (P2P), integrasi SAP Project Budget, dan SAP AR Journal."
+        :breadcrumbs="[
+            'General' => '#',
+            'Monitoring API' => '#',
+            'P2P Integration' => ''
+        ]"
+    >
+        <x-slot:action>
+            <form action="{{ route('p2p.sync') }}" method="POST">
+                @csrf
+                <button type="submit" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    <span>Trigger Sync Manual</span>
+                </button>
+            </form>
+        </x-slot:action>
+    </x-page-header>
 
     @if(session('success'))
         <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-sm font-semibold flex items-center space-x-2">

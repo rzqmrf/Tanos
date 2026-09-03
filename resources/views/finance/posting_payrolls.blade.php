@@ -28,19 +28,15 @@
      }">
      
     <!-- Header Section -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Posting Payroll (General Ledger)</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Tempat penampungan Jurnal dokumen Payroll Result Pelindo Group (On-Cycle & Off-Cycle).</p>
-            </div>
-        </div>
-    </div>
+    <x-page-header 
+        title="Posting Payroll (General Ledger)" 
+        subtitle="Tempat penampungan Jurnal dokumen Payroll Result Pelindo Group (On-Cycle & Off-Cycle)."
+        :breadcrumbs="[
+            'General' => '#',
+            'Finance & Accounting' => '#',
+            'Posting Payroll' => ''
+        ]"
+    />
 
     @if(session('success'))
         <div class="mb-5 p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">

@@ -6,34 +6,32 @@
 <div class="space-y-6" x-data="{ activeTab: 'leaves', leaveModal: false, cicoModal: false }">
 
     {{-- HEADER BLOCK --}}
-    <div class="flex items-center justify-between flex-wrap gap-4">
-        <div class="flex items-center space-x-3">
-            <div class="p-2.5 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-xl border border-blue-100/60 dark:border-blue-800/30">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
+    <x-page-header 
+        title="Employee Self Service (ESS)" 
+        subtitle="Layanan mandiri karyawan untuk pengajuan cuti, izin, dan koreksi jam absensi."
+        :breadcrumbs="[
+            'General' => '#',
+            'ESS' => '#',
+            'Portal ESS' => ''
+        ]"
+    >
+        <x-slot:action>
+            <div class="flex items-center gap-2.5">
+                <button @click="leaveModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Ajukan Cuti / Izin</span>
+                </button>
+                <button @click="cicoModal = true" class="px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Koreksi Jam Absen (CICO)</span>
+                </button>
             </div>
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Employee Self Service (ESS)</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Layanan mandiri karyawan untuk pengajuan cuti, izin, dan koreksi jam absensi.</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-            <button @click="leaveModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm cursor-pointer flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                Ajukan Cuti / Izin
-            </button>
-            <button @click="cicoModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm cursor-pointer flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                Koreksi Jam Absen (CICO)
-            </button>
-        </div>
-    </div>
+        </x-slot:action>
+    </x-page-header>
 
     {{-- NOTIFICATIONS --}}
     @if(session('success'))

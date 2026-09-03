@@ -45,27 +45,26 @@
 }">
 
     <!-- Header Section -->
-    <div class="flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-19.5 5.25h19.5m-19.5 0h19.5M2.25 12h19.5m-19.5 0h19.5m-19.5 5.25h19.5m-19.5 0h19.5M3 19.5h18a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 21 4.5H3a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 3 19.5Z" />
+    <x-page-header 
+        title="Billing: Pranota & Nota" 
+        subtitle="Manajemen pembuatan Pranota Billing proyek hingga posting Invoice AR ke SAP."
+        :breadcrumbs="[
+            'General' => '#',
+            'Finance & Accounting' => '#',
+            'Billing & Nota' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
+            <button @click="showManualModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Billing: Pranota & Nota</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-500 font-medium">Manajemen pembuatan Pranota Billing proyek hingga posting Invoice AR ke SAP.</p>
-            </div>
-        </div>
-        
-        @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'invoices'))
-        <div class="flex gap-2">
-            <button @click="showManualModal = true" class="bg-indigo-650 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
-                + Pranota Manual
+                <span>Pranota Manual</span>
             </button>
-        </div>
-        @endif
-    </div>
+            @endif
+        </x-slot:action>
+    </x-page-header>
 
     <!-- Navigation Tabs (Pranota vs Nota) -->
     <div class="flex border-b border-slate-200 dark:border-slate-800">
