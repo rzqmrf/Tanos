@@ -138,20 +138,6 @@ class AttendanceController extends Controller
             'status'         => 'required',
             'clock_in'       => 'nullable',
             'clock_out'      => 'nullable',
-            'overtime_hours' => 'nullable',
-            'notes'          => 'nullable',
-        ]);
-
-        // Helper pintar konversi jam (Support AM/PM & 24 jam)
-        $parseTime = function ($timeString) {
-            if (empty($timeString) || $timeString === '-') return null;
-            try {
-                return Carbon::parse($timeString)->format('H:i:s');
-            } catch (\Exception $e) {
-                return null;
-            }
-        };
-
         // Format Tanggal
         $formattedDate = Carbon::parse($validData['date'])->toDateString();
 

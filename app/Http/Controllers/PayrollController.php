@@ -51,6 +51,49 @@ class PayrollController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $projects = Project::orderBy('segment')->get();
+        return view('finance.payrolls.create', [
+            'projects' => $projects,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $period = PayrollPeriod::with('project')->findOrFail($id);
+        $projects = Project::orderBy('segment')->get();
+        return view('finance.payrolls.edit', [
+            'period' => $period,
+            'projects' => $projects,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $period = PayrollPeriod::findOrFail($id);
+        $validData = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'name' => 'required|string|max:255',
+            'type' => 'required|in:On-Cycle,Off-Cycle',
+            'month' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $period->update($validData);
+
+        return redirect()->route('payrolls.show', $period->id)->with('success', 'Periode payroll berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $period = PayrollPeriod::findOrFail($id);
+        $period->delete();
+
+        return redirect()->route('payrolls.index')->with('success', 'Periode payroll berhasil dihapus!');
+    }
+
     public function store(Request $request)
     {
         $validData = $request->validate([

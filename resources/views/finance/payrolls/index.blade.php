@@ -3,7 +3,7 @@
 @section('title', 'HCM: Period Payroll — Tanos ERP')
 
 @section('content')
-<div x-data="{ showCreateModal: false }">
+<div>
      
     <x-page-header 
         title="Period Payroll" 
@@ -17,15 +17,21 @@
     >
         <x-slot:action>
             @if(\App\Models\RolePermission::hasPermission(session('user.role'), 'payroll'))
-            <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
+            <a href="{{ route('payrolls.create') }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 <span>Buat Periode Payroll</span>
-            </button>
+            </a>
             @endif
         </x-slot:action>
     </x-page-header>
+
+    @if(session('success'))
+    <div class="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">
+        {{ session('success') }}
+    </div>
+    @endif
 
     <!-- Filters Section -->
     <form action="{{ route('payrolls.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-4 rounded-xl shadow-xs mb-6">
@@ -69,99 +75,88 @@
         </div>
     </form>
 
-                    <td class="p-4">{{ $item->start_date->format('d M Y') }}</td>
-                    <td class="p-4">{{ $item->end_date->format('d M Y') }}</td>
-                    <td class="p-4">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider
-                            {{ $item->status === 'Draft' ? 'bg-slate-100 text-slate-700 dark:bg-slate-850 dark:text-slate-300' : '' }}
-                            {{ $item->status === 'Simulated' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400' : '' }}
-                            {{ $item->status === 'Completed' ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400' : '' }}
-                            {{ $item->status === 'Posted' ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/20 dark:text-blue-400' : '' }}
-                            {{ $item->status === 'Voided' ? 'bg-rose-50 text-rose-700 dark:bg-rose-950/20 dark:text-rose-400' : '' }}
-                        ">
-                            {{ $item->status }}
-                        </span>
-                    </td>
-                    <td class="p-4 text-center">
-                        <div class="flex items-center justify-center">
-                            <a href="{{ route('payrolls.show', $item->id) }}" 
-                               style="background-color: #0091ea; color: #ffffff;"
-                               class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="View Detail">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <!-- Data Table Container -->
+    <x-data-card 
+        title="Period Payroll - List" 
+        :total="$periods->total()"
+        :show-per-page="false"
+        :show-search="false"
+    >
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-4">Nama Periode</th>
+                        <th class="py-3.5 px-4">Project</th>
+                        <th class="py-3.5 px-4 text-center">Tipe</th>
+                        <th class="py-3.5 px-4">Bulan</th>
+                        <th class="py-3.5 px-4">Tanggal Mulai</th>
+                        <th class="py-3.5 px-4">Tanggal Selesai</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th class="py-3.5 px-4 text-center w-28">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
+                    @forelse($periods as $item)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">
+                            <a href="{{ route('payrolls.show', $item->id) }}" class="hover:text-primary transition">
+                                {{ $item->name }}
                             </a>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="8" class="p-12 text-center text-slate-400">Belum ada periode payroll yang terdaftar.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    {{-- MODAL: CREATE PERIOD --}}
-    <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md" style="display: none;">
-        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl w-full max-w-md p-6 shadow-2xl relative" @click.away="showCreateModal = false">
-            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4">Buat Periode Gaji Baru</h3>
-            
-            <form action="{{ route('payrolls.store') }}" method="POST" class="space-y-4">
-                @csrf
-                
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Pilih Project / Segment</label>
-                    <select name="project_id" required 
-                            class="w-full text-xs px-3 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-slate-800 dark:text-slate-200">
-                        @foreach($projects as $proj)
-                            <option value="{{ $proj->id }}">{{ $proj->segment }} - {{ $proj->regional }} ({{ $proj->month }})</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 mb-1.5">Nama Periode</label>
-                    <input type="text" name="name" required placeholder="Contoh: Gaji Security Perak Ags 2026" 
-                           class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Tipe Payroll</label>
-                        <select name="type" required 
-                                class="w-full text-xs px-3 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-slate-800 dark:text-slate-200">
-                            <option value="On-Cycle">On-Cycle</option>
-                            <option value="Off-Cycle">Off-Cycle</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Bulan Proses</label>
-                        <input type="text" name="month" required placeholder="Contoh: Agustus 2026" 
-                               class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Tanggal Mulai</label>
-                        <input type="date" name="start_date" required 
-                               class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5">Tanggal Selesai</label>
-                        <input type="date" name="end_date" required 
-                               class="w-full text-xs px-3.5 py-2.5 bg-slate-50 dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none text-slate-800 dark:text-slate-200">
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-                    <button type="button" @click="showCreateModal = false" class="px-4 py-2 text-slate-500 text-xs font-bold rounded-xl hover:bg-slate-50 transition cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 bg-indigo-650 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow transition cursor-pointer">Buat Periode</button>
-                </div>
-            </form>
+                        </td>
+                        <td class="py-3.5 px-4 font-semibold text-primary">
+                            {{ $item->project ? $item->project->segment . ' - ' . $item->project->regional : '—' }}
+                        </td>
+                        <td class="py-3.5 px-4 text-center font-bold text-[11px]">
+                            <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded font-mono">
+                                {{ $item->type }}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 font-semibold text-slate-700 dark:text-slate-300">
+                            {{ $item->month }}
+                        </td>
+                        <td class="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400">
+                            {{ $item->start_date ? $item->start_date->format('d M Y') : '—' }}
+                        </td>
+                        <td class="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400">
+                            {{ $item->end_date ? $item->end_date->format('d M Y') : '—' }}
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            @if($item->status === 'Completed' || $item->status === 'Posted')
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>{{ strtoupper($item->status) }}
+                            </span>
+                            @else
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded-lg inline-flex items-center">
+                                {{ strtoupper($item->status) }}
+                            </span>
+                            @endif
+                        </td>
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <x-action-button type="view" :href="route('payrolls.show', $item->id)" title="Lihat Detail Gaji" />
+                                <x-action-button type="edit" :href="route('payrolls.edit', $item->id)" title="Edit Periode" />
+                                <form action="{{ route('payrolls.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Hapus periode payroll {{ $item->name }}?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-action-button type="delete" title="Hapus Periode" />
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="py-8 text-center text-slate-400 dark:text-slate-500">Belum ada periode payroll yang terdaftar.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    </div>
-
+        @if($periods->hasPages())
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            {{ $periods->links() }}
+        </div>
+        @endif
+    </x-data-card>
 </div>
 @endsection
-

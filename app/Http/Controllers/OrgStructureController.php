@@ -93,6 +93,53 @@ class OrgStructureController extends Controller
         return redirect()->back()->with('success', 'Unit berhasil dikirim & disinkronkan ke SAP!');
     }
 
+    public function stoCreate()
+    {
+        $rootDivs = Division::all();
+        return view('hr.org.sto-create', compact('rootDivs'));
+    }
+
+    public function stoShow($id)
+    {
+        $division = Division::with(['parent', 'children', 'jobPositions.employees'])->findOrFail($id);
+        return view('hr.org.sto-show', compact('division'));
+    }
+
+    public function stoEdit($id)
+    {
+        $division = Division::findOrFail($id);
+        $rootDivs = Division::where('id', '!=', $id)->get();
+        return view('hr.org.sto-edit', compact('division', 'rootDivs'));
+    }
+
+    public function stoUpdate(Request $request, $id)
+    {
+        $division = Division::findOrFail($id);
+        $valid = $request->validate([
+            'code' => 'required|string|unique:divisions,code,' . $id,
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:divisions,id',
+            'description' => 'nullable|string',
+            'regional' => 'nullable|string',
+            'cost_center' => 'nullable|string',
+            'unit_type' => 'required|string',
+            'valid_from' => 'nullable|date',
+            'valid_to' => 'nullable|date',
+        ]);
+
+        $division->update($valid);
+
+        return redirect()->route('org.sto.show', $division->id)->with('success', 'Unit/Departemen berhasil diperbarui!');
+    }
+
+    public function stoDestroy($id)
+    {
+        $division = Division::findOrFail($id);
+        $division->delete();
+
+        return redirect()->route('org.sto.index')->with('success', 'Unit/Departemen berhasil dihapus!');
+    }
+
     // ==========================================
     // 2. JOB FORMATION (JOB POSITIONS)
     // ==========================================
@@ -103,6 +150,55 @@ class OrgStructureController extends Controller
         $parentJobs = JobPosition::where('active', true)->get();
 
         return view('hr.org.job', compact('jobPositions', 'divisions', 'parentJobs'));
+    }
+
+    public function jobCreate()
+    {
+        $divisions = Division::where('active', true)->get();
+        $parentJobs = JobPosition::where('active', true)->get();
+        return view('hr.org.job-create', compact('divisions', 'parentJobs'));
+    }
+
+    public function jobShow($id)
+    {
+        $job = JobPosition::with(['division', 'parent', 'employees'])->findOrFail($id);
+        return view('hr.org.job-show', compact('job'));
+    }
+
+    public function jobEdit($id)
+    {
+        $job = JobPosition::findOrFail($id);
+        $divisions = Division::where('active', true)->get();
+        $parentJobs = JobPosition::where('active', true)->where('id', '!=', $id)->get();
+        return view('hr.org.job-edit', compact('job', 'divisions', 'parentJobs'));
+    }
+
+    public function jobUpdate(Request $request, $id)
+    {
+        $job = JobPosition::findOrFail($id);
+        $valid = $request->validate([
+            'division_id' => 'required|exists:divisions,id',
+            'parent_id' => 'nullable|exists:job_positions,id',
+            'code' => 'required|string|unique:job_positions,code,' . $id,
+            'name' => 'required|string|max:255',
+            'regional' => 'nullable|string',
+            'cost_center' => 'nullable|string',
+            'cost_center_name' => 'nullable|string',
+            'valid_from' => 'nullable|date',
+            'valid_to' => 'nullable|date',
+        ]);
+
+        $job->update($valid);
+
+        return redirect()->route('org.job.show', $job->id)->with('success', 'Jabatan berhasil diperbarui!');
+    }
+
+    public function jobDestroy($id)
+    {
+        $job = JobPosition::findOrFail($id);
+        $job->delete();
+
+        return redirect()->route('org.job.index')->with('success', 'Jabatan berhasil dihapus!');
     }
 
     public function jobStore(Request $request)
@@ -172,8 +268,6 @@ class OrgStructureController extends Controller
     }
 
     // ==========================================
-    // 3. ECN (EMPLOYEE CHANGE NOTICE)
-    // ==========================================
     public function ecnIndex()
     {
         $movements = EmployeeMovement::with(['employee', 'fromPosition', 'toPosition', 'fromProject', 'toProject'])
@@ -184,6 +278,57 @@ class OrgStructureController extends Controller
         $projects = Project::where('active', true)->get();
 
         return view('hr.org.ecn', compact('movements', 'employees', 'jobPositions', 'projects'));
+    }
+
+    public function ecnCreate()
+    {
+        $employees = Employee::orderBy('name', 'asc')->get();
+        $jobPositions = JobPosition::where('active', true)->get();
+        $projects = Project::where('active', true)->get();
+        return view('hr.org.ecn-create', compact('employees', 'jobPositions', 'projects'));
+    }
+
+    public function ecnShow($id)
+    {
+        $movement = EmployeeMovement::with(['employee', 'fromPosition', 'toPosition', 'fromProject', 'toProject'])->findOrFail($id);
+        return view('hr.org.ecn-show', compact('movement'));
+    }
+
+    public function ecnEdit($id)
+    {
+        $movement = EmployeeMovement::findOrFail($id);
+        $employees = Employee::orderBy('name', 'asc')->get();
+        $jobPositions = JobPosition::where('active', true)->get();
+        $projects = Project::where('active', true)->get();
+        return view('hr.org.ecn-edit', compact('movement', 'employees', 'jobPositions', 'projects'));
+    }
+
+    public function ecnUpdate(Request $request, $id)
+    {
+        $movement = EmployeeMovement::findOrFail($id);
+        $valid = $request->validate([
+            'ecn_name' => 'required|string|max:255',
+            'employee_id' => 'required|exists:employees,id',
+            'movement_type' => 'required|string',
+            'to_position_id' => 'nullable|exists:job_positions,id',
+            'to_project_id' => 'nullable|exists:projects,id',
+            'reference_number' => 'required|string|unique:employee_movements,reference_number,' . $id,
+            'effective_date' => 'required|date',
+            'valid_from' => 'nullable|date',
+            'valid_to' => 'nullable|date',
+        ]);
+
+        $movement->update($valid);
+
+        return redirect()->route('org.ecn.show', $movement->id)->with('success', 'Usulan ECN berhasil diperbarui!');
+    }
+
+    public function ecnDestroy($id)
+    {
+        $movement = EmployeeMovement::findOrFail($id);
+        $movement->delete();
+
+        return redirect()->route('org.ecn.index')->with('success', 'Usulan ECN berhasil dihapus!');
     }
 
     public function ecnStore(Request $request)

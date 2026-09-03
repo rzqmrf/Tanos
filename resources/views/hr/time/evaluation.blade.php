@@ -13,15 +13,14 @@
             'Human Resource' => '#',
             'Time Evaluation' => ''
         ]"
-    >
-        <x-slot:action>
+            <x-slot:action>
             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-            <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+            <a href="{{ route('org.evaluations.create') }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 <span>Create Parameter Rules</span>
-            </button>
+            </a>
             @endif
         </x-slot:action>
     </x-page-header>
@@ -33,62 +32,66 @@
     @endif
 
     <!-- Rules List Section -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-6 shadow-sm">
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-            <table class="w-full text-left border-collapse min-w-[900px]">
+    <x-data-card 
+        title="Time Evaluation Rules - List" 
+        :total="count($evaluations)"
+        :show-per-page="false"
+        :show-search="false"
+    >
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
-                        <th class="p-4 align-middle">Nama Aturan</th>
-                        <th class="p-4 align-middle">Deskripsi</th>
-                        <th class="p-4 align-middle text-center">Toleransi Terlambat</th>
-                        <th class="p-4 align-middle text-center">Toleransi Pulang Cepat</th>
-                        <th class="p-4 align-middle">Masa Berlaku</th>
-                        <th class="p-4 align-middle text-center">Status</th>
-                        <th class="p-4 align-middle text-center">Action</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-4">Nama Aturan</th>
+                        <th class="py-3.5 px-4">Deskripsi</th>
+                        <th class="py-3.5 px-4 text-center">Toleransi Terlambat</th>
+                        <th class="py-3.5 px-4 text-center">Toleransi Pulang Cepat</th>
+                        <th class="py-3.5 px-4">Masa Berlaku</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th class="py-3.5 px-4 text-center w-28">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($evaluations as $eval)
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition {{ !$eval->is_active ? 'opacity-65' : '' }}">
-                        <td class="p-4 align-middle font-bold text-slate-855 dark:text-slate-200">
-                            {{ $eval->name }}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition {{ !$eval->is_active ? 'opacity-65' : '' }}">
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">
+                            <a href="{{ route('org.evaluations.show', $eval->id) }}" class="hover:text-primary transition">
+                                {{ $eval->name }}
+                            </a>
                         </td>
-                        <td class="p-4 align-middle">
+                        <td class="py-3.5 px-4">
                             {{ $eval->description ?? '-' }}
                         </td>
-                        <td class="p-4 align-middle text-center font-bold text-slate-700 dark:text-slate-300">
+                        <td class="py-3.5 px-4 text-center font-bold text-slate-700 dark:text-slate-300">
                             {{ $eval->late_tolerance_minutes }} Menit
                         </td>
-                        <td class="p-4 align-middle text-center font-bold text-slate-700 dark:text-slate-300">
+                        <td class="py-3.5 px-4 text-center font-bold text-slate-700 dark:text-slate-300">
                             {{ $eval->early_departure_minutes }} Menit
                         </td>
-                        <td class="p-4 align-middle text-xs text-slate-500 dark:text-slate-450 whitespace-nowrap">
-                            {{ $eval->valid_from->format('d M Y') }} - {{ $eval->valid_to->format('d M Y') }}
+                        <td class="py-3.5 px-4 text-xs font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                            {{ $eval->valid_from ? $eval->valid_from->format('d M Y') : '—' }} - {{ $eval->valid_to ? $eval->valid_to->format('d M Y') : '—' }}
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
-                            <span class="inline-block px-2.5 py-1 {{ $eval->is_active ? 'bg-emerald-55/10 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-450' }} rounded-md text-xs font-bold">
-                                {{ $eval->is_active ? 'Active (Running)' : 'Inactive' }}
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <span class="inline-block px-2.5 py-1 {{ $eval->is_active ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400' }} rounded-lg text-[10px] font-bold">
+                                {{ $eval->is_active ? 'ACTIVE (RUNNING)' : 'INACTIVE' }}
                             </span>
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
                             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-                            <div class="flex items-center justify-center space-x-2">
-                                <button @click="editItem = { id: '{{ $eval->id }}', name: '{{ $eval->name }}', description: '{{ $eval->description }}', valid_from: '{{ $eval->valid_from->format('Y-m-d') }}', valid_to: '{{ $eval->valid_to->format('Y-m-d') }}', late_tolerance_minutes: '{{ $eval->late_tolerance_minutes }}', early_departure_minutes: '{{ $eval->early_departure_minutes }}', is_active: {{ $eval->is_active ? 1 : 0 }} }; showEditModal = true" class="text-xs bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-indigo-650 dark:text-indigo-400 font-bold px-2.5 py-1.5 rounded-lg transition cursor-pointer">
-                                    Edit
-                                </button>
+                            <div class="flex items-center justify-center space-x-1.5">
+                                <x-action-button type="view" :href="route('org.evaluations.show', $eval->id)" title="Lihat Detail Parameter" />
+                                <x-action-button type="edit" :href="route('org.evaluations.edit', $eval->id)" title="Edit Parameter" />
                                 <form action="{{ route('org.evaluations.destroy', $eval->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus aturan toleransi ini?')" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-xs bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-rose-600 dark:text-rose-400 font-bold px-2.5 py-1.5 rounded-lg transition cursor-pointer">
-                                        Delete
-                                    </button>
+                                    <x-action-button type="delete" title="Hapus Parameter" />
                                 </form>
                             </div>
                             @else
                                 <span class="text-xs text-slate-400 italic">No Action</span>
                             @endif
                         </td>
-                    </tr>
+                    </tr>r>
                     @empty
                     <tr>
                         <td colspan="7" class="p-12 text-center text-slate-400 text-xs">

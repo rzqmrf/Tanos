@@ -219,18 +219,33 @@ Route::prefix('dashboard')->group(function () {
 
     // Organizational Structure Modules (STO, Job Position, ECN)
     Route::get('org-structure/sto', [OrgStructureController::class, 'stoIndex'])->name('org.sto.index')->middleware('permission:employees');
+    Route::get('org-structure/sto/create', [OrgStructureController::class, 'stoCreate'])->name('org.sto.create')->middleware('permission:employees');
     Route::post('org-structure/sto', [OrgStructureController::class, 'stoStore'])->name('org.sto.store')->middleware('permission:employees');
+    Route::get('org-structure/sto/{id}', [OrgStructureController::class, 'stoShow'])->name('org.sto.show')->middleware('permission:employees');
+    Route::get('org-structure/sto/{id}/edit', [OrgStructureController::class, 'stoEdit'])->name('org.sto.edit')->middleware('permission:employees');
+    Route::put('org-structure/sto/{id}', [OrgStructureController::class, 'stoUpdate'])->name('org.sto.update')->middleware('permission:employees');
+    Route::delete('org-structure/sto/{id}', [OrgStructureController::class, 'stoDestroy'])->name('org.sto.destroy')->middleware('permission:employees');
     Route::post('org-structure/sto/{id}/delimit', [OrgStructureController::class, 'stoDelimit'])->name('org.sto.delimit')->middleware('permission:employees');
     Route::post('org-structure/sto/{id}/send-sap', [OrgStructureController::class, 'stoSendSap'])->name('org.sto.send-sap')->middleware('permission:employees');
 
     Route::get('org-structure/job', [OrgStructureController::class, 'jobIndex'])->name('org.job.index')->middleware('permission:employees');
+    Route::get('org-structure/job/create', [OrgStructureController::class, 'jobCreate'])->name('org.job.create')->middleware('permission:employees');
     Route::post('org-structure/job', [OrgStructureController::class, 'jobStore'])->name('org.job.store')->middleware('permission:employees');
+    Route::get('org-structure/job/{id}', [OrgStructureController::class, 'jobShow'])->name('org.job.show')->middleware('permission:employees');
+    Route::get('org-structure/job/{id}/edit', [OrgStructureController::class, 'jobEdit'])->name('org.job.edit')->middleware('permission:employees');
+    Route::put('org-structure/job/{id}', [OrgStructureController::class, 'jobUpdate'])->name('org.job.update')->middleware('permission:employees');
+    Route::delete('org-structure/job/{id}', [OrgStructureController::class, 'jobDestroy'])->name('org.job.destroy')->middleware('permission:employees');
     Route::post('org-structure/job/{id}/delimit', [OrgStructureController::class, 'jobDelimit'])->name('org.job.delimit')->middleware('permission:employees');
     Route::post('org-structure/job/{id}/duplicate', [OrgStructureController::class, 'jobDuplicate'])->name('org.job.duplicate')->middleware('permission:employees');
     Route::post('org-structure/job/{id}/send-sap', [OrgStructureController::class, 'jobSendSap'])->name('org.job.send-sap')->middleware('permission:employees');
 
     Route::get('org-structure/ecn', [OrgStructureController::class, 'ecnIndex'])->name('org.ecn.index')->middleware('permission:employees');
+    Route::get('org-structure/ecn/create', [OrgStructureController::class, 'ecnCreate'])->name('org.ecn.create')->middleware('permission:employees');
     Route::post('org-structure/ecn', [OrgStructureController::class, 'ecnStore'])->name('org.ecn.store')->middleware('permission:employees');
+    Route::get('org-structure/ecn/{id}', [OrgStructureController::class, 'ecnShow'])->name('org.ecn.show')->middleware('permission:employees');
+    Route::get('org-structure/ecn/{id}/edit', [OrgStructureController::class, 'ecnEdit'])->name('org.ecn.edit')->middleware('permission:employees');
+    Route::put('org-structure/ecn/{id}', [OrgStructureController::class, 'ecnUpdate'])->name('org.ecn.update')->middleware('permission:employees');
+    Route::delete('org-structure/ecn/{id}', [OrgStructureController::class, 'ecnDestroy'])->name('org.ecn.destroy')->middleware('permission:employees');
     Route::post('org-structure/ecn/{id}/complete', [OrgStructureController::class, 'ecnComplete'])->name('org.ecn.complete')->middleware('permission:employees');
     Route::post('org-structure/ecn/{id}/send-sap', [OrgStructureController::class, 'ecnSendSap'])->name('org.ecn.send-sap')->middleware('permission:employees');
 
@@ -248,7 +263,10 @@ Route::prefix('dashboard')->group(function () {
     Route::delete('time-management/schedules/assign/{id}', [TimeManagementController::class, 'scheduleAssignDestroy'])->name('org.schedules.assign.destroy')->middleware('permission:schedules');
 
     Route::get('time-management/evaluations', [TimeManagementController::class, 'evaluationIndex'])->name('org.evaluations.index')->middleware('permission:employees');
+    Route::get('time-management/evaluations/create', [TimeManagementController::class, 'evaluationCreate'])->name('org.evaluations.create')->middleware('permission:employees');
     Route::post('time-management/evaluations', [TimeManagementController::class, 'evaluationStore'])->name('org.evaluations.store')->middleware('permission:employees');
+    Route::get('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationShow'])->name('org.evaluations.show')->middleware('permission:employees');
+    Route::get('time-management/evaluations/{id}/edit', [TimeManagementController::class, 'evaluationEdit'])->name('org.evaluations.edit')->middleware('permission:employees');
     Route::put('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationUpdate'])->name('org.evaluations.update')->middleware('permission:employees');
     Route::delete('time-management/evaluations/{id}', [TimeManagementController::class, 'evaluationDestroy'])->name('org.evaluations.destroy')->middleware('permission:employees');
 
@@ -260,8 +278,12 @@ Route::prefix('dashboard')->group(function () {
 
     // HCM Period Payroll & Component Formulation
     Route::get('payrolls', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payrolls.index')->middleware('permission:payroll');
+    Route::get('payrolls/create', [\App\Http\Controllers\PayrollController::class, 'create'])->name('payrolls.create')->middleware('permission:payroll');
     Route::post('payrolls', [\App\Http\Controllers\PayrollController::class, 'store'])->name('payrolls.store')->middleware('permission:payroll');
     Route::get('payrolls/{id}', [\App\Http\Controllers\PayrollController::class, 'show'])->name('payrolls.show')->middleware('permission:payroll');
+    Route::get('payrolls/{id}/edit', [\App\Http\Controllers\PayrollController::class, 'edit'])->name('payrolls.edit')->middleware('permission:payroll');
+    Route::put('payrolls/{id}', [\App\Http\Controllers\PayrollController::class, 'update'])->name('payrolls.update')->middleware('permission:payroll');
+    Route::delete('payrolls/{id}', [\App\Http\Controllers\PayrollController::class, 'destroy'])->name('payrolls.destroy')->middleware('permission:payroll');
     Route::post('payrolls/{id}/calculate', [\App\Http\Controllers\PayrollController::class, 'calculate'])->name('payrolls.calculate')->middleware('permission:payroll');
     Route::post('payrolls/{id}/copy-formula', [\App\Http\Controllers\PayrollController::class, 'copyFormula'])->name('payrolls.copy-formula')->middleware('permission:payroll');
     Route::post('payrolls/{id}/post-sap', [\App\Http\Controllers\PayrollController::class, 'postSap'])->name('payrolls.post-sap')->middleware('permission:payroll');

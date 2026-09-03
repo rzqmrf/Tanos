@@ -121,9 +121,51 @@ class TimeManagementController extends Controller
         return view('hr.time.evaluation', compact('evaluations'));
     }
 
-    public function evaluationsIndex()
+    public function evaluationCreate()
     {
-        return $this->evaluationIndex();
+        return view('hr.time.evaluation-create');
+    }
+
+    public function evaluationShow($id)
+    {
+        $item = TimeEvaluation::findOrFail($id);
+        return view('hr.time.evaluation-show', compact('item'));
+    }
+
+    public function evaluationEdit($id)
+    {
+        $item = TimeEvaluation::findOrFail($id);
+        return view('hr.time.evaluation-edit', compact('item'));
+    }
+
+    public function evaluationUpdate(Request $request, $id)
+    {
+        $item = TimeEvaluation::findOrFail($id);
+        $valid = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'valid_from' => 'required|date',
+            'valid_to' => 'required|date',
+            'late_tolerance_minutes' => 'required|integer|min:0',
+            'early_departure_minutes' => 'required|integer|min:0',
+            'is_active' => 'required|boolean'
+        ]);
+
+        if ($valid['is_active']) {
+            TimeEvaluation::where('id', '!=', $id)->where('is_active', true)->update(['is_active' => false]);
+        }
+
+        $item->update($valid);
+
+        return redirect()->route('org.evaluations.show', $item->id)->with('success', 'Parameter toleransi jam kerja berhasil diperbarui!');
+    }
+
+    public function evaluationDestroy($id)
+    {
+        $item = TimeEvaluation::findOrFail($id);
+        $item->delete();
+
+        return redirect()->route('org.evaluations.index')->with('success', 'Parameter toleransi jam kerja berhasil dihapus!');
     }
 
     public function evaluationStore(Request $request)
