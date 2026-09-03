@@ -58,89 +58,75 @@
 
     <!-- Main Card Container -->
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-5 sm:p-6">
-        
-        <!-- Card Header Title -->
-        <div class="mb-5">
-            <h2 class="text-base font-bold text-slate-800 dark:text-slate-100">
-                Bank ACS - List
-            </h2>
-        </div>
-
-        <!-- Toolbar: Export Buttons (Left) & Page Length + Search Box (Right) -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-            
-            <!-- Left Toolbar: Export Group & Length Selector -->
-            <div class="flex items-center space-x-3">
-                <!-- Export Group: Copy, PDF, Excel -->
-                <div class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/50 p-0.5 shadow-2xs">
-                    <!-- Copy Button -->
-                    <button type="button" @click="copyTableData()" title="Copy Table Data"
-                            class="px-2.5 py-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-white dark:hover:bg-slate-700/60 rounded-md transition cursor-pointer flex items-center space-x-1 text-xs">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                    </button>
-
-                    <!-- PDF Export Button -->
-                    <button type="button" @click="exportPdf()" title="Export PDF"
-                            class="px-2.5 py-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-white dark:hover:bg-slate-700/60 rounded-md transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                        <svg class="w-4 h-4 text-rose-500 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-[10px]">PDF</span>
-                    </button>
-
-                    <!-- Excel Export Button -->
-                    <button type="button" @click="exportExcel()" title="Export Excel / CSV"
-                            class="px-2.5 py-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-100 hover:bg-white dark:hover:bg-slate-700/60 rounded-md transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                        <svg class="w-4 h-4 text-emerald-600 mr-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v1H4zm0-2v-1h5v1H4zm0-2V8h5v1H4zm7 4v-1h5v1h-5zm0-2v-1h5v1h-5zm0-2V8h5v1h-5z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-[10px]">X</span>
-                    </button>
-                </div>
-
-                <!-- Page Size Selector -->
-                <div class="flex items-center space-x-1.5 text-xs text-slate-500 dark:text-slate-400">
-                    <select onchange="window.location.href = this.value;"
-                            class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs rounded-lg px-2.5 py-1.5 font-medium focus:outline-none focus:border-primary">
-                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 10]) }}" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10</option>
-                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 25]) }}" {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}>25</option>
-                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 50]) }}" {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}>50</option>
-                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 100]) }}" {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}>100</option>
-                    </select>
-                </div>
+             <!-- Card Header Title & Export Buttons -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 mb-5 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center space-x-2">
+                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
+                    Bank ACS - List
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                    {{ $bankAcs->total() }} total data
+                </span>
             </div>
 
-            <!-- Right Toolbar: Search Box -->
-            <form method="GET" action="{{ route('general.bank-acs') }}" class="flex items-center space-x-2">
-                @if(request('per_page'))
-                    <input type="hidden" name="per_page" value="{{ request('per_page') }}">
-                @endif
-                <label class="text-xs font-semibold text-slate-500 dark:text-slate-400">Search:</label>
-                <div class="relative">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder=""
-                           class="w-44 sm:w-56 px-3 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-lg text-xs focus:outline-none focus:border-primary">
-                    @if(request('search'))
-                        <a href="{{ route('general.bank-acs') }}" class="absolute right-2 top-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold" title="Clear">×</a>
-                    @endif
-                </div>
-            </form>
-
+            <!-- Export Buttons (Copy, PDF, Excel) -->
+            <div class="flex items-center space-x-2">
+                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
+                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Cetak</span>
+                </button>
+                <button type="button" onclick="window.print()" title="Export PDF"
+                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    <span>PDF</span>
+                </button>
+                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
+                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>XLS</span>
+                </a>
+            </div>
         </div>
 
-        <!-- Table Data matching Screenshot 1 -->
-        <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-800">
-            <table class="w-full text-left border-collapse" id="bankAcsTable">
+        <!-- Filter Controls (Show entries + Search) -->
+        <form method="GET" action="{{ route('general.bank-acs') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
+                <span>Tampilkan</span>
+                <select name="per_page" onchange="this.form.submit()"
+                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
+                    <option value="10" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}>100</option>
+                </select>
+                <span>entri per halaman</span>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <div class="relative min-w-[240px]">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
+                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                @if(request()->filled('search'))
+                <a href="{{ route('general.bank-acs') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
+                @endif
+            </div>
+        </form>
+
+        <!-- Table Data matching Golden Benchmark -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs" id="bankAcsTable">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100">
-                        <th class="py-3 px-4">Bank Name</th>
-                        <th class="py-3 px-4">Account No</th>
-                        <th class="py-3 px-4">Customer</th>
-                        <th class="py-3 px-4">Valid From</th>
-                        <th class="py-3 px-4">Valid To</th>
-                        <th class="py-3 px-4">Document Status</th>
-                        <th class="py-3 px-4 text-center w-24">Action</th>
+                    <tr class="bg-slate-50/80 dark:bg-slate-800/60 border-y border-slate-200 dark:border-slate-800 text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                        <th class="py-3.5 px-3">Bank Name</th>
+                        <th class="py-3.5 px-3">Account No</th>
+                        <th class="py-3.5 px-3">Customer</th>
+                        <th class="py-3.5 px-3">Valid From</th>
+                        <th class="py-3.5 px-3">Valid To</th>
+                        <th class="py-3.5 px-3">Document Status</th>
+                        <th class="py-3.5 px-3 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs text-slate-700 dark:text-slate-300">
@@ -195,36 +181,13 @@
 
                             <!-- Action Column: 3 Standard Action Buttons (Blue Inquiry, Purple Edit, Red Delete) -->
                             <td class="py-3.5 px-4 text-center">
-                                <div class="flex items-center justify-center space-x-1.5">
-                                    <!-- 1. Blue/Sky Detail / Inquiry Button -->
-                                    <button type="button" @click="openInquiryModal(@js($item), {{ $loop->iteration }})"
-                                            class="p-2 rounded-lg bg-sky-500 hover:bg-sky-600 text-white transition shadow-2xs flex items-center justify-center cursor-pointer"
-                                            title="Inquiry Bank ACS Customer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                        </svg>
-                                    </button>
-
-                                    <!-- 2. Purple Edit Button -->
-                                    <button type="button" @click="openEdit(@js($item))"
-                                            class="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition shadow-2xs flex items-center justify-center cursor-pointer"
-                                            title="Edit Data">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </button>
-
-                                    <!-- 3. Red/Rose Delete Button -->
+                                <div class="inline-flex items-center space-x-1.5">
+                                    <x-action-button type="view" :click="'openInquiryModal(' . json_encode($item) . ', ' . $loop->iteration . ')'" title="Inquiry Bank ACS Customer" />
+                                    <x-action-button type="edit" :click="'openEdit(' . json_encode($item) . ')'" title="Edit Data" />
                                     <form method="POST" action="{{ route('general.bank-acs.destroy', $item->id) }}" onsubmit="return confirm('Hapus data rekening {{ $item->account_number }}?');" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                                class="p-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition shadow-2xs flex items-center justify-center cursor-pointer"
-                                                title="Hapus Data">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                            </svg>
-                                        </button>
+                                        <x-action-button type="delete" title="Hapus Data" />
                                     </form>
                                 </div>
                             </td>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Partner Type Master — General Master TANOS ERP')
+@section('title', 'Partner Type Master — Tanos ERP')
 
 @section('content')
 <div class="space-y-6" x-data="{ 
@@ -29,7 +29,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
+            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4 print:hidden">
                 <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
                     <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
                     Home
@@ -49,7 +49,7 @@
         </div>
 
         <button @click="openCreate()"
-                class="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer">
+                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
@@ -57,136 +57,119 @@
         </button>
     </div>
 
-    <!-- Quick Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-primary-light text-primary flex items-center justify-center font-bold">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-                </svg>
-            </div>
-            <div>
-                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Total Kategori</span>
-                <span class="text-xl font-black text-slate-800 dark:text-slate-100">{{ $totalAll }}</span>
-            </div>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-            </div>
-            <div>
-                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Status Aktif</span>
-                <span class="text-xl font-black text-emerald-600 dark:text-emerald-400">{{ $totalActive }}</span>
-            </div>
-        </div>
-
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                </svg>
-            </div>
-            <div>
-                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Integrasi Modul</span>
-                <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">SAP & General Ledger</span>
-            </div>
+    <!-- Alert Notification -->
+    @if(session('success'))
+    <div class="p-4 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span>{{ session('success') }}</span>
         </div>
     </div>
+    @endif
 
-    <!-- Search & Filter Bar -->
-    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <form method="GET" action="{{ route('general.partner-type') }}" class="flex items-center space-x-2 flex-1 max-w-md">
-            <div class="relative w-full">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode, nama tipe partner..."
-                       class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-medium">
-                <div class="absolute left-3 top-2.5 text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                </div>
+    <!-- Main Card Container matching Golden Benchmark -->
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center space-x-2">
+                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
+                    Partner Type - List
+                </h2>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                    {{ $partnerTypes->total() }} total data
+                </span>
             </div>
-            <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-bold shadow-md shadow-primary transition cursor-pointer">Cari</button>
-            @if(request('search'))
-                <a href="{{ route('general.partner-type') }}" class="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold hover:bg-slate-200 transition">Reset</a>
-            @endif
+
+            <!-- Export Buttons (Copy, PDF, Excel) -->
+            <div class="flex items-center space-x-2">
+                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
+                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Cetak</span>
+                </button>
+                <button type="button" onclick="window.print()" title="Export PDF"
+                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    <span>PDF</span>
+                </button>
+                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
+                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>XLS</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Filter Controls (Show entries + Search) -->
+        <form method="GET" action="{{ route('general.partner-type') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
+                <span>Tampilkan</span>
+                <select name="per_page" onchange="this.form.submit()"
+                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
+                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                </select>
+                <span>entri per halaman</span>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <div class="relative min-w-[240px]">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
+                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                @if(request()->filled('search'))
+                <a href="{{ route('general.partner-type') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
+                @endif
+            </div>
         </form>
 
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('general.partner') }}" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center space-x-1.5">
-                <span>Daftar Mitraniaga</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg>
-            </a>
-        </div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+        <!-- Main Table -->
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table class="w-full text-left border-collapse text-xs">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-4">No</th>
-                        <th class="py-3.5 px-4">Kode Tipe</th>
-                        <th class="py-3.5 px-4">Nama Tipe Partner</th>
-                        <th class="py-3.5 px-4">Deskripsi / Peruntukan</th>
-                        <th class="py-3.5 px-4 text-center">Jumlah Mitra</th>
-                        <th class="py-3.5 px-4">Status</th>
-                        <th class="py-3.5 px-4 text-center w-28">Action</th>
+                    <tr class="bg-slate-50/80 dark:bg-slate-800/60 border-y border-slate-200 dark:border-slate-800 text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                        <th class="py-3.5 px-3">Kode Tipe</th>
+                        <th class="py-3.5 px-3 min-w-[180px]">Nama Tipe Partner</th>
+                        <th class="py-3.5 px-3 min-w-[220px]">Deskripsi / Peruntukan</th>
+                        <th class="py-3.5 px-3 text-center">Jumlah Mitra</th>
+                        <th class="py-3.5 px-3 text-center">Status</th>
+                        <th class="py-3.5 px-3 text-center whitespace-nowrap">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                     @forelse($partnerTypes as $index => $item)
-                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
-                            <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $partnerTypes->firstItem() + $index }}</td>
-                            <td class="py-3.5 px-4">
-                                <span class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle">
+                        <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
+                            <td class="py-3.5 px-3 font-mono font-bold text-primary">
+                                <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded font-bold text-[11px]">
                                     {{ $item->code }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">{{ $item->name }}</td>
-                            <td class="py-3.5 px-4 text-slate-500 dark:text-slate-400 max-w-xs">{{ $item->description ?? '—' }}</td>
-                            <td class="py-3.5 px-4 text-center">
-                                <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-[11px]">
+                            <td class="py-3.5 px-3 font-bold text-slate-900 dark:text-slate-100">{{ $item->name }}</td>
+                            <td class="py-3.5 px-3 text-slate-500 dark:text-slate-400">{{ $item->description ?? '—' }}</td>
+                            <td class="py-3.5 px-3 text-center font-bold">
+                                <span class="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px]">
                                     {{ $item->partners_count }} Mitra
                                 </span>
                             </td>
-                            <td class="py-3.5 px-4">
+                            <td class="py-3.5 px-3 text-center font-bold">
                                 @if($item->active)
-                                    <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Aktif
-                                    </span>
+                                    <span class="text-emerald-600 dark:text-emerald-400">Aktif</span>
                                 @else
-                                    <span class="px-2.5 py-1 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg inline-flex items-center">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>Non-Aktif
-                                    </span>
+                                    <span class="text-slate-400">Non-Aktif</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-center">
-                                <div class="flex items-center justify-center space-x-1.5">
-                                    <button @click="openEdit({{ json_encode($item) }})"
-                                            style="background-color: #7c4dff; color: #ffffff;"
-                                            class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="Edit Tipe">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                        </svg>
-                                    </button>
+                            <td class="py-3.5 px-3 text-center whitespace-nowrap">
+                                <div class="inline-flex items-center space-x-1.5">
+                                    <x-action-button type="edit" :click="'openEdit(' . json_encode($item) . ')'" title="Edit Tipe" />
                                     @if($item->partners_count == 0)
-                                        <form action="{{ route('general.partner-type.destroy', $item->id) }}" method="POST"
+                                        <form action="{{ route('general.partner-type.destroy', $item->id) }}" method="POST" class="inline"
                                               onsubmit="return confirm('Hapus Tipe Partner ini?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"
-                                                    style="background-color: #ff1744; color: #ffffff;"
-                                                    class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer" title="Hapus Tipe">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                            </button>
+                                            <x-action-button type="delete" title="Hapus Tipe" />
                                         </form>
                                     @endif
                                 </div>
@@ -194,8 +177,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-8 text-center text-slate-400 dark:text-slate-500">
-                                Belum ada data Partner Type yang tersimpan.
+                            <td colspan="6" class="py-8 text-center text-slate-400 dark:text-slate-500">
+                                Tidak ada data Partner Type ditemukan.
                             </td>
                         </tr>
                     @endforelse
@@ -203,58 +186,57 @@
             </table>
         </div>
 
+        <!-- Pagination Footer -->
         @if($partnerTypes->hasPages())
-            <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-                {{ $partnerTypes->links() }}
-            </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            {{ $partnerTypes->links() }}
+        </div>
         @endif
+
     </div>
 
-    <!-- Modal Form Tambah / Edit -->
-    <div x-show="showModal" x-transition class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
-        <div @click.away="showModal = false" class="bg-white dark:bg-slate-900 w-full max-w-md rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
-            <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <h3 class="text-base font-black text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Partner Type' : 'Tambah Partner Type Baru'"></h3>
-                <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
+    <!-- MODAL FORM CREATE / EDIT PARTNER TYPE -->
+    <div x-show="showModal" x-cloak 
+         class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform transition-all"
+             @click.away="showModal = false">
+            <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100" x-text="editMode ? 'Edit Partner Type' : 'Tambah Partner Type'"></h3>
+                <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold cursor-pointer">&times;</button>
             </div>
-
-            <form :action="editMode ? '{{ url('dashboard/general/partner-type') }}/' + form.id : '{{ route('general.partner-type.store') }}'" method="POST" class="p-6 space-y-4">
+            
+            <form :action="editMode ? '{{ url('/general/partner-type') }}/' + form.id : '{{ route('general.partner-type.store') }}'" method="POST" class="p-6 space-y-4">
                 @csrf
                 <template x-if="editMode">
                     <input type="hidden" name="_method" value="PUT">
                 </template>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Kode Partner Type <span class="text-rose-500">*</span></label>
-                    <input type="text" name="code" x-model="form.code" required placeholder="Contoh: VENDOR, CUSTOMER, SUBCON"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-mono font-bold uppercase">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kode Tipe *</label>
+                    <input type="text" name="code" x-model="form.code" required placeholder="misal: BUMN, VENDOR"
+                           class="w-full px-3.5 py-2 text-xs font-semibold border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 uppercase">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nama Partner Type <span class="text-rose-500">*</span></label>
-                    <input type="text" name="name" x-model="form.name" required placeholder="Contoh: Vendor Penyedia Barang & Jasa"
-                           class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary font-semibold">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Tipe Partner *</label>
+                    <input type="text" name="name" x-model="form.name" required placeholder="misal: Afiliasi BUMN / Pelindo Group"
+                           class="w-full px-3.5 py-2 text-xs font-semibold border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Deskripsi / Catatan</label>
-                    <textarea name="description" x-model="form.description" rows="3" placeholder="Keterangan peruntukan segmentasi rekanan..."
-                              class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl text-xs focus:outline-none focus:border-primary"></textarea>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Deskripsi / Peruntukan</label>
+                    <textarea name="description" x-model="form.description" rows="3" placeholder="Keterangan singkat tipe rekanan..."
+                              class="w-full px-3.5 py-2 text-xs font-medium border border-slate-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"></textarea>
                 </div>
 
                 <div class="flex items-center space-x-2 pt-2">
-                    <input type="checkbox" id="activeToggle" name="active" value="1" x-model="form.active"
-                           class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer">
-                    <label for="activeToggle" class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">Aktifkan Partner Type ini</label>
+                    <input type="checkbox" name="active" value="1" id="active" x-model="form.active" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                    <label for="active" class="text-xs font-bold text-slate-700 dark:text-slate-300">Status Aktif</label>
                 </div>
 
-                <div class="pt-4 flex items-center justify-end space-x-2">
-                    <button type="button" @click="showModal = false" class="px-4 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md shadow-primary transition cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Tambah Sekarang'"></button>
+                <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl cursor-pointer">Batal</button>
+                    <button type="submit" class="px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md border-0 cursor-pointer" x-text="editMode ? 'Simpan Perubahan' : 'Simpan Tipe'"></button>
                 </div>
             </form>
         </div>
