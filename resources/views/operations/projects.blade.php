@@ -29,8 +29,7 @@
 
         <div class="flex items-center gap-2">
             <button @click="openCreateModal()" 
-                    style="background-color: #00c853; color: #ffffff;"
-                    class="px-4 py-2 hover:opacity-90 text-xs font-bold rounded-lg shadow-xs transition flex items-center space-x-1.5 cursor-pointer">
+                    class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-xs transition flex items-center space-x-1.5 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                 <span>Create New</span>
             </button>
@@ -111,18 +110,16 @@
                             <div class="flex items-center justify-center space-x-1.5">
                                 <!-- Blue View Detail -->
                                 <a href="{{ route('projects.show', $item->id) }}" 
-                                   style="background-color: #0091ea; color: #ffffff;"
                                    title="View Detail"
-                                   class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center">
+                                   class="p-2 rounded-lg bg-sky-500 hover:bg-sky-600 text-white transition shadow-2xs flex items-center justify-center">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                                 </a>
 
                                 <!-- Purple Edit -->
                                 <button type="button" 
-                                        @click="openEditModal(@json($item))"
-                                        style="background-color: #7c4dff; color: #ffffff;"
+                                        @click="openEditModal(@js($item))"
                                         title="Edit"
-                                        class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer">
+                                        class="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition shadow-2xs flex items-center justify-center cursor-pointer">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                 </button>
 
@@ -132,9 +129,8 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            style="background-color: #ff1744; color: #ffffff;"
                                             title="Delete"
-                                            class="p-2 rounded-lg hover:opacity-90 transition shadow-2xs flex items-center justify-center cursor-pointer">
+                                            class="p-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition shadow-2xs flex items-center justify-center cursor-pointer">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
                                 </form>
@@ -250,7 +246,7 @@
                     <button type="button" @click="isModalOpen = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold rounded-lg text-xs transition">
                         Batal
                     </button>
-                    <button type="submit" style="background-color: #00c853; color: #ffffff;" class="px-4 py-2 font-bold rounded-lg text-xs hover:opacity-90 transition">
+                    <button type="submit" class="px-4 py-2 font-bold rounded-lg text-xs bg-emerald-600 hover:bg-emerald-700 text-white transition cursor-pointer">
                         Simpan Project
                     </button>
                 </div>

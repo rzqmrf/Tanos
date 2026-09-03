@@ -35,7 +35,7 @@
 
             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
             <div class="flex items-center gap-2 shrink-0">
-                <button @click="showCreateModal = true" style="background-color: #22c55e; color: #ffffff;" class="px-4 py-2 hover:opacity-90 active:scale-95 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
+                <button @click="showCreateModal = true" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
                     <span class="text-sm">+</span>
                     <span>Create New Unit</span>
                 </button>
@@ -76,7 +76,7 @@
             {{-- Action Buttons (Search & Send to MDM) --}}
             <div class="md:col-span-4 flex items-center gap-2.5 justify-end">
                 {{-- Search Button --}}
-                <button style="background-color: #007bff; color: #ffffff;" class="px-5 py-2 hover:opacity-90 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
+                <button class="px-5 py-2 bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer border-0">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
                     <span>Search</span>
                 </button>
@@ -366,7 +366,7 @@
                 <button type="button" @click="showCreateModal = false" class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-xl hover:bg-slate-50 transition cursor-pointer">
                     Batal
                 </button>
-                <button type="submit" style="background-color: #22c55e; color: #ffffff;" class="px-4 py-2 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer border-0">
+                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer border-0">
                     Simpan Unit
                 </button>
             </div>
