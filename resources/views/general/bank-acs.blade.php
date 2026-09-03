@@ -65,7 +65,7 @@
                     Bank ACS - List
                 </h2>
                 <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {{ $bankAcs->total() }} total data
+                    {{ $bankAccounts->total() }} total data
                 </span>
             </div>
 
