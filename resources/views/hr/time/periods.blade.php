@@ -5,27 +5,27 @@
 @section('content')
 <div class="space-y-6 w-full" x-data="{ showCreateModal: false }">
     <!-- Header Block -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+    <x-page-header 
+        title="Time Period Rekap" 
+        subtitle="Generate hasil rekapitulasi kehadiran bulanan karyawan berdasarkan toleransi parameter evaluasi."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Capital' => '#',
+            'Time Management' => '#',
+            'Time Period' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+            <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Time Period</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-550 font-semibold">Generate hasil rekapitulasi kehadiran bulanan karyawan berdasarkan toleransi parameter evaluasi.</p>
-            </div>
-        </div>
-        
-        @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-        <div>
-            <button @click="showCreateModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
-                + Create Time Period
+                <span>Tambah Periode Evaluasi</span>
             </button>
-        </div>
-        @endif
-    </div>
+            @endif
+        </x-slot:action>
+    </x-page-header>
 
     @if(session('success'))
         <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">
@@ -33,43 +33,56 @@
         </div>
     @endif
 
-    <!-- Period Table -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-6 shadow-sm">
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-            <table class="w-full text-left border-collapse min-w-[900px]">
+    <!-- Period Table Container -->
+    <x-data-card 
+        title="Time Period - List" 
+        :total="count($periods)"
+        :show-per-page="false"
+        :show-search="false"
+    >
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
-                        <th class="p-4 align-middle">Nama Periode</th>
-                        <th class="p-4 align-middle">Scope Project</th>
-                        <th class="p-4 align-middle">Rentang Tanggal</th>
-                        <th class="p-4 align-middle text-center">Status</th>
-                        <th class="p-4 align-middle text-center">Action</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-4">Nama Periode</th>
+                        <th class="py-3.5 px-4">Scope Project</th>
+                        <th class="py-3.5 px-4">Rentang Tanggal</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th class="py-3.5 px-4 text-center w-36">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($periods as $period)
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
-                        <td class="p-4 align-middle font-bold text-slate-850 dark:text-slate-200">
-                            {{ $period->name }}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">
+                            <a href="{{ route('org.periods.show', $period->id) }}" class="hover:text-primary transition">
+                                {{ $period->name }}
+                            </a>
                         </td>
-                        <td class="p-4 align-middle font-semibold text-slate-600 dark:text-slate-300">
+                        <td class="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-semibold">
                             {{ $period->project ? $period->project->project_name : 'All Projects (Seluruh Karyawan)' }}
                         </td>
-                        <td class="p-4 align-middle font-mono text-xs text-slate-550 dark:text-slate-450 whitespace-nowrap">
+                        <td class="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400">
                             {{ $period->start_date->format('d M Y') }} - {{ $period->end_date->format('d M Y') }}
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
-                            <span class="inline-block px-2.5 py-1 {{ $period->status === 'Completed' ? 'bg-emerald-55/10 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400' : 'bg-amber-55/10 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400' }} rounded-md text-xs font-bold">
+                        <td class="py-3.5 px-4 text-center">
+                            @if($period->status === 'Completed')
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
+                                Completed
+                            </span>
+                            @else
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded-lg inline-flex items-center">
                                 {{ $period->status }}
                             </span>
+                            @endif
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
                             <div class="inline-flex items-center space-x-1.5">
                                 @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-                                    <form action="{{ route('org.periods.calculate', $period->id) }}" method="POST">
+                                    <form action="{{ route('org.periods.calculate', $period->id) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 font-bold px-2.5 py-1.5 rounded-lg text-xs transition cursor-pointer">
-                                            ⚡ Evaluate
+                                        <button type="submit" title="Jalankan Evaluasi Absensi" class="px-2.5 py-1.5 bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 font-bold rounded-lg text-xs border border-sky-200 dark:border-sky-800/50 hover:bg-sky-100 transition cursor-pointer flex items-center space-x-1">
+                                            <span>⚡ Evaluate</span>
                                         </button>
                                     </form>
                                 @endif
@@ -86,7 +99,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="p-12 text-center text-slate-400 text-xs">
+                        <td colspan="5" class="py-8 text-center text-slate-400 dark:text-slate-500">
                             Belum ada periode evaluasi absensi.
                         </td>
                     </tr>
@@ -94,7 +107,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </x-data-card>
 
     {{-- MODAL: CREATE TIME PERIOD --}}
     <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">

@@ -33,38 +33,17 @@
         this.showDetailModal = true;
     }
 }">
-
-    <!-- Page Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>General</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Master FA</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Fund Center</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Fund Center Master (Pusat Dana & Pagu Anggaran)
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Pengelolaan pagu likuiditas anggaran belanja modal (CAPEX) & operasional (OPEX).</p>
-        </div>
-
-        <button @click="openCreate()"
-                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Tambah Fund Center</span>
-        </button>
-    </div>
+    <x-page-header 
+        title="Fund Center Master (Pusat Dana & Pagu Anggaran)" 
+        subtitle="Pengelolaan pagu likuiditas anggaran belanja modal (CAPEX) & operasional (OPEX)."
+        :breadcrumbs="[
+            'General' => '#',
+            'Master FA' => '#',
+            'Fund Center' => ''
+        ]"
+        create-label="Tambah Fund Center"
+        create-click="openCreate()"
+    />
 
     <!-- Alert Notifications -->
     @if(session('success'))
@@ -77,108 +56,50 @@
     @endif
 
     <!-- Main Card Container matching Golden Benchmark -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-5">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center space-x-2">
-                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
-                    Fund Center - List
-                </h2>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {{ $fundCenters->total() }} total data
-                </span>
-            </div>
-
-            <!-- Export Buttons (Copy, PDF, Excel) -->
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
-                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Cetak</span>
-                </button>
-                <button type="button" onclick="window.print()" title="Export PDF"
-                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span>PDF</span>
-                </button>
-                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
-                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>XLS</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Filter Controls (Show entries + Search) -->
-        <form method="GET" action="{{ route('fa.fund-center') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
-                <span>Tampilkan</span>
-                <select name="per_page" onchange="this.form.submit()"
-                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
-                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                </select>
-                <span>entri per halaman</span>
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <div class="relative min-w-[240px]">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
-                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                @if(request()->filled('search'))
-                <a href="{{ route('fa.fund-center') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
-                @endif
-            </div>
-        </form>
-
+    <x-data-card 
+        title="Fund Center - List" 
+        :total="$fundCenters->total()"
+        :search-route="route('fa.fund-center')"
+    >
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[11px]">
-                        <th class="py-4 px-5">Kode</th>
-                        <th class="py-4 px-5">Nama Fund Center</th>
-                        <th class="py-4 px-5 text-right">Pagu Anggaran</th>
-                        <th class="py-4 px-5 text-center">Mata Uang</th>
-                        <th class="py-4 px-5 text-center">Status</th>
-                        <th class="py-4 px-5 text-center">Action</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-5">Kode Fund Center</th>
+                        <th class="py-3.5 px-5">Nama Fund Center</th>
+                        <th class="py-3.5 px-5 text-right">Limit Pagu Anggaran</th>
+                        <th class="py-3.5 px-5">Keterangan / Peruntukan</th>
+                        <th class="py-3.5 px-5 text-center">Status</th>
+                        <th class="py-3.5 px-5 text-center w-28">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($fundCenters as $item)
-                    <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                         <td class="py-3.5 px-5 font-mono font-bold text-primary">
-                            <button @click="openDetail({{ $item }})" class="hover:underline cursor-pointer">
+                            <button @click="openDetail({{ json_encode($item) }})" class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle hover:opacity-80 transition cursor-pointer">
                                 {{ $item->code }}
                             </button>
                         </td>
                         <td class="py-3.5 px-5">
-                            <button @click="openDetail({{ $item }})" class="text-left font-bold text-slate-800 dark:text-slate-200 hover:text-primary transition cursor-pointer">
+                            <button @click="openDetail({{ json_encode($item) }})" class="font-bold text-slate-800 dark:text-slate-100 hover:text-primary transition cursor-pointer text-left">
                                 {{ $item->name }}
                             </button>
-                            @if($item->description)
-                            <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{{ $item->description }}</p>
-                            @endif
                         </td>
                         <td class="py-3.5 px-5 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
                             {{ $item->currency }} {{ number_format($item->budget_limit, 2, ',', '.') }}
                         </td>
-                        <td class="py-3.5 px-5 text-center">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                {{ $item->currency }}
-                            </span>
+                        <td class="py-3.5 px-5 text-slate-600 dark:text-slate-400 font-medium">
+                            {{ $item->description ?? '—' }}
                         </td>
                         <td class="py-3.5 px-5 text-center">
                             @if($item->active)
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-                                AKTIF
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Aktif
                             </span>
                             @else
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                                NON-AKTIF
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg inline-flex items-center">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>Non-Aktif
                             </span>
                             @endif
                         </td>
@@ -206,11 +127,11 @@
         </div>
 
         @if($fundCenters->hasPages())
-        <div class="p-4 border-t border-slate-100 dark:border-slate-800">
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
             {{ $fundCenters->links() }}
         </div>
         @endif
-    </div>
+    </x-data-card>
 
     <!-- Modal View Detail -->
     <div x-show="showDetailModal" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>

@@ -6,38 +6,17 @@
 <div class="space-y-6">
 
     <!-- Page Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Material</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Equipment Master</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Index</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Equipment Master
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">
-                Katalog Alat Berat, Armada Logistik, dan Mesin Operasional Pelabuhan.
-            </p>
-        </div>
-
-        <a href="{{ route('material.equipment.create') }}"
-           class="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Create New</span>
-        </a>
-    </div>
+    <x-page-header 
+        title="Equipment Master" 
+        subtitle="Katalog Alat Berat, Armada Logistik, dan Mesin Operasional Pelabuhan."
+        :breadcrumbs="[
+            'General' => '#',
+            'Material' => '#',
+            'Equipment Master' => ''
+        ]"
+        create-label="Tambah Equipment"
+        create-url="{{ route('material.equipment.create') }}"
+    />
 
     <!-- Alert Notification -->
     @if(session('success'))
@@ -50,113 +29,79 @@
     @endif
 
     <!-- Data Table Container -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-5">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
-                Equipment - List
-            </h2>
-
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="window.print()" title="Print"
-                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Filter Controls -->
-        <form method="GET" action="{{ route('material.equipment') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
-                <span>Tampilkan</span>
-                <select name="per_page" onchange="this.form.submit()"
-                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
-                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-                </select>
-                <span>entri</span>
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <div class="relative min-w-[240px]">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search equipment, brand, serial..."
-                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                @if(request()->filled('search'))
-                <a href="{{ route('material.equipment') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600">Reset</a>
-                @endif
-            </div>
-        </form>
-
-        <!-- Main Equipment Table -->
+    <x-data-card 
+        title="Equipment - List" 
+        :total="$equipments->total()"
+        :search-route="route('material.equipment')"
+    >
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50/80 dark:bg-slate-800/60 border-y border-slate-200 dark:border-slate-800 text-[11px] font-extrabold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                        <th class="py-3.5 px-3">Equipment Code</th>
-                        <th class="py-3.5 px-3">Name</th>
-                        <th class="py-3.5 px-3">Category</th>
-                        <th class="py-3.5 px-3">Brand & Model</th>
-                        <th class="py-3.5 px-3">Serial Number</th>
-                        <th class="py-3.5 px-3">Alokasi Project</th>
-                        <th class="py-3.5 px-3 text-center">Condition</th>
-                        <th class="py-3.5 px-3 text-right">Purchase Cost</th>
-                        <th class="py-3.5 px-3 text-center whitespace-nowrap">Action</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-3">No</th>
+                        <th class="py-3.5 px-3">Kode Equipment</th>
+                        <th class="py-3.5 px-3">Nama Equipment</th>
+                        <th class="py-3.5 px-3">Merek / Model</th>
+                        <th class="py-3.5 px-3">Serial / Chassis</th>
+                        <th class="py-3.5 px-3 text-center">Tahun Beli</th>
+                        <th class="py-3.5 px-3 text-center">Kondisi Status</th>
+                        <th class="py-3.5 px-3 text-right">Nilai Perolehan</th>
+                        <th class="py-3.5 px-3 text-center w-28">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                    @forelse($equipments as $item)
-                    <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
+                    @forelse($equipments as $index => $item)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
+                        <td class="py-3.5 px-3 text-slate-400 font-semibold">{{ $equipments->firstItem() + $index }}</td>
+                        
                         <!-- Code -->
-                        <td class="py-3.5 px-3 font-mono font-bold text-primary">
-                            <a href="{{ route('material.equipment.show', $item->id) }}" class="hover:underline">
+                        <td class="py-3.5 px-3">
+                            <a href="{{ route('material.equipment.show', $item->id) }}" class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle hover:opacity-80 transition inline-block">
                                 {{ $item->equipment_code }}
                             </a>
                         </td>
 
                         <!-- Name -->
-                        <td class="py-3.5 px-3 font-bold text-slate-900 dark:text-slate-100">
-                            <a href="{{ route('material.equipment.show', $item->id) }}" class="hover:text-primary dark:hover:text-sky-400 transition">
+                        <td class="py-3.5 px-3 font-bold text-slate-800 dark:text-slate-100">
+                            <a href="{{ route('material.equipment.show', $item->id) }}" class="hover:text-primary transition">
                                 {{ $item->name }}
                             </a>
                         </td>
 
-                        <!-- Category -->
-                        <td class="py-3.5 px-3 font-semibold text-slate-700 dark:text-slate-300">
-                            {{ $item->category }}
+                        <!-- Brand / Model -->
+                        <td class="py-3.5 px-3 text-slate-700 dark:text-slate-300">
+                            {{ $item->brand_model ?? '—' }}
                         </td>
 
-                        <!-- Brand Model -->
-                        <td class="py-3.5 px-3 text-slate-600 dark:text-slate-400">
-                            {{ $item->brand_model ?? '-' }}
-                        </td>
-
-                        <!-- Serial Number -->
+                        <!-- Serial -->
                         <td class="py-3.5 px-3 font-mono text-slate-600 dark:text-slate-400">
-                            {{ $item->serial_number ?? '-' }}
+                            {{ $item->serial_number ?? '—' }}
                         </td>
 
-                        <!-- Project -->
-                        <td class="py-3.5 px-3 text-slate-600 dark:text-slate-400">
-                            {{ $item->project ? $item->project->project_name : 'Pool Standby' }}
+                        <!-- Year -->
+                        <td class="py-3.5 px-3 text-center font-mono text-slate-700 dark:text-slate-300 font-bold">
+                            {{ $item->year_manufactured ?? '—' }}
                         </td>
 
-                        <!-- Condition -->
+                        <!-- Condition Status -->
                         <td class="py-3.5 px-3 text-center">
                             @if($item->condition === 'Operational')
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">OPERATIONAL</span>
+                                <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>OPERATIONAL
+                                </span>
                             @elseif($item->condition === 'Maintenance')
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">MAINTENANCE</span>
+                                <span class="px-2.5 py-1 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 rounded-lg inline-flex items-center">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>MAINTENANCE
+                                </span>
                             @else
-                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400">{{ strtoupper($item->condition) }}</span>
+                                <span class="px-2.5 py-1 text-[10px] font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 rounded-lg inline-flex items-center">
+                                    {{ strtoupper($item->condition) }}
+                                </span>
                             @endif
                         </td>
 
                         <!-- Cost -->
-                        <td class="py-3.5 px-3 text-right font-mono font-bold text-slate-800 dark:text-slate-200">
+                        <td class="py-3.5 px-3 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
                             Rp {{ number_format($item->purchase_cost, 0, ',', '.') }}
                         </td>
 
@@ -176,7 +121,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="py-8 text-center text-slate-400">
+                        <td colspan="9" class="py-8 text-center text-slate-400 dark:text-slate-500">
                             Tidak ada data Equipment ditemukan.
                         </td>
                     </tr>
@@ -191,8 +136,7 @@
             {{ $equipments->links() }}
         </div>
         @endif
-
-    </div>
+    </x-data-card>
 
 </div>
 @endsection

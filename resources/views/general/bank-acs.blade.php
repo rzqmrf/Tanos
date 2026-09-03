@@ -4,49 +4,35 @@
 
 @section('content')
 <div class="space-y-6 w-full" x-data="bankAcsManager()">
+    <!-- Header & Breadcrumbs matching Golden Benchmark -->
+    <x-page-header 
+        title="Bank ACS" 
+        subtitle="Setting Bank ACS Customer"
+        :breadcrumbs="[
+            'General' => '#',
+            'Bank ACS' => ''
+        ]"
+    >
+        <x-slot:action>
+            <div class="flex items-center gap-2.5 self-start sm:self-auto">
+                <button @click="openCreate()"
+                        class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Tambah Data</span>
+                </button>
 
-    <!-- Header & Breadcrumbs matching Screenshot 1 -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4 print:hidden">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>General</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Bank ACS</span>
+                <button @click="showAdvancedSearch = true"
+                        class="px-4 py-2.5 bg-[#00c853] hover:bg-[#00b34a] text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                    <span>Advanced Search</span>
+                </button>
             </div>
-
-            <!-- Page Title -->
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Bank ACS
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Setting Bank ACS Customer</p>
-        </div>
-
-        <!-- Top Right Actions -->
-        <div class="flex items-center gap-2.5 self-start sm:self-auto">
-            <button @click="openCreate()"
-                    class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Tambah Data</span>
-            </button>
-
-            <!-- Advanced Search Green Button -->
-            <button @click="showAdvancedSearch = true"
-                    class="px-4 py-2.5 bg-[#00c853] hover:bg-[#00b34a] text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-                <span>Advanced Search</span>
-            </button>
-        </div>
-    </div>
+        </x-slot:action>
+    </x-page-header>
 
     <!-- Feedback Alerts -->
     @if(session('success'))
@@ -57,64 +43,11 @@
     @endif
 
     <!-- Main Card Container -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-5 sm:p-6">
-             <!-- Card Header Title & Export Buttons -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 mb-5 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center space-x-2">
-                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
-                    Bank ACS - List
-                </h2>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {{ $bankAccounts->total() }} total data
-                </span>
-            </div>
-
-            <!-- Export Buttons (Copy, PDF, Excel) -->
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
-                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Cetak</span>
-                </button>
-                <button type="button" onclick="window.print()" title="Export PDF"
-                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span>PDF</span>
-                </button>
-                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
-                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>XLS</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Filter Controls (Show entries + Search) -->
-        <form method="GET" action="{{ route('general.bank-acs') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
-            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
-                <span>Tampilkan</span>
-                <select name="per_page" onchange="this.form.submit()"
-                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
-                    <option value="10" {{ ($perPage ?? 10) == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ ($perPage ?? 10) == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ ($perPage ?? 10) == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ ($perPage ?? 10) == 100 ? 'selected' : '' }}>100</option>
-                </select>
-                <span>entri per halaman</span>
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <div class="relative min-w-[240px]">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
-                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                @if(request()->filled('search'))
-                <a href="{{ route('general.bank-acs') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
-                @endif
-            </div>
-        </form>
-
+    <x-data-card 
+        title="Bank ACS - List" 
+        :total="$bankAccounts->total()"
+        :search-route="route('general.bank-acs')"
+    >
         <!-- Table Data matching Golden Benchmark -->
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs" id="bankAcsTable">
@@ -138,35 +71,38 @@
                             </td>
 
                             <!-- Account No -->
-                            <td class="py-3.5 px-4 font-mono text-slate-700 dark:text-slate-300">
+                            <td class="py-3.5 px-4 font-mono font-bold text-primary dark:text-sky-400">
                                 {{ $item->account_number }}
                             </td>
 
                             <!-- Customer -->
-                            <td class="py-3.5 px-4 font-normal text-slate-800 dark:text-slate-200">
-                                {{ $item->partner?->name ?? $item->account_holder }}
+                            <td class="py-3.5 px-4 font-bold text-slate-900 dark:text-slate-100 uppercase">
+                                {{ $item->partner ? $item->partner->name : '-' }}
                             </td>
 
                             <!-- Valid From -->
-                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-mono text-[11px]">
-                                {{ $item->valid_from ?? '2025-07-22 00:00:00' }}
+                            <td class="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}
                             </td>
 
                             <!-- Valid To -->
-                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-mono text-[11px]">
-                                {{ $item->valid_to ?? '9999-12-31 00:00:00' }}
+                            <td class="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                                9999-12-31
                             </td>
 
-                            <!-- Document Status (Completed + LOG & Approvers badges) -->
+                            <!-- Document Status Badge & Log/Approvers Buttons -->
                             <td class="py-3.5 px-4">
-                                <div class="space-y-1">
-                                    <div class="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                        {{ $item->document_status ?? 'Completed' }}
-                                    </div>
+                                <div class="flex items-center justify-between space-x-2">
+                                    <!-- Status Pill -->
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+                                        SUBMITTED
+                                    </span>
+
+                                    <!-- Right Log & Approvers Badges -->
                                     <div class="flex items-center space-x-1.5">
-                                        <!-- LOG Badge/Button -->
+                                        <!-- Log Badge/Button -->
                                         <button type="button" @click="openLogModal({{ json_encode($item) }})"
-                                                class="px-2 py-0.5 bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 hover:bg-sky-100 border border-sky-100 dark:border-sky-900/50 rounded text-[10px] font-bold tracking-wide transition cursor-pointer">
+                                                class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-bold tracking-wide transition cursor-pointer">
                                             LOG
                                         </button>
 
@@ -194,8 +130,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-10 text-center text-slate-400 dark:text-slate-500">
-                                Tidak ada data rekening Bank ACS yang sesuai dengan pencarian.
+                            <td colspan="7" class="py-8 text-center text-slate-400 dark:text-slate-500">
+                                Tidak ada data Bank ACS Customer ditemukan.
                             </td>
                         </tr>
                     @endforelse
@@ -205,17 +141,11 @@
 
         <!-- Pagination -->
         @if($bankAccounts->hasPages())
-            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-                <div>
-                    Menampilkan {{ $bankAccounts->firstItem() }} - {{ $bankAccounts->lastItem() }} dari {{ $bankAccounts->total() }} data
-                </div>
-                <div>
-                    {{ $bankAccounts->links() }}
-                </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                {{ $bankAccounts->links() }}
             </div>
         @endif
-
-    </div>
+    </x-data-card>
 
     <!-- ==================== MODAL 1: INQUIRY BANK ACS CUSTOMER (Screenshot 2) ==================== -->
     <div x-show="showInquiryModal" 

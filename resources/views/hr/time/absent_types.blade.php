@@ -5,27 +5,27 @@
 @section('content')
 <div class="space-y-6 w-full" x-data="{ showCreateModal: false, showEditModal: false, editItem: {} }">
     <!-- Header Block -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        <div class="flex items-center space-x-3">
-            <div class="p-2 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.504-1.125-1.125-1.125h-6.75a1.125 1.125 0 0 0-1.125 1.125v3.375m9 0h-9M9 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm12 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-6-5.25a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+    <x-page-header 
+        title="Absent Type Master" 
+        subtitle="Kelola daftar tipe ketidakhadiran, tingkat prioritas, dan pemotongan tunjangan gaji."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Capital' => '#',
+            'Time Management' => '#',
+            'Absent Type' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+            <button @click="showCreateModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 dark:text-slate-100">Absent Type</h1>
-                <p class="text-xs text-slate-400 dark:text-slate-550 font-semibold">Kelola daftar tipe ketidakhadiran, tingkat prioritas, dan pemotongan tunjangan gaji.</p>
-            </div>
-        </div>
-        
-        @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
-        <div>
-            <button @click="showCreateModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition cursor-pointer">
-                + Create Absent Type
+                <span>Tambah Absent Type</span>
             </button>
-        </div>
-        @endif
-    </div>
+            @endif
+        </x-slot:action>
+    </x-page-header>
 
     @if(session('success'))
         <div class="p-4 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-xs font-semibold">
@@ -34,58 +34,71 @@
     @endif
 
     <!-- Data Table Section -->
-    <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-6 shadow-sm">
-        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-            <table class="w-full text-left border-collapse min-w-[900px]">
+    <x-data-card 
+        title="Absent Type - List" 
+        :total="count($types)"
+        :show-per-page="false"
+        :show-search="false"
+    >
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
-                        <th class="p-4 align-middle">Kode</th>
-                        <th class="p-4 align-middle">Nama Ketidakhadiran</th>
-                        <th class="p-4 align-middle text-center">Gender Restriction</th>
-                        <th class="p-4 align-middle text-center">Priority Level</th>
-                        <th class="p-4 align-middle text-center">Deduction (Potong Gaji)</th>
-                        <th class="p-4 align-middle">Masa Berlaku</th>
-                        <th class="p-4 align-middle text-center">Status</th>
-                        <th class="p-4 align-middle text-center">Action</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-4">Kode</th>
+                        <th class="py-3.5 px-4">Nama Ketidakhadiran</th>
+                        <th class="py-3.5 px-4 text-center">Gender Restriction</th>
+                        <th class="py-3.5 px-4 text-center">Priority Level</th>
+                        <th class="py-3.5 px-4 text-center">Deduction (Potong Gaji)</th>
+                        <th class="py-3.5 px-4">Masa Berlaku</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th class="py-3.5 px-4 text-center w-28">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm text-slate-600 dark:text-slate-350">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($types as $type)
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition">
-                        <td class="p-4 align-middle font-mono font-bold text-blue-650 dark:text-blue-400 text-[13px]">
-                            {{ $type->code }}
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
+                        <td class="py-3.5 px-4 font-mono font-bold text-primary">
+                            <span class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle">
+                                {{ $type->code }}
+                            </span>
                         </td>
-                        <td class="p-4 align-middle font-bold text-slate-850 dark:text-slate-200">
+                        <td class="py-3.5 px-4 font-bold text-slate-800 dark:text-slate-100">
                             {{ $type->name }}
                         </td>
-                        <td class="p-4 align-middle text-center font-semibold">
-                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400">
+                        <td class="py-3.5 px-4 text-center font-semibold">
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                                 {{ $type->gender }}
                             </span>
                         </td>
-                        <td class="p-4 align-middle text-center font-bold">
+                        <td class="py-3.5 px-4 text-center font-bold">
                             {{ $type->priority_level }}
                         </td>
-                        <td class="p-4 align-middle text-center">
+                        <td class="py-3.5 px-4 text-center">
                             @if($type->deduction_absent === 'Yes')
-                                <span class="inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-50 text-rose-700 dark:bg-rose-950/20 dark:text-rose-400">
+                                <span class="px-2.5 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 font-bold rounded-lg text-[10px] border border-rose-200 dark:border-rose-800/50 inline-flex items-center">
                                     Potong Gaji (Yes)
                                 </span>
                             @else
-                                <span class="inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400">
+                                <span class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-bold rounded-lg text-[10px] border border-emerald-200 dark:border-emerald-800/50 inline-flex items-center">
                                     Tetap Dibayar (No)
                                 </span>
                             @endif
                         </td>
-                        <td class="p-4 align-middle text-xs text-slate-500 dark:text-slate-450 whitespace-nowrap">
+                        <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-mono text-[11px]">
                             {{ $type->valid_from ? $type->valid_from->format('d M Y') : '01 Jan 2024' }} - {{ $type->valid_to ? $type->valid_to->format('d M Y') : 'Selamanya' }}
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
-                            <span class="inline-block px-2.5 py-1 {{ $type->active ? 'bg-emerald-55/10 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400' : 'bg-rose-55/10 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400' }} rounded-md text-xs font-bold">
-                                {{ $type->active ? 'Active' : 'Inactive' }}
+                        <td class="py-3.5 px-4 text-center">
+                            @if($type->active)
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Active
                             </span>
+                            @else
+                            <span class="px-2.5 py-1 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg inline-flex items-center">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span>Inactive
+                            </span>
+                            @endif
                         </td>
-                        <td class="p-4 align-middle text-center whitespace-nowrap">
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
                             @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
                             <div class="inline-flex items-center space-x-1.5">
                                 <x-action-button type="edit" :click="'editItem = ' . json_encode([
@@ -112,7 +125,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="p-12 text-center text-slate-400 text-xs">
+                        <td colspan="8" class="py-8 text-center text-slate-400 dark:text-slate-500">
                             Data absent type belum tersedia.
                         </td>
                     </tr>
@@ -120,7 +133,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </x-data-card>v>
 
     {{-- MODAL: CREATE ABSENT TYPE --}}
     <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">

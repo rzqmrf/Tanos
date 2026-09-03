@@ -48,39 +48,18 @@
         this.detailItem = item;
         this.showDetailModal = true;
     }
-}">
-
-    <!-- Page Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4 print:hidden">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>General</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Master FA</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Tax Master</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Tax Master (Tarif Pajak)
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Pengaturan tarif PPN, PPh 21 Tenaga Kerja, PPh 23 Jasa, dan PPh Final 4(2) untuk transaksi invoice & RAB proyek.</p>
-        </div>
-
-        <button @click="openCreate()"
-                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Tambah Tarif Pajak</span>
-        </button>
-    </div>
+}">    <!-- Page Header & Action -->
+    <x-page-header 
+        title="Tax Master (Tarif Pajak)" 
+        subtitle="Pengaturan tarif PPN, PPh 21 Tenaga Kerja, PPh 23 Jasa, dan PPh Final 4(2) untuk transaksi invoice & RAB proyek."
+        :breadcrumbs="[
+            'General' => '#',
+            'Master FA' => '#',
+            'Tax Master' => ''
+        ]"
+        create-label="Tambah Tarif Pajak"
+        create-click="openCreate()"
+    />
 
     <!-- Alert Notification -->
     @if(session('success'))
@@ -93,63 +72,11 @@
     @endif
 
     <!-- Data Table Container matching Golden Benchmark -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-5">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center space-x-2">
-                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
-                    Tax Master - List
-                </h2>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {{ $taxes->total() }} total data
-                </span>
-            </div>
-
-            <!-- Export Buttons (Copy, PDF, Excel) -->
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
-                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Cetak</span>
-                </button>
-                <button type="button" onclick="window.print()" title="Export PDF"
-                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span>PDF</span>
-                </button>
-                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
-                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>XLS</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Filter Controls (Show entries + Search) -->
-        <form method="GET" action="{{ route('fa.tax') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
-                <span>Tampilkan</span>
-                <select name="per_page" onchange="this.form.submit()"
-                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
-                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                </select>
-                <span>entri per halaman</span>
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <div class="relative min-w-[240px]">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
-                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                @if(request()->filled('search'))
-                <a href="{{ route('fa.tax') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
-                @endif
-            </div>
-        </form>
+    <x-data-card 
+        title="Tax Master - List" 
+        :total="$taxes->total()"
+        :search-route="route('fa.tax')"
+    >
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -222,11 +149,11 @@
         </div>
 
         @if($taxes->hasPages())
-            <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-                {{ $taxes->links() }}
-            </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            {{ $taxes->links() }}
+        </div>
         @endif
-    </div>
+    </x-data-card>
 
     <!-- Modal Form Tambah / Edit Pajak -->
     <div x-show="showModal" x-transition class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">

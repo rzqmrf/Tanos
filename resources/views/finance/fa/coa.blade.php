@@ -58,38 +58,17 @@
         this.showDetailModal = true;
     }
 }">
-
-    <!-- Page Header & Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4.5">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>General</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Master FA</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">Chart of Accounts</span>
-            </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Chart of Accounts (CoA) Master
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Struktur bagan akun hierarkis terpadu untuk integrasi jurnal voucher, posting payroll, dan sinkronisasi SAP General Ledger.</p>
-        </div>
-
-        <button @click="openCreate()"
-                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Tambah Akun CoA</span>
-        </button>
-    </div>
+    <x-page-header 
+        title="Chart of Accounts (CoA) Master" 
+        subtitle="Struktur bagan akun hierarkis terpadu untuk integrasi jurnal voucher, posting payroll, dan sinkronisasi SAP General Ledger."
+        :breadcrumbs="[
+            'General' => '#',
+            'Master FA' => '#',
+            'Chart of Accounts' => ''
+        ]"
+        create-label="Tambah Akun CoA"
+        create-click="openCreate()"
+    />
 
     <!-- Quick Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -130,133 +109,65 @@
         </div>
     </div>
 
-    <!-- Main Card Container matching Golden Benchmark -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 space-y-5">
-        
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
-            <div class="flex items-center space-x-2">
-                <h2 class="text-base font-black text-slate-800 dark:text-slate-100">
-                    Chart of Accounts - List
-                </h2>
-                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                    {{ $accounts->total() }} total data
-                </span>
-            </div>
-
-            <!-- Export Buttons (Copy, PDF, Excel) -->
-            <div class="flex items-center space-x-2">
-                <button type="button" onclick="window.print()" title="Cetak Rekap Data"
-                        class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Cetak</span>
-                </button>
-                <button type="button" onclick="window.print()" title="Export PDF"
-                        class="p-2 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 dark:text-rose-400 rounded-xl transition border border-rose-200 dark:border-rose-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span>PDF</span>
-                </button>
-                <a href="#" onclick="alert('Export Excel sedang diproses...')" title="Export Excel"
-                        class="p-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-600 dark:text-emerald-400 rounded-xl transition border border-emerald-200 dark:border-emerald-900/50 cursor-pointer flex items-center space-x-1 text-xs font-bold">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>XLS</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Filter Controls (Show entries + Search) -->
-        <form method="GET" action="{{ route('fa.coa') }}" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 font-bold">
-                <span>Tampilkan</span>
-                <select name="per_page" onchange="this.form.submit()"
-                        class="px-2.5 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer">
-                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
-                </select>
-                <span>entri per halaman</span>
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <div class="relative min-w-[240px]">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search:"
-                           class="w-full pl-8 pr-4 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
-                @if(request()->filled('search'))
-                <a href="{{ route('fa.coa') }}" class="p-2 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">Reset</a>
-                @endif
-            </div>
-        </form>
-
+    <!-- Data Table Container matching Golden Benchmark -->
+    <x-data-card 
+        title="Chart of Accounts - List" 
+        :total="$accounts->total()"
+        :search-route="route('fa.coa')"
+    >
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                        <th class="py-3.5 px-4">No</th>
-                        <th class="py-3.5 px-4">Kode Akun</th>
-                        <th class="py-3.5 px-4">Nama Akun Buku Besar (CoA)</th>
-                        <th class="py-3.5 px-4">Account Group</th>
+                        <th class="py-3.5 px-4">No Akun</th>
+                        <th class="py-3.5 px-4">Nama Akun CoA</th>
+                        <th class="py-3.5 px-4">Group Akun</th>
                         <th class="py-3.5 px-4 text-center">Tipe / Level</th>
-                        <th class="py-3.5 px-4 text-center">Saldo Normal</th>
-                        <th class="py-3.5 px-4">Status</th>
-                        <th class="py-3.5 px-4 text-center">Action</th>
+                        <th class="py-3.5 px-4 text-center">Posisi Saldo</th>
+                        <th class="py-3.5 px-4 text-center">Status</th>
+                        <th class="py-3.5 px-4 text-center w-28">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
-                    @forelse($accounts as $index => $item)
-                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition {{ $item->is_header ? 'bg-slate-50/40 dark:bg-slate-800/30 font-bold' : '' }}">
-                            <td class="py-3.5 px-4 text-slate-400 font-semibold">{{ $accounts->firstItem() + $index }}</td>
+                    @forelse($accounts as $item)
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
                             <td class="py-3.5 px-4">
-                                <button @click="openDetail({{ json_encode($item) }})" class="px-2.5 py-1 font-mono font-bold rounded-md text-[11px] border hover:opacity-80 transition cursor-pointer
-                                    {{ $item->is_header ? 'bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border-slate-300 dark:border-slate-700' : 'bg-primary-light text-primary border-primary-subtle' }}">
+                                <button @click="openDetail({{ json_encode($item) }})" class="px-2.5 py-1 bg-primary-light text-primary font-mono font-bold rounded-md text-[11px] border border-primary-subtle hover:opacity-80 transition cursor-pointer">
                                     {{ $item->code }}
                                 </button>
                             </td>
                             <td class="py-3.5 px-4">
-                                @php
-                                    $indentPixels = max(0, ($item->level - 1) * 20);
-                                @endphp
-                                <div class="flex items-center space-x-2" :style="'padding-left: ' + {{ $indentPixels }} + 'px'">
+                                <button @click="openDetail({{ json_encode($item) }})" class="font-bold text-slate-800 dark:text-slate-100 hover:text-primary transition cursor-pointer text-left flex items-center">
                                     @if($item->level > 1)
-                                        <span class="text-slate-400 font-mono text-[10px]">└─</span>
+                                        <span class="text-slate-300 mr-1 font-mono">└─</span>
                                     @endif
-                                    <button @click="openDetail({{ json_encode($item) }})" class="hover:text-primary transition cursor-pointer text-left {{ $item->is_header ? 'text-slate-900 dark:text-white font-extrabold text-sm' : 'text-slate-800 dark:text-slate-200 font-semibold' }}">
-                                        {{ $item->name }}
-                                    </button>
-                                </div>
-                                @if($item->description)
-                                    <span class="text-[10px] text-slate-400 dark:text-slate-500 block mt-0.5" :style="'padding-left: ' + {{ $indentPixels }} + 'px'">
-                                        {{ $item->description }}
-                                    </span>
-                                @endif
+                                    <span class="{{ $item->is_header ? 'font-black text-slate-900 dark:text-white' : '' }}">{{ $item->name }}</span>
+                                </button>
                             </td>
-                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">
-                                <span class="text-[11px] font-semibold">{{ $item->accountGroup?->name ?? '—' }}</span>
+                            <td class="py-3.5 px-4">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-[11px]">
+                                    {{ $item->accountGroup?->name ?? '—' }}
+                                </span>
                             </td>
                             <td class="py-3.5 px-4 text-center">
                                 @if($item->is_header)
-                                    <span class="px-2 py-0.5 text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded-md">
-                                        HEADER (Lvl {{ $item->level }})
+                                    <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 font-bold rounded-lg text-[11px] border border-amber-200 dark:border-amber-800/50 inline-flex items-center">
+                                        Header (L{{ $item->level }})
                                     </span>
                                 @else
-                                    <span class="px-2 py-0.5 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">
-                                        POSTING (Lvl {{ $item->level }})
+                                    <span class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 font-bold rounded-lg text-[11px] border border-sky-200 dark:border-sky-800/50 inline-flex items-center">
+                                        Detail (L{{ $item->level }})
                                     </span>
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-center">
                                 @if($item->normal_balance === 'debit')
-                                    <span class="px-2.5 py-0.5 text-[10px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800 rounded-lg">
-                                        DEBIT (D)
-                                    </span>
+                                    <span class="px-2 py-0.5 rounded font-mono font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 text-[11px]">DEBIT</span>
                                 @else
-                                    <span class="px-2.5 py-0.5 text-[10px] font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800 rounded-lg">
-                                        KREDIT (K)
-                                    </span>
+                                    <span class="px-2 py-0.5 rounded font-mono font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 text-[11px]">KREDIT</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4">
+                            <td class="py-3.5 px-4 text-center">
                                 @if($item->active)
                                     <span class="px-2.5 py-1 text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 rounded-lg inline-flex items-center">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>Aktif
@@ -281,7 +192,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="py-8 text-center text-slate-400 dark:text-slate-500">
+                            <td colspan="7" class="py-8 text-center text-slate-400 dark:text-slate-500">
                                 Belum ada data Akun Chart of Accounts yang tersimpan.
                             </td>
                         </tr>
@@ -291,11 +202,11 @@
         </div>
 
         @if($accounts->hasPages())
-            <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-                {{ $accounts->links() }}
-            </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            {{ $accounts->links() }}
+        </div>
         @endif
-    </div>
+    </x-data-card>
 
     <!-- Modal Form Tambah / Edit CoA -->
     <div x-show="showModal" x-transition class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">

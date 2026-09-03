@@ -3,8 +3,31 @@
 @section('title', 'Schedule Assignments — Tanos ERP')
 
 @section('content')
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full" x-data="{ showGroupModal: false, showEditGroupModal: false, showAssignModal: false, editGroup: {} }">
-    <!-- Left Column: Schedule Groups List & Create -->
+<div class="space-y-6 w-full" x-data="{ showGroupModal: false, showEditGroupModal: false, showAssignModal: false, editGroup: {} }">
+    <!-- Header Block -->
+    <x-page-header 
+        title="Schedule Assignments" 
+        subtitle="Kelola kelompok jadwal kerja (Reguler / Shift) & pemetaan penugasan jadwal karyawan."
+        :breadcrumbs="[
+            'General' => '#',
+            'Human Capital' => '#',
+            'Time Management' => '#',
+            'Schedule Assignments' => ''
+        ]"
+    >
+        <x-slot:action>
+            @if(in_array(session('user.role'), ['Admin', 'HR Manager']))
+            <button @click="showAssignModal = true" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto cursor-pointer border-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Assign Schedule</span>
+            </button>
+            @endif
+        </x-slot:action>
+    </x-page-header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
     <div class="lg:col-span-1 space-y-6">
         <div class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 rounded-xl shadow-sm">
             <div class="flex items-center justify-between mb-4">
@@ -130,6 +153,7 @@
             </div>
         </div>
     </div>
+</div>
 
     {{-- MODAL: CREATE SCHEDULE GROUP --}}
     <div x-show="showGroupModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-sm" style="display: none;">

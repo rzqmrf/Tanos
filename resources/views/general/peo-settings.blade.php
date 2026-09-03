@@ -14,136 +14,76 @@
         <button onclick="this.parentElement.remove()" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-200 font-bold text-base leading-none">&times;</button>
     </div>
     @endif
-
-    {{-- HEADER & BREADCRUMB --}}
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-            <!-- Breadcrumbs -->
-            <div class="flex items-center space-x-2 text-xs font-bold text-slate-400 dark:text-slate-400 mb-4 print:hidden">
-                <a href="{{ route('dashboard.index') }}" class="hover:text-primary dark:hover:text-sky-400 transition flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
-                    Home
-                </a>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>General</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span>Setting</span>
-                <span class="text-slate-300 dark:text-slate-600">/</span>
-                <span class="text-primary dark:text-sky-400 font-black">PEO Setting</span>
+    <x-page-header 
+        title="Mapping PEO Setting" 
+        subtitle="Pengelolaan Mapping Integrasi Dokumen PEO"
+        :breadcrumbs="[
+            'General' => '#',
+            'Settings' => '#',
+            'PEO Setting' => ''
+        ]"
+    >
+        <x-slot:action>
+            <div class="flex items-center gap-2.5 shrink-0 flex-wrap self-start md:self-auto">
+                <button onclick="document.getElementById('modal-create-peo').classList.remove('hidden')" 
+                    class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Create New</span>
+                </button>
+                <button onclick="alert('Dokumen Header Setting telah dikonfigurasi.')" 
+                    class="px-4 py-2.5 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer border-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                    <span>Document Header Setting</span>
+                </button>
             </div>
-
-            <h1 class="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
-                Mapping PEO Setting
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2.5 font-medium">Pengelolaan Mapping Integrasi Dokumen PEO</p>
-        </div>
-
-        {{-- ACTION BUTTONS TOP RIGHT --}}
-        <div class="flex items-center gap-2.5 shrink-0 flex-wrap self-start md:self-auto">
-            <button onclick="document.getElementById('modal-create-peo').classList.remove('hidden')" 
-                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Create New</span>
-            </button>
-            <button onclick="alert('Dokumen Header Setting telah dikonfigurasi.')" 
-                class="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
-                <span>Document Header Setting</span>
-            </button>
-        </div>
-    </div>
+        </x-slot:action>
+    </x-page-header>
 
     {{-- MAIN CONTENT CARD --}}
-    <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
-        {{-- Card Header Title --}}
-        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between">
-            <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100">Pengelolaan Mapping Integrasi Dokumen PEO - List</h2>
-            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">{{ $peoSettings->total() }} total konfigurasi</span>
-        </div>
-
+    <x-data-card 
+        title="PEO Setting - List" 
+        :total="$peoSettings->total()"
+        :search-route="route('peo.index')"
+    >
         {{-- TABS NAV --}}
-        <div class="px-6 pt-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center gap-6 bg-white dark:bg-slate-900">
+        <div class="pb-3 border-b border-slate-200/80 dark:border-slate-800 flex items-center gap-6">
             <a href="{{ route('peo.index', ['tab' => 'Berita Acara', 'per_page' => $perPage, 'search' => $search]) }}" 
-                class="pb-3 text-xs font-bold transition-all border-b-2 {{ $activeTab === 'Berita Acara' ? 'border-blue-600 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200' }}">
+                class="pb-2.5 text-xs font-bold transition-all border-b-2 {{ $activeTab === 'Berita Acara' ? 'border-primary text-primary dark:text-sky-400 font-black' : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200' }}">
                 Berita Acara
             </a>
             <a href="{{ route('peo.index', ['tab' => 'Surat Keluar', 'per_page' => $perPage, 'search' => $search]) }}" 
-                class="pb-3 text-xs font-bold transition-all border-b-2 {{ $activeTab === 'Surat Keluar' ? 'border-blue-600 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200' }}">
+                class="pb-2.5 text-xs font-bold transition-all border-b-2 {{ $activeTab === 'Surat Keluar' ? 'border-primary text-primary dark:text-sky-400 font-black' : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200' }}">
                 Surat Keluar
             </a>
         </div>
 
-        {{-- TOOLBAR --}}
-        <div class="p-6 flex flex-col md:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900">
-            {{-- Export Toolbar Icons --}}
-            <div class="flex items-center gap-2">
-                <button onclick="exportToCSV()" title="Export CSV / Document" class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl transition cursor-pointer">
-                    <svg class="w-4 h-4 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
-                </button>
-                <button onclick="window.print()" title="Export PDF" class="p-2.5 bg-rose-50 hover:bg-rose-100 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 rounded-xl transition cursor-pointer">
-                    <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.656" /></svg>
-                </button>
-                <button onclick="exportToCSV()" title="Export Excel" class="p-2.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-emerald-600 dark:text-emerald-400 rounded-xl transition cursor-pointer">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25-6h17.25m-17.25-6h17.25" /></svg>
-                </button>
-                <button onclick="window.location.reload()" title="Refresh Data" class="p-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 rounded-xl transition cursor-pointer">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                </button>
-            </div>
-
-            {{-- Controls: Per Page & Search --}}
-            <div class="flex items-center gap-4 w-full md:w-auto">
-                {{-- Per Page --}}
-                <form action="{{ route('peo.index') }}" method="GET" class="flex items-center gap-2">
-                    <input type="hidden" name="tab" value="{{ $activeTab }}">
-                    <input type="hidden" name="search" value="{{ $search }}">
-                    <select name="per_page" onchange="this.form.submit()" 
-                        class="px-3.5 py-2 text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                        @foreach([10, 25, 50, 100] as $n)
-                        <option value="{{ $n }}" {{ $perPage == $n ? 'selected' : '' }}>{{ $n }}</option>
-                        @endforeach
-                    </select>
-                </form>
-
-                {{-- Search Box with Centered Magnifier Icon --}}
-                <form action="{{ route('peo.index') }}" method="GET" class="relative flex-1 md:w-64">
-                    <input type="hidden" name="tab" value="{{ $activeTab }}">
-                    <input type="hidden" name="per_page" value="{{ $perPage }}">
-                    <div class="relative flex items-center">
-                        <input type="text" name="search" value="{{ $search }}" placeholder="Search:" 
-                            class="w-full pl-9 pr-3 py-2 text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <svg class="w-3.5 h-3.5 absolute left-3 text-slate-400 dark:text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {{-- TABLE DATA --}}
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs" id="peo-table">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
-                        <th class="px-5 py-3.5 w-12 text-center">NO</th>
-                        <th class="px-5 py-3.5">NAMA CUSTOMER</th>
-                        <th class="px-5 py-3.5">NAMA PROYEK</th>
-                        <th class="px-5 py-3.5 text-center">ACTION</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                        <th class="py-3.5 px-5 text-center">NO</th>
+                        <th class="py-3.5 px-5">NAMA CUSTOMER</th>
+                        <th class="py-3.5 px-5">NAMA PROYEK</th>
+                        <th class="py-3.5 px-5 text-center w-28">ACTION</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200 font-semibold">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($peoSettings as $index => $item)
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td class="px-5 py-4 text-center font-semibold text-slate-500 dark:text-slate-400">
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition">
+                        <td class="py-3.5 px-5 text-center font-semibold text-slate-400">
                             {{ $peoSettings->firstItem() + $index }}
                         </td>
-                        <td class="px-5 py-4 font-bold text-slate-900 dark:text-slate-100 uppercase">
-                            {{ $item->customer }}
+                        <td class="py-3.5 px-5 font-bold text-slate-800 dark:text-slate-100 uppercase">
+                            <a href="{{ route('peo.show', $item->id) }}" class="hover:text-primary transition">
+                                {{ $item->customer }}
+                            </a>
                         </td>
-                        <td class="px-5 py-4 text-slate-800 dark:text-slate-200 uppercase">
+                        <td class="py-3.5 px-5 text-slate-700 dark:text-slate-300 uppercase font-semibold">
                             {{ $item->project_name }}
                         </td>
-                        <td class="px-5 py-4 text-center whitespace-nowrap">
+                        <td class="py-3.5 px-5 text-center whitespace-nowrap">
                             <div class="inline-flex items-center space-x-1.5">
                                 <x-action-button type="view" :href="route('peo.show', $item->id)" title="View Detail" />
                                 <x-action-button type="edit" :click="'openEditModal(' . json_encode($item) . ')'" title="Edit Setting" />
@@ -156,7 +96,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400 text-xs">
+                        <td colspan="4" class="py-8 text-center text-slate-400 dark:text-slate-500">
                             Tidak ada data PEO Setting untuk kategori <strong>{{ $activeTab }}</strong>.
                         </td>
                     </tr>
@@ -167,11 +107,11 @@
 
         {{-- PAGINATION FOOTER --}}
         @if($peoSettings->hasPages())
-        <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800">
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
             {{ $peoSettings->links() }}
         </div>
         @endif
-    </div>
+    </x-data-card>
 </div>
 
 {{-- MODAL CREATE PEO SETTING --}}
